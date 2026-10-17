@@ -1,157 +1,134 @@
 ---
-import AboutHeroImage from '../assets/images/teluis_avatar.jpg';
 import Layout from '../layouts/BlogPost.astro';
+import { AUTHOR_NAME, AUTHOR_TITLE, AUTHOR_BIO, SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 const aboutSchema = {
 	'@context': 'https://schema.org',
 	'@type': 'AboutPage',
-	name: '運営者について（プロフィール・編集ポリシー） | TELUIS',
-	description: 'コンサルティングファーム勤務の現役ITエンジニア（teluis）が運営するライフスタイル＆旅行メディア『TELUIS』の運営者プロフィール、経歴、レビュー基準・編集ポリシーをご紹介します。',
-	url: 'https://teluis.com/about/',
+	name: `運営者について（プロフィール・ブログ方針） | ${SITE_TITLE}`,
+	description: `${SITE_TITLE}の運営者プロフィール、発信テーマ、ブログ方針をご紹介します。`,
+	url: 'https://yomileeblog.com/about/',
 	mainEntity: {
 		'@type': 'Person',
-		'@id': 'https://teluis.com/about/#author-teluis',
-		name: 'teluis',
-		jobTitle: 'ITエンジニア / ITコンサルタント',
-		url: 'https://teluis.com/about/',
-		image: 'https://teluis.com/brand/teluis_avatar.webp',
-		description: '日系大手企業、AIスタートアップでの開発経験を経て、現在はコンサルティングファームに勤務。合理的なエンジニア視点と実体験をもとに生活改善・スマート家電・旅行・ガジェット情報を発信。'
+		'@id': 'https://yomileeblog.com/about/#author-yomilee',
+		name: AUTHOR_NAME,
+		jobTitle: AUTHOR_TITLE,
+		url: 'https://yomileeblog.com/about/',
+		image: 'https://yomileeblog.com/brand/teluis_avatar.webp',
+		description: AUTHOR_BIO
 	}
 };
 ---
 
 <Layout
-	title="運営者について（プロフィール・編集ポリシー）"
-	description="コンサルティングファームで働く現役ITエンジニア（teluis）が運営するライフスタイル＆旅行メディア『TELUIS』のプロフィールと編集ポリシー。"
-	pubDate={new Date('2026-09-01')}
-	updatedDate={new Date('2026-09-24')}
-	heroImage={AboutHeroImage}
+	title="運営者について（プロフィール・ブログ方針）"
+	description={`${SITE_TITLE}の運営者プロフィールと発信方針。日常の気づきやガジェット、旅行、暮らしの体験談を記録しています。`}
+	pubDate={new Date('2021-09-01')}
+	updatedDate={new Date('2026-10-17')}
 >
 	<script type="application/ld+json" set:html={JSON.stringify(aboutSchema)} />
 
 	<div class="about-lead">
 		<p>
-			はじめまして。ライフスタイル＆旅行メディア<strong>「TELUIS（テルイズ）」</strong>をご覧いただきありがとうございます。<br />
-			当サイトは、<strong>コンサルティングファームに勤務する現役ITエンジニア兼コンサルタントの teluis</strong> が運営しています。
+			はじめまして。ブログ<strong>「{SITE_TITLE}」</strong>をご覧いただきありがとうございます。<br />
+			当サイトは、ブロガーの <strong>{AUTHOR_NAME}</strong> が個人で運営するライフログ＆体験談ブログです。
 		</p>
 		<p>
-			<strong>「日々の名もなき雑務や生活動線の無駄をシンプルに削ぎ落とし、本当に大切な体験（趣味や旅、クリエイティブな時間）にリソースを注ぐ」</strong>をテーマに、実際に購入して使い倒した家電・ガジェットや、現地へ足を運んだ旅の記録を本音で発信しています。
+			日常の中で「実際に使って良かったガジェット・サービス」「試行錯誤した通信プランや生活の知恵」「旅先で出会った素敵な景色やスポット」など、実体験に基づくリアルな気づきを分かりやすく記録しています。
 		</p>
 	</div>
 
 	<h2>運営者プロフィール</h2>
 
-	<div class="author-profile-box" id="author-teluis">
+	<div class="author-profile-box" id="author-yomilee">
 		<div class="author-header">
 			<img
 				src="/brand/teluis_avatar.webp"
-				alt="teluisのプロフィール画像"
-				width="110"
-				height="110"
+				alt={`${AUTHOR_NAME}のプロフィール画像`}
+				width="90"
+				height="90"
 				loading="lazy"
 				decoding="async"
 				class="author-avatar-img"
 			/>
 			<div class="author-title-area">
-				<span class="author-role-badge">サイト運営・執筆・検証</span>
-				<h3 class="author-name-heading">teluis（テルイズ）</h3>
-				<p class="author-job-sub">現役ITエンジニア / ITコンサルタント</p>
+				<span class="author-role-badge">サイト運営・執筆</span>
+				<h3 class="author-name-heading">{AUTHOR_NAME}</h3>
+				<p class="author-job-sub">{AUTHOR_TITLE}</p>
 			</div>
 		</div>
 
 		<p class="author-intro-text">
-			システム開発の現場とITコンサルティングの世界を渡り歩いてきた、根っからの合理主義者です。仕事で培ったシステム思考や業務改善（BPR）のノウハウを「日々の暮らし・家事動線・旅の計画」にも持ち込み、<strong>「1日5分の手間をどう仕組み化・自動化するか」</strong>を常に実験しています。
+			日々の生活をちょっと便利に、快適にするためのモノ選びやサービス活用が好きなブロガーです。自分が実際に契約・購入して体験したことを「同じように気になっている読者の方の役に立つように」という思いで丁寧にまとめています。
 		</p>
 
-		<h4>これまでのキャリア・経歴</h4>
-		<ul class="career-timeline">
-			<li>
-				<strong>1. 日系大手企業（キャリアのスタート）</strong><br />
-				大規模基幹システムの設計・開発・運用に従事。ミッションクリティカルな環境で、品質管理・セキュリティ・堅牢なシステムアーキテクチャの基礎と、大組織でプロジェクトを推進するビジネススキルを徹底的に学びました。
-			</li>
-			<li>
-				<strong>2. AIスタートアップ（スピードとゼロイチ開発）</strong><br />
-				最先端の機械学習・AI技術を活用したプロダクト開発に参画。限られた時間とリソースの中で、ゼロから高速にプロダクトを形にし、本質的な価値に集中する「徹底した合理性と実装力」を磨きました。
-			</li>
-			<li>
-				<strong>3. コンサルティングファーム（現在）</strong><br />
-				エンジニアとしての技術的知見とビジネス戦略の視点を掛け合わせ、様々な業界のクライアント企業に対してIT戦略立案・DX推進・業務プロセス改善を支援しています。
-			</li>
-		</ul>
-
 		<div class="personal-traits">
-			<h4>パーソナルな一面（好きなこと・モットー）</h4>
+			<h4>主な発信テーマ・好きなこと</h4>
 			<ul>
-				<li><strong>モットー：</strong>「毎日のルーティンの無駄を1秒でも削り、浮いた時間とエネルギーをすべて『新しい体験』や『旅・学び』に投資する」</li>
-				<li><strong>家電・モノ選びの絶対基準：</strong>どれだけ多機能でも<strong>「洗うパーツが4個以上ある調理家電」「日々の手入れに5分以上かかる製品」</strong>は結局使わなくなるため選ばない主義。スペック表に載っていない「パッキンの洗いやすさ」「メンテナンスの手軽さ」を真っ先にチェックします。</li>
-				<li><strong>趣味・好きなこと：</strong>
-					<ul>
-						<li><strong>旅行＆ルート最適化：</strong>Googleフライトやホテルプログラムを駆使した航空券・宿泊先の徹底リサーチ、全国のスターバックス（リージョナル ランドマーク ストア）や美術館・建築巡り、週末のドライブ旅。</li>
-						<li><strong>ガジェット・通信環境：</strong>最新スマートフォンやPC周辺機器の検証、キャリアプログラムや格安SIM（povo等）を組み合わせた通信費・端末代の最適化計算。</li>
-						<li><strong>ライフスタイル：</strong>時短調理家電（自動調理鍋など）での自炊効率化、空間を整えるミニマルなインテリア・便利グッズ探し、カメラでの風景撮影。</li>
-					</ul>
-				</li>
+				<li><strong>通信プラン・ガジェット：</strong>格安SIM（povo等）の申し込み・開通・実使用レポート、スマートフォン実機レビュー、日常を快適にする便利ツール。</li>
+				<li><strong>暮らし・お買い物：</strong>コストコや新商業施設の体験レポート、一人暮らしの防災備蓄、日々の暮らしの工夫。</li>
+				<li><strong>旅行・おでかけ：</strong>各地の観光スポット巡り、季節のイベントやイルミネーション、写真撮影の記録。</li>
 			</ul>
 		</div>
 	</div>
 
 	<hr />
 
-	<h2>当ブログ『TELUIS』3つの編集ポリシー・レビュー基準</h2>
+	<h2>当ブログ『{SITE_TITLE}』の運営方針</h2>
 	<p>
-		インターネット上には、商品の公式サイトを書き換えただけのまとめ記事や、メリットしか書かれていない記事が溢れています。読者の皆様が「時間とお金を無駄にしない選択」をできるよう、当ブログでは以下の3つの基準を厳守しています。
+		読者の皆様に安心して参考にしていただけるよう、当ブログでは以下の3つの基準を大切にしています。
 	</p>
 
 	<div class="policy-grid">
 		<div class="policy-card">
 			<div class="policy-num">POLICY 01</div>
-			<h3>一次情報（実機使用・現地訪問）の徹底</h3>
+			<h3>実体験に基づくリアルな記録</h3>
 			<p>
-				レビュー記事や旅行レポートは、実際に自分のお金で購入して長期間使用したモノ、および実際に現地へ足を運んで体験したコトだけをベースに執筆しています。カタログの宣伝文句ではなく、実生活の中で感じたリアルな事実をお届けします。
+				記事内容は、実際に自分が契約したサービス、購入した製品、実際に訪れたスポットの記録をベースに執筆しています。一次情報を大切にし、体験したからこそ分かる事実をお届けします。
 			</p>
 		</div>
 		<div class="policy-card">
 			<div class="policy-num">POLICY 02</div>
-			<h3>デメリット・手入れの手間も正直に開示</h3>
+			<h3>注意点・正直な感想の共有</h3>
 			<p>
-				「ここは期待外れだった」「洗うパーツが多くて面倒」「このプランはこの人には向かない」といったネガティブな情報や維持コストこそ、購入・予約前に最も知るべき価値ある情報だと考えています。欠点も包み隠さず明記します。
+				良かった点だけでなく、「ここは気をつけたほうがいい」「こういう人には合わないかも」といった注意点やリアルな感想も率直に記載しています。
 			</p>
 		</div>
 		<div class="policy-card">
 			<div class="policy-num">POLICY 03</div>
-			<h3>エンジニアの論理 × 生活者としての実用性</h3>
+			<h3>わかりやすい図解と手順の解説</h3>
 			<p>
-				「数字・スペック・実質コストの厳密な比較検証（エンジニア・コンサルタントの視点）」と、「毎日の生活動線の中でストレスなく使い続けられるか（生活者の視点）」の両面から徹底的に評価します。
+				申し込み手順や利用の流れなど、初めての方でも迷わず進められるよう、スクリーンショットや手順を整理して分かりやすく解説することを心がけています。
 			</p>
 		</div>
 	</div>
 
 	<hr />
 
-	<h2>初めての方へ：カテゴリ別の代表記事・おすすめ記事</h2>
+	<h2>テーマ別おすすめ記事・代表記事</h2>
 	<p>
-		当ブログで多くの読者の方に読まれている、各カテゴリの代表的な体験レポート・徹底検証記事です。気になるテーマからぜひご覧ください。
+		当ブログで掲載している主なカテゴリーの記事です。ぜひご覧ください。
 	</p>
 
 	<div class="featured-links-section">
-		<h3>🏠 ライフスタイル・お買い物体験</h3>
+		<h3>📱 通信・ガジェット・サービス</h3>
 		<ul>
-			<li><a href="/blog/valor-yokohama-shimonagaya/">【現地レポ】バロー横浜下永谷店に行ってきた！鮪ブーメラン・飛騨牛・果物スイーツが凄すぎる</a></li>
-			<li><a href="/blog/dressing-room-air-conditioner/">洗面所・脱衣所が暑い＆寒い問題を解決！小型エアコン・冷暖房対策の導入実体験レポート</a></li>
+			<li><a href="/blog/povo2-open/">【体験談】povo2.0の開通手続き・設定手順と実際に使ってみた感想まとめ</a></li>
+			<li><a href="/blog/povo-re/">povo2.0を実際に使い倒して分かったメリット・注意点</a></li>
+			<li><a href="/blog/aquos-sense4-review/">AQUOS sense4実機レビュー！普段使いのコスパとバッテリー持ち</a></li>
 		</ul>
 
-		<h3>✈️ 旅行・ホテル・クルーズ攻略</h3>
+		<h3>🏠 暮らし・お買い物・生活体験</h3>
 		<ul>
-			<li><a href="/blog/disney-adventure-cost/">【費用公開】ディズニー・アドベンチャー総額いくらかかった？2人で4泊5日クルーズの実費内訳と節約・満喫のリアル</a></li>
-			<li><a href="/blog/disney-adventure-fireworks/">【裏技】ディズニー・アドベンチャーの花火攻略！ディナー後半組はコース回避が正解な理由</a></li>
-			<li><a href="/blog/google-flights-guide/">Googleフライトを使い倒して最安値の航空券・穴場日程を一瞬で見つける検索テクニック</a></li>
-			<li><a href="/blog/nagano-stylish-starbucks/">【長野】わざわざ行きたいオシャレな絶景スタバ厳選5選！ドライブ＆旅の実用ガイド</a></li>
+			<li><a href="/blog/toranomon-hillss/">【現地レポ】虎ノ門ヒルズ ステーションタワーに行ってきた！注目のショップ＆体験</a></li>
+			<li><a href="/blog/costco-family-membership/">コストコで家族カードを作る方法と注意点！家族でお得に楽しむ活用法</a></li>
+			<li><a href="/blog/disaster-prevention-stockpiling-living-alone/">一人暮らしの防災備蓄チェックリスト！最低限揃えておきたい非常食・防災グッズ</a></li>
 		</ul>
 
-		<h3>💻 IT・ガジェット・業務効率化</h3>
+		<h3>🚗 旅行・おでかけ・観光</h3>
 		<ul>
-			<li><a href="/blog/edion-docomo-iphone18pro/">iPhone 18 Proを実質最小負担で運用するキャリアプログラム・通信費トータル計算シミュレーション</a></li>
-			<li><a href="/blog/notion-reading-shortcut/">【iOSショートカット配布】Notion読書メモが「開くだけでだるい」問題を1タップ直行で完全解決する</a></li>
+			<li><a href="/blog/yamaguchi-hagi-sightseeing/">【山口・萩】城下町の歴史とプリンを巡る女子旅・一人旅観光モデルコース</a></li>
+			<li><a href="/blog/tottori-hanakairou-winter-illumination/">【鳥取花回廊】冬のフラワーイルミネーション鑑賞レポート＆見どころ</a></li>
 		</ul>
 	</div>
 
@@ -162,27 +139,27 @@ const aboutSchema = {
 		<tbody>
 			<tr>
 				<th>サイト名</th>
-				<td>TELUIS（テルイズ）</td>
+				<td>{SITE_TITLE}</td>
 			</tr>
 			<tr>
 				<th>サイトURL</th>
-				<td><a href="https://teluis.com/">https://teluis.com/</a></td>
+				<td><a href="https://yomileeblog.com/">https://yomileeblog.com/</a></td>
 			</tr>
 			<tr>
 				<th>運営者</th>
-				<td>teluis（ITエンジニア / ITコンサルタント）</td>
+				<td>{AUTHOR_NAME}（{AUTHOR_TITLE}）</td>
 			</tr>
 			<tr>
 				<th>主な発信テーマ</th>
-				<td>ライフスタイル（生活改善・時短家電）、旅行・ホテル宿泊記、IT・ガジェット検証、ブログ運営ノウハウ</td>
+				<td>通信プラン、ガジェット、生活の知恵・お買い物体験、旅行・観光レポート</td>
 			</tr>
 			<tr>
 				<th>お問い合わせ</th>
-				<td>記事内容に関するご質問、レビュー・取材のご依頼等は <a href="/contact/">お問い合わせフォーム</a> よりご連絡ください。</td>
+				<td>記事内容に関するご質問等は <a href="/contact/">お問い合わせフォーム</a> よりご連絡ください。</td>
 			</tr>
 			<tr>
 				<th>プライバシーポリシー</th>
-				<td>個人情報の取り扱い、アクセス解析ツール、広告配信および免責事項については <a href="/privacy/">プライバシーポリシー</a> をご確認ください。</td>
+				<td>個人情報の取り扱い、広告配信および免責事項については <a href="/privacy/">プライバシーポリシー</a> をご確認ください。</td>
 			</tr>
 		</tbody>
 	</table>
@@ -216,8 +193,8 @@ const aboutSchema = {
 		margin-bottom: 1.25rem;
 	}
 	.author-avatar-img {
-		width: 100px;
-		height: 100px;
+		width: 90px;
+		height: 90px;
 		border-radius: 50%;
 		object-fit: cover;
 		border: 3px solid #e0f2fe;
@@ -250,31 +227,22 @@ const aboutSchema = {
 	}
 
 	.author-intro-text {
+		font-size: 1rem;
+		line-height: 1.75;
 		margin-bottom: 1.25rem;
-	}
-
-	.career-timeline {
-		background: #f8fafc;
-		padding: 1.2rem 1.2rem 1.2rem 2.2rem;
-		border-radius: 8px;
-		margin-bottom: 1.25rem;
-	}
-	.career-timeline li {
-		margin-bottom: 0.85rem;
-		line-height: 1.65;
-	}
-	.career-timeline li:last-child {
-		margin-bottom: 0;
+		color: #334155;
 	}
 
 	.personal-traits {
-		background: #f0f9ff;
-		padding: 1.1rem 1.25rem;
+		background: #f8fafc;
 		border-radius: 8px;
+		padding: 1.25rem 1.5rem;
+		border: 1px solid #e2e8f0;
 	}
 	.personal-traits h4 {
-		margin: 0 0 0.6rem 0;
-		font-size: 1rem;
+		margin-top: 0;
+		margin-bottom: 0.75rem;
+		font-size: 1.05rem;
 		color: #0f172a;
 	}
 	.personal-traits ul {
@@ -282,8 +250,9 @@ const aboutSchema = {
 		padding-left: 1.25rem;
 	}
 	.personal-traits li {
-		margin-bottom: 0.5rem;
+		margin-bottom: 0.6rem;
 		line-height: 1.6;
+		color: #334155;
 	}
 	.personal-traits li:last-child {
 		margin-bottom: 0;
@@ -291,68 +260,81 @@ const aboutSchema = {
 
 	.policy-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 		gap: 1.25rem;
 		margin: 1.5rem 0 2rem;
 	}
 	.policy-card {
 		background: #ffffff;
 		border: 1px solid #e2e8f0;
-		border-top: 4px solid var(--theme-accent, #007cba);
-		border-radius: 8px;
+		border-radius: 10px;
 		padding: 1.25rem;
 		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 	}
 	.policy-num {
 		font-size: 0.75rem;
 		font-weight: 800;
-		color: #0369a1;
 		letter-spacing: 0.05em;
+		color: var(--theme-accent, #007cba);
 		margin-bottom: 0.35rem;
 	}
 	.policy-card h3 {
-		font-size: 1.08rem !important;
-		margin: 0 0 0.65rem 0 !important;
-		padding: 0 !important;
-		border: none !important;
+		font-size: 1.1rem;
+		margin: 0 0 0.5rem;
+		color: #0f172a;
+		border: none;
+		padding: 0;
 	}
 	.policy-card p {
-		font-size: 0.92rem;
-		line-height: 1.65;
+		font-size: 0.9rem;
+		line-height: 1.6;
+		color: #475569;
 		margin: 0;
-		color: #334155;
 	}
 
+	.featured-links-section {
+		margin: 1.5rem 0 2.5rem;
+	}
 	.featured-links-section h3 {
-		font-size: 1.15rem;
-		margin-top: 1.5rem;
-		margin-bottom: 0.6rem;
+		font-size: 1.1rem;
+		margin: 1.25rem 0 0.5rem;
+		color: #1e293b;
 	}
 	.featured-links-section ul {
-		margin-bottom: 1.25rem;
+		margin: 0;
+		padding-left: 1.25rem;
 	}
 	.featured-links-section li {
 		margin-bottom: 0.5rem;
+	}
+	.featured-links-section a {
+		color: var(--theme-accent, #007cba);
+		text-decoration: underline;
+		font-weight: 600;
 	}
 
 	.site-info-table {
 		width: 100%;
 		border-collapse: collapse;
-		margin-top: 1rem;
+		margin: 1.5rem 0 2rem;
 	}
 	.site-info-table th,
 	.site-info-table td {
-		border: 1px solid #e2e8f0;
 		padding: 0.85rem 1rem;
-		text-align: left;
+		border: 1px solid #e2e8f0;
+		font-size: 0.95rem;
 		line-height: 1.6;
 	}
 	.site-info-table th {
-		width: 28%;
-		background-color: #f8fafc;
+		width: 25%;
+		background: #f8fafc;
+		color: #334155;
 		font-weight: 700;
-		color: #1e293b;
+		text-align: left;
 		white-space: nowrap;
+	}
+	.site-info-table td {
+		color: #1e293b;
 	}
 
 	@media (max-width: 640px) {
@@ -360,17 +342,14 @@ const aboutSchema = {
 			flex-direction: column;
 			text-align: center;
 		}
-		.author-profile-box {
-			padding: 1.25rem;
-		}
 		.site-info-table th,
 		.site-info-table td {
 			display: block;
 			width: 100%;
 		}
 		.site-info-table th {
+			background: #f1f5f9;
 			border-bottom: none;
-			padding-bottom: 0.4rem;
 		}
 	}
 </style>

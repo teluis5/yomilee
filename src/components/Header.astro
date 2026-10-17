@@ -12,9 +12,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <header class="site-header">
 	<div class="header-inner">
 		<h2>
-			<a href="/" style="display: flex; align-items: center;">
-				<img src="/brand/teluis_horizontal_logo.webp" alt="TELUIS" width="135" height="45" style="height: 45px; width: auto; mix-blend-mode: darken;" fetchpriority="high" />
-				<span class="sr-only">{SITE_TITLE}</span>
+			<a href="/" class="site-logo-link">
+				<span class="site-logo-text">{SITE_TITLE}</span>
 			</a>
 		</h2>
 		
@@ -80,9 +79,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 		margin: 0;
 		font-size: 1.4em;
 	}
-	h2 a {
+	.site-logo-link {
 		color: var(--text-main);
 		text-decoration: none;
+		display: flex;
+		align-items: center;
+	}
+	.site-logo-text {
+		font-size: 1.35rem;
+		font-weight: 800;
+		letter-spacing: -0.02em;
+		color: var(--text-main);
+		transition: color 0.2s ease;
+	}
+	.site-logo-link:hover .site-logo-text {
+		color: var(--theme-accent);
 	}
 
 	.header-right {

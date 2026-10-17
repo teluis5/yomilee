@@ -1,9 +1,10 @@
 ---
+import { SITE_TITLE } from '../consts';
 const today = new Date();
 ---
 
 <footer>
-	&copy; {today.getFullYear()} TELUIS. All rights reserved.
+	&copy; {today.getFullYear()} {SITE_TITLE}. All rights reserved.
 	<nav class="footer-links" aria-label="フッターメニュー">
 		<a href="/">Home</a>
 		<a href="/category/">Category</a>
