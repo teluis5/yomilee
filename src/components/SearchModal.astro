@@ -1,0 +1,642 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+<div id="search-modal" class="search-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="search-modal-title">
+	<div class="search-backdrop" id="search-backdrop"></div>
+	
+	<div class="search-container">
+		<div class="search-box box">
+			<div class="search-header">
+				<Icon name="heroicons:magnifying-glass" class="search-input-icon" />
+				<input
+					type="search"
+					id="search-input"
+					class="search-input"
+					placeholder="記事を検索（タイトル・キーワード・カテゴリ）..."
+					autocomplete="off"
+					spellcheck="false"
+					aria-label="サイト内検索"
+				/>
+				<button type="button" id="search-close-btn" class="search-close-btn" aria-label="閉じる">
+					<Icon name="heroicons:x-mark" class="icon-inline" />
+				</button>
+			</div>
+
+			<div id="search-results-area" class="search-results-area">
+				<div id="search-status" class="search-status">キーワードを入力して検索</div>
+				<ul id="search-results-list" class="search-results-list" role="listbox"></ul>
+			</div>
+
+			<div class="search-footer">
+				<div class="search-shortcuts">
+					<span><kbd>↑</kbd><kbd>↓</kbd> 移動</span>
+					<span><kbd>Enter</kbd> 決定</span>
+					<span><kbd>Esc</kbd> 閉じる</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	let searchIndex = null;
+	let isLoading = false;
+	let selectedIndex = -1;
+
+	const modal = document.getElementById('search-modal');
+	const backdrop = document.getElementById('search-backdrop');
+	const closeBtn = document.getElementById('search-close-btn');
+	const input = document.getElementById('search-input');
+	const statusEl = document.getElementById('search-status');
+	const resultsList = document.getElementById('search-results-list');
+
+	// インデックスデータの取得
+	async function loadIndex() {
+		if (searchIndex || isLoading) return;
+		isLoading = true;
+		if (statusEl) statusEl.textContent = '検索データを読み込み中...';
+		try {
+			const res = await fetch('/search-index.json');
+			if (!res.ok) throw new Error('Failed to fetch search index');
+			searchIndex = await res.json();
+			if (statusEl) statusEl.textContent = 'キーワードを入力して検索';
+		} catch (err) {
+			console.error('Search index load error:', err);
+			if (statusEl) statusEl.textContent = '検索データの取得に失敗しました';
+		} finally {
+			isLoading = false;
+		}
+	}
+
+	// モーダルを開く
+	function openModal() {
+		if (!modal || !input) return;
+		modal.classList.add('open');
+		modal.setAttribute('aria-hidden', 'false');
+		document.body.style.overflow = 'hidden';
+		loadIndex().then(() => {
+			if (input.value.trim()) {
+				handleSearch();
+			}
+		});
+		setTimeout(() => input.focus(), 50);
+	}
+
+	// モーダルを閉じる
+	function closeModal() {
+		if (!modal || !input) return;
+		modal.classList.remove('open');
+		modal.setAttribute('aria-hidden', 'true');
+		document.body.style.overflow = '';
+		input.value = '';
+		if (resultsList) resultsList.innerHTML = '';
+		if (statusEl) {
+			statusEl.textContent = 'キーワードを入力して検索';
+			statusEl.style.display = 'block';
+		}
+		selectedIndex = -1;
+	}
+
+	// テキスト内のマッチ部分をハイライト
+	function highlightMatch(text, queries) {
+		if (!text) return '';
+		let escapedText = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+		queries.forEach((q) => {
+			if (!q) return;
+			const regex = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+			escapedText = escapedText.replace(regex, '<mark class="search-highlight">$1</mark>');
+		});
+		return escapedText;
+	}
+
+	// 検索実行ロジック
+	function handleSearch() {
+		if (!input || !resultsList || !statusEl) return;
+		const query = input.value.trim().toLowerCase();
+
+		if (!query) {
+			resultsList.innerHTML = '';
+			statusEl.textContent = 'キーワードを入力して検索';
+			statusEl.style.display = 'block';
+			selectedIndex = -1;
+			return;
+		}
+
+		if (!searchIndex) {
+			statusEl.textContent = 'データを読み込み中...';
+			statusEl.style.display = 'block';
+			return;
+		}
+
+		// 全角・半角スペースでAND分割
+		const keywords = query.split(/[\s\u3000]+/).filter(Boolean);
+
+		const matchedItems = [];
+
+		searchIndex.forEach((item) => {
+			const titleLower = (item.title || '').toLowerCase();
+			const descLower = (item.description || '').toLowerCase();
+			const catsLower = (item.categories || []).join(' ').toLowerCase();
+
+			// 全キーワードが含まれているか判定
+			const matchesAll = keywords.every((kw) =>
+				titleLower.includes(kw) || descLower.includes(kw) || catsLower.includes(kw)
+			);
+
+			if (matchesAll) {
+				let score = 0;
+				keywords.forEach((kw) => {
+					if (titleLower.includes(kw)) score += 10;
+					if (catsLower.includes(kw)) score += 5;
+					if (descLower.includes(kw)) score += 1;
+				});
+				matchedItems.push({ item, score });
+			}
+		});
+
+		// スコア降順にソート
+		matchedItems.sort((a, b) => b.score - a.score);
+
+		if (matchedItems.length === 0) {
+			resultsList.innerHTML = '';
+			statusEl.textContent = `「${input.value.trim()}」に一致する記事は見つかりませんでした`;
+			statusEl.style.display = 'block';
+			selectedIndex = -1;
+			return;
+		}
+
+		statusEl.style.display = 'none';
+		selectedIndex = -1;
+
+		// 結果の描画（最大20件）
+		const displayItems = matchedItems.slice(0, 20);
+		resultsList.innerHTML = displayItems
+			.map(({ item }, index) => {
+				const highlightedTitle = highlightMatch(item.title, keywords);
+				const categoryHtml = (item.categories || [])
+					.map((cat) => `<span class="search-result-cat">${cat}</span>`)
+					.join('');
+
+				// サムネイル画像のHTML（画像あり / なしフォールバック）
+				const thumbHtml = item.heroImage
+					? `<div class="search-result-thumb"><img src="${item.heroImage}" alt="" loading="lazy" /></div>`
+					: `<div class="search-result-thumb search-result-thumb-placeholder"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" /></svg></div>`;
+
+				return `
+				<li class="search-result-item" data-index="${index}">
+					<a href="${item.url}" class="search-result-link">
+						${thumbHtml}
+						<div class="search-result-body">
+							<h3 class="search-result-title">${highlightedTitle}</h3>
+							<div class="search-result-meta">
+								${categoryHtml ? `<span class="search-result-cats">${categoryHtml}</span>` : ''}
+								${item.pubDate ? `<time class="search-result-date">${item.pubDate}</time>` : ''}
+							</div>
+						</div>
+						<div class="search-result-arrow" aria-hidden="true" style="width: 16px; height: 16px; min-width: 16px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" style="width: 16px !important; height: 16px !important; min-width: 16px; max-width: 16px; display: block;"><path fill-rule="evenodd" d="M3 10a.75.75 0 0 1 .75-.75h10.638L10.23 5.29a.75.75 0 1 1 1.04-1.08l5.5 5.25a.75.75 0 0 1 0 1.08l-5.5 5.25a.75.75 0 1 1-1.04-1.08l4.158-3.96H3.75A.75.75 0 0 1 3 10Z" clip-rule="evenodd" /></svg>
+						</div>
+					</a>
+				</li>
+				`;
+			})
+			.join('');
+	}
+
+	// キーボード移動の更新
+	function updateSelection() {
+		if (!resultsList) return;
+		const items = resultsList.querySelectorAll('.search-result-item');
+		items.forEach((item, idx) => {
+			if (idx === selectedIndex) {
+				item.classList.add('selected');
+				item.scrollIntoView({ block: 'nearest' });
+			} else {
+				item.classList.remove('selected');
+			}
+		});
+	}
+
+	// イベントリスナーの登録
+	function initSearch() {
+		// 開くトリガー（ヘッダー等のボタンから）
+		document.querySelectorAll('.search-trigger-btn').forEach((btn) => {
+			btn.addEventListener('click', (e) => {
+				e.preventDefault();
+				openModal();
+			});
+		});
+
+		// 閉じる操作
+		closeBtn?.addEventListener('click', closeModal);
+		backdrop?.addEventListener('click', closeModal);
+
+		// 入力ハンドラ
+		input?.addEventListener('input', handleSearch);
+
+		// キーボード操作
+		window.addEventListener('keydown', (e) => {
+			// Cmd+K または Ctrl+K で開閉
+			if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+				e.preventDefault();
+				if (modal?.classList.contains('open')) {
+					closeModal();
+				} else {
+					openModal();
+				}
+				return;
+			}
+
+			// フォーカスが入力要素にない時の '/' キーで開く
+			if (e.key === '/' && !modal?.classList.contains('open')) {
+				const activeTag = document.activeElement?.tagName.toLowerCase();
+				if (activeTag !== 'input' && activeTag !== 'textarea') {
+					e.preventDefault();
+					openModal();
+					return;
+				}
+			}
+
+			// モーダルが開いている時の操作
+			if (modal?.classList.contains('open')) {
+				if (e.key === 'Escape') {
+					e.preventDefault();
+					closeModal();
+				} else if (e.key === 'ArrowDown') {
+					e.preventDefault();
+					const items = resultsList?.querySelectorAll('.search-result-item');
+					if (items && items.length > 0) {
+						selectedIndex = (selectedIndex + 1) % items.length;
+						updateSelection();
+					}
+				} else if (e.key === 'ArrowUp') {
+					e.preventDefault();
+					const items = resultsList?.querySelectorAll('.search-result-item');
+					if (items && items.length > 0) {
+						selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+						updateSelection();
+					}
+				} else if (e.key === 'Enter') {
+					if (selectedIndex >= 0 && resultsList) {
+						const selectedLink = resultsList.querySelector(`.search-result-item[data-index="${selectedIndex}"] a`);
+						if (selectedLink) {
+							e.preventDefault();
+							selectedLink.click();
+						}
+					}
+				}
+			}
+		});
+	}
+
+	document.addEventListener('DOMContentLoaded', initSearch);
+	document.addEventListener('astro:page-load', initSearch);
+</script>
+
+<style>
+	.search-modal {
+		display: none;
+		position: fixed;
+		inset: 0;
+		z-index: 9999;
+		overflow-y: auto;
+		align-items: flex-start;
+		justify-content: center;
+		padding: 2.5rem 1rem;
+	}
+
+	.search-modal.open {
+		display: flex;
+	}
+
+	.search-backdrop {
+		position: fixed;
+		inset: 0;
+		background-color: rgba(0, 0, 0, 0.5);
+		backdrop-filter: blur(4px);
+		-webkit-backdrop-filter: blur(4px);
+		animation: fadeIn 0.2s ease-out;
+	}
+
+	.search-container {
+		position: relative;
+		width: 100%;
+		max-width: 680px;
+		z-index: 1;
+		animation: slideDown 0.25s ease-out;
+	}
+
+	.search-box {
+		background-color: var(--bg-content);
+		border: 1px solid var(--border-color);
+		border-radius: 8px;
+		box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		max-height: 85vh;
+	}
+
+	.search-header {
+		display: flex;
+		align-items: center;
+		padding: 0.75rem 1.2rem;
+		border-bottom: 1px solid var(--border-color);
+		gap: 0.75rem;
+		background-color: var(--bg-content);
+	}
+
+	.search-input-icon {
+		font-size: 1.25rem;
+		color: var(--text-light);
+		flex-shrink: 0;
+	}
+
+	.search-input {
+		flex: 1;
+		border: none;
+		outline: none;
+		background: transparent;
+		font-size: 1.05rem;
+		color: var(--text-main);
+		font-family: inherit;
+		min-width: 0;
+	}
+
+	.search-input::-webkit-search-cancel-button {
+		cursor: pointer;
+	}
+
+	.search-close-btn {
+		background: none;
+		border: none;
+		cursor: pointer;
+		color: var(--text-light);
+		padding: 0.3rem;
+		border-radius: 4px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.2rem;
+		transition: background-color 0.15s ease, color 0.15s ease;
+	}
+
+	.search-close-btn:hover {
+		background-color: var(--bg-main);
+		color: var(--text-main);
+	}
+
+	.search-results-area {
+		overflow-y: auto;
+		padding: 0.2rem 0;
+		flex: 1;
+		min-height: 180px;
+	}
+
+	.search-status {
+		padding: 3rem 1.5rem;
+		text-align: center;
+		color: var(--text-light);
+		font-size: 0.95rem;
+	}
+
+	.search-results-list {
+		list-style: none !important;
+		padding: 0 !important;
+		margin: 0 !important;
+	}
+
+	/* 動的生成される要素に確実に効かせるための :global セレクタ */
+	.search-results-list :global(.search-result-item) {
+		border-bottom: 1px solid var(--border-color);
+		border-left: 3px solid transparent;
+		transition: all 0.15s ease;
+	}
+
+	.search-results-list :global(.search-result-item:last-child) {
+		border-bottom: none;
+	}
+
+	.search-results-list :global(.search-result-item.selected),
+	.search-results-list :global(.search-result-item:hover) {
+		background-color: #f0f7fa;
+		border-left-color: var(--theme-accent);
+	}
+
+	/* コンパクトなカードレイアウト（高さ抑制で一度に多くの結果を表示） */
+	.search-results-list :global(.search-result-link) {
+		display: flex;
+		align-items: center;
+		gap: 0.85rem;
+		padding: 0.55rem 1rem;
+		text-decoration: none !important;
+		color: inherit;
+	}
+
+	/* 左: コンパクトサムネイル */
+	.search-results-list :global(.search-result-thumb) {
+		width: 80px;
+		height: 52px;
+		flex-shrink: 0;
+		border-radius: 4px;
+		overflow: hidden;
+		background-color: var(--bg-main);
+		border: 1px solid var(--border-color);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.search-results-list :global(.search-result-thumb img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		transition: transform 0.2s ease;
+	}
+
+	.search-results-list :global(.search-result-item.selected .search-result-thumb img),
+	.search-results-list :global(.search-result-item:hover .search-result-thumb img) {
+		transform: scale(1.05);
+	}
+
+	.search-results-list :global(.search-result-thumb-placeholder) {
+		color: #cbd5e1;
+	}
+
+	.search-results-list :global(.search-result-thumb-placeholder svg) {
+		width: 22px !important;
+		height: 22px !important;
+	}
+
+	/* 右: ページタイトル & メタ情報 */
+	.search-results-list :global(.search-result-body) {
+		flex: 1;
+		min-width: 0;
+	}
+
+	/* 装飾付きページタイトル */
+	.search-results-list :global(.search-result-title) {
+		font-size: 0.95rem;
+		font-weight: 700;
+		color: var(--text-main);
+		line-height: 1.4;
+		margin: 0 0 0.2rem 0;
+		letter-spacing: 0.01em;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		transition: color 0.15s ease;
+	}
+
+	.search-results-list :global(.search-result-item.selected .search-result-title),
+	.search-results-list :global(.search-result-item:hover .search-result-title) {
+		color: var(--theme-accent);
+		text-decoration: underline;
+		text-decoration-color: var(--theme-accent);
+		text-underline-offset: 3px;
+		text-decoration-thickness: 1.5px;
+	}
+
+	.search-results-list :global(.search-result-meta) {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.75rem;
+		line-height: 1;
+	}
+
+	.search-results-list :global(.search-result-cats) {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.25rem;
+	}
+
+	.search-results-list :global(.search-result-cat) {
+		background-color: #e0f2fe;
+		color: #0369a1;
+		padding: 0.1rem 0.4rem;
+		border-radius: 9999px;
+		font-weight: 600;
+		font-size: 0.7rem;
+		line-height: 1.2;
+	}
+
+	.search-results-list :global(.search-result-date) {
+		color: var(--text-light);
+	}
+
+	/* 右端: 矢印アイコン（サイズ固定16px・巨大化防止） */
+	.search-results-list :global(.search-result-arrow) {
+		color: #94a3b8;
+		flex-shrink: 0;
+		align-self: center;
+		width: 16px !important;
+		min-width: 16px !important;
+		max-width: 16px !important;
+		height: 16px !important;
+		min-height: 16px !important;
+		max-height: 16px !important;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: all 0.2s ease;
+		opacity: 0.45;
+	}
+
+	.search-results-list :global(.search-result-arrow svg) {
+		width: 16px !important;
+		height: 16px !important;
+		min-width: 16px !important;
+		max-width: 16px !important;
+		min-height: 16px !important;
+		max-height: 16px !important;
+		display: block;
+		flex-shrink: 0;
+	}
+
+	.search-results-list :global(.search-result-item.selected .search-result-arrow),
+	.search-results-list :global(.search-result-item:hover .search-result-arrow) {
+		color: var(--theme-accent);
+		transform: translateX(3px);
+		opacity: 1;
+	}
+
+	/* キーワードハイライト */
+	:global(.search-highlight) {
+		background: linear-gradient(transparent 55%, #fff3cd 55%);
+		color: inherit;
+		font-weight: 700;
+		padding: 0 0.1em;
+		border-radius: 2px;
+	}
+
+	.search-footer {
+		padding: 0.55rem 1.2rem;
+		background-color: var(--bg-main);
+		border-top: 1px solid var(--border-color);
+		display: flex;
+		justify-content: flex-end;
+		font-size: 0.8rem;
+		color: var(--text-light);
+	}
+
+	.search-shortcuts {
+		display: flex;
+		gap: 1rem;
+	}
+
+	.search-shortcuts kbd {
+		background-color: var(--bg-content);
+		border: 1px solid var(--border-color);
+		padding: 0.1rem 0.35rem;
+		border-radius: 3px;
+		font-size: 0.75rem;
+		box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+		margin-right: 0.2rem;
+	}
+
+	@keyframes fadeIn {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
+
+	@keyframes slideDown {
+		from {
+			opacity: 0;
+			transform: translateY(-12px) scale(0.98);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+		}
+	}
+
+	@media (max-width: 640px) {
+		.search-modal {
+			padding: 1rem 0.5rem;
+		}
+		.search-box {
+			max-height: 90vh;
+		}
+		.search-results-list :global(.search-result-link) {
+			gap: 0.65rem;
+			padding: 0.5rem 0.75rem;
+		}
+		.search-results-list :global(.search-result-thumb) {
+			width: 68px;
+			height: 45px;
+		}
+		.search-results-list :global(.search-result-title) {
+			font-size: 0.88rem;
+		}
+		.search-results-list :global(.search-result-arrow) {
+			display: none !important;
+		}
+		.search-shortcuts span:not(:last-child) {
+			display: none;
+		}
+	}
+</style>

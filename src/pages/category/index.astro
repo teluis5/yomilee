@@ -1,0 +1,99 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+
+// カテゴリごとの記事数を集計
+const categoryCount = allPosts.reduce((acc, post) => {
+	const categories = post.data.categories || [];
+	categories.forEach((category) => {
+		acc[category] = (acc[category] || 0) + 1;
+	});
+	return acc;
+}, {} as Record<string, number>);
+
+// カテゴリ名の配列を作成し、記事数が多い順にソート
+const sortedCategories = Object.keys(categoryCount).sort(
+	(a, b) => categoryCount[b] - categoryCount[a]
+);
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<BaseHead title={`カテゴリ一覧 | ${SITE_TITLE}`} description="ブログのカテゴリ一覧ページです。" />
+		<style>
+			main {
+				max-width: 960px;
+				margin: 0 auto;
+				padding: 2em;
+			}
+			h2 {
+				margin-bottom: 2em;
+				text-align: center;
+				color: var(--text-main);
+				font-size: 2rem;
+			}
+			.category-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+				gap: 1.5rem;
+			}
+			.category-card {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 1.5rem;
+				background-color: white;
+				border: 1px solid var(--border-color);
+				border-radius: 8px;
+				text-decoration: none;
+				color: var(--text-main);
+				transition: transform 0.2s ease, box-shadow 0.2s ease;
+			}
+			.category-card:hover {
+				transform: translateY(-3px);
+				box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+				border-color: var(--theme-accent);
+			}
+			.category-name {
+				font-size: 1.2rem;
+				font-weight: bold;
+				line-height: 1.4;
+				word-break: break-word;
+			}
+			.category-count {
+				background-color: var(--theme-accent);
+				color: white;
+				padding: 0.2rem 0.8rem;
+				border-radius: 9999px;
+				font-size: 0.9rem;
+				font-weight: bold;
+				white-space: nowrap;
+				flex-shrink: 0;
+				margin-left: 1rem;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h2>カテゴリ一覧</h2>
+			<div class="category-grid">
+				{
+					sortedCategories.map((category) => (
+						<a href={`/category/${category}/`} class="category-card">
+							<span class="category-name">{category}</span>
+							<span class="category-count">{categoryCount[category]} 記事</span>
+						</a>
+					))
+				}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

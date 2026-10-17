@@ -1,0 +1,63 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+<div class="conclusion-box">
+  <div class="conclusion-box-title">
+    <Icon name="heroicons:check-badge" class="icon-inline" /> この記事の結論
+  </div>
+  <div class="conclusion-box-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .conclusion-box {
+    background-color: #e0f2fe;
+    border: none;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 3rem 0 2rem;
+    position: relative;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  }
+  .conclusion-box-title {
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    background-color: #007cba;
+    padding: 2px 12px;
+    color: #ffffff;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .conclusion-box-title :global(svg) {
+    width: 1.2em;
+    height: 1.2em;
+  }
+  .conclusion-box-content {
+    font-weight: bold;
+    color: #0f172a;
+    line-height: 1.7;
+    font-size: 1.05rem;
+  }
+  .conclusion-box-content :global(p) {
+    margin: 0;
+  }
+  .conclusion-box-content :global(p:not(:last-child)) {
+    margin-bottom: 1rem;
+  }
+  /* Optional list styling for conclusion box */
+  .conclusion-box-content :global(ul) {
+    margin: 1rem 0 0 0;
+    padding-left: 1.5rem;
+  }
+  .conclusion-box-content :global(li) {
+    margin-bottom: 0.5rem;
+  }
+</style>

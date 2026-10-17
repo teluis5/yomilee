@@ -1,0 +1,80 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  title?: string;
+  icon?: string;
+}
+
+const { title = "アドバイス", icon = "heroicons:light-bulb" } = Astro.props;
+---
+<div class="advice-box">
+  <div class="advice-box-title">
+    <Icon name={icon} class="icon-inline" /> {title}
+  </div>
+  <div class="advice-box-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .advice-box {
+    background-color: #fffbeb;
+    border: 1.5px solid #fcd34d;
+    border-radius: 8px;
+    padding: 3.2rem 1.5rem 1.5rem;
+    margin: 3rem 0 2rem;
+    position: relative;
+    box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.08);
+  }
+  .advice-box-title {
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    z-index: 2;
+    background-color: #d97706;
+    padding: 6px 16px;
+    color: #ffffff;
+    font-weight: bold;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    box-shadow: 0 2px 4px rgba(180, 83, 9, 0.2);
+    max-width: calc(100% - 40px);
+    box-sizing: border-box;
+  }
+  .advice-box-title :global(svg) {
+    width: 1.2em;
+    height: 1.2em;
+    flex-shrink: 0;
+    margin-top: 0.15em;
+  }
+  .advice-box-content {
+    font-weight: 500;
+    color: #451a03;
+    line-height: 1.75;
+    font-size: 1.02rem;
+  }
+  .advice-box-content :global(p) {
+    margin: 0;
+  }
+  .advice-box-content :global(p:not(:last-child)) {
+    margin-bottom: 0.8rem;
+  }
+  .advice-box-content :global(b),
+  .advice-box-content :global(strong) {
+    color: #78350f;
+    font-weight: 700;
+  }
+  .advice-box-content :global(ul) {
+    margin: 0.8rem 0 0 0;
+    padding-left: 1.5rem;
+  }
+  .advice-box-content :global(li) {
+    margin-bottom: 0.4rem;
+  }
+</style>

@@ -1,0 +1,55 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+<div class="problem-box">
+  <div class="problem-box-title">
+    <Icon name="heroicons:question-mark-circle" class="icon-inline" /> よくあるお悩み
+  </div>
+  <div class="problem-box-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .problem-box {
+    background-color: #e2e8f0;
+    border: none;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2.5rem 0 2rem;
+    position: relative;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  }
+  .problem-box-title {
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    background-color: #475569;
+    padding: 2px 12px;
+    color: #ffffff;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .problem-box-title :global(svg) {
+    width: 1.2em;
+    height: 1.2em;
+  }
+  .problem-box-content {
+    font-weight: bold;
+    color: #334155;
+    line-height: 1.7;
+    font-size: 1.05rem;
+  }
+  .problem-box-content :global(p) {
+    margin: 0;
+  }
+  .problem-box-content :global(p:not(:last-child)) {
+    margin-bottom: 1rem;
+  }
+</style>

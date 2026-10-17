@@ -1,0 +1,73 @@
+---
+interface Props {
+  filename?: string;
+}
+const { filename } = Astro.props;
+---
+<div class="code-box-container">
+  <div class="code-box-header">
+    <div class="mac-dots">
+      <span class="dot red"></span>
+      <span class="dot yellow"></span>
+      <span class="dot green"></span>
+    </div>
+    {filename && <span class="code-filename">{filename}</span>}
+  </div>
+  <div class="code-box-body">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .code-box-container {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    margin: 2rem 0;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  .code-box-header {
+    background-color: #2d2d2d;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+    border-bottom: 1px solid #3f3f3f;
+    min-height: 20px;
+  }
+  .mac-dots {
+    display: flex;
+    gap: 6px;
+    position: absolute;
+    left: 15px;
+  }
+  .dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .red { background-color: #ff5f56; }
+  .yellow { background-color: #ffbd2e; }
+  .green { background-color: #27c93f; }
+  .code-filename {
+    color: #e5e5e5;
+    font-size: 0.85rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    width: 100%;
+    text-align: center;
+    pointer-events: none;
+  }
+  .code-box-body {
+    padding: 1rem;
+    overflow-x: auto;
+  }
+  .code-box-body :global(pre) {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+  .code-box-body :global(code) {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.9rem;
+  }
+</style>

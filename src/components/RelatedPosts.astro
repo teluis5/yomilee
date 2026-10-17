@@ -1,0 +1,237 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	currentSlug: string;
+	categories?: string[];
+	limit?: number;
+}
+
+const { currentSlug, categories = [], limit = 4 } = Astro.props;
+
+// 全記事の取得（ドラフト除外）
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+
+// 現在の記事を除外
+const otherPosts = allPosts.filter((p) => p.id !== currentSlug);
+
+// 1. 同一カテゴリの記事を優先抽出
+let related = otherPosts.filter((p) => {
+	const postCats = p.data.categories || [];
+	return postCats.some((c: string) => categories.includes(c));
+});
+
+// 日付降順ソート
+related.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// 2. 件数が足りない場合は最新記事で補完
+if (related.length < limit) {
+	const relatedIds = new Set(related.map((p) => p.id));
+	const rest = otherPosts
+		.filter((p) => !relatedIds.has(p.id))
+		.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+	
+	related = [...related, ...rest.slice(0, limit - related.length)];
+} else {
+	related = related.slice(0, limit);
+}
+---
+
+{related.length > 0 && (
+	<section class="related-posts-section">
+		<div class="related-posts-header">
+			<Icon name="heroicons:sparkles" class="header-icon" />
+			<h3 class="header-title">あわせて読みたい関連記事</h3>
+		</div>
+		<div class="related-grid">
+			{related.map((post) => (
+				<a href={`/blog/${post.id}/`} class="related-card box">
+					<div class="related-thumb">
+						{post.data.heroImage ? (
+							<Image
+								src={post.data.heroImage}
+								alt={post.data.title}
+								width={500}
+								height={280}
+								loading="lazy"
+								decoding="async"
+								class="related-img"
+							/>
+						) : (
+							<div class="related-no-img" />
+						)}
+					</div>
+					<div class="related-body">
+						{post.data.categories && post.data.categories.length > 0 && (
+							<span class="related-badge">{post.data.categories[0]}</span>
+						)}
+						<h4 class="related-title">{post.data.title}</h4>
+						<p class="related-date">
+							<Icon name="heroicons:calendar" class="date-icon" />
+							<FormattedDate date={post.data.pubDate} />
+						</p>
+					</div>
+				</a>
+			))}
+		</div>
+	</section>
+)}
+
+<style>
+.related-posts-section {
+	margin: 3.5rem 0 2rem 0;
+	padding-top: 2rem;
+	border-top: 2px dashed var(--border-color, #e2e8f0);
+}
+
+.related-posts-header {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-bottom: 1.5rem;
+}
+.header-icon {
+	width: 1.4rem;
+	height: 1.4rem;
+	color: var(--theme-accent, #007cba);
+}
+.header-title {
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: var(--text-main, #1e293b);
+	margin: 0;
+}
+
+/* グリッドレイアウト */
+.related-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 1.25rem;
+}
+
+.related-card {
+	display: flex;
+	flex-direction: column;
+	background: var(--bg-content, #ffffff);
+	border: 1px solid var(--border-color, #e2e8f0);
+	border-radius: 8px;
+	overflow: hidden;
+	text-decoration: none;
+	color: inherit;
+	transition: all 0.25s ease;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.related-card:hover {
+	transform: translateY(-3px);
+	border-color: var(--theme-accent, #007cba);
+	box-shadow: 0 8px 18px rgba(0, 124, 186, 0.12);
+	text-decoration: none;
+}
+
+.related-thumb {
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	overflow: hidden;
+	background: #f1f5f9;
+}
+
+.related-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 0.3s ease;
+}
+
+.related-card:hover .related-img {
+	transform: scale(1.05);
+}
+
+.related-no-img {
+	width: 100%;
+	height: 100%;
+	background: #e2e8f0;
+}
+
+.related-body {
+	padding: 0.85rem 1rem 1rem 1rem;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+.related-badge {
+	align-self: flex-start;
+	font-size: 0.72rem;
+	font-weight: 700;
+	color: var(--theme-accent, #007cba);
+	background: rgba(0, 124, 186, 0.08);
+	padding: 0.12rem 0.45rem;
+	border-radius: 4px;
+	margin-bottom: 0.4rem;
+}
+
+.related-title {
+	font-size: 0.95rem;
+	font-weight: 700;
+	color: var(--text-main, #1e293b);
+	line-height: 1.45;
+	margin: 0 0 0.5rem 0;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	flex: 1;
+	transition: color 0.2s ease;
+}
+
+.related-card:hover .related-title {
+	color: var(--theme-accent, #007cba);
+}
+
+.related-date {
+	font-size: 0.75rem;
+	color: var(--text-light, #64748b);
+	margin: 0;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+}
+.date-icon {
+	width: 13px;
+	height: 13px;
+}
+
+/* スマホ対応 */
+@media (max-width: 600px) {
+	.related-grid {
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
+	.related-card {
+		flex-direction: row;
+		align-items: center;
+	}
+	.related-thumb {
+		width: 120px;
+		height: 85px;
+		aspect-ratio: auto;
+		flex-shrink: 0;
+	}
+	.related-body {
+		padding: 0.6rem 0.8rem;
+	}
+	.related-title {
+		font-size: 0.88rem;
+		margin-bottom: 0.2rem;
+	}
+	.related-badge {
+		font-size: 0.68rem;
+		margin-bottom: 0.2rem;
+	}
+}
+</style>

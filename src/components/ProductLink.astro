@@ -1,0 +1,163 @@
+---
+interface Props {
+	title: string;
+	imageUrl: string;
+	amazonUrl?: string;
+	rakutenUrl?: string;
+	yahooUrl?: string;
+	amazonAsin?: string;
+	rakutenKeyword?: string;
+}
+
+const { title, imageUrl, amazonUrl, rakutenUrl, yahooUrl, amazonAsin, rakutenKeyword } = Astro.props;
+
+// Amazonアソシエイトリンクの自動生成
+const amazonTrackingId = 'teluis-22';
+const finalAmazonUrl = amazonUrl || (amazonAsin ? `https://www.amazon.co.jp/dp/${amazonAsin}?tag=${amazonTrackingId}` : null);
+
+// 楽天アフィリエイトリンクの自動生成
+const rakutenAffiliateId = '52513ff1.59ebf487.52513ff2.71d0e9e4';
+let finalRakutenUrl = rakutenUrl;
+if (!finalRakutenUrl && rakutenKeyword) {
+	const searchUrl = `https://search.rakuten.co.jp/search/mall/${encodeURIComponent(rakutenKeyword)}/`;
+	finalRakutenUrl = searchUrl;
+}
+if (finalRakutenUrl && !finalRakutenUrl.includes('hb.afl.rakuten.co.jp')) {
+	const encodedUrl = encodeURIComponent(finalRakutenUrl);
+	finalRakutenUrl = `https://hb.afl.rakuten.co.jp/hgc/${rakutenAffiliateId}/?pc=${encodedUrl}&m=${encodedUrl}`;
+}
+---
+
+<div class="product-link-card">
+	<div class="product-image">
+		<img src={imageUrl} alt={title} loading="lazy" />
+	</div>
+	<div class="product-info">
+		<div class="product-title">{title}</div>
+		<div class="product-buttons">
+			{finalAmazonUrl && (
+				<a href={finalAmazonUrl} target="_blank" rel="noopener noreferrer" class="btn-aff btn-amazon">
+					Amazonで価格を見る
+				</a>
+			)}
+			{finalRakutenUrl && (
+				<a href={finalRakutenUrl} target="_blank" rel="noopener noreferrer" class="btn-aff btn-rakuten">
+					楽天市場で探す
+				</a>
+			)}
+			{yahooUrl && (
+				<a href={yahooUrl} target="_blank" rel="noopener noreferrer" class="btn-aff btn-yahoo">
+					Yahoo!ショッピング
+				</a>
+			)}
+		</div>
+	</div>
+</div>
+
+<style>
+	.product-link-card {
+		display: flex;
+		gap: 1.5rem;
+		padding: 1.5rem;
+		margin: 2.5rem 0;
+		border: 1px solid var(--border-color, #e2e8f0);
+		border-radius: 8px;
+		background-color: var(--bg-content, #ffffff);
+		box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+	}
+
+	.product-image {
+		flex-shrink: 0;
+		width: 140px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.product-image img {
+		max-width: 100%;
+		max-height: 140px;
+		object-fit: contain;
+	}
+
+	.product-info {
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	.product-title {
+		font-weight: bold;
+		font-size: 1.1rem;
+		line-height: 1.5;
+		margin-bottom: 1rem;
+		color: var(--text-main, #333333);
+	}
+
+	.product-buttons {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.btn-aff {
+		flex: 1;
+		min-width: 140px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.8rem 0.5rem;
+		border-radius: 4px;
+		font-weight: bold;
+		font-size: 0.9rem;
+		color: #ffffff !important;
+		text-decoration: none !important;
+		transition: opacity 0.2s, transform 0.2s;
+		text-align: center;
+	}
+
+	.btn-aff:hover {
+		opacity: 0.85;
+		transform: translateY(-1px);
+	}
+
+	.btn-amazon {
+		background-color: #f5a623;
+		border-bottom: 3px solid #d38300;
+	}
+
+	.btn-rakuten {
+		background-color: #bf0000;
+		border-bottom: 3px solid #990000;
+	}
+
+	.btn-yahoo {
+		background-color: #4b80ce;
+		border-bottom: 3px solid #3362a6;
+	}
+
+	@media (max-width: 600px) {
+		.product-link-card {
+			flex-direction: column;
+			align-items: center;
+			padding: 1.2rem;
+		}
+
+		.product-image {
+			width: 100%;
+			max-width: 200px;
+			margin-bottom: 1rem;
+		}
+
+		.product-title {
+			text-align: center;
+			font-size: 1.05rem;
+		}
+
+		.btn-aff {
+			width: 100%;
+			flex: none;
+		}
+	}
+</style>

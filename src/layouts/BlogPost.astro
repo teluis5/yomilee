@@ -1,0 +1,426 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+import Ad from '../components/Ad.astro';
+import TableEnhancer from '../components/TableEnhancer.astro';
+import CodeEnhancer from '../components/CodeEnhancer.astro';
+import RelatedPosts from '../components/RelatedPosts.astro';
+import ShareButtons from '../components/ShareButtons.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Sidebar from '../components/Sidebar.astro';
+import { Icon } from 'astro-icon/components';
+
+type Props = CollectionEntry<'blog'>['data'] & { headings?: any[]; currentSlug?: string };
+
+const { title, description, pubDate, updatedDate, heroImage, categories, headings } = Astro.props;
+const currentSlug = Astro.props.currentSlug || Astro.url.pathname.replace(/^\/blog\//, '').replace(/\/$/, '');
+
+const breadcrumbItems = [
+	{ label: 'ホーム', href: '/' },
+	...(categories && categories.length > 0
+		? [{ label: categories[0], href: `/category/${categories[0]}/` }]
+		: []),
+	{ label: title },
+];
+
+const siteBase = Astro.site ? Astro.site.href.replace(/\/$/, '') : Astro.url.origin;
+
+const articleSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'Article',
+	headline: title,
+	description: description,
+	image: heroImage ? new URL(heroImage.src, Astro.site || Astro.url.origin).href : undefined,
+	datePublished: pubDate.toISOString(),
+	dateModified: updatedDate ? updatedDate.toISOString() : pubDate.toISOString(),
+	author: {
+		'@type': 'Person',
+		'@id': `${siteBase}/about/#author-teluis`,
+		name: 'teluis',
+		jobTitle: 'ITエンジニア / ITコンサルタント',
+		description: '日系大手企業、AIスタートアップでのシステム開発を経て、現在はコンサルティングファームに勤務する現役ITエンジニア。合理的なエンジニア視点と実機検証に基づき、スマート家電・ガジェット・生活改善・旅行の一次情報を発信。',
+		url: `${siteBase}/about/`,
+		image: `${siteBase}/brand/teluis_avatar.webp`,
+		knowsAbout: [
+			'ITエンジニアリング',
+			'システム開発・AI活用',
+			'業務効率化・ライフハック',
+			'スマート家電・時短家電レビュー',
+			'ガジェット・通信サービス比較',
+			'国内外の旅行計画・マイル・ホテル予約術'
+		]
+	},
+	publisher: {
+		'@type': 'Organization',
+		name: 'TELUIS（テルイズ）',
+		url: `${siteBase}/`,
+		logo: {
+			'@type': 'ImageObject',
+			url: `${siteBase}/brand/teluis_horizontal_logo.webp`
+		}
+	}
+};
+---
+
+<html lang="ja">
+	<head>
+		<BaseHead title={title} description={description} image={heroImage} />
+		<script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+		<style>
+			.hero-image {
+				width: 100%;
+				margin-bottom: 2rem;
+			}
+			.hero-image img {
+				display: block;
+				margin: 0 auto;
+				width: 100%;
+				max-height: 500px;
+				object-fit: cover;
+			}
+			.prose {
+				color: var(--text-main);
+				font-size: 1.05rem;
+			}
+
+			.prose strong {
+				font-weight: 700;
+				background: linear-gradient(transparent 60%, #fff3cd 60%);
+			}
+			.prose table strong {
+				background: none;
+			}
+			.prose table th,
+			.prose table td,
+			.prose table a {
+				word-break: break-all;
+				overflow-wrap: anywhere;
+			}
+
+			/* 楽天アフィリエイトウィジェット表示の最適化 */
+			.prose table:has(a[href*="rakuten.co.jp"]) {
+				border: none !important;
+				background: transparent !important;
+				margin: 2rem auto !important;
+				max-width: 504px !important;
+				width: 100% !important;
+				box-shadow: none !important;
+				display: table !important;
+			}
+			.prose table:has(a[href*="rakuten.co.jp"]) table {
+				border: none !important;
+				background: transparent !important;
+				margin: 0 auto !important;
+				width: 100% !important;
+				box-shadow: none !important;
+			}
+			.prose table:has(a[href*="rakuten.co.jp"]) th,
+			.prose table:has(a[href*="rakuten.co.jp"]) td {
+				border: none !important;
+				background: transparent !important;
+				padding: 0 !important;
+				box-shadow: none !important;
+				font-weight: normal !important;
+			}
+			.prose table:has(a[href*="rakuten.co.jp"]) img {
+				background-color: transparent !important;
+			}
+			.prose table:has(a[href*="rakuten.co.jp"]) a {
+				word-break: normal !important;
+			}
+			.prose table:has(a[href*="rakuten.co.jp"]) a div[style*="background-color:#bf0000"],
+			.prose table:has(a[href*="rakuten.co.jp"]) a[href*="bbtn"] div {
+				white-space: nowrap !important;
+				word-break: keep-all !important;
+				width: auto !important;
+				min-width: 84px !important;
+				box-sizing: border-box !important;
+			}
+			.prose table:has(a[href*="rakuten.co.jp"]) br {
+				display: none;
+			}
+			.prose table:has(a[href*="rakuten.co.jp"]) div[style*="border-radius"] {
+				margin-left: auto !important;
+				margin-right: auto !important;
+				max-width: 100% !important;
+				box-sizing: border-box !important;
+			}
+			@media (max-width: 560px) {
+				.prose table:has(a[href*="rakuten.co.jp"]) table,
+				.prose table:has(a[href*="rakuten.co.jp"]) table tbody,
+				.prose table:has(a[href*="rakuten.co.jp"]) table tr {
+					display: flex !important;
+					flex-direction: column !important;
+					align-items: center !important;
+					width: 100% !important;
+				}
+				.prose table:has(a[href*="rakuten.co.jp"]) table td {
+					width: 100% !important;
+					max-width: 100% !important;
+					display: block !important;
+					text-align: center !important;
+					box-sizing: border-box !important;
+				}
+				.prose table:has(a[href*="rakuten.co.jp"]) table td:first-child a {
+					display: inline-block !important;
+				}
+				.prose table:has(a[href*="rakuten.co.jp"]) table td:first-child img {
+					max-width: 100% !important;
+					height: auto !important;
+					margin: 0 auto !important;
+				}
+				.prose table:has(a[href*="rakuten.co.jp"]) table td:last-child p {
+					text-align: center !important;
+					margin: 8px 0 !important;
+				}
+				.prose table:has(a[href*="rakuten.co.jp"]) table td:last-child div {
+					display: flex !important;
+					justify-content: center !important;
+					align-items: center !important;
+					gap: 12px !important;
+					margin: 8px auto !important;
+				}
+				.prose table:has(a[href*="rakuten.co.jp"]) table td:last-child div a {
+					float: none !important;
+				}
+				.prose table:has(a[href*="rakuten.co.jp"]) table td:last-child div a:last-child div {
+					float: none !important;
+					width: auto !important;
+					min-width: 110px !important;
+				}
+			}
+			.prose ul, .prose ol {
+				padding-left: 1.5rem;
+				margin-bottom: 1.5rem;
+			}
+			.prose li {
+				margin-bottom: 0.5rem;
+				line-height: 1.8;
+			}
+			.prose blockquote {
+				background: #f0f9ff;
+				border-left: 5px solid var(--theme-accent);
+				padding: 1.2rem 1.5rem;
+				margin: 2rem 0;
+				border-radius: 4px;
+				color: #075985;
+				font-weight: 700;
+				font-size: 1.1rem;
+			}
+			.prose blockquote.twitter-tweet {
+				background: transparent;
+				border: none;
+				padding: 0;
+				margin: 1.5rem auto;
+				color: inherit;
+				font-weight: normal;
+			}
+			.prose img {
+				max-width: 100%;
+				height: auto;
+				border-radius: 6px;
+				content-visibility: auto;
+				background-color: #f8fafc;
+			}
+			.prose iframe[src*="google.com/maps"],
+			.prose iframe[data-src*="google.com/maps"] {
+				width: 100%;
+				aspect-ratio: 16 / 10;
+				height: auto;
+				border: 0;
+				border-radius: 8px;
+				background-color: #f1f5f9;
+			}
+			.prose blockquote p {
+				margin: 0;
+			}
+			.title {
+				margin-bottom: 2em;
+				line-height: 1.4;
+			}
+			.title h1 {
+				margin: 0 0 0.5em 0;
+				font-size: 1.8rem;
+			}
+			.date {
+				margin-bottom: 1em;
+				color: var(--text-light);
+				font-size: 0.9em;
+				display: flex;
+				gap: 1em;
+				align-items: center;
+			}
+			.tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5rem;
+				margin-bottom: 1rem;
+			}
+			.tag {
+				display: inline-block;
+				background-color: #e0f2fe;
+				color: #0369a1;
+				padding: 0.2rem 0.6rem;
+				border-radius: 9999px;
+				font-size: 0.85rem;
+				text-decoration: none;
+				font-weight: 600;
+				display: inline-flex;
+				align-items: center;
+				gap: 0.2rem;
+			}
+			.tag:hover {
+				background-color: #bae6fd;
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<div class="layout-container">
+				<!-- メインコンテンツ (左カラム) -->
+				<article class="layout-main">
+					<Breadcrumb items={breadcrumbItems} />
+					<div class="title">
+						<div class="date">
+							<span><Icon name="heroicons:calendar" class="icon-inline" /> <FormattedDate date={pubDate} /></span>
+							{
+								updatedDate && (
+									<span><Icon name="heroicons:arrow-path" class="icon-inline" /> <FormattedDate date={updatedDate} /></span>
+								)
+							}
+						</div>
+						<h1>{title}</h1>
+						{categories && categories.length > 0 && (
+							<div class="tags">
+								{categories.map((category: string) => (
+									<a href={`/category/${category}/`} class="tag"><Icon name="heroicons:tag" class="icon-inline" /> {category}</a>
+								))}
+							</div>
+						)}
+					</div>
+					
+					<div class="hero-image">
+						{heroImage && <Image width={1020} height={510} src={heroImage} alt={title} loading="eager" fetchpriority="high" decoding="async" />}
+					</div>
+					
+					<div class="prose">
+						<div id="toc-wrapper">
+							{headings && <TableOfContents headings={headings} />}
+						</div>
+						<slot />
+						
+						<ShareButtons title={title} />
+						
+						<RelatedPosts currentSlug={currentSlug} categories={categories} />
+						
+						<!-- 記事下広告（審査通過後にスロットIDを設定して有効化） -->
+						<!--
+						<div style="margin-top: 3rem;">
+							<Ad />
+						</div>
+						-->
+					</div>
+
+					<script is:inline>
+						(() => {
+							const toc = document.getElementById('toc-wrapper');
+							if (!toc) return;
+							if (!toc.querySelector('.toc-container')) return;
+							
+							// 記事本文(.prose)内の最初の見出し(h2, h3, h4)を取得
+							const firstHeading = document.querySelector('.prose h2, .prose h3, .prose h4');
+							if (firstHeading && firstHeading.parentNode && toc.nextElementSibling !== firstHeading) {
+								firstHeading.parentNode.insertBefore(toc, firstHeading);
+							}
+						})();
+					</script>
+				</article>
+
+				<!-- サイドバー (右カラム) -->
+				<Sidebar />
+			</div>
+		</main>
+		<Footer />
+		<TableEnhancer />
+		<CodeEnhancer />
+		<script>
+			document.addEventListener('DOMContentLoaded', () => {
+				const toc = document.getElementById('toc-wrapper');
+				if (toc && toc.querySelector('.toc-container')) {
+					const firstHeading = document.querySelector('.prose h2, .prose h3, .prose h4');
+					if (firstHeading && firstHeading.parentNode && toc.nextElementSibling !== firstHeading) {
+						firstHeading.parentNode.insertBefore(toc, firstHeading);
+					}
+				}
+
+				// 記事内画像の非同期・遅延読み込み補完
+				const proseImages = document.querySelectorAll('.prose img');
+				proseImages.forEach(img => {
+					if (!img.getAttribute('loading')) {
+						img.setAttribute('loading', 'lazy');
+					}
+					if (!img.getAttribute('decoding')) {
+						img.setAttribute('decoding', 'async');
+					}
+				});
+
+				// Google Mapsの先行事前読み込み（初期描画の邪魔をせず、直後のアイドル時や操作時に先行ロード）
+				const mapIframes = document.querySelectorAll('.prose iframe[src*="google.com/maps"], .prose iframe[data-src*="google.com/maps"]');
+				if (mapIframes.length > 0) {
+					let allLoaded = false;
+					const loadAllMaps = () => {
+						if (allLoaded) return;
+						allLoaded = true;
+						mapIframes.forEach(iframe => {
+							const htmlIframe = iframe as HTMLIFrameElement;
+							const pendingSrc = htmlIframe.dataset.src;
+							if (pendingSrc) {
+								htmlIframe.src = pendingSrc;
+								htmlIframe.removeAttribute('data-src');
+							}
+						});
+					};
+
+					// 1. 初回のスクロール、タッチ、操作で即座に先行ロード
+					['scroll', 'touchstart', 'mousemove', 'wheel'].forEach(evt => {
+						window.addEventListener(evt, loadAllMaps, { once: true, passive: true });
+					});
+
+					// 2. 操作がなくても、初期表示が落ち着いたタイミング（アイドル時または1秒後）に自動で事前読み込み
+					if ('requestIdleCallback' in window) {
+						window.addEventListener('load', () => {
+							(window as any).requestIdleCallback(() => {
+								setTimeout(loadAllMaps, 300);
+							}, { timeout: 1500 });
+						});
+					} else {
+						window.addEventListener('load', () => {
+							setTimeout(loadAllMaps, 800);
+						});
+					}
+
+					// 3. 画面内接近検知（広範囲 1500px 手前で検知）
+					if ('IntersectionObserver' in window) {
+						const mapObserver = new IntersectionObserver((entries) => {
+							entries.forEach(entry => {
+								if (entry.isIntersecting) {
+									loadAllMaps();
+									mapObserver.disconnect();
+								}
+							});
+						}, { rootMargin: '1500px 0px' });
+
+						mapIframes.forEach(iframe => mapObserver.observe(iframe));
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,174 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+import { Icon } from 'astro-icon/components';
+
+// 新着記事を取得
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const recentPosts = allPosts
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 5);
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<BaseHead title={'404 Not Found | ' + SITE_TITLE} description="お探しのページは見つかりませんでした。" />
+		<!-- 旧日本語URL・旧カテゴリからのスマート自動転送スクリプト -->
+		<script is:inline>
+			(function() {
+				var path = window.location.pathname;
+				var decoded = '';
+				try { decoded = decodeURIComponent(path); } catch (e) { decoded = path; }
+
+				var redirects = [
+					{ match: '名画のティータイム', to: '/blog/art-teatime-book-review/' },
+					{ match: 'ハリー・ポッ', to: '/blog/harry-potter-toshimaen-station/' },
+					{ match: 'ハリーポッ', to: '/blog/harry-potter-toshimaen-station/' },
+					{ match: 'とっとり', to: '/blog/tottori-hanakairou-winter-illumination/' },
+					{ match: '挫折した理由', to: '/blog/why-quit-blog-first-month/' },
+					{ match: 'マネー・ビジネス', to: '/category/ライフスタイル/' },
+					{ match: '暮らし・家電', to: '/category/ライフスタイル/' },
+					{ match: 'グルメ', to: '/category/旅行/' },
+					{ match: '地域ニュース', to: '/category/ライフスタイル/' }
+				];
+
+				for (var i = 0; i < redirects.length; i++) {
+					if (decoded.indexOf(redirects[i].match) !== -1) {
+						window.location.replace(redirects[i].to);
+						break;
+					}
+				}
+			})();
+		</script>
+		<style>
+			.error-container {
+				max-width: 800px;
+				margin: 3rem auto;
+				padding: 3rem 1.5rem;
+				text-align: center;
+				background-color: var(--bg-content);
+				border: 1px solid var(--border-color);
+				border-radius: var(--radius);
+			}
+			.error-code {
+				font-size: 5rem;
+				font-weight: 800;
+				color: var(--theme-accent);
+				line-height: 1;
+				margin-bottom: 1rem;
+				letter-spacing: -2px;
+			}
+			.error-title {
+				font-size: 1.5rem;
+				font-weight: 700;
+				margin-bottom: 1rem;
+				color: var(--text-main);
+			}
+			.error-desc {
+				font-size: 1rem;
+				color: var(--text-light);
+				margin-bottom: 2.5rem;
+				line-height: 1.8;
+			}
+			.btn-home {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+				padding: 0.8rem 2rem;
+				background-color: var(--theme-accent);
+				color: #ffffff !important;
+				font-weight: 700;
+				border-radius: 9999px;
+				text-decoration: none;
+				transition: opacity 0.2s, transform 0.2s;
+				box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+			}
+			.btn-home:hover {
+				opacity: 0.9;
+				transform: translateY(-2px);
+				text-decoration: none;
+			}
+			.recent-section {
+				margin-top: 3.5rem;
+				padding-top: 2.5rem;
+				border-top: 1px solid var(--border-color);
+				text-align: left;
+			}
+			.recent-title {
+				font-size: 1.15rem;
+				font-weight: 700;
+				margin-bottom: 1.2rem;
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				color: var(--text-main);
+			}
+			.recent-list {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+			}
+			.recent-item {
+				padding: 0.75rem 0;
+				border-bottom: 1px dashed var(--border-color);
+			}
+			.recent-item:last-child {
+				border-bottom: none;
+			}
+			.recent-item a {
+				color: var(--text-main);
+				text-decoration: none;
+				display: flex;
+				align-items: baseline;
+				gap: 0.5rem;
+				font-weight: 500;
+			}
+			.recent-item a:hover {
+				color: var(--theme-accent);
+				text-decoration: underline;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="error-container">
+				<div class="error-code">404</div>
+				<h1 class="error-title">お探しのページが見つかりません</h1>
+				<p class="error-desc">
+					アクセスされたページは、一時的にアクセスできない状態にあるか、<br />
+					移動もしくは削除された可能性があります。<br />
+					URLをご確認いただくか、トップページよりお探しください。
+				</p>
+				<a href="/" class="btn-home">
+					<Icon name="heroicons:home" class="icon-inline" />
+					トップページへ戻る
+				</a>
+
+				{recentPosts.length > 0 && (
+					<div class="recent-section">
+						<div class="recent-title">
+							<Icon name="heroicons:sparkles" class="icon-inline" />
+							最新の記事から探す
+						</div>
+						<ul class="recent-list">
+							{recentPosts.map((post) => (
+								<li class="recent-item">
+									<a href={'/blog/' + post.id + '/'}>
+										<Icon name="heroicons:chevron-right" class="icon-inline" style="font-size: 0.85em; color: var(--theme-accent); flex-shrink: 0;" />
+										<span>{post.data.title}</span>
+									</a>
+								</li>
+							))}
+						</ul>
+					</div>
+				)}
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

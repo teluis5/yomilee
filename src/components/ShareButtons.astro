@@ -1,0 +1,81 @@
+---
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+const currentUrl = Astro.url.href;
+
+const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(title)}`;
+const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(title + " " + currentUrl)}`;
+const threadsUrl = `https://www.threads.net/intent/post?text=${encodeURIComponent(title + " " + currentUrl)}`;
+---
+
+<div class="share-buttons">
+	<span class="share-label">この記事をシェアする</span>
+	<div class="share-links">
+		<a href={twitterUrl} target="_blank" rel="noopener noreferrer" class="btn-share btn-x" aria-label="Share on X (Twitter)">
+			<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg>
+			<span>Post</span>
+		</a>
+		<a href={threadsUrl} target="_blank" rel="noopener noreferrer" class="btn-share btn-threads" aria-label="Share on Threads">
+			<svg width="20" height="20" viewBox="0 0 192 192" fill="currentColor"><path d="M141.537 88.9883C140.71 88.5919 139.87 88.2104 139.019 87.8451C137.537 60.5382 122.616 44.905 97.5619 44.745C97.4484 44.7443 97.3355 44.7443 97.222 44.7443C82.2364 44.7443 69.7731 51.1409 62.102 62.7807L75.881 72.2328C81.6116 63.5383 90.6052 61.6848 97.2286 61.6848C97.3051 61.6848 97.3819 61.6848 97.4576 61.6855C105.707 61.7381 111.932 64.1366 115.961 68.814C118.893 72.2193 120.854 76.925 121.825 82.8638C114.511 81.6207 106.601 81.2385 98.145 81.7233C74.3247 83.0954 59.0111 96.9879 60.0396 116.292C60.5615 126.084 65.4397 134.508 73.775 140.011C80.8224 144.663 89.899 146.938 99.3323 146.423C111.79 145.74 121.563 140.987 128.381 132.296C133.559 125.696 136.834 117.143 138.28 106.366C144.217 109.949 148.617 114.664 151.047 120.332C155.179 129.967 155.42 145.8 142.501 158.708C131.182 170.016 117.576 174.908 97.0135 175.059C74.2042 174.89 56.9538 167.575 45.7381 153.317C35.2355 139.966 29.8077 120.682 29.6052 96C29.8077 71.3178 35.2355 52.0336 45.7381 38.6827C56.9538 24.4249 74.2039 17.11 97.0132 16.9405C119.988 17.1113 137.539 24.4614 149.184 38.708C154.894 45.5136 159.199 53.6013 162.037 62.7483L178.184 57.6534C174.524 45.6942 168.964 35.1272 161.464 26.1554C147.013 8.44167 124.962 0.165215 97.0132 0C64.6309 0.207909 41.5205 9.42065 25.5971 29.6102C12.3087 46.4674 5.34298 70.3802 5.00001 96L5 96.0026L5.00001 96.0052C5.34298 121.625 12.3087 145.538 25.5971 162.395C41.5205 182.585 64.6309 191.792 97.0135 192C122.784 191.83 140.75 185.341 155.516 170.589C174.453 151.668 172.935 127.324 165.734 110.825C158.747 94.8143 146.993 88.0837 141.537 88.9883ZM98.84 130.495C85.5019 131.226 75.8752 125.845 75.2536 115.34C74.6536 105.19 82.5925 97.1065 99.8887 95.9922C106.666 95.556 113.197 96.027 118.895 97.1353C117.842 116.038 108.665 129.743 98.84 130.495Z"></path></svg>
+			<span>Threads</span>
+		</a>
+		<a href={lineUrl} target="_blank" rel="noopener noreferrer" class="btn-share btn-line" aria-label="Share on LINE">
+			<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M24 10.304c0-5.369-5.383-9.738-12-9.738S0 4.935 0 10.304c0 4.814 4.27 8.846 10.035 9.608.391.084.922.258 1.057.592.12.3-.039.922-.047 1.084-.027.318-.124 1.528.28 1.344.405-.184 2.181-1.285 3.003-1.884 1.157-.841 4.296-3.155 5.86-5.014C22.68 13.916 24 12.242 24 10.304zM7.375 13.178H5.21a.403.403 0 0 1-.403-.404V7.525c0-.223.18-.403.403-.403.224 0 .403.18.403.403v4.845h1.761a.403.403 0 0 1 .404.403.404.404 0 0 1-.403.405zm2.84 0a.403.403 0 0 1-.403-.404V7.525c0-.223.18-.403.403-.403.224 0 .403.18.403.403v5.249c0 .223-.18.404-.403.404zm5.556 0h-.47a.403.403 0 0 1-.362-.224l-2.023-3.666v3.486a.403.403 0 0 1-.403.404.403.403 0 0 1-.403-.404V7.525a.404.404 0 0 1 .655-.316l2.196 3.978V7.525c0-.223.18-.403.403-.403.224 0 .404.18.404.403v5.249a.404.404 0 0 1-.404.404zm3.834-4.444h-1.761a.403.403 0 0 1-.403-.403.403.403 0 0 1 .403-.404h1.761a.403.403 0 0 1 0 .807zm0 1.615h-1.761a.403.403 0 0 1-.403-.404.403.403 0 0 1 .403-.403h1.761a.403.403 0 0 1 0 .807zm0 1.215h-1.761a.403.403 0 0 1-.403-.404.403.403 0 0 1 .403-.403h1.761a.403.403 0 0 1 0 .807zm0-4.045h-1.761a.403.403 0 0 1-.403-.403.403.403 0 0 1 .403-.404h1.761a.403.403 0 0 1 0 .807z"/></svg>
+			<span>LINE</span>
+		</a>
+	</div>
+</div>
+
+<style>
+	.share-buttons {
+		margin: 3rem 0;
+		padding: 1.5rem;
+		background: var(--bg-content, #fff);
+		border-radius: 8px;
+		text-align: center;
+		border: 1px solid var(--border-color, #e2e8f0);
+	}
+	.share-label {
+		display: block;
+		font-weight: bold;
+		color: var(--text-main, #333);
+		margin-bottom: 1rem;
+		font-size: 1.1rem;
+	}
+	.share-links {
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+	.btn-share {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.6rem 1.2rem;
+		border-radius: 9999px;
+		font-weight: bold;
+		font-size: 0.95rem;
+		color: #ffffff !important;
+		text-decoration: none !important;
+		transition: transform 0.2s, opacity 0.2s;
+	}
+	.btn-share:hover {
+		transform: translateY(-2px);
+		opacity: 0.9;
+	}
+	.btn-x {
+		background-color: #000000;
+	}
+	.btn-threads {
+		background-color: #000000;
+		color: #ffffff;
+		border: 1px solid #333;
+	}
+	.btn-line {
+		background-color: #06C755;
+	}
+</style>

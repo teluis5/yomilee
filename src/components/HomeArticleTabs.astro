@@ -1,0 +1,553 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	page: {
+		data: any[];
+		currentPage: number;
+		lastPage: number;
+		url: {
+			prev?: string;
+			next?: string;
+		};
+	};
+	categoryLimit?: number;
+}
+
+const { page, categoryLimit = 6 } = Astro.props;
+
+// 全公開記事の取得（ドラフト除外）
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const sortedAllPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// カテゴリごとの記事を分類・集計
+const categoryPostsMap = new Map<string, typeof sortedAllPosts>();
+sortedAllPosts.forEach((post) => {
+	const cats = post.data.categories || [];
+	cats.forEach((cat: string) => {
+		if (!categoryPostsMap.has(cat)) {
+			categoryPostsMap.set(cat, []);
+		}
+		categoryPostsMap.get(cat)!.push(post);
+	});
+});
+
+// 記事件数の多い順にカテゴリをソート
+const sortedCategories = Array.from(categoryPostsMap.entries())
+	.sort((a, b) => b[1].length - a[1].length)
+	.map(([cat, posts]) => ({
+		name: cat,
+		count: posts.length,
+		posts: posts.slice(0, categoryLimit),
+	}));
+---
+
+<div class="tabs-container">
+	<!-- カテゴリが存在する場合のみタブナビゲーションを表示 -->
+	{sortedCategories.length > 0 && (
+		<div class="tab-nav-wrapper">
+			<div class="tab-nav" role="tablist" aria-label="記事一覧の切り替え">
+				<button
+					type="button"
+					class="tab-btn is-active"
+					role="tab"
+					aria-selected="true"
+					data-tab="tab-recent"
+					id="btn-tab-recent"
+					aria-controls="panel-tab-recent"
+					tabindex="0"
+				>
+					<Icon name="heroicons:clock" class="icon-inline tab-icon" />
+					<span class="tab-label">新着記事</span>
+				</button>
+				{sortedCategories.map((cat, index) => (
+					<button
+						type="button"
+						class="tab-btn"
+						role="tab"
+						aria-selected="false"
+						data-tab={`tab-cat-${index}`}
+						id={`btn-tab-cat-${index}`}
+						aria-controls={`panel-tab-cat-${index}`}
+						tabindex="-1"
+					>
+						<Icon name="heroicons:folder" class="icon-inline tab-icon" />
+						<span class="tab-label">{cat.name}</span>
+						<span class="tab-count">{cat.count}</span>
+					</button>
+				))}
+			</div>
+		</div>
+	)}
+
+	<!-- タブパネル一覧 -->
+	<div class="tab-panels">
+		<!-- 1. 新着記事パネル -->
+		<div
+			class="tab-panel is-active"
+			id="panel-tab-recent"
+			role="tabpanel"
+			aria-labelledby="btn-tab-recent"
+		>
+			<div class="entry-list">
+				{page.data.map((post) => (
+					<a href={`/blog/${post.id}/`} class="entry-card box">
+						<div class="entry-thumb">
+							{post.data.heroImage ? (
+								<Image width={720} height={405} src={post.data.heroImage} alt={post.data.title} loading="lazy" decoding="async" fetchpriority="low" />
+							) : (
+								<div class="entry-thumb-empty" />
+							)}
+						</div>
+						<div class="entry-content">
+							<h2 class="entry-title">{post.data.title}</h2>
+							<div class="entry-meta">
+								<p class="entry-date">
+									<Icon name="heroicons:calendar" class="icon-inline" /> <FormattedDate date={post.data.pubDate} />
+								</p>
+								{post.data.categories && post.data.categories.length > 0 && (
+									<span class="entry-cat-badge">{post.data.categories[0]}</span>
+								)}
+							</div>
+						</div>
+					</a>
+				))}
+			</div>
+
+			<!-- ページネーション（新着順タブのみ） -->
+			{page.lastPage > 1 && (
+				<div class="pagination">
+					{page.url.prev ? (
+						<a href={page.url.prev} class="page-link">
+							&laquo; 前へ
+						</a>
+					) : (
+						<div />
+					)}
+					<span class="page-current">
+						{page.currentPage} / {page.lastPage} ページ
+					</span>
+					{page.url.next ? (
+						<a href={page.url.next} class="page-link">
+							次へ &raquo;
+						</a>
+					) : (
+						<div />
+					)}
+				</div>
+			)}
+		</div>
+
+		<!-- 2. 各カテゴリ別パネル -->
+		{sortedCategories.map((cat, index) => (
+			<div
+				class="tab-panel"
+				id={`panel-tab-cat-${index}`}
+				role="tabpanel"
+				aria-labelledby={`btn-tab-cat-${index}`}
+			>
+				<div class="entry-list">
+					{cat.posts.map((post) => (
+						<a href={`/blog/${post.id}/`} class="entry-card box">
+							<div class="entry-thumb">
+								{post.data.heroImage ? (
+									<Image width={720} height={405} src={post.data.heroImage} alt={post.data.title} loading="lazy" decoding="async" fetchpriority="low" />
+								) : (
+									<div class="entry-thumb-empty" />
+								)}
+							</div>
+							<div class="entry-content">
+								<h2 class="entry-title">{post.data.title}</h2>
+								<div class="entry-meta">
+									<p class="entry-date">
+										<Icon name="heroicons:calendar" class="icon-inline" /> <FormattedDate date={post.data.pubDate} />
+									</p>
+									<span class="entry-cat-badge">{cat.name}</span>
+								</div>
+							</div>
+						</a>
+					))}
+				</div>
+
+				<div class="category-more-wrapper">
+					<a href={`/category/${cat.name}/`} class="category-more-link">
+						「{cat.name}」の記事一覧へ（全{cat.count}件） &raquo;
+					</a>
+				</div>
+			</div>
+		))}
+	</div>
+</div>
+
+<style>
+	.tabs-container {
+		width: 100%;
+		margin-bottom: 2rem;
+	}
+
+	/* タブナビゲーション */
+	.tab-nav-wrapper {
+		position: relative;
+		border-bottom: 2px solid var(--border-color);
+		margin-bottom: 1.5rem;
+	}
+
+	.tab-nav {
+		display: flex;
+		gap: 0.35rem;
+		overflow-x: auto;
+		overflow-y: hidden;
+		-webkit-overflow-scrolling: touch;
+		overscroll-behavior-x: contain;
+		overscroll-behavior-y: none;
+		touch-action: pan-x pinch-zoom;
+		scrollbar-width: none;
+		padding: 3px 0 0 0;
+		margin-bottom: -2px;
+	}
+	.tab-nav::-webkit-scrollbar {
+		display: none;
+	}
+
+	.tab-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		padding: 0.65rem 1.1rem;
+		border: 1px solid var(--border-color);
+		border-bottom: 2px solid transparent;
+		border-radius: 6px 6px 0 0;
+		background-color: #f7f8f9;
+		color: var(--text-main);
+		font-size: 0.95rem;
+		font-weight: 600;
+		cursor: pointer;
+		white-space: nowrap;
+		transition: all 0.2s ease;
+		position: relative;
+		user-select: none;
+		font-family: inherit;
+		box-sizing: border-box;
+	}
+
+	.tab-btn:hover {
+		background-color: #ededed;
+		color: var(--theme-accent);
+	}
+
+	.tab-btn.is-active {
+		background-color: var(--bg-content);
+		color: var(--theme-accent);
+		border-color: var(--border-color);
+		border-bottom-color: var(--bg-content);
+		border-top: 3px solid var(--theme-accent);
+		padding-top: calc(0.65rem - 2px);
+		z-index: 2;
+	}
+
+	.tab-icon {
+		width: 1.1em;
+		height: 1.1em;
+	}
+
+	.tab-count {
+		font-size: 0.75rem;
+		background: #e2e8f0;
+		color: #475569;
+		border-radius: 10px;
+		padding: 0.1rem 0.45rem;
+		font-weight: normal;
+		margin-left: 0.15rem;
+	}
+	.tab-btn.is-active .tab-count {
+		background: #e0f2fe;
+		color: #0369a1;
+	}
+
+	/* パネル切り替え */
+	.tab-panel {
+		display: none;
+		content-visibility: hidden;
+	}
+	.tab-panel.is-active {
+		display: block;
+		content-visibility: visible;
+		animation: tabFadeIn 0.22s ease-out;
+	}
+
+	@keyframes tabFadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(3px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	/* 記事カード一覧 */
+	.entry-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		list-style: none;
+		padding: 0;
+		margin: 0 0 1.5rem 0;
+	}
+
+	.entry-card {
+		display: flex;
+		background-color: var(--bg-content);
+		border: 1px solid var(--border-color);
+		border-radius: var(--radius);
+		overflow: hidden;
+		text-decoration: none;
+		color: var(--text-main);
+		transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+	}
+
+	.entry-card:hover {
+		background-color: #fafafa;
+		text-decoration: none;
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+	}
+
+	.entry-thumb {
+		flex: 0 0 300px;
+		aspect-ratio: 16/9;
+		overflow: hidden;
+		background-color: var(--border-color);
+	}
+
+	.entry-thumb img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.3s ease;
+	}
+
+	.entry-card:hover .entry-thumb img {
+		transform: scale(1.03);
+	}
+
+	.entry-thumb-empty {
+		width: 100%;
+		height: 100%;
+		background-color: #e2e8f0;
+	}
+
+	.entry-content {
+		padding: 1.25rem 1.5rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		flex: 1;
+	}
+
+	.entry-title {
+		font-size: 1.15rem;
+		margin: 0 0 0.5rem 0;
+		line-height: 1.45;
+		color: var(--text-main);
+	}
+
+	.entry-card:hover .entry-title {
+		color: var(--theme-accent);
+	}
+
+	.entry-meta {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+	}
+
+	.entry-date {
+		font-size: 0.85rem;
+		color: var(--text-light);
+		margin: 0;
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	.entry-cat-badge {
+		font-size: 0.75rem;
+		color: #0284c7;
+		background-color: #f0f9ff;
+		border: 1px solid #bae6fd;
+		border-radius: 4px;
+		padding: 0.1rem 0.5rem;
+	}
+
+	/* もっと見るボタン */
+	.category-more-wrapper {
+		text-align: center;
+		margin: 1.5rem 0 2rem;
+	}
+
+	.category-more-link {
+		display: inline-block;
+		padding: 0.65rem 1.5rem;
+		border: 1px solid var(--theme-accent);
+		color: var(--theme-accent);
+		background-color: var(--bg-content);
+		border-radius: var(--radius);
+		font-weight: 600;
+		font-size: 0.95rem;
+		text-decoration: none;
+		transition: all 0.2s ease;
+	}
+
+	.category-more-link:hover {
+		background-color: var(--theme-accent);
+		color: #ffffff;
+		text-decoration: none;
+	}
+
+	/* ページネーション */
+	.pagination {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 1.5rem;
+		padding-top: 1rem;
+		border-top: 1px solid var(--border-color);
+	}
+
+	.page-link {
+		padding: 0.5rem 1rem;
+		background-color: var(--theme-accent);
+		color: white;
+		border-radius: 4px;
+		text-decoration: none;
+		font-weight: bold;
+		font-size: 0.9rem;
+	}
+
+	.page-link:hover {
+		opacity: 0.85;
+		text-decoration: none;
+	}
+
+	.page-current {
+		font-size: 0.9rem;
+		color: var(--text-light);
+	}
+
+	@media (max-width: 720px) {
+		.tab-btn {
+			padding: 0.55rem 0.85rem;
+			font-size: 0.85rem;
+		}
+		.tab-btn.is-active {
+			padding-top: calc(0.55rem - 2px);
+		}
+		.entry-list {
+			gap: 0.6rem;
+		}
+		.entry-card {
+			flex-direction: row;
+			align-items: stretch;
+		}
+		.entry-thumb {
+			flex: 0 0 110px;
+			width: 110px;
+			aspect-ratio: 16 / 9;
+			min-height: 70px;
+		}
+		.entry-content {
+			padding: 0.6rem 0.75rem;
+			flex: 1;
+			min-width: 0;
+			justify-content: space-between;
+		}
+		.entry-title {
+			font-size: 0.92rem;
+			margin: 0 0 0.25rem 0;
+			line-height: 1.35;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;
+			overflow: hidden;
+		}
+		.entry-date {
+			font-size: 0.75rem;
+		}
+		.entry-cat-badge {
+			font-size: 0.7rem;
+			padding: 0.05rem 0.4rem;
+		}
+	}
+</style>
+
+<script>
+	function setupArticleTabs() {
+		const tabContainers = document.querySelectorAll('.tabs-container');
+
+		tabContainers.forEach((container) => {
+			const tabButtons = Array.from(container.querySelectorAll<HTMLButtonElement>('.tab-btn'));
+			const tabPanels = Array.from(container.querySelectorAll<HTMLElement>('.tab-panel'));
+
+			function activateTab(btn: HTMLButtonElement) {
+				const targetTabId = btn.getAttribute('data-tab');
+
+				// ボタンのアクティブ状態更新
+				tabButtons.forEach((b) => {
+					b.classList.remove('is-active');
+					b.setAttribute('aria-selected', 'false');
+					b.setAttribute('tabindex', '-1');
+				});
+				btn.classList.add('is-active');
+				btn.setAttribute('aria-selected', 'true');
+				btn.setAttribute('tabindex', '0');
+
+				// タブがスクロール領域で見切れている場合はフォーカス位置にスクロール
+				btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
+				// パネルの表示切り替え
+				tabPanels.forEach((p) => {
+					p.classList.remove('is-active');
+				});
+
+				if (targetTabId === 'tab-recent') {
+					const recentPanel = container.querySelector('#panel-tab-recent');
+					recentPanel?.classList.add('is-active');
+				} else {
+					const targetPanel = container.querySelector(`#panel-${targetTabId}`);
+					targetPanel?.classList.add('is-active');
+				}
+			}
+
+			tabButtons.forEach((btn, index) => {
+				btn.addEventListener('click', () => activateTab(btn));
+
+				// キーボード操作対応（左右矢印キーで移動）
+				btn.addEventListener('keydown', (e) => {
+					let nextIndex = index;
+					if (e.key === 'ArrowRight') {
+						nextIndex = (index + 1) % tabButtons.length;
+						e.preventDefault();
+					} else if (e.key === 'ArrowLeft') {
+						nextIndex = (index - 1 + tabButtons.length) % tabButtons.length;
+						e.preventDefault();
+					}
+
+					if (nextIndex !== index) {
+						tabButtons[nextIndex].focus();
+						activateTab(tabButtons[nextIndex]);
+					}
+				});
+			});
+		});
+	}
+
+	// 初回読み込みおよびSPA遷移に対応
+	setupArticleTabs();
+	document.addEventListener('astro:page-load', setupArticleTabs);
+</script>

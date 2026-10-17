@@ -1,0 +1,102 @@
+---
+// 6_shared_ui/components/CodeEnhancer.astro
+//
+// 記事内のすべてのコードブロック（pre / .astro-code）に対し、
+// ワンクリックでクリップボードへコピーできる「コピーボタン」を自動付与するエンハンサーです。
+---
+
+<style is:global>
+/* コードブロックのラッパー設定 */
+.code-block-wrapper {
+	position: relative;
+	margin: 1.75rem 0;
+}
+.code-block-wrapper pre,
+.code-block-wrapper .astro-code {
+	margin: 0 !important;
+}
+
+/* コピーボタンのスタイル */
+.code-copy-btn {
+	position: absolute;
+	top: 0.6rem;
+	right: 0.6rem;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	padding: 0.3rem 0.65rem;
+	font-size: 0.75rem;
+	font-family: inherit;
+	font-weight: 600;
+	color: #94a3b8;
+	background: rgba(30, 41, 59, 0.75);
+	backdrop-filter: blur(4px);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	border-radius: 6px;
+	cursor: pointer;
+	opacity: 0.85;
+	transition: all 0.2s ease;
+	z-index: 10;
+	user-select: none;
+}
+.code-copy-btn:hover {
+	opacity: 1;
+	color: #ffffff;
+	background: rgba(51, 65, 85, 0.9);
+	border-color: rgba(255, 255, 255, 0.3);
+}
+.code-copy-btn.copied {
+	color: #34d399 !important;
+	border-color: rgba(52, 211, 153, 0.4) !important;
+	background: rgba(6, 78, 59, 0.6) !important;
+}
+.code-copy-btn svg {
+	width: 14px;
+	height: 14px;
+	stroke-width: 2;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+	const codeBlocks = document.querySelectorAll('.prose pre, pre.astro-code');
+	
+	const copyIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
+	const checkIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6 9 17l-5-5"/></svg>`;
+
+	codeBlocks.forEach((pre) => {
+		// すでにラッパー処理済みの場合はスキップ
+		if (pre.parentElement?.classList.contains('code-block-wrapper')) return;
+
+		const wrapper = document.createElement('div');
+		wrapper.className = 'code-block-wrapper';
+
+		pre.parentNode?.insertBefore(wrapper, pre);
+		wrapper.appendChild(pre);
+
+		// コピーボタン生成
+		const button = document.createElement('button');
+		button.className = 'code-copy-btn';
+		button.type = 'button';
+		button.setAttribute('aria-label', 'コードをコピー');
+		button.innerHTML = `${copyIcon}<span>コピー</span>`;
+
+		button.addEventListener('click', async () => {
+			const code = pre.querySelector('code')?.innerText || pre.innerText || '';
+			try {
+				await navigator.clipboard.writeText(code.replace(/\n$/, ''));
+				button.classList.add('copied');
+				button.innerHTML = `${checkIcon}<span>コピー完了!</span>`;
+				setTimeout(() => {
+					button.classList.remove('copied');
+					button.innerHTML = `${copyIcon}<span>コピー</span>`;
+				}, 2000);
+			} catch (err) {
+				console.error('Failed to copy code: ', err);
+			}
+		});
+
+		wrapper.appendChild(button);
+	});
+});
+</script>

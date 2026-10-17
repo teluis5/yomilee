@@ -1,0 +1,82 @@
+---
+import { Icon } from 'astro-icon/components';
+
+export interface Props {
+	headings: { depth: number; slug: string; text: string }[];
+}
+
+const { headings } = Astro.props;
+// depth 2 (H2) and 3 (H3) 
+const tocHeadings = headings ? headings.filter((h) => h.depth === 2 || h.depth === 3) : [];
+---
+
+{tocHeadings.length > 0 && (
+	<div class="toc-container box">
+		<div class="toc-title">
+			<Icon name="heroicons:list-bullet" class="icon-inline" /> 目次
+		</div>
+		<ul class="toc-list">
+			{tocHeadings.map((heading) => (
+				<li class={'toc-depth-' + heading.depth}>
+					<a href={'#' + heading.slug}>{heading.text}</a>
+				</li>
+			))}
+		</ul>
+	</div>
+)}
+
+<style>
+	.toc-container {
+		background-color: #f7f9fa;
+		border: 1px solid var(--border-color);
+		border-radius: var(--radius);
+		padding: 1.5rem;
+		margin: 2rem 0;
+	}
+	.toc-title {
+		font-size: 1.2rem;
+		font-weight: bold;
+		margin-bottom: 1rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		border-bottom: 2px solid var(--theme-accent);
+		padding-bottom: 0.5rem;
+	}
+	.toc-list {
+		list-style: none !important;
+		padding: 0 !important;
+		margin: 0 !important;
+	}
+	.toc-list li {
+		margin-bottom: 0.5rem !important;
+		line-height: 1.5 !important;
+	}
+	.toc-depth-2 {
+		font-weight: bold;
+		margin-top: 0.8rem !important;
+	}
+	.toc-depth-2::before {
+		content: "\25A0"; /* Square */
+		color: var(--theme-accent);
+		margin-right: 0.5rem;
+		font-size: 0.8em;
+	}
+	.toc-depth-3 {
+		padding-left: 1.5rem;
+		font-size: 0.95rem;
+	}
+	.toc-depth-3::before {
+		content: "\2514"; /* L shape */
+		color: var(--text-light);
+		margin-right: 0.5rem;
+	}
+	.toc-list a {
+		color: var(--text-main);
+		text-decoration: none;
+	}
+	.toc-list a:hover {
+		color: var(--theme-accent);
+		text-decoration: underline;
+	}
+</style>

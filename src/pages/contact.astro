@@ -1,0 +1,28 @@
+---
+import Layout from '../layouts/BlogPost.astro';
+---
+
+<Layout
+	title="お問い合わせ"
+	description="当ブログに関するお問い合わせはこちらからお願いいたします。"
+	pubDate={new Date('2026-09-02')}
+>
+	<p>
+		当ブログに関するご質問、お仕事のご依頼、その他お問い合わせは、以下のフォームよりお願いいたします。<br>
+		内容を確認次第、折り返しご連絡させていただきます。
+	</p>
+	
+	<div style="display: flex; justify-content: center; margin-top: 2rem;">
+		<iframe 
+			src="https://docs.google.com/forms/d/e/1FAIpQLSeeqbtArE0i-4VNRbTMEotlKRxBn-NshGR4Hw9C-UWLRiIo2g/viewform?embedded=true" 
+			width="100%" 
+			height="1414" 
+			frameborder="0" 
+			marginheight="0" 
+			marginwidth="0"
+			style="max-width: 640px;"
+		>
+			読み込んでいます…
+		</iframe>
+	</div>
+</Layout>

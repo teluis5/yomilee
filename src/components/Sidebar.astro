@@ -1,0 +1,436 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import FormattedDate from './FormattedDate.astro';
+import * as consts from '../consts';
+
+interface Props {
+	authorName?: string;
+	authorTitle?: string;
+	authorBio?: string;
+	authorAvatar?: string;
+	showPartner?: boolean;
+}
+
+const siteConsts = consts as Record<string, any>;
+
+const {
+	authorName = siteConsts.AUTHOR_NAME ?? siteConsts.AUTHOR?.name ?? 'teluis',
+	authorTitle = siteConsts.AUTHOR_TITLE ?? siteConsts.AUTHOR?.title ?? '',
+	authorBio = siteConsts.AUTHOR_BIO ?? siteConsts.AUTHOR?.bio ?? '',
+	authorAvatar = siteConsts.AUTHOR_AVATAR ?? siteConsts.AUTHOR?.avatar ?? '/brand/teluis_avatar.webp',
+} = Astro.props;
+
+// 全記事の取得（ドラフト除外）
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const recentPosts = sortedPosts.slice(0, 5);
+
+// カテゴリ別記事件数の集計
+const categoryCounts: Record<string, number> = {};
+allPosts.forEach((post) => {
+	post.data.categories?.forEach((cat: string) => {
+		categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+	});
+});
+const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
+---
+
+<aside class="layout-sidebar">
+	<!-- プロフィールウィジェット -->
+	<div class="sidebar-widget box">
+		<div class="widget-header">
+			<Icon name="heroicons:user" class="icon-inline" />
+			<span>運営者プロフィール</span>
+		</div>
+		<div class="profile-card">
+			<div class="profile-avatar-wrap">
+				<a href="/about/" aria-label="運営者プロフィール詳細へ">
+					<img class="profile-avatar" src={authorAvatar} alt={authorName} width="76" height="76" loading="lazy" decoding="async" />
+				</a>
+			</div>
+			<div class="profile-body">
+				<div class="profile-name"><a href="/about/" style="color: inherit; text-decoration: none;">{authorName}</a></div>
+				<div class="profile-role">{authorTitle}</div>
+				<p class="profile-text">{authorBio}</p>
+			</div>
+		</div>
+
+		<div style="padding: 0 1.15rem 1.15rem;">
+			<a href="/about/" style="display: block; text-align: center; padding: 0.55rem 0.8rem; background-color: #f0f9ff; color: #0369a1; border: 1px solid #bae6fd; border-radius: 6px; font-size: 0.82rem; font-weight: 700; text-decoration: none;">
+				詳しいプロフィール・運営情報を見る &raquo;
+			</a>
+		</div>
+	</div>
+
+	<!-- カテゴリ一覧ウィジェット -->
+	{categories.length > 0 && (
+		<div class="sidebar-widget box">
+			<div class="widget-header">
+				<Icon name="heroicons:tag" class="icon-inline" />
+				<span>カテゴリー</span>
+			</div>
+			<ul class="category-list">
+				{categories.map(([category, count]) => (
+					<li>
+						<a href={`/category/${category}/`} class="category-item">
+							<span class="category-name">
+								<Icon name="heroicons:folder" class="cat-icon" />
+								{category}
+							</span>
+							<span class="category-count">{count}</span>
+						</a>
+					</li>
+				))}
+			</ul>
+		</div>
+	)}
+
+	<!-- 新着記事ウィジェット（サムネイル付き） -->
+	{recentPosts.length > 0 && (
+		<div class="sidebar-widget box">
+			<div class="widget-header">
+				<Icon name="heroicons:sparkles" class="icon-inline" />
+				<span>新着記事</span>
+			</div>
+			<div class="recent-posts">
+				{recentPosts.map((post) => (
+					<a href={`/blog/${post.id}/`} class="recent-post-card">
+						<div class="recent-thumb">
+							{post.data.heroImage ? (
+								<Image
+									width={160}
+									height={90}
+									src={post.data.heroImage}
+									alt={post.data.title}
+									loading="lazy"
+									decoding="async"
+								/>
+							) : (
+								<div class="thumb-placeholder">
+									<Icon name="heroicons:photo" class="placeholder-icon" />
+								</div>
+							)}
+						</div>
+						<div class="recent-content">
+							<h4 class="recent-title">{post.data.title}</h4>
+							<span class="recent-date">
+								<Icon name="heroicons:calendar" class="date-icon" />
+								<FormattedDate date={post.data.pubDate} />
+							</span>
+						</div>
+					</a>
+				))}
+			</div>
+		</div>
+	)}
+</aside>
+
+<style>
+	.layout-sidebar {
+		flex: 1 1 30%;
+		min-width: 300px;
+		position: sticky;
+		top: 80px;
+		max-height: calc(100vh - 100px);
+		overflow-y: auto;
+		overflow-x: hidden;
+		scrollbar-width: thin;
+		scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.layout-sidebar::-webkit-scrollbar {
+		width: 5px;
+	}
+	.layout-sidebar::-webkit-scrollbar-thumb {
+		background: rgba(0, 0, 0, 0.15);
+		border-radius: 4px;
+	}
+	.layout-sidebar::-webkit-scrollbar-thumb:hover {
+		background: rgba(0, 0, 0, 0.3);
+	}
+
+	@media (max-width: 800px) {
+		.layout-sidebar {
+			flex: 1 1 100%;
+			position: static;
+			max-height: none;
+			overflow-y: visible;
+		}
+	}
+
+	/* ウィジェット共通スタイル */
+	.sidebar-widget {
+		padding: 1.25rem;
+		background: var(--bg-content, #ffffff);
+	}
+
+	.widget-header {
+		font-size: 1.05rem;
+		font-weight: 700;
+		color: var(--text-main, #333333);
+		background-color: #f8fafc;
+		padding: 0.6rem 1rem;
+		border-left: 4px solid var(--theme-accent, #0284c7);
+		margin: -1.25rem -1.25rem 1.2rem -1.25rem;
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		border-bottom: 1px solid var(--border-color, #e2e8f0);
+	}
+
+	/* プロフィール */
+	.profile-card {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+	.profile-avatar-wrap {
+		position: relative;
+		margin-bottom: 0.75rem;
+	}
+
+	.profile-avatar {
+		width: 88px;
+		height: 88px;
+		border-radius: 50%;
+		object-fit: cover;
+		border: 3px solid #f0f9ff;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+		display: block;
+	}
+
+	.profile-name {
+		font-size: 1.15rem;
+		font-weight: 700;
+		color: var(--text-main, #1e293b);
+		margin-bottom: 0.2rem;
+	}
+
+	.profile-role {
+		font-size: 0.78rem;
+		font-weight: 600;
+		color: var(--theme-accent, #0284c7);
+		background: #e0f2fe;
+		padding: 0.15rem 0.6rem;
+		border-radius: 9999px;
+		display: inline-block;
+		margin-bottom: 0.75rem;
+	}
+
+	.profile-text {
+		font-size: 0.88rem;
+		color: var(--text-main, #475569);
+		line-height: 1.6;
+		margin: 0;
+		text-align: left;
+	}
+
+	.partner-divider {
+		height: 1px;
+		background: var(--border-color, #e2e8f0);
+		margin: 1.1rem 0;
+	}
+
+	.partner-card {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.partner-avatar {
+		width: 48px;
+		height: 48px;
+		border-radius: 50%;
+		object-fit: cover;
+		flex-shrink: 0;
+		border: 2px solid #fce7f3;
+	}
+
+	.partner-body {
+		flex: 1;
+		min-width: 0;
+	}
+
+	.partner-name {
+		font-size: 0.92rem;
+		font-weight: 700;
+		color: var(--text-main, #1e293b);
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+	}
+
+	.partner-badge {
+		font-size: 0.7rem;
+		color: #be185d;
+		background: #fce7f3;
+		padding: 0.1rem 0.4rem;
+		border-radius: 4px;
+		font-weight: 600;
+	}
+
+	.partner-text {
+		font-size: 0.8rem;
+		color: var(--text-light, #64748b);
+		margin: 0.15rem 0 0 0;
+		line-height: 1.4;
+	}
+
+	/* カテゴリ一覧 */
+	.category-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+
+	.category-item {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0.5rem 0.6rem;
+		border-radius: 6px;
+		text-decoration: none;
+		color: var(--text-main, #334155);
+		font-size: 0.9rem;
+		transition: background-color 0.2s, color 0.2s;
+	}
+
+	.category-item:hover {
+		background-color: #f0f9ff;
+		color: var(--theme-accent, #0284c7);
+	}
+
+	.category-name {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.cat-icon {
+		font-size: 1rem;
+		color: var(--theme-accent, #0284c7);
+		flex-shrink: 0;
+	}
+
+	.category-count {
+		font-size: 0.75rem;
+		font-weight: 700;
+		background: #f1f5f9;
+		color: var(--text-light, #64748b);
+		padding: 0.1rem 0.5rem;
+		border-radius: 9999px;
+		flex-shrink: 0;
+	}
+
+	.category-item:hover .category-count {
+		background: #bae6fd;
+		color: #0369a1;
+	}
+
+	/* 新着記事（サムネイル付き） */
+	.recent-posts {
+		display: flex;
+		flex-direction: column;
+		gap: 0.9rem;
+	}
+
+	.recent-post-card {
+		display: flex;
+		gap: 0.75rem;
+		text-decoration: none;
+		color: inherit;
+		padding-bottom: 0.85rem;
+		border-bottom: 1px dashed var(--border-color, #e2e8f0);
+		transition: transform 0.15s ease;
+	}
+
+	.recent-post-card:last-child {
+		border-bottom: none;
+		padding-bottom: 0;
+	}
+
+	.recent-post-card:hover .recent-title {
+		color: var(--theme-accent, #0284c7);
+	}
+
+	.recent-post-card:hover .recent-thumb img {
+		transform: scale(1.05);
+	}
+
+	.recent-thumb {
+		width: 84px;
+		aspect-ratio: 16 / 9;
+		border-radius: 4px;
+		overflow: hidden;
+		flex-shrink: 0;
+		background: #e2e8f0;
+	}
+
+	.recent-thumb img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.25s ease;
+		display: block;
+	}
+
+	.thumb-placeholder {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #f1f5f9;
+		color: #94a3b8;
+	}
+
+	.placeholder-icon {
+		font-size: 1.25rem;
+	}
+
+	.recent-content {
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+
+	.recent-title {
+		font-size: 0.86rem;
+		font-weight: 600;
+		line-height: 1.4;
+		margin: 0 0 0.35rem 0;
+		color: var(--text-main, #1e293b);
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		transition: color 0.2s;
+	}
+
+	.recent-date {
+		font-size: 0.76rem;
+		color: var(--text-light, #94a3b8);
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	.date-icon {
+		font-size: 0.85rem;
+	}
+</style>

@@ -1,0 +1,354 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	slug?: string;
+	slugs?: string[];
+	url?: string;
+	title?: string;
+	description?: string;
+	image?: any;
+	label?: string;
+}
+
+const {
+	slug,
+	slugs,
+	url,
+	title: customTitle,
+	description: customDesc,
+	image: customImage,
+	label = 'あわせて読みたい',
+} = Astro.props;
+
+// 全記事の取得
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+
+// 対象記事リストの構築
+type TargetItem = {
+	url: string;
+	title: string;
+	description?: string;
+	image?: any;
+	date?: Date;
+	category?: string;
+};
+
+const items: TargetItem[] = [];
+
+if (slugs && slugs.length > 0) {
+	slugs.forEach((s) => {
+		const cleanSlug = s.replace(/^\/blog\//, '').replace(/\/$/, '');
+		const post = allPosts.find((p) => p.id === cleanSlug);
+		if (post) {
+			items.push({
+				url: `/blog/${post.id}/`,
+				title: post.data.title,
+				description: post.data.description,
+				image: post.data.heroImage,
+				date: post.data.pubDate,
+				category: post.data.categories?.[0],
+			});
+		}
+	});
+} else if (slug) {
+	const cleanSlug = slug.replace(/^\/blog\//, '').replace(/\/$/, '');
+	const post = allPosts.find((p) => p.id === cleanSlug);
+	if (post) {
+		items.push({
+			url: `/blog/${post.id}/`,
+			title: customTitle || post.data.title,
+			description: customDesc || post.data.description,
+			image: customImage || post.data.heroImage,
+			date: post.data.pubDate,
+			category: post.data.categories?.[0],
+		});
+	} else {
+		// 見つからない場合はスラッグからURL生成
+		items.push({
+			url: `/blog/${cleanSlug}/`,
+			title: customTitle || cleanSlug,
+			description: customDesc,
+			image: customImage,
+		});
+	}
+} else if (url) {
+	// URLから該当記事を探索
+	const match = url.match(/\/blog\/([^\/]+)/);
+	const targetSlug = match ? match[1] : '';
+	const post = allPosts.find((p) => p.id === targetSlug);
+	if (post) {
+		items.push({
+			url: `/blog/${post.id}/`,
+			title: customTitle || post.data.title,
+			description: customDesc || post.data.description,
+			image: customImage || post.data.heroImage,
+			date: post.data.pubDate,
+			category: post.data.categories?.[0],
+		});
+	} else {
+		items.push({
+			url,
+			title: customTitle || url,
+			description: customDesc,
+			image: customImage,
+		});
+	}
+}
+---
+
+{items.length > 0 && (
+	<div class="blog-card-container">
+		{items.length > 1 && label && (
+			<div class="blog-card-group-header">
+				<Icon name="heroicons:bookmark" class="icon-inline group-icon" />
+				<span>{label}</span>
+			</div>
+		)}
+		<div class="blog-card-list">
+			{items.map((item) => (
+				<a href={item.url} class="blog-card box" rel="bookmark">
+					<div class="blog-card-thumb">
+						{item.image ? (
+							typeof item.image === 'object' ? (
+								<Image
+									src={item.image}
+									alt={item.title}
+									width={400}
+									height={225}
+									loading="lazy"
+									decoding="async"
+									class="blog-card-img"
+								/>
+							) : (
+								<img src={item.image} alt={item.title} class="blog-card-img" loading="lazy" />
+							)
+						) : (
+							<div class="blog-card-no-img">
+								<Icon name="heroicons:document-text" class="no-img-icon" />
+							</div>
+						)}
+					</div>
+					<div class="blog-card-body">
+						<div class="blog-card-header">
+							<span class="blog-card-badge">{item.category || label}</span>
+							{item.date && (
+								<span class="blog-card-date">
+									<Icon name="heroicons:calendar" class="date-icon" />
+									<FormattedDate date={item.date} />
+								</span>
+							)}
+						</div>
+						<h4 class="blog-card-title">{item.title}</h4>
+						{item.description && (
+							<p class="blog-card-desc">{item.description}</p>
+						)}
+					</div>
+					<div class="blog-card-arrow">
+						<Icon name="heroicons:chevron-right" class="arrow-icon" />
+					</div>
+				</a>
+			))}
+		</div>
+	</div>
+)}
+
+<style>
+.blog-card-container {
+	margin: 2rem 0;
+}
+
+.blog-card-group-header {
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-size: 1rem;
+	font-weight: 700;
+	color: var(--text-main, #333333);
+	margin-bottom: 0.75rem;
+	padding-left: 0.25rem;
+}
+.group-icon {
+	color: var(--theme-accent, #007cba);
+	width: 1.15em;
+	height: 1.15em;
+}
+
+.blog-card-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.85rem;
+}
+
+.blog-card {
+	display: flex;
+	align-items: center;
+	background: var(--bg-content, #ffffff);
+	border: 1px solid var(--border-color, #e2e8f0);
+	border-radius: 8px;
+	overflow: hidden;
+	text-decoration: none;
+	color: inherit;
+	transition: all 0.25s ease;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+	position: relative;
+}
+
+.blog-card:hover {
+	transform: translateY(-2px);
+	border-color: var(--theme-accent, #007cba);
+	box-shadow: 0 6px 16px rgba(0, 124, 186, 0.12);
+	text-decoration: none;
+}
+
+/* サムネイル画像 */
+.blog-card-thumb {
+	width: 180px;
+	height: 115px;
+	flex-shrink: 0;
+	overflow: hidden;
+	background: #f1f5f9;
+	position: relative;
+}
+
+.blog-card-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 0.3s ease;
+}
+
+.blog-card:hover .blog-card-img {
+	transform: scale(1.05);
+}
+
+.blog-card-no-img {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #e2e8f0;
+	color: #94a3b8;
+}
+.no-img-icon {
+	width: 32px;
+	height: 32px;
+}
+
+/* カード本文 */
+.blog-card-body {
+	flex: 1;
+	padding: 0.85rem 1rem;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.blog-card-header {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin-bottom: 0.35rem;
+}
+
+.blog-card-badge {
+	display: inline-block;
+	font-size: 0.72rem;
+	font-weight: 700;
+	color: var(--theme-accent, #007cba);
+	background: rgba(0, 124, 186, 0.08);
+	padding: 0.15rem 0.5rem;
+	border-radius: 4px;
+	letter-spacing: 0.02em;
+}
+
+.blog-card-date {
+	font-size: 0.75rem;
+	color: var(--text-light, #64748b);
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+}
+.date-icon {
+	width: 13px;
+	height: 13px;
+}
+
+.blog-card-title {
+	font-size: 0.98rem;
+	font-weight: 700;
+	color: var(--text-main, #1e293b);
+	line-height: 1.4;
+	margin: 0 0 0.3rem 0;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	transition: color 0.2s ease;
+}
+
+.blog-card:hover .blog-card-title {
+	color: var(--theme-accent, #007cba);
+}
+
+.blog-card-desc {
+	font-size: 0.82rem;
+	color: var(--text-light, #64748b);
+	line-height: 1.45;
+	margin: 0;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+/* 矢印 */
+.blog-card-arrow {
+	padding: 0 1rem 0 0.25rem;
+	color: #94a3b8;
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+	transition: transform 0.2s ease, color 0.2s ease;
+}
+.arrow-icon {
+	width: 20px;
+	height: 20px;
+}
+.blog-card:hover .blog-card-arrow {
+	transform: translateX(3px);
+	color: var(--theme-accent, #007cba);
+}
+
+/* モバイル対応 */
+@media (max-width: 640px) {
+	.blog-card-thumb {
+		width: 110px;
+		height: 85px;
+	}
+	.blog-card-body {
+		padding: 0.6rem 0.75rem;
+	}
+	.blog-card-title {
+		font-size: 0.88rem;
+		-webkit-line-clamp: 2;
+		margin-bottom: 0.15rem;
+	}
+	.blog-card-desc {
+		display: none; /* スマホでは抜粋を非表示にしてスッキリ */
+	}
+	.blog-card-badge {
+		font-size: 0.68rem;
+		padding: 0.1rem 0.4rem;
+	}
+	.blog-card-arrow {
+		display: none; /* スマホでは矢印を非表示にして表示領域最大化 */
+	}
+}
+</style>

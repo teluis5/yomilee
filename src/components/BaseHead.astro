@@ -1,0 +1,123 @@
+---
+// Import the global.css file here so that it is included on
+// all pages through the use of the <BaseHead /> component.
+import '../styles/global.css';
+import type { ImageMetadata } from 'astro';
+import FallbackImage from '../assets/images/teluis_logo.jpg';
+import { SITE_TITLE } from '../consts';
+import { Font } from 'astro:assets';
+
+interface Props {
+	title: string;
+	description: string;
+	image?: ImageMetadata;
+}
+
+const normalizedPath = Astro.url.pathname.endsWith('/') || /\.[a-z0-9]+$/i.test(Astro.url.pathname)
+	? Astro.url.pathname
+	: `${Astro.url.pathname}/`;
+const canonicalURL = new URL(normalizedPath, Astro.site);
+
+const { title, description, image = FallbackImage } = Astro.props;
+---
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<!-- Google Tag Manager (管理者除外対応) -->
+<script is:inline>
+(function(w,d,s,l,i){
+  try {
+    var params = new URLSearchParams(w.location.search);
+    var hostname = w.location.hostname;
+    var domainAttr = hostname.endsWith('teluis.com') ? '; domain=.teluis.com' : '';
+    if (params.get('admin') === 'true') {
+      d.cookie = "teluis_admin=true; path=/" + domainAttr + "; max-age=31536000; SameSite=Lax";
+      localStorage.setItem('teluis_admin', 'true');
+      console.log('[Admin Mode] GA/GTM 計測除外モードを有効化しました');
+    } else if (params.get('admin') === 'false') {
+      d.cookie = "teluis_admin=; path=/" + domainAttr + "; max-age=0";
+      localStorage.removeItem('teluis_admin');
+      console.log('[Admin Mode] GA/GTM 計測除外モードを解除しました');
+    }
+  } catch (e) {}
+
+  var isAdmin = (d.cookie.indexOf('teluis_admin=true') !== -1);
+  try {
+    if (!isAdmin && localStorage.getItem('teluis_admin') === 'true') {
+      isAdmin = true;
+    }
+  } catch (e) {}
+
+  if (isAdmin) {
+    w[l] = w[l] || [];
+    console.info('[Admin Mode] GTMの読み込みをスキップしました (自アクセス除外中)');
+    return;
+  }
+
+  function loadGTM() {
+    if (w['__gtm_loaded']) return;
+    w['__gtm_loaded'] = true;
+    w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  }
+
+  ['scroll', 'mousemove', 'touchstart', 'click', 'keydown'].forEach(function(evt) {
+    w.addEventListener(evt, loadGTM, { once: true, passive: true });
+  });
+})(window,document,'script','dataLayer','GTM-NZ2SJ4PM');
+</script>
+<link rel="icon" type="image/png" sizes="64x64" href="/brand/favicon-64.png" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<meta name="generator" content={Astro.generator} />
+<link
+	rel="alternate"
+	type="application/rss+xml"
+	title={SITE_TITLE}
+	href={new URL('rss.xml', Astro.site)}
+/>
+
+<Font cssVariable="--font-atkinson" />
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="description" content={description} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:locale" content="ja_JP" />
+<meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:type" content="website" />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(image.src, Astro.url)} />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:url" content={Astro.url} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={new URL(image.src, Astro.url)} />
+
+<!-- Google AdSense Script -->
+<script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8011635154814608" crossorigin="anonymous"></script>
+
+<!-- Twitter widgets Script (ツイート埋め込みが存在する場合のみ動的に遅延ロード) -->
+<script is:inline>
+	document.addEventListener('DOMContentLoaded', () => {
+		if (document.querySelector('.twitter-tweet')) {
+			const s = document.createElement('script');
+			s.src = 'https://platform.twitter.com/widgets.js';
+			s.charset = 'utf-8';
+			s.async = true;
+			document.head.appendChild(s);
+		}
+	});
+</script>

@@ -1,0 +1,170 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import Sidebar from '../components/Sidebar.astro';
+import HomeArticleTabs from '../components/HomeArticleTabs.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+export async function getStaticPaths({ paginate }) {
+	const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+	const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+	return paginate(sortedPosts, { pageSize: 10 });
+}
+
+const { page } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		{page.currentPage === 1 && (
+			<link
+				rel="preload"
+				as="image"
+				href="/brand/hero_banner_new_mobile.webp"
+				type="image/webp"
+				media="(max-width: 768px)"
+				fetchpriority="high"
+			/>
+			<link
+				rel="preload"
+				as="image"
+				href="/brand/hero_banner_new.webp"
+				type="image/webp"
+				media="(min-width: 769px)"
+				fetchpriority="high"
+			/>
+		)}
+		<style>
+			/* ヒーローバナー */
+			.hero-banner {
+				width: 100%;
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 1rem 1rem 0;
+			}
+			.hero-banner-inner {
+				position: relative;
+				width: 100%;
+				border-radius: 10px;
+				overflow: hidden;
+				box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+			}
+			.hero-banner picture {
+				display: block;
+				width: 100%;
+			}
+			.hero-banner img {
+				width: 100%;
+				height: 380px;
+				object-fit: cover;
+				object-position: center 30%;
+				display: block;
+			}
+			/* グラスモーフィズム・キャッチフレーズパネル */
+			.hero-catchphrase-box {
+				position: absolute;
+				left: 48%;
+				bottom: 22px;
+				transform: translateX(-50%);
+				background: rgba(255, 255, 255, 0.86);
+				backdrop-filter: blur(10px);
+				-webkit-backdrop-filter: blur(10px);
+				border: 1px solid rgba(255, 255, 255, 0.95);
+				border-radius: 12px;
+				padding: 0.75rem 1.6rem;
+				box-shadow: 0 8px 24px rgba(27, 77, 62, 0.12);
+				text-align: center;
+				white-space: nowrap;
+				z-index: 2;
+			}
+			.hero-catchphrase-sub {
+				display: block;
+				font-size: 0.7rem;
+				font-weight: 700;
+				letter-spacing: 0.14em;
+				color: #1b4d3e;
+				margin-bottom: 0.2rem;
+				text-transform: uppercase;
+			}
+			.hero-catchphrase-main {
+				margin: 0;
+				font-size: 1.25rem;
+				font-weight: 800;
+				color: #1f2937;
+				letter-spacing: 0.06em;
+				line-height: 1.35;
+			}
+			@media (max-width: 720px) {
+				.hero-banner {
+					padding: 0.5rem 0.5rem 0;
+				}
+				.hero-banner img {
+					height: auto;
+					aspect-ratio: 16 / 9;
+					object-fit: cover;
+				}
+				.hero-catchphrase-box {
+					left: 50%;
+					bottom: 10px;
+					padding: 0.42rem 0.95rem;
+					border-radius: 8px;
+					background: rgba(255, 255, 255, 0.88);
+				}
+				.hero-catchphrase-sub {
+					font-size: 0.58rem;
+					letter-spacing: 0.1em;
+					margin-bottom: 0.1rem;
+				}
+				.hero-catchphrase-main {
+					font-size: 0.88rem;
+					letter-spacing: 0.04em;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<h1 class="sr-only" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;">{SITE_TITLE} - モノと仕組みで、暮らしを整える。</h1>
+		<Header />
+		
+		<!-- トップヒーローバナー -->
+		{page.currentPage === 1 && (
+			<div class="hero-banner">
+				<div class="hero-banner-inner">
+					<picture>
+						<source media="(max-width: 768px)" srcset="/brand/hero_banner_new_mobile.webp" type="image/webp" />
+						<img
+							src="/brand/hero_banner_new.webp"
+							alt="TELUIS - モノと仕組みで、暮らしを整える。"
+							width="1200"
+							height="669"
+							fetchpriority="high"
+							loading="eager"
+							decoding="sync"
+						/>
+					</picture>
+					<div class="hero-catchphrase-box">
+						<span class="hero-catchphrase-sub">SMART LIFE &amp; GADGET LOG</span>
+						<p class="hero-catchphrase-main">モノと仕組みで、暮らしを整える。</p>
+					</div>
+				</div>
+			</div>
+		)}
+
+		<main>
+			<div class="layout-container">
+				<!-- メインコンテンツ (左カラム) -->
+				<div class="layout-main">
+					<HomeArticleTabs page={page} />
+				</div>
+
+				<!-- サイドバー (右カラム) -->
+				<Sidebar />
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

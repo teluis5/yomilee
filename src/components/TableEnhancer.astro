@@ -1,0 +1,184 @@
+---
+// src/components/TableEnhancer.astro
+//
+// 【使い方】
+// このファイルを他のAstroプロジェクト（telubizなど）の `src/components/` にコピーし、
+// テーブルを表示するレイアウトファイル（例：BlogPost.astro）の <body> 閉じタグ直前などで
+// <TableEnhancer /> としてインポート・配置するだけで、記事内のテーブルが
+// 完璧な「縦横スクロール・固定ヘッダー対応」になります。
+//
+// 対象となるテーブルのセレクタは `script` 内の `document.querySelectorAll('.prose table')` で指定しています。
+// 必要に応じてプロジェクトごとのクラス名に合わせて変更してください。
+---
+
+<style is:global>
+/* ========================================================
+   スクロール＆追従テーブル用コアスタイル
+   ======================================================== */
+
+/* スクロール時のヘッダー追従範囲を限定する大枠 */
+.table-super-wrapper {
+	position: relative;
+	margin: 2rem 0;
+}
+
+/* 横スクロール用のラッパー */
+.table-scroll-wrapper {
+	width: 100%;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	margin-top: 0;
+	/* スクロール可能であることを示す右端の影 */
+	box-shadow: inset -5px 0 5px -5px rgba(0,0,0,0.1);
+}
+.table-scroll-wrapper table {
+	margin: 0;
+}
+
+/* 縦スクロール時に上部に張り付くクローンヘッダーの枠 */
+.sticky-thead-container {
+	position: -webkit-sticky;
+	position: sticky;
+	/* ↓ サイトのヘッダーが固定されている場合は、その高さに合わせて数値を変更してください */
+	top: 57px; 
+	z-index: 20;
+	width: 100%;
+	overflow: hidden; 
+	background-color: var(--bg-content, #ffffff); /* スクロール時の背景透け防止 */
+}
+
+/* 内部のthは元のスタイルをリセットし、重複して追従・ズレるのを防ぐ */
+.table-scroll-wrapper thead th,
+.sticky-thead-container thead th {
+	position: static;
+	top: auto;
+}
+
+/* 1番左の列（比較項目）を横スクロール時に固定表示する */
+.table-scroll-wrapper th:first-child,
+.table-scroll-wrapper td:first-child,
+.sticky-thead-container th:first-child {
+	position: sticky;
+	left: 0;
+	z-index: 10;
+}
+/* ヘッダーの左上角は一番手前に持ってくる */
+.table-scroll-wrapper th:first-child,
+.sticky-thead-container th:first-child {
+	z-index: 11; 
+	/* Firefox等での border のバグ対策 */
+	box-shadow: inset -1px 0 0 var(--border-color, #dfdfdf);
+}
+.table-scroll-wrapper td:first-child {
+	box-shadow: inset -1px 0 0 var(--border-color, #dfdfdf);
+}
+
+/* スクロール可能であることを伝えるテキスト */
+.table-scroll-hint {
+	text-align: right;
+	font-size: 0.8rem;
+	color: var(--text-light, #777);
+	padding-bottom: 0.5rem;
+	position: sticky;
+	left: 0; /* スクロールしても常に見えるようにする */
+}
+
+/* 1番左の列の文字が潰れないようにする */
+.table-fixed-left-col th:first-child,
+.table-fixed-left-col td:first-child {
+	word-break: break-all;
+	line-height: 1.3;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+	// 記事内のすべてのテーブルを対象にする（プロジェクトに合わせてセレクタを変更してください）
+	const tables = document.querySelectorAll('.prose table');
+	
+	tables.forEach(table => {
+		// 楽天アフィリエイトウィジェット等の埋め込みテーブルは装飾対象外にする
+		if (table.querySelector('a[href*="rakuten.co.jp"]') || table.closest('table:has(a[href*="rakuten.co.jp"])')) return;
+
+		// 1行目のセルの数を取得して比較対象の数を計算 (最初の「項目」列を引く)
+		const firstRow = table.querySelector('tr');
+		if (!firstRow) return;
+		
+		const colCount = firstRow.children.length;
+		const targetCount = colCount - 1;
+		
+		// 1番左の列幅の基準値
+		const leftColWidth = '5.5rem';
+		
+		// 自動でスタイル用のクラスを付与し、列幅を揃えるための固定レイアウトを適用
+		table.classList.add('table-fixed-left-col');
+		table.style.tableLayout = 'fixed';
+		
+		const firstTh = table.querySelector('thead th:first-child');
+		if (firstTh) {
+			firstTh.style.width = leftColWidth;
+			firstTh.style.minWidth = leftColWidth;
+		}
+		
+		// 比較対象が4つ以上の場合は、スクロール領域を作るために表自体の幅を広げる
+		if (targetCount > 3) {
+			const ratio = targetCount / 3;
+			table.style.width = `calc(${leftColWidth} + (100% - ${leftColWidth}) * ${ratio})`;
+			
+			// stickyの追従範囲を限定するための大枠ラッパー
+			const superWrapper = document.createElement('div');
+			superWrapper.className = 'table-super-wrapper';
+			
+			const wrapper = document.createElement('div');
+			wrapper.className = 'table-scroll-wrapper';
+			
+			const hint = document.createElement('div');
+			hint.className = 'table-scroll-hint';
+			hint.innerHTML = '<span>← 左右にスクロールできます →</span>';
+			
+			// 元の table を superWrapper で囲み、ラッパー構造を組み立てる
+			table.parentNode?.insertBefore(superWrapper, table);
+			superWrapper.appendChild(hint);
+			superWrapper.appendChild(wrapper);
+			wrapper.appendChild(table);
+
+			// --- 縦スクロール追従用のクローンヘッダーを作成 ---
+			const originalThead = table.querySelector('thead');
+			if (originalThead) {
+				const cloneContainer = document.createElement('div');
+				cloneContainer.className = 'sticky-thead-container';
+				
+				const cloneTable = document.createElement('table');
+				cloneTable.className = table.className;
+				cloneTable.style.width = table.style.width;
+				cloneTable.style.tableLayout = 'fixed';
+				cloneTable.style.margin = '0';
+				
+				const cloneThead = originalThead.cloneNode(true);
+				cloneTable.appendChild(cloneThead);
+				cloneContainer.appendChild(cloneTable);
+				
+				// 大枠ラッパーの中で、横スクロールラッパーの直前に挿入する
+				superWrapper.insertBefore(cloneContainer, wrapper);
+				
+				// 横スクロールを同期させる
+				wrapper.addEventListener('scroll', () => {
+					cloneContainer.scrollLeft = wrapper.scrollLeft;
+				}, { passive: true });
+				
+				// クローンと元のヘッダーの二重スペースを消すため、ラッパーをネガティブマージンで上に引き上げる
+				requestAnimationFrame(() => {
+					const headerHeight = originalThead.offsetHeight;
+					if (headerHeight > 0) {
+						wrapper.style.marginTop = `-${headerHeight}px`;
+						originalThead.style.visibility = 'hidden';
+					}
+				});
+			}
+		} else {
+			// 比較対象が3つ以下の場合は画面幅にピッタリ収める
+			table.style.width = '100%';
+		}
+	});
+});
+</script>

@@ -1,0 +1,176 @@
+---
+import { Image } from 'astro:assets';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Sidebar from '../../components/Sidebar.astro';
+
+export async function getStaticPaths() {
+	const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+	const uniqueCategories = [...new Set(allPosts.flatMap((post) => post.data.categories || []))];
+
+	return uniqueCategories.map((category) => {
+		const filteredPosts = allPosts.filter((post) => post.data.categories?.includes(category));
+		return {
+			params: { category },
+			props: { posts: filteredPosts },
+		};
+	});
+}
+
+const { category } = Astro.params;
+const { posts } = Astro.props;
+
+// Sort by date desc
+posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<BaseHead title={`【${category}】の記事一覧 | ${SITE_TITLE}`} description={`${category}に関する記事の一覧です。`} />
+		<style>
+			.page-header {
+				margin-bottom: 2em;
+				text-align: center;
+				color: var(--text-main);
+			}
+			.category-badge {
+				background-color: #e0f2fe;
+				color: #0369a1;
+				padding: 0.2rem 0.6rem;
+				border-radius: 4px;
+				font-size: 1.2rem;
+			}
+			.entry-list {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+				list-style: none;
+				padding: 0;
+				margin: 0 0 2rem 0;
+			}
+			.entry-card {
+				display: flex;
+				background-color: var(--bg-content);
+				border: 1px solid var(--border-color);
+				border-radius: var(--radius);
+				overflow: hidden;
+				text-decoration: none;
+				color: var(--text-main);
+				transition: background-color 0.2s;
+			}
+			.entry-card:hover {
+				background-color: #fafafa;
+				text-decoration: none;
+			}
+			.entry-thumb {
+				flex: 0 0 300px;
+				aspect-ratio: 16/9;
+				overflow: hidden;
+				background-color: var(--border-color);
+			}
+			.entry-thumb img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+			.entry-content {
+				padding: 1.5rem;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+			.entry-title {
+				font-size: 1.25rem;
+				margin: 0 0 0.5rem 0;
+				line-height: 1.4;
+			}
+			.entry-date {
+				font-size: 0.9rem;
+				color: var(--text-light);
+				margin: 0;
+			}
+			@media (max-width: 720px) {
+				.entry-list {
+					gap: 0.6rem;
+				}
+				.entry-card {
+					flex-direction: row;
+					align-items: stretch;
+				}
+				.entry-thumb {
+					flex: 0 0 110px;
+					width: 110px;
+					aspect-ratio: 16 / 9;
+					min-height: 70px;
+				}
+				.entry-content {
+					padding: 0.6rem 0.75rem;
+					flex: 1;
+					min-width: 0;
+					justify-content: space-between;
+				}
+				.entry-title {
+					font-size: 0.92rem;
+					margin: 0 0 0.25rem 0;
+					line-height: 1.35;
+					display: -webkit-box;
+					-webkit-box-orient: vertical;
+					-webkit-line-clamp: 2;
+					overflow: hidden;
+				}
+				.entry-date {
+					font-size: 0.75rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="layout-container">
+				<div class="layout-main">
+					<Breadcrumb
+						items={[
+							{ label: 'ホーム', href: '/' },
+							{ label: `${category}` },
+						]}
+					/>
+					<h2 class="page-header"><span class="category-badge">{category}</span> の記事一覧</h2>
+					<section>
+						<div class="entry-list">
+							{
+								posts.map((post) => (
+									<a href={`/blog/${post.id}/`} class="entry-card box">
+										<div class="entry-thumb">
+											{post.data.heroImage ? (
+												<Image width={720} height={405} src={post.data.heroImage} alt="" />
+											) : (
+												<div style="width:100%; height:100%; background:#e0e0e0;"></div>
+											)}
+										</div>
+										<div class="entry-content">
+											<h2 class="entry-title">{post.data.title}</h2>
+											<p class="entry-date">
+												<Icon name="heroicons:calendar" class="icon-inline" /> <FormattedDate date={post.data.pubDate} />
+											</p>
+										</div>
+									</a>
+								))
+							}
+						</div>
+					</section>
+				</div>
+
+				<Sidebar />
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

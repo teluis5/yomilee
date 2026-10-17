@@ -1,0 +1,486 @@
+
+:root {
+	--theme-color: #333333;
+	--theme-accent: #007cba;
+	--text-main: #333333;
+	--text-light: #717171;
+	--bg-main: #f3f4f5;
+	--bg-content: #ffffff;
+	--border-color: #dfdfdf;
+	--radius: 4px;
+	--shadow: 0 1px 3px rgba(0,0,0,0.05);
+	--font-base: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+}
+
+body {
+	font-family: var(--font-base);
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	background-color: var(--bg-content);
+	color: var(--text-main);
+	font-size: 16px;
+	line-height: 1.8;
+}
+* {
+	box-sizing: border-box;
+}
+
+main {
+	width: 100%;
+	max-width: 1200px;
+	margin: 2rem auto;
+	padding: 0 1rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0 0 1rem 0;
+	color: var(--text-main);
+	line-height: 1.4;
+	font-weight: 700;
+}
+
+a {
+	color: var(--theme-accent);
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+	opacity: 0.8;
+}
+
+/* SVG Icon alignment */
+.icon-inline {
+	display: inline-block;
+	vertical-align: text-bottom;
+	width: 1.2em;
+	height: 1.2em;
+}
+
+p { margin-bottom: 1.5em; }
+
+/* Cocoon-like Card Style */
+.box {
+	background-color: var(--bg-content);
+	border: 1px solid var(--border-color);
+	border-radius: var(--radius);
+	/* box-shadow: var(--shadow); */
+	overflow: hidden;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+/* Image Caption (figure / figcaption) */
+figure {
+	margin: 1.25rem 0;
+	text-align: center;
+}
+
+@media (max-width: 640px) {
+	figure {
+		margin: 1rem 0;
+	}
+}
+
+figure img {
+	display: block;
+	margin: 0 auto;
+	border-radius: var(--radius);
+}
+
+figcaption,
+.caption,
+.image-caption {
+	display: block;
+	font-size: 0.85rem;
+	color: var(--text-light);
+	margin-top: 0.5rem;
+	text-align: center;
+	line-height: 1.5;
+}
+
+figcaption p,
+.caption p,
+.image-caption p {
+	margin: 0;
+	font-size: inherit;
+	color: inherit;
+	line-height: inherit;
+}
+
+figcaption a,
+.caption a,
+.image-caption a {
+	color: var(--text-light);
+	text-decoration: underline;
+}
+
+figcaption a:hover,
+.caption a:hover,
+.image-caption a:hover {
+	color: var(--theme-accent);
+}
+
+/* Inline code */
+code {
+	font-family: "JetBrains Mono", Consolas, "SFMono-Regular", Menlo, Monaco, "Courier New", monospace;
+	font-size: 0.88em;
+	padding: 0.15em 0.45em;
+	background-color: rgba(0, 0, 0, 0.05);
+	color: #c7254e;
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	border-radius: 4px;
+	word-break: break-word;
+}
+
+/* Code block (pre / Shiki) */
+pre,
+.astro-code {
+	position: relative;
+	padding: 1.25rem 1.5rem;
+	margin: 1.75rem 0;
+	border-radius: 8px;
+	background-color: #1e293b !important;
+	color: #f8fafc !important;
+	border: 1px solid #334155;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+	font-size: 0.92rem;
+	line-height: 1.65;
+	letter-spacing: 0.015em;
+	overflow-x: auto;
+	scrollbar-width: thin;
+	scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+/* Code block inner code reset */
+pre code,
+.astro-code code {
+	all: unset;
+	display: block;
+	background: transparent !important;
+	background-color: transparent !important;
+	padding: 0 !important;
+	border: none !important;
+	border-radius: 0 !important;
+	font-family: "JetBrains Mono", Consolas, "SFMono-Regular", Menlo, Monaco, "Courier New", monospace;
+	font-size: inherit;
+	color: inherit;
+	line-height: inherit;
+	white-space: pre;
+	word-break: normal;
+	word-spacing: normal;
+	overflow-wrap: normal;
+}
+
+/* Code block scrollbars */
+pre::-webkit-scrollbar,
+.astro-code::-webkit-scrollbar {
+	height: 6px;
+}
+pre::-webkit-scrollbar-thumb,
+.astro-code::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.25);
+	border-radius: 3px;
+}
+pre::-webkit-scrollbar-thumb:hover,
+.astro-code::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, 0.4);
+}
+blockquote {
+	border-left: 4px solid #dddddd;
+	padding: 0 0 0 16px;
+	margin: 1.5em 0;
+	color: var(--text-light);
+}
+hr {
+	border: none;
+	border-top: 1px solid var(--border-color);
+	margin: 2rem 0;
+}
+
+/* Tables */
+table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 2rem 0;
+	font-size: 0.9rem;
+}
+th, td {
+	border: 1px solid var(--border-color);
+	padding: 0.6rem 0.8rem;
+	text-align: left;
+	vertical-align: top;
+	word-break: break-all;
+	overflow-wrap: anywhere;
+}
+table a {
+	word-break: break-all;
+	overflow-wrap: anywhere;
+}
+th {
+	background-color: var(--bg-main);
+	font-weight: bold;
+	font-size: 0.85rem;
+}
+tbody td:first-child {
+	font-weight: bold;
+	font-size: 0.85rem;
+	background-color: #fafafa;
+}
+
+/* 楽天アフィリエイトウィジェット表示の最適化 */
+table:has(a[href*="rakuten.co.jp"]) {
+	border: none !important;
+	background: transparent !important;
+	margin: 2rem auto !important;
+	max-width: 504px !important;
+	width: 100% !important;
+	box-shadow: none !important;
+	display: table !important;
+}
+table:has(a[href*="rakuten.co.jp"]) table {
+	border: none !important;
+	background: transparent !important;
+	margin: 0 auto !important;
+	width: 100% !important;
+	box-shadow: none !important;
+}
+table:has(a[href*="rakuten.co.jp"]) th,
+table:has(a[href*="rakuten.co.jp"]) td {
+	border: none !important;
+	background: transparent !important;
+	padding: 0 !important;
+	box-shadow: none !important;
+	font-weight: normal !important;
+}
+table:has(a[href*="rakuten.co.jp"]) img {
+	background-color: transparent !important;
+}
+table:has(a[href*="rakuten.co.jp"]) a {
+	word-break: normal !important;
+}
+table:has(a[href*="rakuten.co.jp"]) a div[style*="background-color:#bf0000"],
+table:has(a[href*="rakuten.co.jp"]) a[href*="bbtn"] div {
+	white-space: nowrap !important;
+	word-break: keep-all !important;
+	width: auto !important;
+	min-width: 84px !important;
+	box-sizing: border-box !important;
+}
+table:has(a[href*="rakuten.co.jp"]) br {
+	display: none;
+}
+table:has(a[href*="rakuten.co.jp"]) div[style*="border-radius"] {
+	margin-left: auto !important;
+	margin-right: auto !important;
+	max-width: 100% !important;
+	box-sizing: border-box !important;
+}
+@media (max-width: 560px) {
+	table:has(a[href*="rakuten.co.jp"]) table,
+	table:has(a[href*="rakuten.co.jp"]) table tbody,
+	table:has(a[href*="rakuten.co.jp"]) table tr {
+		display: flex !important;
+		flex-direction: column !important;
+		align-items: center !important;
+		width: 100% !important;
+	}
+	table:has(a[href*="rakuten.co.jp"]) table td {
+		width: 100% !important;
+		max-width: 100% !important;
+		display: block !important;
+		text-align: center !important;
+		box-sizing: border-box !important;
+	}
+	table:has(a[href*="rakuten.co.jp"]) table td:first-child a {
+		display: inline-block !important;
+	}
+	table:has(a[href*="rakuten.co.jp"]) table td:first-child img {
+		max-width: 100% !important;
+		height: auto !important;
+		margin: 0 auto !important;
+	}
+	table:has(a[href*="rakuten.co.jp"]) table td:last-child p {
+		text-align: center !important;
+		margin: 8px 0 !important;
+	}
+	table:has(a[href*="rakuten.co.jp"]) table td:last-child div {
+		display: flex !important;
+		justify-content: center !important;
+		align-items: center !important;
+		gap: 12px !important;
+		margin: 8px auto !important;
+	}
+	table:has(a[href*="rakuten.co.jp"]) table td:last-child div a {
+		float: none !important;
+	}
+	table:has(a[href*="rakuten.co.jp"]) table td:last-child div a:last-child div {
+		float: none !important;
+		width: auto !important;
+		min-width: 110px !important;
+	}
+}
+thead th {
+	position: sticky;
+	top: 57px; /* サイトのヘッダー高さ(約57px)に合わせる */
+	z-index: 10;
+	/* border-collapse のバグ対策として、擬似的に下線を引く */
+	box-shadow: 0 1px 0 var(--border-color);
+}
+
+/* Two Column Layout */
+.layout-container {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	gap: 2rem;
+}
+.layout-main {
+	flex: 1 1 65%;
+	min-width: 0;
+}
+.layout-sidebar {
+	flex: 1 1 30%;
+	min-width: 300px;
+	position: sticky;
+	top: 80px;
+	max-height: calc(100vh - 100px);
+	overflow-y: auto;
+	overflow-x: hidden;
+	scrollbar-width: thin;
+	scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+.layout-sidebar::-webkit-scrollbar {
+	width: 5px;
+}
+.layout-sidebar::-webkit-scrollbar-thumb {
+	background: rgba(0, 0, 0, 0.15);
+	border-radius: 4px;
+}
+.layout-sidebar::-webkit-scrollbar-thumb:hover {
+	background: rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 800px) {
+	.layout-main, .layout-sidebar {
+		flex: 1 1 100%;
+	}
+	.layout-sidebar {
+		position: static;
+		max-height: none;
+		overflow-y: visible;
+	}
+}
+
+.sr-only {
+	border: 0;
+	padding: 0;
+	margin: 0;
+	position: absolute !important;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+	clip: rect(1px 1px 1px 1px);
+	white-space: nowrap;
+}
+
+/* 見出しの装飾（派手すぎない・上品なスタイル） */
+.prose h2 {
+	padding: 0.8rem 1rem;
+	background-color: #f7f9fa;
+	border-left: 5px solid var(--theme-accent);
+	border-bottom: 1px solid var(--border-color);
+	font-size: 1.5rem;
+	margin-top: 3rem;
+	margin-bottom: 1.5rem;
+	border-radius: 0 4px 4px 0;
+}
+
+.prose h3 {
+	padding-bottom: 0.5rem;
+	border-bottom: 2px solid #e2e8f0;
+	font-size: 1.25rem;
+	margin-top: 2.5rem;
+	margin-bottom: 1.2rem;
+	position: relative;
+}
+.prose h3::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	bottom: -2px;
+	width: 60px;
+	height: 2px;
+	background-color: var(--theme-accent);
+}
+
+.prose h4 {
+	font-size: 1.1rem;
+	margin-top: 2rem;
+	margin-bottom: 1rem;
+	padding-left: 0.5rem;
+	border-left: 3px solid #cbd5e1;
+}
+
+.prose h5 {
+	font-size: 1.05rem;
+	font-weight: 700;
+	margin-top: 1.5rem;
+	margin-bottom: 0.8rem;
+}
+
+.prose b,
+.prose strong {
+	font-weight: 700;
+	color: var(--text-main);
+}
+
+.prose i,
+.prose em {
+	font-style: italic;
+}
+
+.prose s,
+.prose del {
+	text-decoration: line-through;
+	color: var(--text-light);
+}
+
+.prose u {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.prose mark {
+	background-color: #fef08a;
+	padding: 0.1em 0.35em;
+	border-radius: 2px;
+	color: inherit;
+}
+
+.prose kbd {
+	background-color: var(--bg-main);
+	border: 1px solid var(--border-color);
+	border-radius: 3px;
+	box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+	font-size: 0.85em;
+	padding: 2px 6px;
+	font-family: monospace;
+}
+
+/* Screen reader only utility (アクセシビリティ・SEO用非表示見出し) */
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border-width: 0;
+}
+
