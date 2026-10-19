@@ -10,7 +10,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "audit:alt": "node audit_alt.mjs"
+    "audit:alt": "node audit_alt.mjs",
+    "generate:trend": "node scripts/generate_trend.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^7.0.8",
