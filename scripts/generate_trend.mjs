@@ -18,6 +18,9 @@ const apiKeyArg = args.find(a => a.startsWith('--api-key='))?.split('=')[1];
 const limitArg = args.find(a => a.startsWith('--limit='))?.split('=')[1];
 const targetLimit = limitArg ? Math.max(1, parseInt(limitArg, 10)) : 2; // デフォルト2記事
 
+// ジャンル指定: all, news, tech, ai, product, lifestyle
+const genreArg = args.find(a => a.startsWith('--genre='))?.split('=')[1]?.toLowerCase() || 'all';
+
 // APIキーの自動解決 (.secrets/gemini-key.txt も探索)
 function resolveApiKey() {
   if (process.env.GEMINI_API_KEY) return process.env.GEMINI_API_KEY.trim();
@@ -69,45 +72,27 @@ function decodeXml(str) {
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
     .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
-    .replace(/&#([0-9]+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)));
+    .replace(/&#([0-9]+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)))
+    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
+    .trim();
 }
 
-// 暮らし・ライフスタイル・節約・おでかけキーワード
-const LIFESTYLE_PATTERNS = [
-  /暮らし/i, /生活/i, /節約/i, /家計/i, /お得/i, /セール/i, /割引/i, /ポイント/i, /還元/i,
-  /コストコ/i, /無印/i, /100均/i, /ダイソー/i, /セリア/i, /ニトリ/i, /カルディ/i, /楽天/i, /Amazon/i,
-  /新店舗/i, /オープン/i, /商業施設/i, /モール/i, /ショップ/i,
-  /時短/i, /便利グッズ/i, /防災/i, /備蓄/i, /料理/i, /レシピ/i, /健康/i, /睡眠/i, /片付け/i, /収納/i, /掃除/i,
-  /旅行/i, /観光/i, /おでかけ/i, /週末/i, /イベント/i, /イルミネーション/i, /ホテル/i, /カフェ/i, /スポット/i,
-  /グルメ/i, /スイーツ/i, /テイクアウト/i, /朝活/i, /散歩/i
-];
+// 共通HTTPリクエスト用ヘッダー
+const FETCH_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+};
 
-// IT・ガジェット・通信・スマホキーワード
-const GADGET_PATTERNS = [
-  /スマホ/i, /スマートフォン/i, /iPhone/i, /Android/i, /Pixel/i, /Galaxy/i, /AQUOS/i, /Xperia/i,
-  /格安SIM/i, /povo/i, /LINEMO/i, /ahamo/i, /楽天モバイル/i, /ワイモバイル/i, /UQ/i, /通信プラン/i, /eSIM/i, /Wi-Fi/i,
-  /ガジェット/i, /スマートウォッチ/i, /Apple Watch/i, /イヤホン/i, /充電器/i, /モバイルバッテリー/i, /Anker/i,
-  /iPad/i, /タブレット/i, /ノートPC/i, /MacBook/i, /Windows/i,
-  /アプリ/i, /便利ツール/i, /AIツール/i, /ChatGPT/i, /ブラウザ/i, /拡張機能/i, /Google/i, /LINE/i, /PayPay/i
-];
+// -------------------------------------------------------------
+// 各種情報収集フェッチャー
+// -------------------------------------------------------------
 
-function calculateScores(text) {
-  let lifeScore = 0;
-  for (const pattern of LIFESTYLE_PATTERNS) {
-    if (pattern.test(text)) lifeScore += 10;
-  }
-  let gadgetScore = 0;
-  for (const pattern of GADGET_PATTERNS) {
-    if (pattern.test(text)) gadgetScore += 10;
-  }
-  return { lifeScore, gadgetScore, totalScore: lifeScore + gadgetScore };
-}
-
-// 1. はてなブックマーク（暮らし人気エントリ）
-async function fetchHatenaLifeTrends() {
-  console.log('📡 はてなブックマーク（暮らし）人気RSSを取得中...');
+// 1. Yahoo!ニュース（主要トピックス / ITニュース）
+async function fetchYahooNews(type = 'top-picks') {
+  const url = `https://news.yahoo.co.jp/rss/topics/${type}.xml`;
+  const label = type === 'it' ? 'Yahoo! ITニュース' : 'Yahoo! 主要ニュース';
+  console.log(`📡 ${label} を取得中...`);
   try {
-    const res = await fetch('https://b.hatena.ne.jp/hotentry/life.rss');
+    const res = await fetch(url, { headers: FETCH_HEADERS });
     if (!res.ok) throw new Error(`Status: ${res.status}`);
     const xml = await res.text();
 
@@ -118,27 +103,125 @@ async function fetchHatenaLifeTrends() {
     while ((match = itemRegex.exec(xml)) !== null) {
       const content = match[0];
       const title = decodeXml(content.match(/<title>(.*?)<\/title>/)?.[1] || '');
-      const link = content.match(/<link>(.*?)<\/link>/)?.[1] || '';
+      const link = decodeXml(content.match(/<link>(.*?)<\/link>/)?.[1] || '');
+
+      if (title && link) {
+        items.push({
+          sourceType: `yahoo_${type}`,
+          title,
+          link,
+          description: '',
+          image: null,
+          genreHint: type === 'it' ? 'tech' : 'news',
+          score: 80,
+          sourceName: label
+        });
+      }
+    }
+    return items;
+  } catch (e) {
+    console.warn(`⚠️ ${label} の取得に失敗しました:`, e.message);
+    return [];
+  }
+}
+
+// 2. PR TIMES（新商品・新サービス・注目発表）
+async function fetchPRTimes() {
+  console.log('📡 PR TIMES（新商品・新サービス発表）を取得中...');
+  try {
+    const res = await fetch('https://prtimes.jp/index.rdf', { headers: FETCH_HEADERS });
+    if (!res.ok) throw new Error(`Status: ${res.status}`);
+    const xml = await res.text();
+
+    const items = [];
+    const itemRegex = /<item\b[\s\S]*?<\/item>/g;
+    let match;
+
+    while ((match = itemRegex.exec(xml)) !== null) {
+      const content = match[0];
+      const title = decodeXml(content.match(/<title>(.*?)<\/title>/)?.[1] || '');
+      const link = decodeXml(content.match(/<link>(.*?)<\/link>/)?.[1] || '');
+      const descRaw = decodeXml(content.match(/<description>([\s\S]*?)<\/description>/)?.[1] || '');
+
+      // 画像URLをdescriptionまたはタグから抽出
+      const imgMatch = descRaw.match(/https:\/\/prcdn\.freetls\.fastly\.net\/release_image\/[^\s\"\'\<\>]+/i) ||
+                       content.match(/<image>(.*?)<\/image>/i);
+      const image = imgMatch ? imgMatch[0] : null;
+
+      // 新商品・新発売・新機能・先行予約・限定などのキーワード判定
+      const isProduct = /新発売|新登場|発売|先行|発表|新商品|新モデル|新サービス|誕生|開始|リニューアル|オープン/i.test(title);
+
+      if (title && link && isProduct) {
+        // descriptionから画像テキスト等を除去して簡潔に
+        const cleanDesc = descRaw.replace(/\[画像\d+:[^\]]+\]/g, '').replace(/\[[^\]]+株式会社\]/g, '').trim().slice(0, 150);
+
+        items.push({
+          sourceType: 'prtimes',
+          title,
+          link,
+          description: cleanDesc,
+          image,
+          genreHint: 'product',
+          score: 85,
+          sourceName: 'PR TIMES 新商品・新サービス'
+        });
+      }
+    }
+    return items;
+  } catch (e) {
+    console.warn('⚠️ PR TIMES の取得に失敗しました:', e.message);
+    return [];
+  }
+}
+
+// 3. はてなブックマーク（総合・テクノロジー・暮らし）
+async function fetchHatena(category = 'life') {
+  const urlMap = {
+    general: 'https://b.hatena.ne.jp/hotentry.rss',
+    it: 'https://b.hatena.ne.jp/hotentry/it.rss',
+    life: 'https://b.hatena.ne.jp/hotentry/life.rss'
+  };
+  const labelMap = {
+    general: 'はてなブックマーク（総合人気）',
+    it: 'はてなブックマーク（テクノロジー・AI）',
+    life: 'はてなブックマーク（暮らし・生活）'
+  };
+
+  const url = urlMap[category] || urlMap.life;
+  const label = labelMap[category] || labelMap.life;
+  console.log(`📡 ${label} を取得中...`);
+
+  try {
+    const res = await fetch(url, { headers: FETCH_HEADERS });
+    if (!res.ok) throw new Error(`Status: ${res.status}`);
+    const xml = await res.text();
+
+    const items = [];
+    const itemRegex = /<item\b[\s\S]*?<\/item>/g;
+    let match;
+
+    while ((match = itemRegex.exec(xml)) !== null) {
+      const content = match[0];
+      const title = decodeXml(content.match(/<title>(.*?)<\/title>/)?.[1] || '');
+      const link = decodeXml(content.match(/<link>(.*?)<\/link>/)?.[1] || '');
       const countStr = content.match(/<hatena:bookmarkcount>(.*?)<\/hatena:bookmarkcount>/)?.[1] || '0';
-      const desc = decodeXml(content.match(/<description>(.*?)<\/description>/)?.[1] || '');
+      const desc = decodeXml(content.match(/<description>([\s\S]*?)<\/description>/)?.[1] || '');
       const image = content.match(/<hatena:imageurl>(.*?)<\/hatena:imageurl>/)?.[1] || null;
 
       if (title && link) {
         const bookmarks = parseInt(countStr, 10);
-        const textToAnalyze = `${title} ${desc}`;
-        const { lifeScore, gadgetScore, totalScore } = calculateScores(textToAnalyze);
+        const genreHint = category === 'it' ? 'tech' : (category === 'general' ? 'news' : 'lifestyle');
 
         items.push({
-          sourceType: 'hatena_life',
+          sourceType: `hatena_${category}`,
           title,
           link,
           bookmarks,
           description: desc,
           image,
-          lifeScore,
-          gadgetScore,
-          score: bookmarks * 1.2 + totalScore * 3,
-          sourceName: 'はてなブックマーク（暮らし）'
+          genreHint,
+          score: bookmarks + 30,
+          sourceName: label
         });
       }
     }
@@ -146,66 +229,16 @@ async function fetchHatenaLifeTrends() {
     items.sort((a, b) => b.score - a.score);
     return items;
   } catch (e) {
-    console.warn('⚠️ はてなブックマーク（暮らし）の取得に失敗しました:', e.message);
+    console.warn(`⚠️ ${label} の取得に失敗しました:`, e.message);
     return [];
   }
 }
 
-// 2. はてなブックマーク（テクノロジー人気エントリ）
-async function fetchHatenaTechTrends() {
-  console.log('📡 はてなブックマーク（テクノロジー）人気RSSを取得中...');
-  try {
-    const res = await fetch('https://b.hatena.ne.jp/hotentry/it.rss');
-    if (!res.ok) throw new Error(`Status: ${res.status}`);
-    const xml = await res.text();
-
-    const items = [];
-    const itemRegex = /<item\b[\s\S]*?<\/item>/g;
-    let match;
-
-    while ((match = itemRegex.exec(xml)) !== null) {
-      const content = match[0];
-      const title = decodeXml(content.match(/<title>(.*?)<\/title>/)?.[1] || '');
-      const link = content.match(/<link>(.*?)<\/link>/)?.[1] || '';
-      const countStr = content.match(/<hatena:bookmarkcount>(.*?)<\/hatena:bookmarkcount>/)?.[1] || '0';
-      const desc = decodeXml(content.match(/<description>(.*?)<\/description>/)?.[1] || '');
-      const image = content.match(/<hatena:imageurl>(.*?)<\/hatena:imageurl>/)?.[1] || null;
-
-      if (title && link) {
-        const bookmarks = parseInt(countStr, 10);
-        const textToAnalyze = `${title} ${desc}`;
-        const { lifeScore, gadgetScore, totalScore } = calculateScores(textToAnalyze);
-
-        if (gadgetScore > 0 || lifeScore > 0) {
-          items.push({
-            sourceType: 'hatena_tech',
-            title,
-            link,
-            bookmarks,
-            description: desc,
-            image,
-            lifeScore,
-            gadgetScore,
-            score: bookmarks + totalScore * 3,
-            sourceName: 'はてなブックマーク（ガジェット・IT）'
-          });
-        }
-      }
-    }
-
-    items.sort((a, b) => b.score - a.score);
-    return items;
-  } catch (e) {
-    console.warn('⚠️ はてなブックマーク（テクノロジー）の取得に失敗しました:', e.message);
-    return [];
-  }
-}
-
-// 3. Google Trends RSS（急上昇ワード）
+// 4. Google Trends (急上昇)
 async function fetchGoogleTrends() {
-  console.log('📡 Google Trends (JP) から急上昇トピックを取得中...');
+  console.log('📡 Google Trends (JP) から急上昇ワードを取得中...');
   try {
-    const res = await fetch('https://trends.google.com/trending/rss?geo=JP');
+    const res = await fetch('https://trends.google.com/trending/rss?geo=JP', { headers: FETCH_HEADERS });
     if (!res.ok) throw new Error(`Status: ${res.status}`);
     const xml = await res.text();
 
@@ -220,9 +253,8 @@ async function fetchGoogleTrends() {
       const pictureMatch = itemContent.match(/<ht:picture>(.*?)<\/ht:picture>/);
 
       const title = decodeXml(titleMatch ? titleMatch[1] : '');
-      const { lifeScore, gadgetScore, totalScore } = calculateScores(title);
 
-      if (title && totalScore > 0) {
+      if (title) {
         const newsItems = [];
         const newsRegex = /<ht:news_item>([\s\S]*?)<\/ht:news_item>/g;
         let nMatch;
@@ -239,17 +271,15 @@ async function fetchGoogleTrends() {
         items.push({
           sourceType: 'google_trends',
           title,
-          traffic: trafficMatch ? trafficMatch[1] : '注目',
+          traffic: trafficMatch ? trafficMatch[1] : '急上昇',
           picture: pictureMatch ? pictureMatch[1] : null,
-          lifeScore,
-          gadgetScore,
-          score: 100 + totalScore * 5,
+          genreHint: 'news',
+          score: 110,
           news: newsItems,
           sourceName: 'Google急上昇トレンド'
         });
       }
     }
-
     return items;
   } catch (e) {
     console.warn('⚠️ Google Trends の取得に失敗しました:', e.message);
@@ -257,19 +287,30 @@ async function fetchGoogleTrends() {
   }
 }
 
-// カテゴリ判定
+// -------------------------------------------------------------
+// カテゴリ自動判定ロジック
+// -------------------------------------------------------------
 function determineCategories(topic) {
-  const life = topic.lifeScore || 0;
-  const gadget = topic.gadgetScore || 0;
+  const text = `${topic.title} ${topic.description || ''}`;
 
-  if (life > gadget && life > 0) {
-    return ['ライフスタイル'];
-  } else if (gadget > life && gadget > 0) {
+  // AI・テクノロジー・IT
+  const isTech = /AI|ChatGPT|Claude|Gemini|OpenAI|生成AI|LLM|プログラミング|スマホ|iPhone|Android|Pixel|Galaxy|格安SIM|povo|通信|ガジェット|スマートウォッチ|アプリ|Web|PC|MacBook|Windows|ソフトウェア|脆弱性/i.test(text);
+
+  // 旅行・おでかけ・観光
+  const isTravel = /旅行|観光|おでかけ|ホテル|温泉|イルミネーション|紅葉|桜|スポット|京都|東京|北海道|飛行機|新幹線|空港|カフェ|グルメ/i.test(text);
+
+  // 新商品・暮らし・生活
+  const isLifestyle = /暮らし|生活|節約|家計|コストコ|無印|100均|ニトリ|カルディ|楽天|Amazon|新発売|新商品|家電|料理|レシピ|健康|睡眠|片付け|掃除|防災|育児/i.test(text);
+
+  if (isTech && isLifestyle) {
+    return ['IT・ガジェット', 'ライフスタイル'];
+  } else if (isTech) {
     return ['IT・ガジェット'];
-  } else if (gadget > 0 && life > 0) {
-    return ['ライフスタイル', 'IT・ガジェット'];
+  } else if (isTravel) {
+    return ['旅行'];
+  } else {
+    return ['ライフスタイル'];
   }
-  return ['ライフスタイル'];
 }
 
 // スラッグ生成 (日付-キーワード-短縮ハッシュ)
@@ -297,7 +338,6 @@ function isDuplicateTopic(topic, blogDir) {
     const indexPath = path.join(blogDir, dir, 'index.mdx');
     if (fs.existsSync(indexPath)) {
       const content = fs.readFileSync(indexPath, 'utf-8');
-      // リンクの一致、または同一タイトルの含有をチェック
       if (targetLink && content.includes(targetLink)) {
         return true;
       }
@@ -309,7 +349,9 @@ function isDuplicateTopic(topic, blogDir) {
   return false;
 }
 
-// 1話題に特化した Gemini API 記事執筆
+// -------------------------------------------------------------
+// 1話題に特化した Gemini API 記事執筆（AI・ニュース・新商品対応）
+// -------------------------------------------------------------
 async function generateSingleArticleWithGemini(topic, dateInfo, categories) {
   if (!GEMINI_API_KEY) {
     console.log('⚠️ GEMINI_API_KEY が未設定のため、親しみやすいブロガー風フォールバック記事を生成します。');
@@ -319,24 +361,26 @@ async function generateSingleArticleWithGemini(topic, dateInfo, categories) {
   console.log(`🤖 Gemini で【1話題深掘り・yomilee等身大ブロガー風】記事を執筆中: "${topic.title.slice(0, 25)}..."`);
 
   const topicData = `タイトル: ${topic.title}
-情報源: ${topic.sourceName || '話題のトピック'} (${topic.bookmarks ? topic.bookmarks + 'ブクマ' : topic.traffic})
+情報源: ${topic.sourceName || '話題のトピック'}
 URL: ${topic.link || topic.news?.[0]?.url || ''}
 概要・抜粋: ${topic.description || topic.news?.map(n => n.title).join(' / ') || ''}`;
 
-  const systemInstruction = `あなたは暮らしとガジェットの体験談ブログ「yomileeblog（ヨミリーブログ）」の運営者「yomilee」です。
-読者に寄り添う親しみやすく等身大の語り口で、提示された【1つの話題・トレンド】を深く・わかりやすく・読者目線で掘り下げた単体ブログ記事（1話題1記事）を執筆してください。
+  const systemInstruction = `あなたは暮らし・ガジェット・話題の情報を発信する人気ブログ「yomileeblog（ヨミリーブログ）」の運営者「yomilee」です。
+読者に寄り添う親しみやすく等身大の語り口で、提示された【1つの話題（トップニュース、最新AI・テクノロジー、注目の新商品、暮らしのトレンドなど）】を深く・わかりやすく・読者目線で掘り下げた単独ブログ記事（1話題1記事）を執筆してください。
 
 【ペルソナと文体ルール】
-1. **親しみやすさと等身大の共感**:
-   - 語り口: 「〜ですよね」「〜してみてはいかがでしょうか」「実際に気になったので詳しくチェックしてみました」「日々の暮らしや買い物がちょっと快適になりそうですね」など、温かみがあり丁寧なブログ調。
+1. **親しみやすさと読者目線の共感**:
+   - 語り口: 「〜ですよね」「〜してみてはいかがでしょうか」「実際に気になったので詳しく調べてみました」「日々の生活やお買い物がちょっと快適になりそうですね」など、温かみがあり丁寧なブログ調。
    - 硬いニュース報道調（「〜と報じられた」「今後の展開が期待される」）や、AI特有の不自然な定型句（「いかがでしたでしょうか」）は使わないこと。
-2. **読者目線の実用性と本音**:
-   - 単なるニュースの要約ではなく、「結局、自分の生活や家計にどう役立つのか？」「どんな人におすすめなのか？」「ちょっと注意したい点はあるか？」を等身大の目線で率直に解説。
+2. **テーマに応じた実用的な切り口**:
+   - **AI・テクノロジーの場合**: 難解な専門用語を避け、「結局、僕たちの仕事や日常作業の何がラクになるのか？」「無料で試せるか？導入の手順は？」など、等身大の実践目線で解説。
+   - **新商品・新製品の場合**: 「何が新しくなったのか？」「既存モデルや他社製品との決定的な違いは？」「どんな人におすすめで、買いなのか？」という本音目線。
+   - **トップニュース・時事の場合**: 「私たちの普段の暮らしや家計にどう関わってくるのか？」「今押さえておきたい要点」を整理。
 3. **キャッチーでわかりやすい個別記事タイトル**:
-   - 日付や「トレンドまとめ」といった文言はタイトルに入れないこと！
-   - テーマの魅力を前面に出し、読者が思わず読みたくなる具体的なタイトル（32〜45文字程度）。
-   - 例: 「100均耐熱ガラスの落とし穴？お湯で割れる事故を防ぐ注意点と安全な選び方」
-   - 例: 「日本で買える本当においしいキムチはどれ？本場の見分け方とおすすめまとめ」
+   - 日付や「まとめ」といった事務的な文言はタイトルに入れないこと！
+   - 読者の興味を惹きつける具体的で魅力的なタイトル（32〜45文字程度）。
+   - 例: 「〇〇が新登場！何が進化した？買い替えるべき理由と気になる注意点」
+   - 例: 「話題の最新AI『〇〇』とは？日々の作業が爆速化する活用法と使ってみた感想」
 
 【記事構成ルール】
 - **Frontmatter**:
@@ -347,14 +391,14 @@ URL: ${topic.link || topic.news?.[0]?.url || ''}
   heroImage: "./hero.jpg"
 - **導入部**:
   - ブロガーらしい親しみやすい導入の挨拶と、その話題に興味を持ったきっかけ
-  - <ProblemBox> コンポーネントを配置（読者が「まさにそれが知りたかった」「気になっていた」と感じる悩みや関心を3〜4項目）
+  - <ProblemBox> コンポーネントを配置（読者が「まさにそれが知りたかった」「気になっていた」と感じる疑問や関心を3〜4項目）
 - **本文セクション**:
   - H2見出し 3〜4つで構成（読者の疑問を順序立てて解決）:
-    - H2: 「何が話題になっている？概要と注目の背景」
-    - H2: 「日々の暮らしや生活はどう変わる？注目のメリットと活かし方」
-    - H2: 「知っておきたい注意点や失敗しないコツ（おすすめな人）」
+    - H2: 「何が起きている？注目の背景と概要」
+    - H2: 「日々の暮らしや仕事はどう変わる？注目のメリットと活かし方」
+    - H2: 「知っておきたい注意点やおすすめな人（選び方のポイント）」
     - H2: 「まとめと一次情報リンク」
-  - 一次情報リンク: [元記事や詳細はこちら](${topic.link || topic.news?.[0]?.url || ''})
+  - 一次情報リンク: [元記事や公式発表はこちら](${topic.link || topic.news?.[0]?.url || ''})
 - **まとめ部**:
   - <ConclusionBox> コンポーネントを配置（記事の要点まとめ3点・今日から試せるワンアクション）
 - **HTML/MDX構文**:
@@ -366,7 +410,7 @@ URL: ${topic.link || topic.news?.[0]?.url || ''}
 【取り上げる話題】
 ${topicData}
 
-上記の1つの話題を徹底的に料理して、読者が「読んでよかった！」「参考になった！」と感じる充実したyomileeblog記事を1本執筆してください！`;
+上記の話題を徹底的に料理して、読者が「読んでよかった！」「生活に役立ちそう！」と感じる充実したyomileeblog記事を1本執筆してください！`;
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
@@ -406,8 +450,17 @@ function generateSingleFallbackArticle(topic, dateInfo, categories) {
   mainCleanTitle = mainCleanTitle.replace(/^[「『"']/, '').replace(/[」』"']$/, '').trim();
   const displayTitle = mainCleanTitle.length > 26 ? mainCleanTitle.slice(0, 25) + '…' : mainCleanTitle;
 
-  const title = `【話題】「${displayTitle}」とは？暮らしへの役立て方と知っておきたいポイント`;
-  const description = `ネットやSNSでいま大きな話題を集めている「${displayTitle}」について、等身大ブロガー目線で徹底解説！気になる概要から日々の生活への取り入れ方、注意点まで分かりやすくお届けします。`;
+  const isProduct = categories.includes('ライフスタイル') && /新発売|発売|新登場|登場|限定|新商品/i.test(topic.title);
+  const isTech = categories.includes('IT・ガジェット');
+
+  let title = `【注目】「${displayTitle}」とは？暮らしへの役立て方と知っておきたいポイント`;
+  if (isProduct) {
+    title = `【新登場】「${displayTitle}」の特徴・魅力と気になるポイントを徹底解説！`;
+  } else if (isTech) {
+    title = `【注目テクノロジー】「${displayTitle}」のメリット・活用法と生活への影響`;
+  }
+
+  const description = `ネットやSNSで話題の「${displayTitle}」について、等身大ブロガー目線でわかりやすく徹底解説！気になる概要から日々の生活や作業への活かし方、注意点までお届けします。`;
 
   let mdx = `---
 title: "${title}"
@@ -421,43 +474,43 @@ import ConclusionBox from '../../../components/ConclusionBox.astro';
 
 こんにちは、yomileeです！
 
-日々の暮らしやSNSを見ていると、<b>「これ、生活がちょっと便利になりそう！」「知っておくと役立つ！」</b>と思える面白い話題や発見がたくさんありますよね。
+日々の生活やネットを見ていると、<b>「これ、生活がちょっと便利になりそう！」「知っておくと役立つ！」</b>と思える面白い新製品やテクノロジー、話題がたくさんありますよね。
 
-今回は、いまネットやコミュニティで特に大きな関心を集めている<b>「${mainCleanTitle}」</b>について、等身大ブロガーの目線で詳しく深掘りしてみたいと思います。
+今回は、いまネットやメディアで大きな注目を集めている<b>「${mainCleanTitle}」</b>について、等身大ブロガーの目線で詳しく深掘りしてみたいと思います。
 
 <ProblemBox>
-- 「${displayTitle}」が話題になっているけれど、具体的に何がポイントなの？
-- 自分の普段の暮らしや生活にどう活かせるのか知りたい
+- 「${displayTitle}」が話題になっているけれど、具体的に何が凄いの？
+- 自分の普段の生活や仕事、家計にどう役立つのか知りたい
 - 取り入れる際の注意点や失敗しないコツを事前にチェックしておきたい
 </ProblemBox>
 
-それでは、気になる詳細をさっそく見ていきましょう！
+それでは、気になる詳細をさっそくチェックしていきましょう！
 
 ---
 
 ## 🌟 何が話題になっている？注目の背景と概要
 
-本日、ネットやSNSで特に多くの反響を集めているのがこちらの話題です。
+本日、ネットやメディアで特に多くの反響を集めているのがこちらの話題です。
 
 ${topic.description ? `> ${topic.description}\n\n` : ''}
 
-この話題がこれほど注目されている背景には、**「日々の生活の中にあるちょっとした疑問や不便に対して、共感できるリアルな解決策や知恵が提示されている」**という点があります。
+この話題が注目されている背景には、**「日々の生活の中にあるちょっとした不便や疑問に対して、新しい価値や実践的な解決策が提示されている」**という点があります。
 
-- **誰もが感じていた疑問の言語化**: 「それ、自分も気になっていた！」という身近なテーマ
-- **実践しやすい身近な工夫**: 特別な道具や高価な出費なしで今日から役立つ情報
-- **リアルな体験談の価値**: 理屈だけでなく、実際に試したからこそ分かる生の声
+- **身近な課題へのアプローチ**: 「それ、気になっていた！」と感じる身近なテーマ
+- **すぐに役立つ実用性**: 高度すぎる話ではなく、日々の暮らしや買い物に直結する内容
+- **今後の動向にも期待**: 今後の普及やアップデートでさらに生活が便利になる可能性
 
 ---
 
-## 💡 日々の暮らしや生活はどう変わる？取り入れるメリット
+## 💡 日々の暮らしや日常はどう変わる？取り入れるメリット
 
-実際にこの知恵やツールを生活に取り入れてみると、日々のちょっとしたストレスや時間の無駄を減らすきっかけになりそうです。
+実際にこの話題や製品、サービスを生活に取り入れてみると、日々のちょっとしたストレスや作業の無駄を減らす大きなきっかけになりそうです。
 
-### 1. 手間や悩みの削減
-普段なんとなく行っていた作業や買い物の選び方に明確な基準ができるため、迷う時間をぐっと短縮できます。
+### 1. 作業や生活の効率化
+これまで時間がかかっていた作業や選び方に明確な基準ができるため、日々の生活をよりスマートに整えることができます。
 
-### 2. 生活の満足度アップ
-無理のない範囲で暮らしのクオリティを高められるため、日々の生活がちょっと心地よく、前向きな気持ちになれますね。
+### 2. 暮らしの快適さ・満足度アップ
+無理のない範囲で新しい知恵や便利アイテムを取り入れることで、毎日の生活が一段と心地よく、前向きな気持ちになれますね。
 
 ---
 
@@ -465,18 +518,18 @@ ${topic.description ? `> ${topic.description}\n\n` : ''}
 
 とても魅力的な話題ですが、取り入れる際にはいくつか気をつけたいポイントもあります。
 
-- **自分の環境に合わせてアレンジする**: 全てをそのまま真似するのではなく、自分や家庭のライフスタイルに合う部分を選んで取り入れるのが長続きのコツです。
-- **過度な期待は禁物**: あくまで日々の暮らしをサポートする工夫のひとつとして、気軽な気持ちで試してみるのがおすすめです。
+- **自分のライフスタイルに合わせて選ぶ**: 話題になっているからといって無理に全部を取り入れるのではなく、自分に合った部分を見極めるのが大切です。
+- **今後の口コミや情報もチェック**: 発売直後や新発表の場合は、実際のユーザーの声や続報もあわせて追っていくのが賢い付き合い方です。
 
-👉 **元記事・一次情報で詳細をチェック**:  
+👉 **元記事・公式情報で詳細をチェック**:  
 <a href="${topic.link || topic.news?.[0]?.url || '#'}" target="_blank" rel="noopener noreferrer">${topic.title}</a>
 
 ---
 
 <ConclusionBox>
-- 本日は注目を集める「${displayTitle}」について、暮らしへの役立て方や知っておきたいポイントをご紹介しました。
+- 本日は注目の「${displayTitle}」について、暮らしへの役立て方や知っておきたいポイントをご紹介しました。
 - 気になった方は、ぜひ無理のない範囲で日常の中に取り入れてみてくださいね。
-- 次回も暮らしを豊かにする身近な気づきをお届けします！
+- 次回も暮らしやデジタル生活を豊かにする身近な気づきをお届けします！
 </ConclusionBox>
 `;
 
@@ -490,11 +543,7 @@ async function prepareHeroImage(targetDir, imageUrl) {
   if (imageUrl) {
     try {
       console.log(`🖼️ サムネイル画像をダウンロード中: ${imageUrl}`);
-      const res = await fetch(imageUrl, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-        }
-      });
+      const res = await fetch(imageUrl, { headers: FETCH_HEADERS });
       if (res.ok) {
         const buffer = await res.arrayBuffer();
         if (buffer.byteLength > 500) {
@@ -551,7 +600,7 @@ function performAutoPush(createdSlugs) {
       return true;
     }
 
-    const commitMsg = `feat(yomilee): add ${createdSlugs.length} daily trend article(s) (${createdSlugs[0].slice(0, 10)})`;
+    const commitMsg = `feat(yomilee): add ${createdSlugs.length} daily article(s) (${createdSlugs[0].slice(0, 10)})`;
     console.log(`💬 コミット実行: "${commitMsg}"`);
     execSync(`git commit -m "${commitMsg}"`, { cwd: YOMILEE_ROOT, stdio: 'inherit' });
 
@@ -566,48 +615,84 @@ function performAutoPush(createdSlugs) {
   }
 }
 
+// -------------------------------------------------------------
 // メイン処理
+// -------------------------------------------------------------
 async function main() {
-  console.log(`🚀 === yomileeblog 【1話題1記事】トレンド自動生成 (上限: ${targetLimit}記事) ===`);
+  console.log(`🚀 === yomileeblog 自動記事生成 (ジャンル: ${genreArg}, 上限: ${targetLimit}記事) ===`);
   const dateInfo = getJSTDate();
   console.log(`📅 対象日付: ${dateInfo.dateStr} (${dateInfo.formattedJa})`);
   console.log(`🔑 Gemini APIキー状態: ${GEMINI_API_KEY ? '設定済み ✅' : '未設定（フォールバックモード） ⚠️'}`);
 
-  // 1. はてブ（暮らし）の取得
-  const hatenaLifeTopics = await fetchHatenaLifeTrends();
-  console.log(`📊 取得したはてブ（暮らし）候補: ${hatenaLifeTopics.length}件`);
+  const candidatePool = [];
 
-  // 2. はてブ（テクノロジー・日常ガジェット）の取得
-  const hatenaTechTopics = await fetchHatenaTechTrends();
-  console.log(`📊 取得したはてブ（テック・ガジェット）候補: ${hatenaTechTopics.length}件`);
+  // ジャンルに応じた情報収集
+  if (genreArg === 'all' || genreArg === 'news') {
+    const yahooTop = await fetchYahooNews('top-picks');
+    const hatenaGeneral = await fetchHatena('general');
+    const googleTrends = await fetchGoogleTrends();
+    candidatePool.push(...yahooTop, ...hatenaGeneral, ...googleTrends);
+  }
 
-  // 3. Google Trends の取得
-  const googleTrendsTopics = await fetchGoogleTrends();
-  console.log(`📊 取得したGoogle急上昇（生活・ガジェット）候補: ${googleTrendsTopics.length}件`);
+  if (genreArg === 'all' || genreArg === 'tech' || genreArg === 'ai') {
+    const hatenaTech = await fetchHatena('it');
+    const yahooIT = await fetchYahooNews('it');
+    candidatePool.push(...hatenaTech, ...yahooIT);
+  }
 
-  // 統合・スコア順候補リスト
-  const allCandidates = [];
-  googleTrendsTopics.forEach(t => allCandidates.push(t));
-  hatenaLifeTopics.forEach(t => {
-    if (!allCandidates.some(c => c.title === t.title)) allCandidates.push(t);
+  if (genreArg === 'all' || genreArg === 'product') {
+    const prtimes = await fetchPRTimes();
+    candidatePool.push(...prtimes);
+  }
+
+  if (genreArg === 'all' || genreArg === 'lifestyle') {
+    const hatenaLife = await fetchHatena('life');
+    candidatePool.push(...hatenaLife);
+  }
+
+  // 重複排除とスコアリング
+  const uniqueCandidates = [];
+  for (const item of candidatePool) {
+    if (!uniqueCandidates.some(c => c.title === item.title || (c.link && c.link === item.link))) {
+      uniqueCandidates.push(item);
+    }
+  }
+
+  // スコア順にソート（画像ありボーナス ＋ 指定ジャンル適合ブースト）
+  uniqueCandidates.sort((a, b) => {
+    let aScore = a.score + (a.image || a.picture ? 15 : 0);
+    let bScore = b.score + (b.image || b.picture ? 15 : 0);
+
+    if (genreArg === 'ai' || genreArg === 'tech') {
+      const techPattern = /AI|ChatGPT|Claude|Gemini|OpenAI|生成AI|LLM|スマホ|iPhone|Android|Pixel|Galaxy|ガジェット|アプリ|新機能|ツール|Apple|Google|Microsoft/i;
+      if (techPattern.test(a.title)) aScore += 60;
+      if (techPattern.test(b.title)) bScore += 60;
+    } else if (genreArg === 'product') {
+      const prodPattern = /新発売|新商品|新登場|発売|先行|発表|限定|コラボ|新モデル|誕生|オープン/i;
+      if (prodPattern.test(a.title)) aScore += 60;
+      if (prodPattern.test(b.title)) bScore += 60;
+    } else if (genreArg === 'news') {
+      if (a.sourceType.startsWith('yahoo_top') || a.sourceType === 'hatena_general' || a.sourceType === 'google_trends') aScore += 40;
+      if (b.sourceType.startsWith('yahoo_top') || b.sourceType === 'hatena_general' || b.sourceType === 'google_trends') bScore += 40;
+    }
+
+    return bScore - aScore;
   });
-  hatenaTechTopics.forEach(t => {
-    if (!allCandidates.some(c => c.title === t.title)) allCandidates.push(t);
-  });
 
-  if (allCandidates.length === 0) {
-    console.error('❌ 暮らし・ガジェット関連のトレンド情報を取得できませんでした。');
+  console.log(`📊 収集した候補総数: ${uniqueCandidates.length}件`);
+
+  if (uniqueCandidates.length === 0) {
+    console.error('❌ 該当ジャンルの情報を取得できませんでした。');
     process.exit(1);
   }
 
-  // 重複排除しながら targetLimit 件を選定
+  // 既存記事との重複排除を行いながら targetLimit 件を選定
   const blogDir = path.join(YOMILEE_ROOT, 'src', 'content', 'blog');
   const selectedTopics = [];
 
-  for (const candidate of allCandidates) {
+  for (const candidate of uniqueCandidates) {
     if (selectedTopics.length >= targetLimit) break;
 
-    // 重複チェック
     if (!isForce && isDuplicateTopic(candidate, blogDir)) {
       console.log(`⏭️ 既存記事と重複のためスキップ: "${candidate.title.slice(0, 25)}..."`);
       continue;
@@ -617,7 +702,7 @@ async function main() {
   }
 
   if (selectedTopics.length === 0) {
-    console.log('ℹ️ 新規に作成可能な未執筆トレンド記事はありませんでした。');
+    console.log('ℹ️ 新規に作成可能な未執筆記事はありませんでした。');
     return;
   }
 
@@ -631,7 +716,8 @@ async function main() {
     const targetDir = path.join(blogDir, slug);
 
     console.log(`\n--- [記事 ${i + 1}/${selectedTopics.length}] ---`);
-    console.log(`📌 話題: ${topic.title}`);
+    console.log(`📌 タイトル: ${topic.title}`);
+    console.log(`📰 情報源: ${topic.sourceName}`);
     console.log(`📁 スラッグ: ${slug}`);
     console.log(`📂 カテゴリ: ${categories.join(', ')}`);
 
