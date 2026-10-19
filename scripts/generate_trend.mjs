@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
 
@@ -14,6 +15,8 @@ const isDryRun = args.includes('--dry-run');
 const isForce = args.includes('--force');
 const isAutoPush = args.includes('--auto-push');
 const apiKeyArg = args.find(a => a.startsWith('--api-key='))?.split('=')[1];
+const limitArg = args.find(a => a.startsWith('--limit='))?.split('=')[1];
+const targetLimit = limitArg ? Math.max(1, parseInt(limitArg, 10)) : 2; // デフォルト2記事
 
 // APIキーの自動解決 (.secrets/gemini-key.txt も探索)
 function resolveApiKey() {
@@ -125,7 +128,6 @@ async function fetchHatenaLifeTrends() {
         const textToAnalyze = `${title} ${desc}`;
         const { lifeScore, gadgetScore, totalScore } = calculateScores(textToAnalyze);
 
-        // 暮らし・ライフスタイルに適合するものを優先
         items.push({
           sourceType: 'hatena_life',
           title,
@@ -174,7 +176,6 @@ async function fetchHatenaTechTrends() {
         const textToAnalyze = `${title} ${desc}`;
         const { lifeScore, gadgetScore, totalScore } = calculateScores(textToAnalyze);
 
-        // 一般的なスマホ・日常ガジェット・便利ツールにヒットするもののみ採用
         if (gadgetScore > 0 || lifeScore > 0) {
           items.push({
             sourceType: 'hatena_tech',
@@ -221,7 +222,6 @@ async function fetchGoogleTrends() {
       const title = decodeXml(titleMatch ? titleMatch[1] : '');
       const { lifeScore, gadgetScore, totalScore } = calculateScores(title);
 
-      // 生活・ガジェット・話題のトピック
       if (title && totalScore > 0) {
         const newsItems = [];
         const newsRegex = /<ht:news_item>([\s\S]*?)<\/ht:news_item>/g;
@@ -258,9 +258,9 @@ async function fetchGoogleTrends() {
 }
 
 // カテゴリ判定
-function determineCategories(mainTopic) {
-  const life = mainTopic.lifeScore || 0;
-  const gadget = mainTopic.gadgetScore || 0;
+function determineCategories(topic) {
+  const life = topic.lifeScore || 0;
+  const gadget = topic.gadgetScore || 0;
 
   if (life > gadget && life > 0) {
     return ['ライフスタイル'];
@@ -272,73 +272,101 @@ function determineCategories(mainTopic) {
   return ['ライフスタイル'];
 }
 
-// yomilee風 Gemini API 記事執筆
-async function generateArticleWithGemini(mainTopic, subTopics, dateInfo, categories) {
+// スラッグ生成 (日付-キーワード-短縮ハッシュ)
+function generateSlug(topic, dateInfo) {
+  const words = (topic.title.match(/[a-zA-Z0-9]+/g) || [])
+    .filter(w => w.length >= 3 && !/^\d+$/.test(w))
+    .slice(0, 3)
+    .map(w => w.toLowerCase());
+
+  const hashSource = topic.link || topic.title;
+  const hash = crypto.createHash('md5').update(hashSource).digest('hex').slice(0, 6);
+
+  if (words.length > 0) {
+    return `${dateInfo.dateStr}-${words.join('-')}-${hash}`;
+  }
+  return `${dateInfo.dateStr}-trend-${hash}`;
+}
+
+// 既存記事との重複チェック
+function isDuplicateTopic(topic, blogDir) {
+  const dirs = fs.readdirSync(blogDir);
+  const targetLink = topic.link || topic.news?.[0]?.url || '';
+
+  for (const dir of dirs) {
+    const indexPath = path.join(blogDir, dir, 'index.mdx');
+    if (fs.existsSync(indexPath)) {
+      const content = fs.readFileSync(indexPath, 'utf-8');
+      // リンクの一致、または同一タイトルの含有をチェック
+      if (targetLink && content.includes(targetLink)) {
+        return true;
+      }
+      if (topic.title.length > 10 && content.includes(topic.title.slice(0, 15))) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+// 1話題に特化した Gemini API 記事執筆
+async function generateSingleArticleWithGemini(topic, dateInfo, categories) {
   if (!GEMINI_API_KEY) {
     console.log('⚠️ GEMINI_API_KEY が未設定のため、親しみやすいブロガー風フォールバック記事を生成します。');
-    return generateFallbackArticle(mainTopic, subTopics, dateInfo, categories);
+    return generateSingleFallbackArticle(topic, dateInfo, categories);
   }
 
-  console.log('🤖 Gemini で【yomilee等身大ブロガー風】の親しみやすい記事を執筆中...');
+  console.log(`🤖 Gemini で【1話題深掘り・yomilee等身大ブロガー風】記事を執筆中: "${topic.title.slice(0, 25)}..."`);
 
-  const mainTopicData = `【メイン特集トピック（最重要）】
-タイトル: ${mainTopic.title}
-情報源: ${mainTopic.sourceName || '話題のトピック'} (${mainTopic.bookmarks ? mainTopic.bookmarks + 'ブクマ' : mainTopic.traffic})
-URL: ${mainTopic.link || mainTopic.news?.[0]?.url || ''}
-概要・抜粋: ${mainTopic.description || mainTopic.news?.map(n => n.title).join(' / ') || ''}`;
-
-  const subTopicsData = subTopics.map((t, i) => {
-    const url = t.link || t.news?.[0]?.url || '';
-    const desc = t.description || t.news?.map(n => n.title).join(' / ') || '';
-    return `- トピック${i + 1}: ${t.title} (${url})\n  要約: ${desc}`;
-  }).join('\n');
+  const topicData = `タイトル: ${topic.title}
+情報源: ${topic.sourceName || '話題のトピック'} (${topic.bookmarks ? topic.bookmarks + 'ブクマ' : topic.traffic})
+URL: ${topic.link || topic.news?.[0]?.url || ''}
+概要・抜粋: ${topic.description || topic.news?.map(n => n.title).join(' / ') || ''}`;
 
   const systemInstruction = `あなたは暮らしとガジェットの体験談ブログ「yomileeblog（ヨミリーブログ）」の運営者「yomilee」です。
-読者に寄り添う親しみやすく等身大の語り口で、日々の暮らしがちょっと便利になったり、お得になったり、ワクワクするような話題をわかりやすくお届けします。
+読者に寄り添う親しみやすく等身大の語り口で、提示された【1つの話題・トレンド】を深く・わかりやすく・読者目線で掘り下げた単体ブログ記事（1話題1記事）を執筆してください。
 
 【ペルソナと文体ルール】
 1. **親しみやすさと等身大の共感**:
    - 語り口: 「〜ですよね」「〜してみてはいかがでしょうか」「実際に気になったので詳しくチェックしてみました」「日々の暮らしや買い物がちょっと快適になりそうですね」など、温かみがあり丁寧なブログ調。
    - 硬いニュース報道調（「〜と報じられた」「今後の展開が期待される」）や、AI特有の不自然な定型句（「いかがでしたでしょうか」）は使わないこと。
 2. **読者目線の実用性と本音**:
-   - 「結局、自分の生活や家計にどう役立つのか？」「どんな人におすすめなのか？」「ちょっと注意したい点はあるか？」を等身大の目線で率直に解説。
-3. **キャッチーでわかりやすいタイトル**:
-   - 事務的な日付まとめではなく、メイン特集の魅力を前面に出した、思わずクリックしたくなるタイトル（32〜45文字程度）。
-   - 例: 「〇〇が話題！日々の暮らしや買い物がちょっと快適になる注目トレンドまとめ」
-   - 例: 「これ便利そう！注目の〇〇と今チェックしておきたいライフスタイル＆ガジェット話題4選」
+   - 単なるニュースの要約ではなく、「結局、自分の生活や家計にどう役立つのか？」「どんな人におすすめなのか？」「ちょっと注意したい点はあるか？」を等身大の目線で率直に解説。
+3. **キャッチーでわかりやすい個別記事タイトル**:
+   - 日付や「トレンドまとめ」といった文言はタイトルに入れないこと！
+   - テーマの魅力を前面に出し、読者が思わず読みたくなる具体的なタイトル（32〜45文字程度）。
+   - 例: 「100均耐熱ガラスの落とし穴？お湯で割れる事故を防ぐ注意点と安全な選び方」
+   - 例: 「日本で買える本当においしいキムチはどれ？本場の見分け方とおすすめまとめ」
 
 【記事構成ルール】
 - **Frontmatter**:
-  title: キャッチーなブログタイトル
+  title: キャッチーな個別記事タイトル（日付や「まとめ」は含めない）
   description: 110〜130文字程度で、読者の好奇心をそそる導入要約
   pubDate: "${dateInfo.dateStr}"
   categories: ${JSON.stringify(categories)}
   heroImage: "./hero.jpg"
 - **導入部**:
-  - ブロガーらしい親しみやすい導入の挨拶と日常の小話
+  - ブロガーらしい親しみやすい導入の挨拶と、その話題に興味を持ったきっかけ
   - <ProblemBox> コンポーネントを配置（読者が「まさにそれが知りたかった」「気になっていた」と感じる悩みや関心を3〜4項目）
-- **メイン特集セクション (H2)**:
-  - 今回のトップトピック（${mainTopic.title}）を丁寧に解説
-  - H3「何が話題になっている？概要と注目ポイント」
-  - H3「日々の暮らしや生活はどう変わる？（導入・活用のメリット）」
-  - H3「気になる注意点やおすすめな人」
-  - 一次情報リンク: [元記事や詳細をチェック](${mainTopic.link || mainTopic.news?.[0]?.url || ''})
-- **あわせて読みたい注目トピック4選 (H2)**:
-  - サブトピックをそれぞれH3見出しで、1〜2段落＋yomileeの一言コメント（「これ試してみたい」「ここが便利そう」など）を添えて紹介。
+- **本文セクション**:
+  - H2見出し 3〜4つで構成（読者の疑問を順序立てて解決）:
+    - H2: 「何が話題になっている？概要と注目の背景」
+    - H2: 「日々の暮らしや生活はどう変わる？注目のメリットと活かし方」
+    - H2: 「知っておきたい注意点や失敗しないコツ（おすすめな人）」
+    - H2: 「まとめと一次情報リンク」
+  - 一次情報リンク: [元記事や詳細はこちら](${topic.link || topic.news?.[0]?.url || ''})
 - **まとめ部**:
-  - <ConclusionBox> コンポーネントを配置（本日のまとめ・暮らしの知恵・読者が今すぐ試せるワンアクション）
+  - <ConclusionBox> コンポーネントを配置（記事の要点まとめ3点・今日から試せるワンアクション）
 - **HTML/MDX構文**:
   - <br />、<hr />などは必ず自己閉じタグにすること。
   - 出力はMarkdown本文のみ（Frontmatter含む、\`\`\`mdx のコードブロックで囲まないこと）。`;
 
   const userPrompt = `日付: ${dateInfo.formattedJa}（${dateInfo.dateStr}）
 
-${mainTopicData}
+【取り上げる話題】
+${topicData}
 
-【あわせて紹介するサブトピック】
-${subTopicsData}
-
-上記のトピックを活用して、読者が「読んでよかった！」「生活に役立ちそう！」と感じる親しみやすいyomileeblog記事を執筆してください！`;
+上記の1つの話題を徹底的に料理して、読者が「読んでよかった！」「参考になった！」と感じる充実したyomileeblog記事を1本執筆してください！`;
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
@@ -372,23 +400,14 @@ ${subTopicsData}
   return generatedText;
 }
 
-// フォールバック記事生成（APIキー未設定時でも高品質に生成）
-function generateFallbackArticle(mainTopic, subTopics, dateInfo, categories) {
-  let mainCleanTitle = mainTopic.title.replace(/[-|].*$/, '').trim();
-  // 外側の鉤括弧をストリップ
+// 1話題に特化したフォールバック記事生成（APIキー未設定時でも高品質）
+function generateSingleFallbackArticle(topic, dateInfo, categories) {
+  let mainCleanTitle = topic.title.replace(/[-|].*$/, '').trim();
   mainCleanTitle = mainCleanTitle.replace(/^[「『"']/, '').replace(/[」』"']$/, '').trim();
-
   const displayTitle = mainCleanTitle.length > 26 ? mainCleanTitle.slice(0, 25) + '…' : mainCleanTitle;
-  const title = `【${dateInfo.mm}月${dateInfo.dd}日】「${displayTitle}」が話題！暮らしと便利トレンドまとめ`;
-  const description = `${dateInfo.formattedJa}の注目トレンド！ネットやSNSで大きな話題の「${displayTitle}」のポイントや日々の暮らしへの役立て方、注目の便利トピックを等身大ブロガー目線でわかりやすくお届けします。`;
 
-  // ひとことメモのバリエーション
-  const commentTemplates = [
-    '日々の暮らしを快適にするちょっとした工夫や知恵は、知っておくだけでも役立ちますね。気になる方はぜひチェックしてみてください！',
-    'SNSでも共感の声が多く集まっていました。日常のちょっとした不便を解消するヒントになりそうです。',
-    'これは実際に試してみたくなる話題ですね！週末のお買い物や生活の中で意識してみるのもおすすめです。',
-    '新しい視点や便利なツールが登場するとワクワクしますね。今後のアップデートや口コミも追っていきたいところです！'
-  ];
+  const title = `【話題】「${displayTitle}」とは？暮らしへの役立て方と知っておきたいポイント`;
+  const description = `ネットやSNSでいま大きな話題を集めている「${displayTitle}」について、等身大ブロガー目線で徹底解説！気になる概要から日々の生活への取り入れ方、注意点まで分かりやすくお届けします。`;
 
   let mdx = `---
 title: "${title}"
@@ -402,66 +421,64 @@ import ConclusionBox from '../../../components/ConclusionBox.astro';
 
 こんにちは、yomileeです！
 
-日々の生活やネットを見ていると、<b>「これ、生活がちょっと便利になりそう！」「試してみたい！」</b>と思える面白いサービスや便利グッズ、お得な話題がたくさんありますよね。
+日々の暮らしやSNSを見ていると、<b>「これ、生活がちょっと便利になりそう！」「知っておくと役立つ！」</b>と思える面白い話題や発見がたくさんありますよね。
 
-本日もネットやSNSで注目を集めている話題の中から、暮らしやデジタル生活に役立つトレンドを厳選してピックアップしました。
+今回は、いまネットやコミュニティで特に大きな関心を集めている<b>「${mainCleanTitle}」</b>について、等身大ブロガーの目線で詳しく深掘りしてみたいと思います。
 
 <ProblemBox>
-- 「${mainCleanTitle.slice(0, 25)}」が話題だけど、具体的に何が便利なの？
-- 忙しい毎日の中で、暮らしをラクにする知恵やお得な情報を手軽に知りたい
-- 今日の注目のライフスタイル・デジタル話題をスキマ時間にサクッとチェックしたい
+- 「${displayTitle}」が話題になっているけれど、具体的に何がポイントなの？
+- 自分の普段の暮らしや生活にどう活かせるのか知りたい
+- 取り入れる際の注意点や失敗しないコツを事前にチェックしておきたい
 </ProblemBox>
 
-まずは今日一番注目したいメインの話題からじっくり見ていきましょう！
+それでは、気になる詳細をさっそく見ていきましょう！
 
 ---
 
-## 🌟 【本日のメイン注目トピック】${mainTopic.title}
+## 🌟 何が話題になっている？注目の背景と概要
 
-本日、ネットやSNSで特に大きな関心を集めているのがこちらの話題です。
+本日、ネットやSNSで特に多くの反響を集めているのがこちらの話題です。
 
-${mainTopic.description ? `> ${mainTopic.description}\n\n` : ''}
+${topic.description ? `> ${topic.description}\n\n` : ''}
 
-### なぜ今、注目されているの？
-単なるニュースにとどまらず、**「私たちの普段の暮らしや毎日のちょっとした不便をどう解決してくれるか」**という実践的なメリットが多くの人に共感されているポイントです。
+この話題がこれほど注目されている背景には、**「日々の生活の中にあるちょっとした疑問や不便に対して、共感できるリアルな解決策や知恵が提示されている」**という点があります。
 
-- **日々の手間やストレスを軽減**: 面倒だった作業や管理をスマートにしてくれる工夫
-- **生活の質の向上**: 無理のない範囲で暮らしがワンランク快適になる体験
-- **知っておくと得する気づき**: 毎日の買い物や生活防衛にも役立つヒント
-
-### 普段の生活はどう快適になる？
-実際に取り入れてみることで、日々のちょっとした時間の節約や気分のリフレッシュに繋がりそうです。
-
-「自分には合うかな？」と気になる方もいるかもしれませんが、まずは気軽にチェックしてみてはいかがでしょうか。
-
-👉 **元記事・詳しい情報をチェック**:  
-<a href="${mainTopic.link || mainTopic.news?.[0]?.url || '#'}" target="_blank" rel="noopener noreferrer">${mainTopic.title}</a>
+- **誰もが感じていた疑問の言語化**: 「それ、自分も気になっていた！」という身近なテーマ
+- **実践しやすい身近な工夫**: 特別な道具や高価な出費なしで今日から役立つ情報
+- **リアルな体験談の価値**: 理屈だけでなく、実際に試したからこそ分かる生の声
 
 ---
 
-## 💡 あわせてチェックしたい！今日の暮らし＆便利トピック4選
+## 💡 日々の暮らしや生活はどう変わる？取り入れるメリット
 
-メイン特集のほかにも、今日チェックしておきたい注目の話題や便利ネタが揃っています。サクッと確認していきましょう！
+実際にこの知恵やツールを生活に取り入れてみると、日々のちょっとしたストレスや時間の無駄を減らすきっかけになりそうです。
 
+### 1. 手間や悩みの削減
+普段なんとなく行っていた作業や買い物の選び方に明確な基準ができるため、迷う時間をぐっと短縮できます。
+
+### 2. 生活の満足度アップ
+無理のない範囲で暮らしのクオリティを高められるため、日々の生活がちょっと心地よく、前向きな気持ちになれますね。
+
+---
+
+## ⚠️ 知っておきたい注意点やおすすめな人
+
+とても魅力的な話題ですが、取り入れる際にはいくつか気をつけたいポイントもあります。
+
+- **自分の環境に合わせてアレンジする**: 全てをそのまま真似するのではなく、自分や家庭のライフスタイルに合う部分を選んで取り入れるのが長続きのコツです。
+- **過度な期待は禁物**: あくまで日々の暮らしをサポートする工夫のひとつとして、気軽な気持ちで試してみるのがおすすめです。
+
+👉 **元記事・一次情報で詳細をチェック**:  
+<a href="${topic.link || topic.news?.[0]?.url || '#'}" target="_blank" rel="noopener noreferrer">${topic.title}</a>
+
+---
+
+<ConclusionBox>
+- 本日は注目を集める「${displayTitle}」について、暮らしへの役立て方や知っておきたいポイントをご紹介しました。
+- 気になった方は、ぜひ無理のない範囲で日常の中に取り入れてみてくださいね。
+- 次回も暮らしを豊かにする身近な気づきをお届けします！
+</ConclusionBox>
 `;
-
-  subTopics.slice(0, 4).forEach((t, i) => {
-    const url = t.link || t.news?.[0]?.url || '#';
-    const comment = commentTemplates[i % commentTemplates.length];
-    mdx += `### ${i + 1}. ${t.title}\n\n`;
-    if (t.description) {
-      mdx += `${t.description}\n\n`;
-    }
-    mdx += `**yomileeのひとことメモ**:<br />\n`;
-    mdx += `${comment}\n\n`;
-    mdx += `🔗 <a href="${url}" target="_blank" rel="noopener noreferrer">詳細や元リンクはこちら</a>\n\n---\n\n`;
-  });
-
-  mdx += `<ConclusionBox>
-- 本日は「${displayTitle}」を中心に、暮らしとデジタル生活をちょっと豊かにする注目トピックをお届けしました。
-- 気になるサービスや知恵があれば、まずは無理のない範囲で日常に取り入れてみるのがおすすめです。
-- 次回も日々の暮らしに役立つリアルな情報をお届けします！
-</ConclusionBox>\n`;
 
   return mdx;
 }
@@ -492,15 +509,19 @@ async function prepareHeroImage(targetDir, imageUrl) {
   }
 
   // フォールバックJPEG
-  console.log('🖼️ フォールバック hero.jpg を作成中...');
   const minimalJpgBase64 = '/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=';
   fs.writeFileSync(heroPath, Buffer.from(minimalJpgBase64, 'base64'));
   console.log('✅ フォールバック hero.jpg を保存しました');
 }
 
-// 安全なGitコミット＆プッシュ（安全照合付き）
-function performAutoPush(slug) {
+// 安全なGitコミット＆プッシュ（複数記事一括対応）
+function performAutoPush(createdSlugs) {
   console.log('\n🔒 === 安全なGitコミット＆プッシュを開始 ===');
+
+  if (!createdSlugs || createdSlugs.length === 0) {
+    console.log('ℹ️ プッシュ対象の記事がありません。');
+    return true;
+  }
 
   // 1. リモートURLの照合
   try {
@@ -517,18 +538,20 @@ function performAutoPush(slug) {
 
   // 2. ステージング & コミット & プッシュ
   try {
-    const targetBlogRelPath = `src/content/blog/${slug}`;
-    console.log(`📦 ステージング中: ${targetBlogRelPath}`);
-    execSync(`git add "${targetBlogRelPath}"`, { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+    for (const slug of createdSlugs) {
+      const targetRel = `src/content/blog/${slug}`;
+      console.log(`📦 ステージング中: ${targetRel}`);
+      execSync(`git add "${targetRel}"`, { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+    }
 
     // ステータス確認
     const status = execSync('git status --porcelain', { cwd: YOMILEE_ROOT, encoding: 'utf-8' });
-    if (!status.includes(slug)) {
+    if (!status.trim()) {
       console.log('ℹ️ コミットする新しい差分がありません。');
       return true;
     }
 
-    const commitMsg = `feat(yomilee): add daily lifestyle trend ${slug}`;
+    const commitMsg = `feat(yomilee): add ${createdSlugs.length} daily trend article(s) (${createdSlugs[0].slice(0, 10)})`;
     console.log(`💬 コミット実行: "${commitMsg}"`);
     execSync(`git commit -m "${commitMsg}"`, { cwd: YOMILEE_ROOT, stdio: 'inherit' });
 
@@ -545,7 +568,7 @@ function performAutoPush(slug) {
 
 // メイン処理
 async function main() {
-  console.log('🚀 === yomileeblog 【暮らし＆デジタル生活】トレンド自動生成 ===');
+  console.log(`🚀 === yomileeblog 【1話題1記事】トレンド自動生成 (上限: ${targetLimit}記事) ===`);
   const dateInfo = getJSTDate();
   console.log(`📅 対象日付: ${dateInfo.dateStr} (${dateInfo.formattedJa})`);
   console.log(`🔑 Gemini APIキー状態: ${GEMINI_API_KEY ? '設定済み ✅' : '未設定（フォールバックモード） ⚠️'}`);
@@ -562,83 +585,92 @@ async function main() {
   const googleTrendsTopics = await fetchGoogleTrends();
   console.log(`📊 取得したGoogle急上昇（生活・ガジェット）候補: ${googleTrendsTopics.length}件`);
 
-  // 統合・トピック選定
-  const combinedTopics = [];
+  // 統合・スコア順候補リスト
+  const allCandidates = [];
+  googleTrendsTopics.forEach(t => allCandidates.push(t));
+  hatenaLifeTopics.forEach(t => {
+    if (!allCandidates.some(c => c.title === t.title)) allCandidates.push(t);
+  });
+  hatenaTechTopics.forEach(t => {
+    if (!allCandidates.some(c => c.title === t.title)) allCandidates.push(t);
+  });
 
-  // Google急上昇でヒットしたものを優先投入
-  googleTrendsTopics.forEach(t => combinedTopics.push(t));
-
-  // はてブ暮らし
-  for (const t of hatenaLifeTopics) {
-    if (combinedTopics.length >= 8) break;
-    if (!combinedTopics.some(c => c.title === t.title)) {
-      combinedTopics.push(t);
-    }
-  }
-
-  // はてブテック・ガジェット
-  for (const t of hatenaTechTopics) {
-    if (combinedTopics.length >= 10) break;
-    if (!combinedTopics.some(c => c.title === t.title)) {
-      combinedTopics.push(t);
-    }
-  }
-
-  if (combinedTopics.length === 0) {
+  if (allCandidates.length === 0) {
     console.error('❌ 暮らし・ガジェット関連のトレンド情報を取得できませんでした。');
     process.exit(1);
   }
 
-  const mainTopic = combinedTopics[0];
-  const subTopics = combinedTopics.slice(1);
-  const categories = determineCategories(mainTopic);
+  // 重複排除しながら targetLimit 件を選定
+  const blogDir = path.join(YOMILEE_ROOT, 'src', 'content', 'blog');
+  const selectedTopics = [];
 
-  console.log(`🔥 【本日のメイン特集】: ${mainTopic.title}`);
-  console.log(`📂 【判定カテゴリ】: ${categories.join(', ')}`);
-  console.log(`📌 【サブトピック】: ${subTopics.length}件`);
+  for (const candidate of allCandidates) {
+    if (selectedTopics.length >= targetLimit) break;
 
-  // 記事保存先ディレクトリ
-  const slug = `${dateInfo.dateStr}-daily-trend`;
-  const targetDir = path.join(YOMILEE_ROOT, 'src', 'content', 'blog', slug);
-
-  if (fs.existsSync(targetDir) && !isForce) {
-    console.log(`ℹ️ すでに本日の記事ディレクトリが存在します: ${slug}`);
-    console.log('   上書きする場合は --force を指定してください。');
-    if (isAutoPush) {
-      console.log('   --auto-push が指定されているため、Gitプッシュのみ試行します。');
-      performAutoPush(slug);
+    // 重複チェック
+    if (!isForce && isDuplicateTopic(candidate, blogDir)) {
+      console.log(`⏭️ 既存記事と重複のためスキップ: "${candidate.title.slice(0, 25)}..."`);
+      continue;
     }
+
+    selectedTopics.push(candidate);
+  }
+
+  if (selectedTopics.length === 0) {
+    console.log('ℹ️ 新規に作成可能な未執筆トレンド記事はありませんでした。');
     return;
   }
 
-  fs.mkdirSync(targetDir, { recursive: true });
+  console.log(`\n🎯 今回生成する話題: ${selectedTopics.length}件`);
+  const createdSlugs = [];
 
-  // サムネイル画像
-  const imageUrl = mainTopic.image || mainTopic.picture || subTopics.find(t => t.image || t.picture)?.image;
-  await prepareHeroImage(targetDir, imageUrl);
+  for (let i = 0; i < selectedTopics.length; i++) {
+    const topic = selectedTopics[i];
+    const categories = determineCategories(topic);
+    const slug = generateSlug(topic, dateInfo);
+    const targetDir = path.join(blogDir, slug);
 
-  // 記事本文の生成
-  let articleMdx = '';
-  if (isDryRun) {
-    console.log('🧪 --dry-run モード: yomilee風テンプレート記事を生成します。');
-    articleMdx = generateFallbackArticle(mainTopic, subTopics, dateInfo, categories);
-  } else {
-    articleMdx = await generateArticleWithGemini(mainTopic, subTopics, dateInfo, categories);
+    console.log(`\n--- [記事 ${i + 1}/${selectedTopics.length}] ---`);
+    console.log(`📌 話題: ${topic.title}`);
+    console.log(`📁 スラッグ: ${slug}`);
+    console.log(`📂 カテゴリ: ${categories.join(', ')}`);
+
+    if (fs.existsSync(targetDir) && !isForce) {
+      console.log(`ℹ️ すでにディレクトリが存在します: ${slug} (スキップ)`);
+      continue;
+    }
+
+    fs.mkdirSync(targetDir, { recursive: true });
+
+    // サムネイル画像保存
+    const imageUrl = topic.image || topic.picture;
+    await prepareHeroImage(targetDir, imageUrl);
+
+    // 記事本文の生成
+    let articleMdx = '';
+    if (isDryRun) {
+      console.log('🧪 --dry-run モード: yomilee風個別フォールバック記事を生成します。');
+      articleMdx = generateSingleFallbackArticle(topic, dateInfo, categories);
+    } else {
+      articleMdx = await generateSingleArticleWithGemini(topic, dateInfo, categories);
+    }
+
+    // ファイル書き出し
+    const mdxPath = path.join(targetDir, 'index.mdx');
+    fs.writeFileSync(mdxPath, articleMdx, 'utf-8');
+    console.log(`💾 記事を保存しました: ${mdxPath}`);
+
+    createdSlugs.push(slug);
   }
-
-  // ファイル書き出し
-  const mdxPath = path.join(targetDir, 'index.mdx');
-  fs.writeFileSync(mdxPath, articleMdx, 'utf-8');
-  console.log(`💾 記事を保存しました: ${mdxPath}`);
 
   // 自動Gitプッシュ
-  if (isAutoPush) {
-    performAutoPush(slug);
-  } else {
-    console.log('💡 コミット＆プッシュまで自動実行する場合は --auto-push を指定してください。');
+  if (isAutoPush && createdSlugs.length > 0) {
+    performAutoPush(createdSlugs);
+  } else if (createdSlugs.length > 0) {
+    console.log('\n💡 コミット＆プッシュまで自動実行する場合は --auto-push を指定してください。');
   }
 
-  console.log('🎉 すべての処理が完了しました！');
+  console.log('\n🎉 すべての処理が完了しました！');
 }
 
 main().catch(err => {
