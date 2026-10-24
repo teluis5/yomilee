@@ -16,7 +16,7 @@ const isForce = args.includes('--force');
 const isAutoPush = args.includes('--auto-push');
 const apiKeyArg = args.find(a => a.startsWith('--api-key='))?.split('=')[1];
 const limitArg = args.find(a => a.startsWith('--limit='))?.split('=')[1];
-const targetLimit = limitArg ? Math.max(1, parseInt(limitArg, 10)) : 2; // デフォルト2記事
+const targetLimit = limitArg ? Math.max(1, parseInt(limitArg, 10)) : 20; // デフォルト20記事（1日2回実行で計40記事）
 
 // ジャンル指定: all, news, tech, ai, product, lifestyle
 const genreArg = args.find(a => a.startsWith('--genre='))?.split('=')[1]?.toLowerCase() || 'all';
@@ -86,10 +86,16 @@ const FETCH_HEADERS = {
 // 各種情報収集フェッチャー
 // -------------------------------------------------------------
 
-// 1. Yahoo!ニュース（主要トピックス / ITニュース）
+// 1. Yahoo!ニュース（主要 / IT / 経済 / エンタメ）
 async function fetchYahooNews(type = 'top-picks') {
   const url = `https://news.yahoo.co.jp/rss/topics/${type}.xml`;
-  const label = type === 'it' ? 'Yahoo! ITニュース' : 'Yahoo! 主要ニュース';
+  const labelMap = {
+    'top-picks': 'Yahoo! 主要ニュース',
+    'it': 'Yahoo! ITニュース',
+    'business': 'Yahoo! 経済・マネー',
+    'entertainment': 'Yahoo! エンタメ・話題'
+  };
+  const label = labelMap[type] || `Yahoo! ${type}`;
   console.log(`📡 ${label} を取得中...`);
   try {
     const res = await fetch(url, { headers: FETCH_HEADERS });
@@ -106,13 +112,14 @@ async function fetchYahooNews(type = 'top-picks') {
       const link = decodeXml(content.match(/<link>(.*?)<\/link>/)?.[1] || '');
 
       if (title && link) {
+        const genreHint = type === 'it' ? 'tech' : (type === 'business' ? 'lifestyle' : 'news');
         items.push({
           sourceType: `yahoo_${type}`,
           title,
           link,
           description: '',
           image: null,
-          genreHint: type === 'it' ? 'tech' : 'news',
+          genreHint,
           score: 80,
           sourceName: label
         });
@@ -174,17 +181,19 @@ async function fetchPRTimes() {
   }
 }
 
-// 3. はてなブックマーク（総合・テクノロジー・暮らし）
+// 3. はてなブックマーク（総合・テクノロジー・暮らし・経済）
 async function fetchHatena(category = 'life') {
   const urlMap = {
     general: 'https://b.hatena.ne.jp/hotentry.rss',
     it: 'https://b.hatena.ne.jp/hotentry/it.rss',
-    life: 'https://b.hatena.ne.jp/hotentry/life.rss'
+    life: 'https://b.hatena.ne.jp/hotentry/life.rss',
+    economics: 'https://b.hatena.ne.jp/hotentry/economics.rss'
   };
   const labelMap = {
     general: 'はてなブックマーク（総合人気）',
     it: 'はてなブックマーク（テクノロジー・AI）',
-    life: 'はてなブックマーク（暮らし・生活）'
+    life: 'はてなブックマーク（暮らし・生活）',
+    economics: 'はてなブックマーク（経済・マネー）'
   };
 
   const url = urlMap[category] || urlMap.life;
@@ -629,9 +638,10 @@ async function main() {
   // ジャンルに応じた情報収集
   if (genreArg === 'all' || genreArg === 'news') {
     const yahooTop = await fetchYahooNews('top-picks');
+    const yahooEnt = await fetchYahooNews('entertainment');
     const hatenaGeneral = await fetchHatena('general');
     const googleTrends = await fetchGoogleTrends();
-    candidatePool.push(...yahooTop, ...hatenaGeneral, ...googleTrends);
+    candidatePool.push(...yahooTop, ...yahooEnt, ...hatenaGeneral, ...googleTrends);
   }
 
   if (genreArg === 'all' || genreArg === 'tech' || genreArg === 'ai') {
@@ -647,7 +657,9 @@ async function main() {
 
   if (genreArg === 'all' || genreArg === 'lifestyle') {
     const hatenaLife = await fetchHatena('life');
-    candidatePool.push(...hatenaLife);
+    const yahooBiz = await fetchYahooNews('business');
+    const hatenaEcon = await fetchHatena('economics');
+    candidatePool.push(...hatenaLife, ...yahooBiz, ...hatenaEcon);
   }
 
   // 重複排除とスコアリング
@@ -738,7 +750,16 @@ async function main() {
       console.log('🧪 --dry-run モード: yomilee風個別フォールバック記事を生成します。');
       articleMdx = generateSingleFallbackArticle(topic, dateInfo, categories);
     } else {
-      articleMdx = await generateSingleArticleWithGemini(topic, dateInfo, categories);
+      try {
+        articleMdx = await generateSingleArticleWithGemini(topic, dateInfo, categories);
+      } catch (err) {
+        console.warn(`⚠️ Gemini API生成失敗 (${err.message})。フォールバック記事で継続します。`);
+        articleMdx = generateSingleFallbackArticle(topic, dateInfo, categories);
+      }
+      // APIレート制限回避のための安全なインターバル（1.5秒）
+      if (i < selectedTopics.length - 1) {
+        await new Promise(r => setTimeout(r, 1500));
+      }
     }
 
     // ファイル書き出し
