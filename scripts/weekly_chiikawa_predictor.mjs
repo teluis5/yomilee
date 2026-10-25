@@ -9,8 +9,10 @@ const __dirname = path.dirname(__filename);
 const YOMILEE_ROOT = path.resolve(__dirname, '..');
 
 const DATA_DIR = path.join(YOMILEE_ROOT, 'data');
+const SRC_DATA_DIR = path.join(YOMILEE_ROOT, 'src', 'data');
 const HISTORY_FILE = path.join(DATA_DIR, 'ana_b767_flight_history.json');
 const OUTPUT_JSON_FILE = path.join(DATA_DIR, 'chiikawa_weekly_prediction.json');
+const SRC_OUTPUT_JSON_FILE = path.join(SRC_DATA_DIR, 'chiikawa_weekly_prediction.json');
 
 // 日本語空港辞書
 const AIRPORT_NAMES = {
@@ -479,8 +481,11 @@ export async function generateWeeklyPrediction() {
     }
   };
 
+  if (!fs.existsSync(SRC_DATA_DIR)) fs.mkdirSync(SRC_DATA_DIR, { recursive: true });
   fs.writeFileSync(OUTPUT_JSON_FILE, JSON.stringify(resultData, null, 2), 'utf-8');
+  fs.writeFileSync(SRC_OUTPUT_JSON_FILE, JSON.stringify(resultData, null, 2), 'utf-8');
   console.log(`💾 週間予測JSONデータを保存しました: ${OUTPUT_JSON_FILE}`);
+  console.log(`💾 src/dataにも保存しました: ${SRC_OUTPUT_JSON_FILE}`);
   return resultData;
 }
 

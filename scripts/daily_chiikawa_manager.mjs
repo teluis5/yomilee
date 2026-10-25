@@ -25,7 +25,7 @@ function performAutoPush(updatedAt) {
       execSync('git pull origin main --rebase', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
     } catch {}
 
-    execSync('git add data/chiikawa_weekly_prediction.json data/ana_b767_flight_history.json scripts/ src/pages/site/chiikawajet/', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+    execSync('git add data/ src/data/ scripts/ src/pages/site/chiikawajet/', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
 
     const commitMsg = `feat(yomilee): update Chiikawa Jet weekly prediction dashboard (${updatedAt})`;
     console.log(`📝 コミット実行: "${commitMsg}"`);
