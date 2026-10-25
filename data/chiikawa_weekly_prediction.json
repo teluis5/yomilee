@@ -1,0 +1,406 @@
+{
+  "updatedAt": "2026年10月26日 01:02",
+  "updatedAtIso": "2026-10-25T16:02:48.346Z",
+  "aircraft": {
+    "model": "ボーイング 767-300ER",
+    "reg": "JA609A",
+    "nickname": "ANA ちいかわジェット",
+    "currentLocation": "長崎",
+    "currentLocationCode": "NGS",
+    "isAirborne": false,
+    "nightStay": "長崎",
+    "nightStayCode": "NGS"
+  },
+  "weeklySchedule": [
+    {
+      "dayIndex": 0,
+      "dateStr": "2026-10-26",
+      "dateJa": "10月26日(月)",
+      "dow": "月",
+      "isToday": true,
+      "isTomorrow": false,
+      "isWeekend": false,
+      "statusType": "today",
+      "statusLabel": "本日（リアルタイム）",
+      "currentAirport": "長崎",
+      "nightStay": "長崎",
+      "flights": [
+        {
+          "flightNo": "運航計画待機中",
+          "route": "長崎 駐機中",
+          "time": "朝便発表待ち",
+          "status": "待機中",
+          "isLanded": false,
+          "isLive": false
+        }
+      ]
+    },
+    {
+      "dayIndex": 1,
+      "dateStr": "2026-10-27",
+      "dateJa": "10月27日(火)",
+      "dow": "火",
+      "isToday": false,
+      "isTomorrow": true,
+      "isWeekend": false,
+      "statusType": "tomorrow",
+      "statusLabel": "明日（ナイトステイ確定予測）",
+      "expectedStart": "長崎発 (NH662)",
+      "flights": [
+        {
+          "step": "第1便 (朝一始発)",
+          "flightNo": "NH662",
+          "route": "長崎 ➔ 東京(羽田)",
+          "time": "07:45発 - 09:20着",
+          "probability": 95,
+          "confidence": "本命 ◎ (95%)",
+          "reason": "長崎空港ナイトステイ機材の朝一羽田行き（高頻度・定番固定運用）（過去同型機実績 4回連続投入）"
+        },
+        {
+          "step": "第2便 (午前往路)",
+          "flightNo": "NH677 / NH251",
+          "route": "東京(羽田) ➔ 広島 または 福岡",
+          "time": "10:15〜10:30発 - 11:40〜12:30着",
+          "probability": 75,
+          "confidence": "有力 ◯ (75%)",
+          "reason": "羽田での折り返し整備（約60分）後、主要地方基幹路線へ再投入"
+        },
+        {
+          "step": "第3便 (午後復路)",
+          "flightNo": "NH682 / NH256",
+          "route": "広島 または 福岡 ➔ 東京(羽田)",
+          "time": "12:45〜13:10発 - 14:05〜14:50着",
+          "probability": 75,
+          "confidence": "有力 ◯ (75%)",
+          "reason": "地方空港から羽田への昼折り返し便"
+        },
+        {
+          "step": "第4便 (夕方便)",
+          "flightNo": "NH593 / NH669",
+          "route": "東京(羽田) ➔ 松山 または 長崎",
+          "time": "14:15〜19:15発",
+          "probability": 60,
+          "confidence": "可能性あり △ (60%)",
+          "reason": "午後〜夕方にかけての四国・九州方面への2巡目フライト"
+        }
+      ]
+    },
+    {
+      "dayIndex": 2,
+      "dateStr": "2026-10-28",
+      "dateJa": "10月28日(水)",
+      "dow": "水",
+      "isToday": false,
+      "isTomorrow": false,
+      "isWeekend": false,
+      "statusType": "forecast",
+      "statusLabel": "週間確率予報",
+      "topRoute": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
+      "topProbability": 47,
+      "routes": [
+        {
+          "route": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
+          "destCode": "FUK",
+          "probability": 47,
+          "star": "★★★★★",
+          "rank": "本命 ◎",
+          "candidateFlights": "NH245 / NH250 / NH251 / NH256",
+          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度で充当"
+        },
+        {
+          "route": "羽田 ➔ 広島 / 広島 ➔ 羽田",
+          "destCode": "HIJ",
+          "probability": 35,
+          "star": "★★★★★",
+          "rank": "本命 ◎",
+          "candidateFlights": "NH677 / NH682 / NH685 / NH688",
+          "note": "B767の主力路線。ビジネス需要が高く安定運用"
+        },
+        {
+          "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
+          "destCode": "NGS",
+          "probability": 28,
+          "star": "★★★★☆",
+          "rank": "有力 ◯",
+          "candidateFlights": "NH661 / NH664 / NH669 / NH662",
+          "note": "九州の定番就航地。夜間ナイトステイが頻出"
+        },
+        {
+          "route": "羽田 ➔ 松山 / 松山 ➔ 羽田",
+          "destCode": "MYJ",
+          "probability": 21,
+          "star": "★★★☆☆",
+          "rank": "注目 ▲",
+          "candidateFlights": "NH593 / NH596 / NH582",
+          "note": "四国基幹路線。午後〜夕方往復パターンの有力候補"
+        }
+      ]
+    },
+    {
+      "dayIndex": 3,
+      "dateStr": "2026-10-29",
+      "dateJa": "10月29日(木)",
+      "dow": "木",
+      "isToday": false,
+      "isTomorrow": false,
+      "isWeekend": false,
+      "statusType": "forecast",
+      "statusLabel": "週間確率予報",
+      "topRoute": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
+      "topProbability": 39,
+      "routes": [
+        {
+          "route": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
+          "destCode": "FUK",
+          "probability": 39,
+          "star": "★★★★★",
+          "rank": "本命 ◎",
+          "candidateFlights": "NH245 / NH250 / NH251 / NH256",
+          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度で充当"
+        },
+        {
+          "route": "羽田 ➔ 広島 / 広島 ➔ 羽田",
+          "destCode": "HIJ",
+          "probability": 27,
+          "star": "★★★★☆",
+          "rank": "有力 ◯",
+          "candidateFlights": "NH677 / NH682 / NH685 / NH688",
+          "note": "B767の主力路線。ビジネス需要が高く安定運用"
+        },
+        {
+          "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
+          "destCode": "CTS",
+          "probability": 21,
+          "star": "★★★☆☆",
+          "rank": "注目 ▲",
+          "candidateFlights": "NH55 / NH60 / NH71 / NH76",
+          "note": "北海道幹線。大型機材のサポートで週末や多客期に投入"
+        },
+        {
+          "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
+          "destCode": "NGS",
+          "probability": 20,
+          "star": "★★★☆☆",
+          "rank": "注目 ▲",
+          "candidateFlights": "NH661 / NH664 / NH669 / NH662",
+          "note": "九州の定番就航地。夜間ナイトステイが頻出"
+        }
+      ]
+    },
+    {
+      "dayIndex": 4,
+      "dateStr": "2026-10-30",
+      "dateJa": "10月30日(金)",
+      "dow": "金",
+      "isToday": false,
+      "isTomorrow": false,
+      "isWeekend": false,
+      "statusType": "forecast",
+      "statusLabel": "週間確率予報",
+      "topRoute": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
+      "topProbability": 46,
+      "routes": [
+        {
+          "route": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
+          "destCode": "FUK",
+          "probability": 46,
+          "star": "★★★★★",
+          "rank": "本命 ◎",
+          "candidateFlights": "NH245 / NH250 / NH251 / NH256",
+          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度で充当"
+        },
+        {
+          "route": "羽田 ➔ 広島 / 広島 ➔ 羽田",
+          "destCode": "HIJ",
+          "probability": 34,
+          "star": "★★★★☆",
+          "rank": "有力 ◯",
+          "candidateFlights": "NH677 / NH682 / NH685 / NH688",
+          "note": "B767の主力路線。ビジネス需要が高く安定運用"
+        },
+        {
+          "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
+          "destCode": "NGS",
+          "probability": 27,
+          "star": "★★★★☆",
+          "rank": "有力 ◯",
+          "candidateFlights": "NH661 / NH664 / NH669 / NH662",
+          "note": "九州の定番就航地。夜間ナイトステイが頻出"
+        },
+        {
+          "route": "羽田 ➔ 松山 / 松山 ➔ 羽田",
+          "destCode": "MYJ",
+          "probability": 20,
+          "star": "★★★☆☆",
+          "rank": "注目 ▲",
+          "candidateFlights": "NH593 / NH596 / NH582",
+          "note": "四国基幹路線。午後〜夕方往復パターンの有力候補"
+        }
+      ]
+    },
+    {
+      "dayIndex": 5,
+      "dateStr": "2026-10-31",
+      "dateJa": "10月31日(土)",
+      "dow": "土",
+      "isToday": false,
+      "isTomorrow": false,
+      "isWeekend": true,
+      "statusType": "forecast",
+      "statusLabel": "週間確率予報",
+      "topRoute": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
+      "topProbability": 38,
+      "routes": [
+        {
+          "route": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
+          "destCode": "FUK",
+          "probability": 38,
+          "star": "★★★★★",
+          "rank": "本命 ◎",
+          "candidateFlights": "NH245 / NH250 / NH251 / NH256",
+          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度で充当"
+        },
+        {
+          "route": "羽田 ➔ 松山 / 松山 ➔ 羽田",
+          "destCode": "MYJ",
+          "probability": 27,
+          "star": "★★★★☆",
+          "rank": "有力 ◯",
+          "candidateFlights": "NH593 / NH596 / NH582",
+          "note": "四国基幹路線。午後〜夕方往復パターンの有力候補"
+        },
+        {
+          "route": "羽田 ➔ 広島 / 広島 ➔ 羽田",
+          "destCode": "HIJ",
+          "probability": 26,
+          "star": "★★★★☆",
+          "rank": "有力 ◯",
+          "candidateFlights": "NH677 / NH682 / NH685 / NH688",
+          "note": "B767の主力路線。ビジネス需要が高く安定運用"
+        },
+        {
+          "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
+          "destCode": "CTS",
+          "probability": 23,
+          "star": "★★★☆☆",
+          "rank": "注目 ▲",
+          "candidateFlights": "NH55 / NH60 / NH71 / NH76",
+          "note": "北海道幹線。大型機材のサポートで週末や多客期に投入"
+        }
+      ]
+    },
+    {
+      "dayIndex": 6,
+      "dateStr": "2026-11-01",
+      "dateJa": "11月1日(日)",
+      "dow": "日",
+      "isToday": false,
+      "isTomorrow": false,
+      "isWeekend": true,
+      "statusType": "forecast",
+      "statusLabel": "週間確率予報",
+      "topRoute": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
+      "topProbability": 45,
+      "routes": [
+        {
+          "route": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
+          "destCode": "FUK",
+          "probability": 45,
+          "star": "★★★★★",
+          "rank": "本命 ◎",
+          "candidateFlights": "NH245 / NH250 / NH251 / NH256",
+          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度で充当"
+        },
+        {
+          "route": "羽田 ➔ 広島 / 広島 ➔ 羽田",
+          "destCode": "HIJ",
+          "probability": 33,
+          "star": "★★★★☆",
+          "rank": "有力 ◯",
+          "candidateFlights": "NH677 / NH682 / NH685 / NH688",
+          "note": "B767の主力路線。ビジネス需要が高く安定運用"
+        },
+        {
+          "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
+          "destCode": "NGS",
+          "probability": 26,
+          "star": "★★★★☆",
+          "rank": "有力 ◯",
+          "candidateFlights": "NH661 / NH664 / NH669 / NH662",
+          "note": "九州の定番就航地。夜間ナイトステイが頻出"
+        },
+        {
+          "route": "羽田 ➔ 松山 / 松山 ➔ 羽田",
+          "destCode": "MYJ",
+          "probability": 19,
+          "star": "★★★☆☆",
+          "rank": "注目 ▲",
+          "candidateFlights": "NH593 / NH596 / NH582",
+          "note": "四国基幹路線。午後〜夕方往復パターンの有力候補"
+        }
+      ]
+    }
+  ],
+  "airportRadar": [
+    {
+      "code": "HND",
+      "name": "東京(羽田)",
+      "prob": 95,
+      "level": "S (超高確率)",
+      "note": "B767の全国運行ハブ。ほぼ毎日どこかの便で飛来します。"
+    },
+    {
+      "code": "FUK",
+      "name": "福岡空港",
+      "prob": 65,
+      "level": "A (高確率)",
+      "note": "羽田発着の最大就航地。昼・夕方ダイヤで遭遇チャンス大。"
+    },
+    {
+      "code": "NGS",
+      "name": "長崎空港",
+      "prob": 50,
+      "level": "A (高確率)",
+      "note": "夜間ナイトステイ便（NH669/NH662）で固定投入されやすい。"
+    },
+    {
+      "code": "HIJ",
+      "name": "広島空港",
+      "prob": 45,
+      "level": "B (中確率)",
+      "note": "午前〜昼（NH677/NH682）のビジネスダイヤで投入頻度高。"
+    },
+    {
+      "code": "MYJ",
+      "name": "松山空港",
+      "prob": 40,
+      "level": "B (中確率)",
+      "note": "午後便（NH593/NH596）での充当実績が多数あり。"
+    },
+    {
+      "code": "CTS",
+      "name": "新千歳空港",
+      "prob": 30,
+      "level": "C (週末注目)",
+      "note": "多客期や週末の大型機サポートとして投入される傾向。"
+    },
+    {
+      "code": "ITM",
+      "name": "大阪(伊丹)",
+      "prob": 25,
+      "level": "C (注目)",
+      "note": "羽田-伊丹シャトル便での突発投入や朝一番便の実績あり。"
+    },
+    {
+      "code": "OKA",
+      "name": "沖縄(那覇)",
+      "prob": 15,
+      "level": "D (レア)",
+      "note": "リゾート路線への遠征フライト。遭遇できれば超ラッキー！"
+    }
+  ],
+  "dbStats": {
+    "totalFleetFlights": 220,
+    "fleetCount": 15
+  }
+}
