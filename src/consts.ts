@@ -1,12 +1,12 @@
-// Global site configurations for yomileeblog
-export const SITE_TITLE = 'yomileeblog';
-export const SITE_DESCRIPTION = '日常の気づきやガジェット、旅行、暮らしの体験談を記録するブログ「yomileeblog」。';
+// Global site configurations for ヨミトク (YomiToku)
+export const SITE_TITLE = 'ヨミトク';
+export const SITE_DESCRIPTION = '読んで得する！スポーツ、注目の新商品、ガジェット、暮らしの気になる話題を等身大で深掘りする情報メディア「ヨミトク」。';
 
 // Author / Profile configurations for Sidebar & Author Box
 export const AUTHOR = {
 	name: 'yomilee',
 	title: 'ブロガー / ライター',
-	bio: '旅とガジェット、生活の身近な気づきや実体験を発信しています。',
+	bio: 'スポーツ、ガジェット、新商品、暮らしの身近な気づきや実体験を発信しています。',
 	avatar: '/brand/teluis_avatar.webp',
 };
 
