@@ -277,10 +277,8 @@ const articleSchema = {
 			.tag:hover {
 				background-color: #bae6fd;
 			}
-			/* Google自動広告の不自然な割り込み・中途半端な空枠の完全遮断 */
-			.google-auto-placed,
-			ins.adsbygoogle:empty,
-			ins.adsbygoogle[data-ad-status="unfilled"] {
+			/* Google自動広告（.google-auto-placed）のみ完全遮断 */
+			.google-auto-placed {
 				display: none !important;
 				height: 0 !important;
 				margin: 0 !important;
@@ -375,47 +373,6 @@ const articleSchema = {
 						img.setAttribute('decoding', 'async');
 					}
 				});
-
-				// 見出し直後および文脈ブロック間の不自然な広告自動挿入を監視・排除
-				(() => {
-					function purgeIntrusiveAds() {
-						// 1. 見出し（H1〜H6）の直後に割り込んだ広告要素を完全撤去
-						const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-						headings.forEach(h => {
-							let next = h.nextElementSibling;
-							while (next && (
-								next.classList.contains('google-auto-placed') ||
-								next.tagName === 'INS' ||
-								(next.id && next.id.startsWith('aswift_')) ||
-								next.classList.contains('adsbygoogle')
-							)) {
-								const target = next;
-								next = next.nextElementSibling;
-								target.remove();
-							}
-						});
-
-						// 2. 本文(.prose)内の自動広告(.google-auto-placed)を撤去
-						const autoAds = document.querySelectorAll('.prose .google-auto-placed, .chiikawa-dashboard .google-auto-placed');
-						autoAds.forEach(el => el.remove());
-
-						// 3. slot属性のない未設定広告タグの撤去
-						const emptyAds = document.querySelectorAll('ins.adsbygoogle:not([data-ad-slot]), ins.adsbygoogle[data-ad-status="unfilled"]');
-						emptyAds.forEach(el => {
-							const wrapper = el.closest('.adsense-wrapper');
-							if (wrapper) wrapper.remove();
-							else el.remove();
-						});
-					}
-
-					purgeIntrusiveAds();
-					if (window.MutationObserver) {
-						const observer = new MutationObserver(() => {
-							purgeIntrusiveAds();
-						});
-						observer.observe(document.body, { childList: true, subtree: true });
-					}
-				})();
 
 				// Google Mapsの先行事前読み込み（初期描画の邪魔をせず、直後のアイドル時や操作時に先行ロード）
 				const mapIframes = document.querySelectorAll('.prose iframe[src*="google.com/maps"], .prose iframe[data-src*="google.com/maps"]');
