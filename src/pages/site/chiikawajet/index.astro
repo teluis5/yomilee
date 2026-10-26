@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../layouts/BlogPost.astro';
+import Ad from '../../../components/Ad.astro';
 import predictionData from '../../../data/chiikawa_weekly_prediction.json';
 
 const title = "【毎日自動更新】ANAちいかわジェット運行予定＆週間フライト確率予測 | JA609A";
@@ -31,7 +32,7 @@ const pageSchema = {
 >
 	<script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
 
-	<div class="chiikawa-dashboard">
+	<div class="chiikawa-dashboard google-anno-skip">
 		<!-- ヒーローサマリーヘッダー -->
 		<div class="dash-hero">
 			<div class="dash-badge-row">
@@ -518,6 +519,9 @@ const pageSchema = {
 				</div>
 			</div>
 		</div>
+		
+		<!-- ページ下部 固定広告スロット -->
+		<Ad position="bottom" />
 	</div>
 </Layout>
 
