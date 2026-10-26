@@ -263,18 +263,6 @@ const pageSchema = {
 									</div>
 								)}
 
-								<!-- 空港別クイック絞り込みバー -->
-								<div class="airport-filter-bar" data-filter-group="tomorrow">
-									<span class="af-label">✈️ 空港で探す:</span>
-									<button type="button" class="af-btn is-active" data-airport="ALL">すべて表示</button>
-									<button type="button" class="af-btn" data-airport="長崎">長崎</button>
-									<button type="button" class="af-btn" data-airport="福岡">福岡</button>
-									<button type="button" class="af-btn" data-airport="広島">広島</button>
-									<button type="button" class="af-btn" data-airport="松山">松山</button>
-									<button type="button" class="af-btn" data-airport="伊丹">大阪(伊丹)</button>
-									<button type="button" class="af-btn" data-airport="新千歳">札幌(新千歳)</button>
-								</div>
-
 								<!-- プランA / プランB / プランC リスト -->
 								<div class="plans-container">
 									{(day.plans || []).map((plan) => (
@@ -1451,44 +1439,6 @@ const pageSchema = {
 		font-size: 0.78rem;
 	}
 
-	/* 空港別フィルタバー */
-	.airport-filter-bar {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: 0.4rem;
-		background: #ffffff;
-		border: 1px solid #cbd5e1;
-		border-radius: 8px;
-		padding: 0.55rem 0.75rem;
-		margin-bottom: 0.85rem;
-	}
-	.af-label {
-		font-size: 0.8rem;
-		font-weight: 700;
-		color: #334155;
-		margin-right: 0.25rem;
-	}
-	.af-btn {
-		background: #f1f5f9;
-		border: 1px solid #cbd5e1;
-		color: #334155;
-		font-size: 0.78rem;
-		font-weight: 600;
-		padding: 0.25rem 0.6rem;
-		border-radius: 9999px;
-		cursor: pointer;
-		transition: all 0.15s ease;
-	}
-	.af-btn:hover {
-		background: #e2e8f0;
-	}
-	.af-btn.is-active {
-		background: #0284c7;
-		border-color: #0284c7;
-		color: #ffffff;
-	}
-
 	/* プラン一覧コンテナ */
 	.plans-container {
 		display: flex;
@@ -2012,47 +1962,3 @@ const pageSchema = {
 		.plan-summary-right { width: 100%; justify-content: space-between; }
 	}
 </style>
-
-<script>
-	document.addEventListener('DOMContentLoaded', () => {
-		const filterBar = document.querySelector('.airport-filter-bar');
-		if (!filterBar) return;
-
-		const buttons = filterBar.querySelectorAll('.af-btn');
-		const planCards = document.querySelectorAll('.plan-card');
-
-		buttons.forEach((btn) => {
-			btn.addEventListener('click', () => {
-				buttons.forEach((b) => b.classList.remove('is-active'));
-				btn.classList.add('is-active');
-
-				const target = btn.getAttribute('data-airport') || 'ALL';
-				planCards.forEach((card) => {
-					const airports = card.getAttribute('data-airports') || '';
-					const rows = card.querySelectorAll('.plan-flight-row');
-
-					if (target === 'ALL') {
-						card.classList.remove('is-dimmed');
-						rows.forEach((r) => r.classList.remove('is-match'));
-					} else {
-						if (airports.includes(target)) {
-							card.classList.remove('is-dimmed');
-							card.setAttribute('open', '');
-						} else {
-							card.classList.add('is-dimmed');
-						}
-
-						rows.forEach((r) => {
-							const route = r.getAttribute('data-route') || '';
-							if (route.includes(target)) {
-								r.classList.add('is-match');
-							} else {
-								r.classList.remove('is-match');
-							}
-						});
-					}
-				});
-			});
-		});
-	});
-</script>
