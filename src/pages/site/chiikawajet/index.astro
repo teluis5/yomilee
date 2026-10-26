@@ -177,10 +177,59 @@ const pageSchema = {
 													<span class="t-flight-no">{f.flightNo}</span>
 													<span class="t-route-text">{f.route}</span>
 												</div>
+								</div>
+
+								{day.todayOutlook && (
+									<div class="today-outlook-card">
+										<div class="to-header">
+											<div class="to-header-left">
+												<span class="to-badge">🔮 今日のこの後の予定・フライト見通し</span>
+												<strong class="to-title">{day.todayOutlook.title}</strong>
+											</div>
+											<span class="to-cur-note">📍 {day.todayOutlook.currentFlightNote}</span>
+										</div>
+
+										<div class="to-grid">
+											<!-- ① 夕方折返し便（確実） -->
+											<div class="to-box to-turnaround">
+												<div class="to-box-head">
+													<span class="to-tag tag-high">ほぼ確実・確率 {day.todayOutlook.turnaround.probability}%</span>
+													<h4 class="to-box-h">🔄 夕方の折返し羽田帰還便</h4>
+												</div>
+												<div class="to-flight-line">
+													<strong class="to-fno">{day.todayOutlook.turnaround.flightNo}</strong>
+													<strong class="to-time">⏰ {day.todayOutlook.turnaround.time}</strong>
+													<span class="to-route">{day.todayOutlook.turnaround.route}</span>
+												</div>
+												<p class="to-desc">{day.todayOutlook.turnaround.desc}</p>
+											</div>
+
+											<!-- ② 今夜の夜間駐機シナリオ（2択） -->
+											<div class="to-box to-night">
+												<div class="to-box-head">
+													<span class="to-tag tag-scenarios">19時以降の着地予想</span>
+													<h4 class="to-box-h">🌙 今夜の夜間駐機（ナイトステイ）シナリオ</h4>
+												</div>
+												<div class="to-scenarios-list">
+													{day.todayOutlook.nightScenarios.map((sc) => (
+														<div class="to-sc-item">
+															<div class="sc-head">
+																<b class="sc-label">{sc.label}</b>
+																<span class="sc-prob">確率 <strong>{sc.prob}%</strong></span>
+															</div>
+															<p class="sc-sum">{sc.summary}</p>
+															<small class="sc-sub">{sc.detail}</small>
+														</div>
+													))}
+												</div>
 											</div>
 										</div>
-									))}
-								</div>
+
+										<div class="to-footer">
+											<span>{day.todayOutlook.notice}</span>
+										</div>
+									</div>
+								)}
 							</div>
 						)}
 
@@ -1727,6 +1776,179 @@ const pageSchema = {
 		color: #78350f;
 		line-height: 1.55;
 		font-weight: 600;
+	}
+
+	/* 今日のこの後の予定・見通しカード */
+	.today-outlook-card {
+		margin-top: 1.5rem;
+		background: #ffffff;
+		border: 2px solid #0284c7;
+		border-radius: 12px;
+		padding: 1.25rem;
+		box-shadow: 0 4px 14px rgba(2, 132, 199, 0.08);
+	}
+	.to-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		padding-bottom: 0.85rem;
+		border-bottom: 1px solid #e0f2fe;
+		margin-bottom: 1rem;
+	}
+	.to-header-left {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		flex-wrap: wrap;
+	}
+	.to-badge {
+		background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+		color: #ffffff;
+		font-size: 0.8rem;
+		font-weight: 800;
+		padding: 0.25rem 0.65rem;
+		border-radius: 6px;
+	}
+	.to-title {
+		font-size: 1.05rem;
+		color: #0f172a;
+	}
+	.to-cur-note {
+		font-size: 0.85rem;
+		color: #0369a1;
+		font-weight: 700;
+		background: #e0f2fe;
+		padding: 0.25rem 0.6rem;
+		border-radius: 6px;
+	}
+	.to-grid {
+		display: grid;
+		grid-template-columns: 1fr 1.1fr;
+		gap: 1rem;
+	}
+	.to-box {
+		border-radius: 10px;
+		padding: 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+	.to-turnaround {
+		background: #f8fafc;
+		border: 1.5px solid #cbd5e1;
+	}
+	.to-night {
+		background: #f0fdf4;
+		border: 1.5px solid #86efac;
+	}
+	.to-box-head {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+	.to-box-h {
+		margin: 0;
+		font-size: 0.95rem;
+		font-weight: 800;
+		color: #0f172a;
+	}
+	.to-tag {
+		font-size: 0.72rem;
+		font-weight: 800;
+		padding: 0.15rem 0.5rem;
+		border-radius: 999px;
+	}
+	.tag-high {
+		background: #ef4444;
+		color: #ffffff;
+	}
+	.tag-scenarios {
+		background: #16a34a;
+		color: #ffffff;
+	}
+	.to-flight-line {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		background: #ffffff;
+		padding: 0.5rem 0.75rem;
+		border-radius: 6px;
+		border: 1px solid #e2e8f0;
+	}
+	.to-fno {
+		color: #0284c7;
+		font-size: 1.05rem;
+	}
+	.to-time {
+		color: #0f172a;
+		font-size: 0.9rem;
+	}
+	.to-route {
+		color: #334155;
+		font-weight: 700;
+		font-size: 0.9rem;
+	}
+	.to-desc {
+		margin: 0;
+		font-size: 0.85rem;
+		color: #475569;
+		line-height: 1.55;
+	}
+	.to-scenarios-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+	.to-sc-item {
+		background: #ffffff;
+		border: 1px solid #bbf7d0;
+		border-radius: 8px;
+		padding: 0.6rem 0.8rem;
+	}
+	.sc-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 0.2rem;
+	}
+	.sc-label {
+		color: #15803d;
+		font-size: 0.88rem;
+	}
+	.sc-prob {
+		font-size: 0.8rem;
+		color: #64748b;
+	}
+	.sc-prob strong {
+		color: #b45309;
+		font-size: 0.95rem;
+	}
+	.sc-sum {
+		margin: 0 0 0.2rem 0;
+		font-size: 0.86rem;
+		color: #1e293b;
+		font-weight: 700;
+	}
+	.sc-sub {
+		color: #64748b;
+		font-size: 0.78rem;
+		line-height: 1.4;
+	}
+	.to-footer {
+		margin-top: 0.9rem;
+		padding-top: 0.75rem;
+		border-top: 1px dashed #cbd5e1;
+		font-size: 0.82rem;
+		color: #64748b;
+	}
+
+	@media (max-width: 768px) {
+		.to-grid {
+			grid-template-columns: 1fr;
+		}
 	}
 
 	.desktop-only {

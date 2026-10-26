@@ -224,8 +224,14 @@ export async function generateWeeklyPrediction() {
     const jstD = new Date(d.getTime() + (9 * 60 + d.getTimezoneOffset()) * 60 * 1000);
     const flightDateStr = formatDate(jstD);
 
+    const nowTs = Math.floor(Date.now() / 1000);
     const isLanded = /着陸済/.test(statusJa);
-    const isLive = /飛行中/.test(statusJa);
+    const isLive = /飛行中/.test(statusJa) || (f.status?.live === true) || (!isLanded && depTs > 0 && depTs <= nowTs && (!arrTs || arrTs > nowTs - 600));
+
+    let resolvedStatusJa = statusJa;
+    if (isLive && !/飛行中/.test(statusJa)) {
+      resolvedStatusJa = '飛行中 ✈️';
+    }
 
     parsedFlights.push({
       flightNo: flightNo || 'ANA便',
@@ -237,7 +243,7 @@ export async function generateWeeklyPrediction() {
       dateStr: flightDateStr,
       depTime: formatTime(depSched || depReal),
       arrTime: formatTime(arrSched || arrReal),
-      statusJa,
+      statusJa: resolvedStatusJa,
       isLanded,
       isLive,
       depTs,
@@ -248,20 +254,49 @@ export async function generateWeeklyPrediction() {
   parsedFlights.sort((a, b) => a.depTs - b.depTs);
 
   // 本日分のフライト
-  const todayFlights = parsedFlights.filter(f => f.dateStr === todayStr);
+  let todayFlights = parsedFlights.filter(f => f.dateStr === todayStr);
+
+  // API一時障害時のフォールバック（既存JSONから当日の確定フライトを復元）
+  if (todayFlights.length === 0 && fs.existsSync(SRC_OUTPUT_JSON_FILE)) {
+    try {
+      const prevData = JSON.parse(fs.readFileSync(SRC_OUTPUT_JSON_FILE, 'utf-8'));
+      const prevDay = prevData.weeklySchedule?.find(d => d.dateStr === todayStr);
+      if (prevDay && Array.isArray(prevDay.flights) && prevDay.flights.length > 0 && prevDay.flights[0].flightNo !== '運航計画待機中') {
+        console.log(`ℹ️ Flightradar24データ空欄のため、前回保存済みの本日フライト(${prevDay.flights.length}便)をフォールバック復元します。`);
+        todayFlights = prevDay.flights.filter(f => !f.isPredicted).map(f => ({
+          flightNo: f.flightNo,
+          origCode: 'HND',
+          destCode: 'HIJ',
+          origName: f.route?.split(' ➔ ')[0] || '羽田',
+          destName: f.route?.split(' ➔ ')[1] || '広島',
+          route: f.route,
+          dateStr: todayStr,
+          depTime: (f.time || '').split('発')[0] || '',
+          arrTime: (f.time || '').split('- ')[1]?.replace('着', '') || '',
+          statusJa: f.status,
+          isLanded: f.isLanded,
+          isLive: f.isLive,
+          depTs: 0,
+          arrTs: 0
+        }));
+      }
+    } catch (e) {
+      console.warn('⚠️ フォールバック復元エラー:', e.message);
+    }
+  }
 
   // 現在地とナイトステイ先
   let currentAirport = '長崎';
   let currentAirportCode = 'NGS';
   let isAirborne = false;
 
-  const liveFlight = parsedFlights.find(f => f.isLive);
+  const liveFlight = todayFlights.find(f => f.isLive) || parsedFlights.find(f => f.isLive);
   if (liveFlight) {
     isAirborne = true;
     currentAirport = `${liveFlight.origName} ➔ ${liveFlight.destName} へ飛行中`;
     currentAirportCode = liveFlight.destCode;
   } else {
-    const landedFlights = parsedFlights.filter(f => f.isLanded);
+    const landedFlights = (todayFlights.length > 0 ? todayFlights : parsedFlights).filter(f => f.isLanded);
     if (landedFlights.length > 0) {
       const lastLanded = landedFlights[landedFlights.length - 1];
       currentAirport = lastLanded.destName;
@@ -274,6 +309,7 @@ export async function generateWeeklyPrediction() {
   let isNightStayConfirmed = false;
   let todayRemainingPredictions = [];
   let pendingNightStayNote = null;
+  let todayOutlook = null;
 
   const TURNAROUND_RETURN_MAP = {
     HIJ: { flightNo: 'NH684 (予測)', origName: '広島', destName: '東京(羽田)', depTime: '17:15', arrTime: '18:40', status: '🔄 折返し復路予測 (確率85%)' },
@@ -327,6 +363,33 @@ export async function generateWeeklyPrediction() {
         });
         nightStayName = `未確定（${lastToday.arrTime}${lastToday.destName}着後、${ret.depTime}発で羽田へ折返し見込み / 19〜21時頃に確定）`;
         pendingNightStayNote = `⏳ 本日はまだ夕方便（${lastToday.flightNo}: ${lastToday.route} ${lastToday.arrTime}着）の運航段階です。通常このあと${ret.depTime}発の折り返し便で一度東京(羽田)へ戻るため、今夜の最終駐機先（＝明朝の始発空港）は19時〜21時頃に確定します。現在は今夜の最終着地シナリオ別にプランA〜Cを予測しています。`;
+
+        todayOutlook = {
+          title: '本日のこの後のフライト見通し＆夜の展開',
+          currentFlightNote: `現在、${lastToday.flightNo}便（${lastToday.route}、${lastToday.arrTime}着予定）を運航中`,
+          turnaround: {
+            flightNo: ret.flightNo,
+            route: `${ret.origName} ➔ ${ret.destName}`,
+            time: `${ret.depTime}発 - ${ret.arrTime}着`,
+            probability: 90,
+            desc: `${lastToday.destName}到着後、約40〜45分の折返し時間で羽田へ戻る復路便（過去の運用実績から確率90%）。羽田空港の展望デッキ・お出迎えは${ret.arrTime}頃が狙い目です。`
+          },
+          nightScenarios: [
+            {
+              label: 'パターン①【羽田ステイ終了】',
+              prob: 55,
+              summary: `${ret.arrTime}羽田到着後、本日の全運航を終えて羽田で夜間駐機`,
+              detail: '明朝は羽田始発便（長崎・広島・福岡など）からスタートします。'
+            },
+            {
+              label: 'パターン②【夜の地方ナイトステイ便へ充当】',
+              prob: 45,
+              summary: `羽田帰還後、19時台の夜最終便で地方空港へ向かい現地ステイ`,
+              detail: '有力候補: 羽田 19:15発 ➔ 長崎 21:15着 (NH669)、羽田 19:30発 ➔ 広島 21:00着 (NH685) など'
+            }
+          ],
+          notice: '💡 夜の最終便割り当ては、夕方17:30〜19:00頃にANA公式およびFlightradar24へ登録され次第、当画面にも自動反映されます。'
+        };
       } else {
         todayRemainingPredictions.push({
           flightNo: '夕方・夜便 (未発表)',
@@ -665,6 +728,8 @@ export async function generateWeeklyPrediction() {
         currentAirport: currentAirport,
         nightStay: nightStayName,
         isNightStayConfirmed,
+        pendingNightStayNote,
+        todayOutlook,
         flights: combinedTodayFlights
       });
     } else if (day.dayIndex === 1) {

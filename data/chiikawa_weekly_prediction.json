@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年10月26日 15:39",
-  "updatedAtIso": "2026-10-26T06:39:37.670Z",
+  "updatedAt": "2026年10月26日 15:47",
+  "updatedAtIso": "2026-10-26T06:47:11.165Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "東京(羽田)",
-    "currentLocationCode": "HND",
-    "isAirborne": false,
+    "currentLocation": "東京(羽田) ➔ 広島 へ飛行中",
+    "currentLocationCode": "HIJ",
+    "isAirborne": true,
     "nightStay": "未確定（16:30広島着後、17:15発で羽田へ折返し見込み / 19〜21時頃に確定）",
     "nightStayCode": "HIJ"
   },
@@ -82,9 +82,36 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降予測）",
-      "currentAirport": "東京(羽田)",
+      "currentAirport": "東京(羽田) ➔ 広島 へ飛行中",
       "nightStay": "未確定（16:30広島着後、17:15発で羽田へ折返し見込み / 19〜21時頃に確定）",
       "isNightStayConfirmed": false,
+      "pendingNightStayNote": "⏳ 本日はまだ夕方便（NH681: 東京(羽田) ➔ 広島 16:30着）の運航段階です。通常このあと17:15発の折り返し便で一度東京(羽田)へ戻るため、今夜の最終駐機先（＝明朝の始発空港）は19時〜21時頃に確定します。現在は今夜の最終着地シナリオ別にプランA〜Cを予測しています。",
+      "todayOutlook": {
+        "title": "本日のこの後のフライト見通し＆夜の展開",
+        "currentFlightNote": "現在、NH681便（東京(羽田) ➔ 広島、16:30着予定）を運航中",
+        "turnaround": {
+          "flightNo": "NH684 (予測)",
+          "route": "広島 ➔ 東京(羽田)",
+          "time": "17:15発 - 18:40着",
+          "probability": 90,
+          "desc": "広島到着後、約40〜45分の折返し時間で羽田へ戻る復路便（過去の運用実績から確率90%）。羽田空港の展望デッキ・お出迎えは18:40頃が狙い目です。"
+        },
+        "nightScenarios": [
+          {
+            "label": "パターン①【羽田ステイ終了】",
+            "prob": 55,
+            "summary": "18:40羽田到着後、本日の全運航を終えて羽田で夜間駐機",
+            "detail": "明朝は羽田始発便（長崎・広島・福岡など）からスタートします。"
+          },
+          {
+            "label": "パターン②【夜の地方ナイトステイ便へ充当】",
+            "prob": 45,
+            "summary": "羽田帰還後、19時台の夜最終便で地方空港へ向かい現地ステイ",
+            "detail": "有力候補: 羽田 19:15発 ➔ 長崎 21:15着 (NH669)、羽田 19:30発 ➔ 広島 21:00着 (NH685) など"
+          }
+        ],
+        "notice": "💡 夜の最終便割り当ては、夕方17:30〜19:00頃にANA公式およびFlightradar24へ登録され次第、当画面にも自動反映されます。"
+      },
       "flights": [
         {
           "flightNo": "NH662",
@@ -117,9 +144,9 @@
           "flightNo": "NH681",
           "route": "東京(羽田) ➔ 広島",
           "time": "15:00発 - 16:30着",
-          "status": "到着予定 (16:43)",
+          "status": "飛行中 ✈️",
           "isLanded": false,
-          "isLive": false,
+          "isLive": true,
           "isPredicted": false
         },
         {
