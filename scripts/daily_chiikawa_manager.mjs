@@ -22,7 +22,7 @@ function performAutoPush(updatedAt) {
     }
 
     try {
-      execSync('git pull origin main --rebase', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+      execSync('git pull origin main --rebase --autostash', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
     } catch {}
 
     execSync('git add data/chiikawa_weekly_prediction.json src/data/chiikawa_weekly_prediction.json scripts/ src/pages/site/chiikawajet/', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
