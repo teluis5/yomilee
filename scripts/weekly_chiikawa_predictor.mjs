@@ -328,31 +328,58 @@ export async function generateWeeklyPrediction() {
       reason: flight1Reason
     },
     {
-      step: '第2便 (午前往路)',
-      flightNo: 'NH677 / NH251',
-      route: '東京(羽田) ➔ 広島 または 福岡',
-      time: '10:15〜10:30発 - 11:40〜12:30着',
+      step: '第2便 (昼往路・広島候補)',
+      flightNo: 'NH677',
+      route: '東京(羽田) ➔ 広島',
+      time: '10:15発 - 11:40着',
       probability: 75,
       confidence: '有力 ◯ (75%)',
-      reason: '羽田での折り返し整備（約60分）後、主要地方基幹路線へ再投入'
+      reason: '羽田での折り返し整備（約60分）後、B767主力路線の広島へ投入'
     },
     {
-      step: '第3便 (午後復路)',
-      flightNo: 'NH682 / NH256',
-      route: '広島 または 福岡 ➔ 東京(羽田)',
-      time: '12:45〜13:10発 - 14:05〜14:50着',
+      step: '第2便 (昼往路・福岡候補)',
+      flightNo: 'NH251',
+      route: '東京(羽田) ➔ 福岡',
+      time: '10:30発 - 12:30着',
+      probability: 70,
+      confidence: '有力 ◯ (70%)',
+      reason: '羽田折り返し後、九州の基幹路線（福岡線）へ投入'
+    },
+    {
+      step: '第3便 (昼復路・広島発)',
+      flightNo: 'NH682',
+      route: '広島 ➔ 東京(羽田)',
+      time: '12:45発 - 14:05着',
       probability: 75,
       confidence: '有力 ◯ (75%)',
-      reason: '地方空港から羽田への昼折り返し便'
+      reason: '広島空港からの昼折り返し羽田便'
     },
     {
-      step: '第4便 (夕方便)',
-      flightNo: 'NH593 / NH669',
-      route: '東京(羽田) ➔ 松山 または 長崎',
-      time: '14:15〜19:15発',
-      probability: 60,
-      confidence: '可能性あり △ (60%)',
-      reason: '午後〜夕方にかけての四国・九州方面への2巡目フライト'
+      step: '第3便 (昼復路・福岡発)',
+      flightNo: 'NH256',
+      route: '福岡 ➔ 東京(羽田)',
+      time: '13:10発 - 14:50着',
+      probability: 70,
+      confidence: '有力 ◯ (70%)',
+      reason: '福岡空港からの昼折り返し羽田便'
+    },
+    {
+      step: '第4便 (午後便・松山候補)',
+      flightNo: 'NH593',
+      route: '東京(羽田) ➔ 松山',
+      time: '14:15発 - 15:45着',
+      probability: 65,
+      confidence: '有力 ◯ (65%)',
+      reason: '午後帯の四国基幹路線。折り返しNH596便(16:35発)で羽田帰還パターン'
+    },
+    {
+      step: '第4便 (夕夜便・長崎候補)',
+      flightNo: 'NH669',
+      route: '東京(羽田) ➔ 長崎',
+      time: '19:15発 - 21:15着',
+      probability: 65,
+      confidence: '有力 ◯ (65%)',
+      reason: '長崎ナイトステイ便。長崎空港で夜を明かし翌朝NH662便(08:25発)へ接続'
     }
   ];
 
