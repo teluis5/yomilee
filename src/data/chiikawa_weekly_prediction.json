@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年10月26日 12:37",
-  "updatedAtIso": "2026-10-26T03:37:20.591Z",
+  "updatedAt": "2026年10月26日 12:40",
+  "updatedAtIso": "2026-10-26T03:40:08.010Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "長崎",
-    "currentLocationCode": "NGS",
+    "currentLocation": "大阪(伊丹)",
+    "currentLocationCode": "ITM",
     "isAirborne": false,
-    "nightStay": "長崎",
-    "nightStayCode": "NGS"
+    "nightStay": "大阪(伊丹)",
+    "nightStayCode": "ITM"
   },
   "weeklySchedule": [
     {
@@ -22,15 +22,23 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム）",
-      "currentAirport": "長崎",
-      "nightStay": "長崎",
+      "currentAirport": "大阪(伊丹)",
+      "nightStay": "大阪(伊丹)",
       "flights": [
         {
-          "flightNo": "運航計画待機中",
-          "route": "長崎 駐機中",
-          "time": "朝便発表待ち",
-          "status": "待機中",
-          "isLanded": false,
+          "flightNo": "NH662",
+          "route": "長崎 ➔ 東京(羽田)",
+          "time": "08:25発 - 10:00着",
+          "status": "着陸済 (09:50)",
+          "isLanded": true,
+          "isLive": false
+        },
+        {
+          "flightNo": "NH21",
+          "route": "東京(羽田) ➔ 大阪(伊丹)",
+          "time": "11:00発 - 12:10着",
+          "status": "着陸済 (12:03)",
+          "isLanded": true,
           "isLive": false
         }
       ]
@@ -45,16 +53,16 @@
       "isWeekend": false,
       "statusType": "tomorrow",
       "statusLabel": "明日（ナイトステイ確定予測）",
-      "expectedStart": "長崎発 (NH662)",
+      "expectedStart": "大阪(伊丹)発 (NH14)",
       "flights": [
         {
           "step": "第1便 (朝一始発)",
-          "flightNo": "NH662",
-          "route": "長崎 ➔ 東京(羽田)",
-          "time": "07:45発 - 09:20着",
+          "flightNo": "NH14",
+          "route": "大阪(伊丹) ➔ 東京(羽田)",
+          "time": "07:05発 - 08:15着",
           "probability": 95,
           "confidence": "本命 ◎ (95%)",
-          "reason": "長崎空港ナイトステイ機材の朝一羽田行き（高頻度・定番固定運用）（過去同型機実績 5回連続投入）"
+          "reason": "伊丹空港ナイトステイ機材の羽田行き始発便、または千歳行き(NH771)（過去同型機実績 1回連続投入）"
         },
         {
           "step": "第2便 (午前往路)",
