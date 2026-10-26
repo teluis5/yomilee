@@ -25,7 +25,7 @@ function performAutoPush(updatedAt) {
       execSync('git pull origin main --rebase --autostash', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
     } catch {}
 
-    execSync('git add data/chiikawa_weekly_prediction.json src/data/chiikawa_weekly_prediction.json scripts/ src/pages/site/chiikawajet/', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+    execSync('git add data/chiikawa_weekly_prediction.json src/data/chiikawa_weekly_prediction.json scripts/ src/pages/site/chiikawajet/ src/assets/images/chiikawajet_ogp.png public/brand/chiikawajet_ogp.png', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
 
     const commitMsg = `feat(yomilee): update Chiikawa Jet weekly prediction dashboard (${updatedAt})`;
     console.log(`📝 コミット実行: "${commitMsg}"`);
@@ -42,6 +42,15 @@ function performAutoPush(updatedAt) {
 async function main() {
   const result = await generateWeeklyPrediction();
   if (!result) return;
+
+  // 運行予想インフォグラフィック画像（Twitterカード/OGP）を最新データで自動生成
+  try {
+    const cardGenScript = path.resolve(YOMILEE_ROOT, '..', '..', '5_script', 'generate_chiikawa_tweet_card.py');
+    console.log(`🖼️ 運行予想インフォグラフィック画像を再生成中: python "${cardGenScript}"`);
+    execSync(`python "${cardGenScript}"`, { stdio: 'inherit' });
+  } catch (err) {
+    console.warn('⚠️ カード画像生成で警告が発生しました:', err.message);
+  }
 
   if (isDryRun) {
     console.log('🧪 --dry-run モード: Gitプッシュをスキップします。');

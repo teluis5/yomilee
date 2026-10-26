@@ -2,6 +2,7 @@
 import Layout from '../../../layouts/BlogPost.astro';
 import Ad from '../../../components/Ad.astro';
 import predictionData from '../../../data/chiikawa_weekly_prediction.json';
+import heroImage from '../../../assets/images/chiikawajet_ogp.png';
 
 const title = "【毎日自動更新】ANAちいかわジェット運行予定＆週間フライト確率予測 | JA609A";
 const description = "ANA特別塗装機「ちいかわジェット（JA609A）」の本日のリアルタイム運行状況、明日の始発便予測、および向こう1週間の就航確率予報をAIデータ分析で毎日更新！羽田・福岡・長崎・広島など全国主要空港の遭遇レーダーを掲載。";
@@ -29,6 +30,7 @@ const pageSchema = {
 	description={description}
 	pubDate={new Date('2026-10-25')}
 	updatedDate={new Date(currentData.updatedAtIso)}
+	heroImage={heroImage}
 >
 	<script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
 
