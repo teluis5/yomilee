@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年10月26日 13:10",
-  "updatedAtIso": "2026-10-26T04:10:28.166Z",
+  "updatedAt": "2026年10月26日 15:25",
+  "updatedAtIso": "2026-10-26T06:25:21.484Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "大阪(伊丹)",
-    "currentLocationCode": "ITM",
+    "currentLocation": "東京(羽田)",
+    "currentLocationCode": "HND",
     "isAirborne": false,
-    "nightStay": "東京(羽田)",
-    "nightStayCode": "HND"
+    "nightStay": "広島",
+    "nightStayCode": "HIJ"
   },
   "accuracyStats": {
     "firstFlightHitRate": 96,
@@ -82,8 +82,8 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム）",
-      "currentAirport": "大阪(伊丹)",
-      "nightStay": "東京(羽田)",
+      "currentAirport": "東京(羽田)",
+      "nightStay": "広島",
       "flights": [
         {
           "flightNo": "NH662",
@@ -105,7 +105,15 @@
           "flightNo": "NH26",
           "route": "大阪(伊丹) ➔ 東京(羽田)",
           "time": "13:00発 - 14:10着",
-          "status": "到着予定 (13:03)",
+          "status": "着陸済 (13:59)",
+          "isLanded": true,
+          "isLive": false
+        },
+        {
+          "flightNo": "NH681",
+          "route": "東京(羽田) ➔ 広島",
+          "time": "15:00発 - 16:30着",
+          "status": "到着予定 (15:18)",
           "isLanded": false,
           "isLive": false
         }
@@ -120,71 +128,206 @@
       "isTomorrow": true,
       "isWeekend": false,
       "statusType": "tomorrow",
-      "statusLabel": "明日（ナイトステイ確定予測）",
-      "expectedStart": "東京(羽田)発 (NH661)",
+      "statusLabel": "明日（3大ルート予測：プランA・B・C）",
+      "expectedStart": "広島発 (NH672)",
+      "isRegionalNightStay": true,
+      "confirmedFirstFlight": {
+        "flightNo": "NH672",
+        "route": "広島 ➔ 東京(羽田)",
+        "time": "07:30発 - 08:50着",
+        "confidence": "95%",
+        "reason": "広島空港ナイトステイ機材の朝一羽田行き（定番ビジネス路線）（過去同型機実績 2回連続投入）"
+      },
+      "plans": [
+        {
+          "planId": "plan-a",
+          "planName": "プランA",
+          "rank": "本命 ◎",
+          "probability": 45,
+          "title": "広島始発 ➔ 広島往復 ➔ 松山往復",
+          "routeSummary": "広島 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 松山 ➔ 羽田",
+          "airports": [
+            "広島",
+            "東京(羽田)",
+            "広島",
+            "松山"
+          ],
+          "description": "広島からの朝一始発便（95%確定）で羽田到着後、広島と松山を巡る王道ローテーション",
+          "flights": [
+            {
+              "step": "① 朝一便",
+              "time": "07:30発 - 08:50着",
+              "flightNo": "NH672",
+              "route": "広島 ➔ 東京(羽田)",
+              "tag": "🔒初便95%確定",
+              "isConfirmedFirst": true
+            },
+            {
+              "step": "② 午前便",
+              "time": "10:15発 - 11:40着",
+              "flightNo": "NH677",
+              "route": "東京(羽田) ➔ 広島",
+              "tag": "午前往路"
+            },
+            {
+              "step": "③ 昼復路",
+              "time": "12:45発 - 14:05着",
+              "flightNo": "NH682",
+              "route": "広島 ➔ 東京(羽田)",
+              "tag": "昼復路"
+            },
+            {
+              "step": "④ 午後便",
+              "time": "15:15発 - 16:45着",
+              "flightNo": "NH595",
+              "route": "東京(羽田) ➔ 松山",
+              "tag": "午後往路"
+            },
+            {
+              "step": "⑤ 夜最終",
+              "time": "17:35発 - 19:05着",
+              "flightNo": "NH598",
+              "route": "松山 ➔ 東京(羽田)",
+              "tag": "🌙羽田帰還"
+            }
+          ]
+        },
+        {
+          "planId": "plan-b",
+          "planName": "プランB",
+          "rank": "有力 ◯",
+          "probability": 35,
+          "title": "広島始発 ➔ 福岡往復 ➔ 長崎ステイ",
+          "routeSummary": "広島 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 長崎(泊)",
+          "airports": [
+            "広島",
+            "東京(羽田)",
+            "福岡",
+            "長崎"
+          ],
+          "description": "広島から羽田へ戻った後、福岡幹線を往復し、夜19:15発の長崎便でステイする九州集中パターン",
+          "flights": [
+            {
+              "step": "① 朝一便",
+              "time": "07:30発 - 08:50着",
+              "flightNo": "NH672",
+              "route": "広島 ➔ 東京(羽田)",
+              "tag": "🔒初便95%確定",
+              "isConfirmedFirst": true
+            },
+            {
+              "step": "② 午前便",
+              "time": "10:30発 - 12:30着",
+              "flightNo": "NH251",
+              "route": "東京(羽田) ➔ 福岡",
+              "tag": "午前往路"
+            },
+            {
+              "step": "③ 午後便",
+              "time": "13:10発 - 14:50着",
+              "flightNo": "NH256",
+              "route": "福岡 ➔ 東京(羽田)",
+              "tag": "昼復路"
+            },
+            {
+              "step": "④ 夜最終",
+              "time": "19:15発 - 21:15着",
+              "flightNo": "NH669",
+              "route": "東京(羽田) ➔ 長崎",
+              "tag": "🌙夜間駐機"
+            }
+          ]
+        },
+        {
+          "planId": "plan-c",
+          "planName": "プランC",
+          "rank": "対抗 ▲",
+          "probability": 20,
+          "title": "広島始発 ➔ 新千歳往復 ➔ 伊丹往復",
+          "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 伊丹 ➔ 羽田",
+          "airports": [
+            "広島",
+            "東京(羽田)",
+            "札幌(新千歳)",
+            "大阪(伊丹)"
+          ],
+          "description": "羽田から新千歳・伊丹の主要幹線をピストン運航するパターン",
+          "flights": [
+            {
+              "step": "① 朝一便",
+              "time": "07:30発 - 08:50着",
+              "flightNo": "NH672",
+              "route": "広島 ➔ 東京(羽田)",
+              "tag": "🔒初便95%確定",
+              "isConfirmedFirst": true
+            },
+            {
+              "step": "② 午前便",
+              "time": "10:00発 - 11:35着",
+              "flightNo": "NH59",
+              "route": "東京(羽田) ➔ 札幌(新千歳)",
+              "tag": "午前往路"
+            },
+            {
+              "step": "③ 午後便",
+              "time": "12:30発 - 14:10着",
+              "flightNo": "NH64",
+              "route": "札幌(新千歳) ➔ 東京(羽田)",
+              "tag": "昼復路"
+            },
+            {
+              "step": "④ 夕方便",
+              "time": "15:00発 - 16:10着",
+              "flightNo": "NH31",
+              "route": "東京(羽田) ➔ 大阪(伊丹)",
+              "tag": "夕方往路"
+            },
+            {
+              "step": "⑤ 夜最終",
+              "time": "17:00発 - 18:15着",
+              "flightNo": "NH36",
+              "route": "大阪(伊丹) ➔ 東京(羽田)",
+              "tag": "🌙羽田帰還"
+            }
+          ]
+        }
+      ],
       "flights": [
         {
-          "step": "第1便 (朝一始発)",
-          "flightNo": "NH661",
-          "route": "東京(羽田) ➔ 長崎",
-          "time": "08:15発 - 10:10着",
-          "probability": 95,
-          "confidence": "本命 ◎ (95%)",
-          "reason": "羽田ナイトステイ後の九州・四国・中国方面朝一便（過去同型機実績 5回連続投入）"
+          "step": "① 朝一便",
+          "time": "07:30発 - 08:50着",
+          "flightNo": "NH672",
+          "route": "広島 ➔ 東京(羽田)",
+          "tag": "🔒初便95%確定",
+          "isConfirmedFirst": true
         },
         {
-          "step": "第2便 (昼往路・広島候補)",
+          "step": "② 午前便",
+          "time": "10:15発 - 11:40着",
           "flightNo": "NH677",
           "route": "東京(羽田) ➔ 広島",
-          "time": "10:15発 - 11:40着",
-          "probability": 75,
-          "confidence": "有力 ◯ (75%)",
-          "reason": "羽田での折り返し整備（約60分）後、B767主力路線の広島へ投入"
+          "tag": "午前往路"
         },
         {
-          "step": "第2便 (昼往路・福岡候補)",
-          "flightNo": "NH251",
-          "route": "東京(羽田) ➔ 福岡",
-          "time": "10:30発 - 12:30着",
-          "probability": 70,
-          "confidence": "有力 ◯ (70%)",
-          "reason": "羽田折り返し後、九州の基幹路線（福岡線）へ投入"
-        },
-        {
-          "step": "第3便 (昼復路・広島発)",
+          "step": "③ 昼復路",
+          "time": "12:45発 - 14:05着",
           "flightNo": "NH682",
           "route": "広島 ➔ 東京(羽田)",
-          "time": "12:45発 - 14:05着",
-          "probability": 75,
-          "confidence": "有力 ◯ (75%)",
-          "reason": "広島空港からの昼折り返し羽田便"
+          "tag": "昼復路"
         },
         {
-          "step": "第3便 (昼復路・福岡発)",
-          "flightNo": "NH256",
-          "route": "福岡 ➔ 東京(羽田)",
-          "time": "13:10発 - 14:50着",
-          "probability": 70,
-          "confidence": "有力 ◯ (70%)",
-          "reason": "福岡空港からの昼折り返し羽田便"
-        },
-        {
-          "step": "第4便 (午後便・松山候補)",
-          "flightNo": "NH593",
+          "step": "④ 午後便",
+          "time": "15:15発 - 16:45着",
+          "flightNo": "NH595",
           "route": "東京(羽田) ➔ 松山",
-          "time": "14:15発 - 15:45着",
-          "probability": 65,
-          "confidence": "有力 ◯ (65%)",
-          "reason": "午後帯の四国基幹路線。折り返しNH596便(16:35発)で羽田帰還パターン"
+          "tag": "午後往路"
         },
         {
-          "step": "第4便 (夕夜便・長崎候補)",
-          "flightNo": "NH669",
-          "route": "東京(羽田) ➔ 長崎",
-          "time": "19:15発 - 21:15着",
-          "probability": 65,
-          "confidence": "有力 ◯ (65%)",
-          "reason": "長崎ナイトステイ便。長崎空港で夜を明かし翌朝NH662便(08:25発)へ接続"
+          "step": "⑤ 夜最終",
+          "time": "17:35発 - 19:05着",
+          "flightNo": "NH598",
+          "route": "松山 ➔ 東京(羽田)",
+          "tag": "🌙羽田帰還"
         }
       ]
     },
@@ -197,7 +340,7 @@
       "isTomorrow": false,
       "isWeekend": false,
       "statusType": "forecast",
-      "statusLabel": "週間確率予報",
+      "statusLabel": "週間確率予報（プランA〜E）",
       "topRoute": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
       "topProbability": 47,
       "routes": [
@@ -208,7 +351,8 @@
           "star": "★★★★★",
           "rank": "本命 ◎",
           "candidateFlights": "NH245 / NH250 / NH251 / NH256",
-          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度投入"
+          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度投入",
+          "planName": "プランA"
         },
         {
           "route": "羽田 ➔ 広島 / 広島 ➔ 羽田",
@@ -217,7 +361,8 @@
           "star": "★★★★★",
           "rank": "本命 ◎",
           "candidateFlights": "NH677 / NH682 / NH685 / NH688",
-          "note": "B767の主力ビジネス路線。安定したデイリー運用"
+          "note": "B767の主力ビジネス路線。安定したデイリー運用",
+          "planName": "プランB"
         },
         {
           "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
@@ -226,7 +371,8 @@
           "star": "★★★★☆",
           "rank": "有力 ◯",
           "candidateFlights": "NH661 / NH664 / NH669 / NH662",
-          "note": "九州の定番就航地。夜間ナイトステイが頻出"
+          "note": "九州の定番就航地。夜間ナイトステイが頻出",
+          "planName": "プランC"
         },
         {
           "route": "伊丹 ➔ 新千歳 / 新千歳 ➔ 伊丹",
@@ -235,7 +381,8 @@
           "star": "★★★☆☆",
           "rank": "注目 ▲",
           "candidateFlights": "NH771 / NH774",
-          "note": "伊丹発着の公式就航路線。関西圏のファン大注目"
+          "note": "伊丹発着の公式就航路線。関西圏のファン大注目",
+          "planName": "プランD"
         },
         {
           "route": "羽田 ➔ 松山 / 松山 ➔ 羽田",
@@ -244,7 +391,8 @@
           "star": "★★★☆☆",
           "rank": "注目 ▲",
           "candidateFlights": "NH593 / NH596 / NH582",
-          "note": "四国基幹路線。午後〜夕方往復パターンの有力候補"
+          "note": "四国基幹路線。午後〜夕方往復パターンの有力候補",
+          "planName": "プランE"
         }
       ]
     },
@@ -257,7 +405,7 @@
       "isTomorrow": false,
       "isWeekend": false,
       "statusType": "forecast",
-      "statusLabel": "週間確率予報",
+      "statusLabel": "週間確率予報（プランA〜E）",
       "topRoute": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
       "topProbability": 39,
       "routes": [
@@ -268,7 +416,8 @@
           "star": "★★★★★",
           "rank": "本命 ◎",
           "candidateFlights": "NH245 / NH250 / NH251 / NH256",
-          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度投入"
+          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度投入",
+          "planName": "プランA"
         },
         {
           "route": "羽田 ➔ 広島 / 広島 ➔ 羽田",
@@ -277,7 +426,8 @@
           "star": "★★★★☆",
           "rank": "有力 ◯",
           "candidateFlights": "NH677 / NH682 / NH685 / NH688",
-          "note": "B767の主力ビジネス路線。安定したデイリー運用"
+          "note": "B767の主力ビジネス路線。安定したデイリー運用",
+          "planName": "プランB"
         },
         {
           "route": "羽田 ➔ 伊丹 / 伊丹 ➔ 羽田",
@@ -286,7 +436,8 @@
           "star": "★★★★☆",
           "rank": "有力 ◯",
           "candidateFlights": "NH21 / NH26 / NH35 / NH40",
-          "note": "伊丹シャトル便。早朝・昼間帯での充当実績多数"
+          "note": "伊丹シャトル便。早朝・昼間帯での充当実績多数",
+          "planName": "プランC"
         },
         {
           "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
@@ -295,7 +446,8 @@
           "star": "★★★☆☆",
           "rank": "注目 ▲",
           "candidateFlights": "NH55 / NH60 / NH71 / NH76",
-          "note": "北海道幹線。大型機サポートや週末に高頻度充当"
+          "note": "北海道幹線。大型機サポートや週末に高頻度充当",
+          "planName": "プランD"
         },
         {
           "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
@@ -304,7 +456,8 @@
           "star": "★★★☆☆",
           "rank": "注目 ▲",
           "candidateFlights": "NH661 / NH664 / NH669 / NH662",
-          "note": "九州の定番就航地。夜間ナイトステイが頻出"
+          "note": "九州の定番就航地。夜間ナイトステイが頻出",
+          "planName": "プランE"
         }
       ]
     },
@@ -317,7 +470,7 @@
       "isTomorrow": false,
       "isWeekend": false,
       "statusType": "forecast",
-      "statusLabel": "週間確率予報",
+      "statusLabel": "週間確率予報（プランA〜E）",
       "topRoute": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
       "topProbability": 46,
       "routes": [
@@ -328,7 +481,8 @@
           "star": "★★★★★",
           "rank": "本命 ◎",
           "candidateFlights": "NH245 / NH250 / NH251 / NH256",
-          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度投入"
+          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度投入",
+          "planName": "プランA"
         },
         {
           "route": "羽田 ➔ 広島 / 広島 ➔ 羽田",
@@ -337,7 +491,8 @@
           "star": "★★★★☆",
           "rank": "有力 ◯",
           "candidateFlights": "NH677 / NH682 / NH685 / NH688",
-          "note": "B767の主力ビジネス路線。安定したデイリー運用"
+          "note": "B767の主力ビジネス路線。安定したデイリー運用",
+          "planName": "プランB"
         },
         {
           "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
@@ -346,7 +501,8 @@
           "star": "★★★★☆",
           "rank": "有力 ◯",
           "candidateFlights": "NH661 / NH664 / NH669 / NH662",
-          "note": "九州の定番就航地。夜間ナイトステイが頻出"
+          "note": "九州の定番就航地。夜間ナイトステイが頻出",
+          "planName": "プランC"
         },
         {
           "route": "羽田 ➔ 鹿児島 / 鹿児島 ➔ 羽田",
@@ -355,7 +511,8 @@
           "star": "★★★☆☆",
           "rank": "注目 ▲",
           "candidateFlights": "NH621 / NH626 / NH629",
-          "note": "南九州の基幹路線。公式定期投入対象"
+          "note": "南九州の基幹路線。公式定期投入対象",
+          "planName": "プランD"
         },
         {
           "route": "伊丹 ➔ 新千歳 / 新千歳 ➔ 伊丹",
@@ -364,7 +521,8 @@
           "star": "★★★☆☆",
           "rank": "注目 ▲",
           "candidateFlights": "NH771 / NH774",
-          "note": "伊丹発着の公式就航路線。関西圏のファン大注目"
+          "note": "伊丹発着の公式就航路線。関西圏のファン大注目",
+          "planName": "プランE"
         }
       ]
     },
@@ -377,7 +535,7 @@
       "isTomorrow": false,
       "isWeekend": true,
       "statusType": "forecast",
-      "statusLabel": "週間確率予報",
+      "statusLabel": "週間確率予報（プランA〜E）",
       "topRoute": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
       "topProbability": 38,
       "routes": [
@@ -388,7 +546,8 @@
           "star": "★★★★★",
           "rank": "本命 ◎",
           "candidateFlights": "NH245 / NH250 / NH251 / NH256",
-          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度投入"
+          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度投入",
+          "planName": "プランA"
         },
         {
           "route": "羽田 ➔ 松山 / 松山 ➔ 羽田",
@@ -397,7 +556,8 @@
           "star": "★★★★☆",
           "rank": "有力 ◯",
           "candidateFlights": "NH593 / NH596 / NH582",
-          "note": "四国基幹路線。午後〜夕方往復パターンの有力候補"
+          "note": "四国基幹路線。午後〜夕方往復パターンの有力候補",
+          "planName": "プランB"
         },
         {
           "route": "羽田 ➔ 広島 / 広島 ➔ 羽田",
@@ -406,7 +566,8 @@
           "star": "★★★★☆",
           "rank": "有力 ◯",
           "candidateFlights": "NH677 / NH682 / NH685 / NH688",
-          "note": "B767の主力ビジネス路線。安定したデイリー運用"
+          "note": "B767の主力ビジネス路線。安定したデイリー運用",
+          "planName": "プランC"
         },
         {
           "route": "羽田 ➔ 伊丹 / 伊丹 ➔ 羽田",
@@ -415,7 +576,8 @@
           "star": "★★★★☆",
           "rank": "有力 ◯",
           "candidateFlights": "NH21 / NH26 / NH35 / NH40",
-          "note": "伊丹シャトル便。早朝・昼間帯での充当実績多数"
+          "note": "伊丹シャトル便。早朝・昼間帯での充当実績多数",
+          "planName": "プランD"
         },
         {
           "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
@@ -424,7 +586,8 @@
           "star": "★★★★☆",
           "rank": "有力 ◯",
           "candidateFlights": "NH55 / NH60 / NH71 / NH76",
-          "note": "北海道幹線。大型機サポートや週末に高頻度充当"
+          "note": "北海道幹線。大型機サポートや週末に高頻度充当",
+          "planName": "プランE"
         }
       ]
     },
@@ -437,7 +600,7 @@
       "isTomorrow": false,
       "isWeekend": true,
       "statusType": "forecast",
-      "statusLabel": "週間確率予報",
+      "statusLabel": "週間確率予報（プランA〜E）",
       "topRoute": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
       "topProbability": 45,
       "routes": [
@@ -448,7 +611,8 @@
           "star": "★★★★★",
           "rank": "本命 ◎",
           "candidateFlights": "NH245 / NH250 / NH251 / NH256",
-          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度投入"
+          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度投入",
+          "planName": "プランA"
         },
         {
           "route": "羽田 ➔ 広島 / 広島 ➔ 羽田",
@@ -457,7 +621,8 @@
           "star": "★★★★☆",
           "rank": "有力 ◯",
           "candidateFlights": "NH677 / NH682 / NH685 / NH688",
-          "note": "B767の主力ビジネス路線。安定したデイリー運用"
+          "note": "B767の主力ビジネス路線。安定したデイリー運用",
+          "planName": "プランB"
         },
         {
           "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
@@ -466,7 +631,8 @@
           "star": "★★★★☆",
           "rank": "有力 ◯",
           "candidateFlights": "NH661 / NH664 / NH669 / NH662",
-          "note": "九州の定番就航地。夜間ナイトステイが頻出"
+          "note": "九州の定番就航地。夜間ナイトステイが頻出",
+          "planName": "プランC"
         },
         {
           "route": "伊丹 ➔ 新千歳 / 新千歳 ➔ 伊丹",
@@ -475,7 +641,8 @@
           "star": "★★★☆☆",
           "rank": "注目 ▲",
           "candidateFlights": "NH771 / NH774",
-          "note": "伊丹発着の公式就航路線。関西圏のファン大注目"
+          "note": "伊丹発着の公式就航路線。関西圏のファン大注目",
+          "planName": "プランD"
         },
         {
           "route": "羽田 ➔ 鹿児島 / 鹿児島 ➔ 羽田",
@@ -484,7 +651,8 @@
           "star": "★★★☆☆",
           "rank": "注目 ▲",
           "candidateFlights": "NH621 / NH626 / NH629",
-          "note": "南九州の基幹路線。公式定期投入対象"
+          "note": "南九州の基幹路線。公式定期投入対象",
+          "planName": "プランE"
         }
       ]
     }
@@ -611,7 +779,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 240,
+    "totalFleetFlights": 248,
     "fleetCount": 15
   }
 }
