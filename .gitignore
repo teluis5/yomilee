@@ -48,3 +48,9 @@ desktop.ini
 # Migration artifacts
 WP_Output/
 process_wp_posts.mjs
+
+# Private Flight Data & Raw Fleet History (完全非公開ローカルDB)
+data/ana_b767_flight_history.json
+*.sqlite
+*.db
+private_data/
