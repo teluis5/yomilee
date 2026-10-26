@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import Sidebar from '../components/Sidebar.astro';
 import HomeArticleTabs from '../components/HomeArticleTabs.astro';
+import Ad from '../components/Ad.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 export async function getStaticPaths({ paginate }) {
@@ -158,6 +159,8 @@ const { page } = Astro.props;
 			<div class="layout-container">
 				<!-- メインコンテンツ (左カラム) -->
 				<div class="layout-main">
+					<!-- ホーム上部 広告枠 (5945449170) -->
+					<Ad position="home-top" />
 					<HomeArticleTabs page={page} />
 				</div>
 

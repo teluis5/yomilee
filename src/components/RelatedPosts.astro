@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
 import FormattedDate from './FormattedDate.astro';
+import Ad from './Ad.astro';
 
 interface Props {
 	currentSlug: string;
@@ -77,6 +78,9 @@ if (related.length < limit) {
 				</a>
 			))}
 		</div>
+		
+		<!-- ブログカード型 広告枠 -->
+		<Ad position="blog-card" />
 	</section>
 )}
 

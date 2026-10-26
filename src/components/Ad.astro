@@ -1,9 +1,9 @@
 ---
 // Google AdSense 広告表示用コンポーネント (共通UIマスター)
-// 指定された位置（目次下、記事下など）に整ったレイアウトで広告を配置します。
+// 指定された位置（ホーム上部、記事下、サイドバー、ブログカードなど）に整ったレイアウトで広告を配置します。
 interface Props {
   slot?: string;
-  position?: 'toc' | 'bottom' | 'sidebar' | 'custom';
+  position?: 'home-top' | 'bottom' | 'sidebar' | 'blog-card' | 'custom';
   client?: string;
 }
 
@@ -13,18 +13,29 @@ const {
   client = 'ca-pub-8011635154814608'
 } = Astro.props;
 
-// slotがダミー('1234567890')または未指定の場合は非表示
-const validSlot = (slot && slot !== '1234567890') ? slot : undefined;
+// ユーザー指定スロットIDマッピング
+// - ホーム上部: 5945449170 (ディスプレイ)
+// - 記事内: 4644769398 (記事下・サイドバー等)
+// - ブログカード広告: 2398575230 (関連記事等)
+const POSITION_SLOTS: Record<string, string> = {
+  'home-top': '5945449170',
+  'bottom': '4644769398',
+  'sidebar': '4644769398',
+  'blog-card': '2398575230',
+  'custom': '4644769398',
+};
+
+const targetSlot = slot || POSITION_SLOTS[position] || '4644769398';
 ---
 
-{validSlot && (
+{targetSlot && (
   <div class={`adsense-wrapper ad-pos-${position}`}>
     <div class="adsense-label">スポンサーリンク</div>
     <div class="adsense-body">
       <ins class="adsbygoogle"
            style="display:block; text-align:center;"
            data-ad-client={client}
-           data-ad-slot={validSlot}
+           data-ad-slot={targetSlot}
            data-ad-format="auto"
            data-full-width-responsive="true"></ins>
       <script is:inline>
@@ -44,8 +55,9 @@ const validSlot = (slot && slot !== '1234567890') ? slot : undefined;
   .adsense-wrapper:has(ins[data-ad-status="unfilled"]) {
     display: none !important;
   }
-  .ad-pos-toc {
-    margin: 1.5rem auto 2.5rem auto;
+  .ad-pos-home-top {
+    margin: 1.5rem auto 2rem auto;
+    max-width: 960px;
   }
   .ad-pos-bottom {
     margin: 2.5rem auto 2rem auto;
@@ -55,6 +67,11 @@ const validSlot = (slot && slot !== '1234567890') ? slot : undefined;
   .ad-pos-sidebar {
     margin: 1.5rem auto 0 auto;
     width: 100%;
+  }
+  .ad-pos-blog-card {
+    margin: 2.5rem auto 1.5rem auto;
+    padding-top: 1.5rem;
+    border-top: 1px dashed var(--border-color, #e2e8f0);
   }
   .adsense-label {
     font-size: 0.72rem;
