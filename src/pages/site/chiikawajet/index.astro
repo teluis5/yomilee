@@ -252,11 +252,11 @@ const pageSchema = {
 			</div>
 		</div>
 
-		<!-- 全国8大空港 遭遇確率レーダー -->
+		<!-- 公式就航17空港 遭遇確率レーダー -->
 		<div class="radar-section">
-			<h2 class="section-heading">📍 全国主要空港「ちいかわジェット遭遇確率レーダー」</h2>
+			<h2 class="section-heading">📍 【公式就航17空港】ちいかわジェット遭遇確率レーダー</h2>
 			<p class="section-sub">
-				あなたの最寄り空港に向こう1週間でちいかわジェットが飛来する確率をランク付けしました。
+				あなたの最寄り空港に向こう1週間でちいかわジェットが飛来する確率をAIデータ分析でランク付けしました。
 			</p>
 
 			<div class="radar-grid">
@@ -276,6 +276,55 @@ const pageSchema = {
 						<p class="radar-note">{a.note}</p>
 					</div>
 				))}
+			</div>
+		</div>
+
+		<!-- ANA公式就航路線一覧カード -->
+		<div class="official-routes-section">
+			<h2 class="section-heading">🗺️ 【ANA公式発表】就航路線一覧（2026年10月25日冬ダイヤ以降）</h2>
+			<p class="section-sub">
+				ANA公式サイトにて発表された、ちいかわジェット（JA609A）の定期就航路線（全20路線）です。
+			</p>
+
+			<div class="official-routes-card">
+				<div class="official-hub-block">
+					<div class="hub-header">
+						<span class="hub-badge">最大ハブ</span>
+						<strong class="hub-title">東京（羽田）発着（計15路線）</strong>
+					</div>
+					<div class="routes-tags">
+						<span class="r-tag">札幌(新千歳)</span>
+						<span class="r-tag">大阪(伊丹)</span>
+						<span class="r-tag">福岡</span>
+						<span class="r-tag">沖縄(那覇)</span>
+						<span class="r-tag">松山</span>
+						<span class="r-tag">長崎</span>
+						<span class="r-tag">広島</span>
+						<span class="r-tag">函館</span>
+						<span class="r-tag">熊本</span>
+						<span class="r-tag">鹿児島</span>
+						<span class="r-tag">宮崎</span>
+						<span class="r-tag">米子</span>
+						<span class="r-tag">山口宇部</span>
+						<span class="r-tag">高知</span>
+						<span class="r-tag">石垣</span>
+					</div>
+				</div>
+
+				<div class="official-subhubs-grid">
+					<div class="subhub-item">
+						<strong class="subhub-title">大阪（伊丹）発着</strong>
+						<p class="subhub-routes">札幌(新千歳)、沖縄(那覇)、東京(羽田)</p>
+					</div>
+					<div class="subhub-item">
+						<strong class="subhub-title">名古屋（中部）発着</strong>
+						<p class="subhub-routes">札幌(新千歳)、沖縄(那覇)</p>
+					</div>
+					<div class="subhub-item">
+						<strong class="subhub-title">福岡発着</strong>
+						<p class="subhub-routes">札幌(新千歳)、東京(羽田)</p>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -722,6 +771,77 @@ const pageSchema = {
 		font-size: 0.75rem;
 		color: #64748b;
 		line-height: 1.4;
+	}
+
+	.official-routes-card {
+		background: #ffffff;
+		border: 1px solid #cbd5e1;
+		border-radius: 10px;
+		padding: 1.25rem;
+		box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+		margin-bottom: 2rem;
+	}
+	.official-hub-block {
+		background: #f8fafc;
+		border: 1px solid #e2e8f0;
+		border-radius: 8px;
+		padding: 1.25rem;
+		margin-bottom: 1rem;
+	}
+	.hub-header {
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		margin-bottom: 0.85rem;
+	}
+	.hub-badge {
+		background: #0284c7;
+		color: #ffffff;
+		font-size: 0.75rem;
+		font-weight: 700;
+		padding: 0.15rem 0.5rem;
+		border-radius: 4px;
+	}
+	.hub-title {
+		font-size: 1.05rem;
+		color: #0f172a;
+	}
+	.routes-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+	.r-tag {
+		background: #ffffff;
+		border: 1px solid #cbd5e1;
+		color: #1e293b;
+		font-size: 0.85rem;
+		font-weight: 600;
+		padding: 0.3rem 0.65rem;
+		border-radius: 6px;
+	}
+	.official-subhubs-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		gap: 1rem;
+	}
+	.subhub-item {
+		background: #f8fafc;
+		border: 1px solid #e2e8f0;
+		border-radius: 8px;
+		padding: 1rem;
+	}
+	.subhub-title {
+		display: block;
+		font-size: 0.95rem;
+		color: #0284c7;
+		margin-bottom: 0.4rem;
+	}
+	.subhub-routes {
+		margin: 0;
+		font-size: 0.85rem;
+		color: #334155;
+		line-height: 1.5;
 	}
 
 	.tips-grid {

@@ -357,15 +357,31 @@ export async function generateWeeklyPrediction() {
   ];
 
   // 5. Day 2〜Day 6（向こう1週間）の路線確率予測
-  // ANA B767-300ER の投入路線別ベース確率モデル
+  // ANA公式発表（2026年10月25日以降）に基づく就航路線ベース確率モデル
   const baseRouteProbabilities = [
-    { route: '羽田 ➔ 福岡 / 福岡 ➔ 羽田', destCode: 'FUK', baseProb: 40, flights: 'NH245 / NH250 / NH251 / NH256', note: 'ANA屈指のドル箱幹線。平日・週末問わず高頻度で充当' },
-    { route: '羽田 ➔ 広島 / 広島 ➔ 羽田', destCode: 'HIJ', baseProb: 30, flights: 'NH677 / NH682 / NH685 / NH688', note: 'B767の主力路線。ビジネス需要が高く安定運用' },
+    // --- 羽田発着 主要・基幹路線 (公式15路線) ---
+    { route: '羽田 ➔ 福岡 / 福岡 ➔ 羽田', destCode: 'FUK', baseProb: 40, flights: 'NH245 / NH250 / NH251 / NH256', note: 'ANA屈指のドル箱幹線。平日・週末問わず高頻度投入' },
+    { route: '羽田 ➔ 広島 / 広島 ➔ 羽田', destCode: 'HIJ', baseProb: 30, flights: 'NH677 / NH682 / NH685 / NH688', note: 'B767の主力ビジネス路線。安定したデイリー運用' },
     { route: '羽田 ➔ 長崎 / 長崎 ➔ 羽田', destCode: 'NGS', baseProb: 25, flights: 'NH661 / NH664 / NH669 / NH662', note: '九州の定番就航地。夜間ナイトステイが頻出' },
     { route: '羽田 ➔ 松山 / 松山 ➔ 羽田', destCode: 'MYJ', baseProb: 20, flights: 'NH593 / NH596 / NH582', note: '四国基幹路線。午後〜夕方往復パターンの有力候補' },
-    { route: '羽田 ➔ 新千歳 / 新千歳 ➔ 羽田', destCode: 'CTS', baseProb: 15, flights: 'NH55 / NH60 / NH71 / NH76', note: '北海道幹線。大型機材のサポートで週末や多客期に投入' },
-    { route: '羽田 ➔ 伊丹 / 伊丹 ➔ 羽田', destCode: 'ITM', baseProb: 15, flights: 'NH21 / NH26 / NH35 / NH40', note: '伊丹シャトル便。早朝・昼間帯での突発充当あり' },
-    { route: '羽田 ➔ 那覇 / 那覇 ➔ 羽田', destCode: 'OKA', baseProb: 10, flights: 'NH467 / NH472', note: '沖縄観光路線。週末や連休に特別ペイント機の遠征あり' }
+    { route: '羽田 ➔ 伊丹 / 伊丹 ➔ 羽田', destCode: 'ITM', baseProb: 20, flights: 'NH21 / NH26 / NH35 / NH40', note: '伊丹シャトル便。早朝・昼間帯での充当実績多数' },
+    { route: '羽田 ➔ 新千歳 / 新千歳 ➔ 羽田', destCode: 'CTS', baseProb: 18, flights: 'NH55 / NH60 / NH71 / NH76', note: '北海道幹線。大型機サポートや週末に高頻度充当' },
+    { route: '羽田 ➔ 那覇 / 那覇 ➔ 羽田', destCode: 'OKA', baseProb: 15, flights: 'NH467 / NH472', note: '沖縄観光路線。週末や連休に特別ペイント機の遠征あり' },
+    { route: '羽田 ➔ 鹿児島 / 鹿児島 ➔ 羽田', destCode: 'KOJ', baseProb: 15, flights: 'NH621 / NH626 / NH629', note: '南九州の基幹路線。公式定期投入対象' },
+    { route: '羽田 ➔ 熊本 / 熊本 ➔ 羽田', destCode: 'KMJ', baseProb: 15, flights: 'NH643 / NH648', note: '熊本線へのB767定期投入枠' },
+    { route: '羽田 ➔ 宮崎 / 宮崎 ➔ 羽田', destCode: 'KMI', baseProb: 12, flights: 'NH603 / NH608', note: '宮崎ブーゲンビリア空港への公式就航路線' },
+    { route: '羽田 ➔ 函館 / 函館 ➔ 羽田', destCode: 'HKD', baseProb: 12, flights: 'NH553 / NH556', note: '道南エリアへの公式就航路線' },
+    { route: '羽田 ➔ 山口宇部 / 山口宇部 ➔ 羽田', destCode: 'UBJ', baseProb: 10, flights: 'NH697 / NH700', note: '山口宇部空港への公式就航路線' },
+    { route: '羽田 ➔ 高知 / 高知 ➔ 羽田', destCode: 'KCZ', baseProb: 10, flights: 'NH561 / NH566', note: '高知龍馬空港への公式就航路線' },
+    { route: '羽田 ➔ 米子 / 米子 ➔ 羽田', destCode: 'YGJ', baseProb: 10, flights: 'NH385 / NH388', note: '米子鬼太郎空港への公式就航路線' },
+    { route: '羽田 ➔ 石垣 / 石垣 ➔ 羽田', destCode: 'ISG', baseProb: 8,  flights: 'NH89 / NH92', note: '八重山直行リゾート便。遭遇できれば超プレミアム' },
+
+    // --- 地方・直行路線 (伊丹・中部・福岡発着) ---
+    { route: '伊丹 ➔ 新千歳 / 新千歳 ➔ 伊丹', destCode: 'CTS', baseProb: 15, flights: 'NH771 / NH774', note: '伊丹発着の公式就航路線。関西圏のファン大注目' },
+    { route: '伊丹 ➔ 那覇 / 那覇 ➔ 伊丹', destCode: 'OKA', baseProb: 12, flights: 'NH763 / NH766', note: '伊丹発着の沖縄リゾート路線' },
+    { route: '中部 ➔ 新千歳 / 新千歳 ➔ 中部', destCode: 'CTS', baseProb: 15, flights: 'NH703 / NH708', note: '名古屋（セントレア）発着の公式就航路線' },
+    { route: '中部 ➔ 那覇 / 那覇 ➔ 中部', destCode: 'OKA', baseProb: 12, flights: 'NH377 / NH380', note: '名古屋（セントレア）発着の沖縄線' },
+    { route: '福岡 ➔ 新千歳 / 新千歳 ➔ 福岡', destCode: 'CTS', baseProb: 10, flights: 'NH289 / NH290', note: '福岡〜札幌を結ぶ公式就航の日本縦断ルート' }
   ];
 
   const weeklySchedule = [];
@@ -405,10 +421,10 @@ export async function generateWeeklyPrediction() {
       });
     } else {
       // 2日後〜6日後
-      // 週末補正（土日は福岡・新千歳・那覇の確率が微増、広島が微減など）
+      // 週末補正（土日は福岡・新千歳・那覇・石垣の確率が微増、広島が微減など）
       const weekendFactor = day.isWeekend ? 1.2 : 1.0;
       const predictionsForDay = baseRouteProbabilities.map((r, idx) => {
-        let prob = Math.round(r.baseProb * (day.isWeekend && (r.destCode === 'OKA' || r.destCode === 'CTS') ? weekendFactor : 1.0));
+        let prob = Math.round(r.baseProb * (day.isWeekend && (r.destCode === 'OKA' || r.destCode === 'CTS' || r.destCode === 'ISG') ? weekendFactor : 1.0));
         // 少しずつ日によってバリエーションを出す（ランダムではなく周期的な傾向）
         const cycleOffset = ((day.dayIndex * 7 + idx * 13) % 15) - 7;
         prob = Math.max(5, Math.min(65, prob + cycleOffset));
@@ -443,21 +459,30 @@ export async function generateWeeklyPrediction() {
         statusLabel: '週間確率予報',
         topRoute: predictionsForDay[0].route,
         topProbability: predictionsForDay[0].probability,
-        routes: predictionsForDay.slice(0, 4)
+        routes: predictionsForDay.slice(0, 5)
       });
     }
   }
 
-  // 6. 空港別「ちいかわジェット遭遇確率レーダー」
+  // 6. 公式発表就航空港（17空港）「ちいかわジェット遭遇確率レーダー」
   const airportRadar = [
-    { code: 'HND', name: '東京(羽田)', prob: 95, level: 'S (超高確率)', note: 'B767の全国運行ハブ。ほぼ毎日どこかの便で飛来します。' },
-    { code: 'FUK', name: '福岡空港',   prob: 65, level: 'A (高確率)',   note: '羽田発着の最大就航地。昼・夕方ダイヤで遭遇チャンス大。' },
-    { code: 'NGS', name: '長崎空港',   prob: 50, level: 'A (高確率)',   note: '夜間ナイトステイ便（NH669/NH662）で固定投入されやすい。' },
-    { code: 'HIJ', name: '広島空港',   prob: 45, level: 'B (中確率)',   note: '午前〜昼（NH677/NH682）のビジネスダイヤで投入頻度高。' },
-    { code: 'MYJ', name: '松山空港',   prob: 40, level: 'B (中確率)',   note: '午後便（NH593/NH596）での充当実績が多数あり。' },
-    { code: 'CTS', name: '新千歳空港', prob: 30, level: 'C (週末注目)', note: '多客期や週末の大型機サポートとして投入される傾向。' },
-    { code: 'ITM', name: '大阪(伊丹)', prob: 25, level: 'C (注目)',     note: '羽田-伊丹シャトル便での突発投入や朝一番便の実績あり。' },
-    { code: 'OKA', name: '沖縄(那覇)', prob: 15, level: 'D (レア)',     note: 'リゾート路線への遠征フライト。遭遇できれば超ラッキー！' }
+    { code: 'HND', name: '東京(羽田)',   prob: 98, level: 'S (毎日運航)', note: 'B767の全国運行ハブ。15路線の拠点としてほぼ毎日飛来。' },
+    { code: 'FUK', name: '福岡空港',     prob: 70, level: 'A (超高確率)', note: '羽田便＆新千歳便の公式就航地。昼夕ダイヤで遭遇チャンス大。' },
+    { code: 'CTS', name: '新千歳空港',   prob: 60, level: 'A (高確率)',   note: '羽田・伊丹・中部・福岡の4拠点すべてから直行便が乗り入れ！' },
+    { code: 'NGS', name: '長崎空港',     prob: 55, level: 'A (高確率)',   note: '夜間ナイトステイ便（NH669/NH662）で定番固定投入。' },
+    { code: 'HIJ', name: '広島空港',     prob: 50, level: 'B (中確率)',   note: '午前〜昼の往復ビジネスダイヤでB767高頻度投入。' },
+    { code: 'ITM', name: '大阪(伊丹)',   prob: 45, level: 'B (中確率)',   note: '羽田シャトル便に加え、新千歳・那覇の直行便も公式対象。' },
+    { code: 'MYJ', name: '松山空港',     prob: 40, level: 'B (中確率)',   note: '午後便（NH593/NH596）での投入実績多数。' },
+    { code: 'NGO', name: '名古屋(中部)', prob: 35, level: 'B (中確率)',   note: '新千歳便＆那覇便が公式就航。東海エリアの重要拠点。' },
+    { code: 'OKA', name: '沖縄(那覇)',   prob: 35, level: 'B (中確率)',   note: '羽田・伊丹・中部の3空港から飛来するリゾート路線。' },
+    { code: 'KOJ', name: '鹿児島空港',   prob: 25, level: 'C (注目)',     note: '南九州の公式就航路線。羽田往復便で定期投入。' },
+    { code: 'KMJ', name: '熊本空港',     prob: 25, level: 'C (注目)',     note: '公式発表路線。羽田-熊本便（NH643等）に充当。' },
+    { code: 'KMI', name: '宮崎空港',     prob: 20, level: 'C (注目)',     note: '公式発表路線。南国リゾート便として飛来。' },
+    { code: 'HKD', name: '函館空港',     prob: 20, level: 'C (注目)',     note: '公式発表路線。道南への公式乗り入れフライト。' },
+    { code: 'UBJ', name: '山口宇部',     prob: 18, level: 'D (機会あり)', note: '公式発表路線。羽田-宇部線にB767定期便あり。' },
+    { code: 'KCZ', name: '高知空港',     prob: 18, level: 'D (機会あり)', note: '公式発表路線。羽田-高知龍馬空港へ就航。' },
+    { code: 'YGJ', name: '米子空港',     prob: 18, level: 'D (機会あり)', note: '公式発表路線。山陰エリアへの貴重な就航地。' },
+    { code: 'ISG', name: '石垣空港',     prob: 12, level: 'E (レア便)',   note: '羽田からの直行長距離リゾート便。遭遇できれば超幸運！' }
   ];
 
   const resultData = {
