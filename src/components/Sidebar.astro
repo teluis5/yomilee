@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
 import FormattedDate from './FormattedDate.astro';
+import Ad from './Ad.astro';
 import * as consts from '../consts';
 
 interface Props {
@@ -125,6 +126,9 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 			</div>
 		</div>
 	)}
+
+	<!-- サイドバー手動広告スロット（PC追従・最下部） -->
+	<Ad position="sidebar" />
 </aside>
 
 <style>
