@@ -271,10 +271,76 @@ export async function generateWeeklyPrediction() {
 
   let nightStayCode = currentAirportCode;
   let nightStayName = currentAirport;
+  let isNightStayConfirmed = false;
+  let todayRemainingPredictions = [];
+  let pendingNightStayNote = null;
+
+  const TURNAROUND_RETURN_MAP = {
+    HIJ: { flightNo: 'NH684 (予測)', origName: '広島', destName: '東京(羽田)', depTime: '17:15', arrTime: '18:40', status: '🔄 折返し復路予測 (確率85%)' },
+    ITM: { flightNo: 'NH32 (予測)',  origName: '大阪(伊丹)', destName: '東京(羽田)', depTime: '16:00', arrTime: '17:15', status: '🔄 折返し復路予測 (確率85%)' },
+    FUK: { flightNo: 'NH262 (予測)', origName: '福岡', destName: '東京(羽田)', depTime: '16:50', arrTime: '18:35', status: '🔄 折返し復路予測 (確率85%)' },
+    MYJ: { flightNo: 'NH596 (予測)', origName: '松山', destName: '東京(羽田)', depTime: '16:35', arrTime: '18:05', status: '🔄 折返し復路予測 (確率85%)' },
+    NGS: { flightNo: 'NH668 (予測)', origName: '長崎', destName: '東京(羽田)', depTime: '17:05', arrTime: '18:50', status: '🔄 折返し復路予測 (確率85%)' },
+    CTS: { flightNo: 'NH74 (予測)',  origName: '札幌(新千歳)', destName: '東京(羽田)', depTime: '17:30', arrTime: '19:10', status: '🔄 折返し復路予測 (確率85%)' }
+  };
+
   if (todayFlights.length > 0) {
     const lastToday = todayFlights[todayFlights.length - 1];
-    nightStayCode = lastToday.destCode;
-    nightStayName = lastToday.destName;
+    const lastDepHour = parseInt((lastToday.depTime || '00:00').split(':')[0], 10) || 0;
+    const lastArrHour = parseInt((lastToday.arrTime || '00:00').split(':')[0], 10) || 0;
+    const currentJstHour = jstNow.getHours();
+
+    // 出発18時以降、または到着19時以降、または現在時刻20時以降ならナイトステイ確定
+    if (lastDepHour >= 18 || lastArrHour >= 19 || currentJstHour >= 20) {
+      isNightStayConfirmed = true;
+      nightStayCode = lastToday.destCode;
+      nightStayName = `${lastToday.destName}（確定）`;
+    } else {
+      isNightStayConfirmed = false;
+      nightStayCode = lastToday.destCode;
+      if (lastToday.destCode !== 'HND') {
+        const ret = TURNAROUND_RETURN_MAP[lastToday.destCode] || {
+          flightNo: `ANA復路便 (予測)`,
+          origName: lastToday.destName,
+          destName: '東京(羽田)',
+          depTime: '夕方',
+          arrTime: '夜',
+          status: '🔄 折返し復路予測 (確率85%)'
+        };
+        todayRemainingPredictions.push({
+          flightNo: ret.flightNo,
+          route: `${ret.origName} ➔ ${ret.destName}`,
+          time: `${ret.depTime}発 - ${ret.arrTime}着`,
+          status: ret.status,
+          isLanded: false,
+          isLive: false,
+          isPredicted: true
+        });
+        todayRemainingPredictions.push({
+          flightNo: '最終便 (未発表)',
+          route: '羽田そのまま駐機 または 19時台地方最終便',
+          time: '19:15〜20:00頃',
+          status: '🌙 19〜21時頃に確定',
+          isLanded: false,
+          isLive: false,
+          isPredicted: true
+        });
+        nightStayName = `未確定（${lastToday.arrTime}${lastToday.destName}着後、${ret.depTime}発で羽田へ折返し見込み / 19〜21時頃に確定）`;
+        pendingNightStayNote = `⏳ 本日はまだ夕方便（${lastToday.flightNo}: ${lastToday.route} ${lastToday.arrTime}着）の運航段階です。通常このあと${ret.depTime}発の折り返し便で一度東京(羽田)へ戻るため、今夜の最終駐機先（＝明朝の始発空港）は19時〜21時頃に確定します。現在は今夜の最終着地シナリオ別にプランA〜Cを予測しています。`;
+      } else {
+        todayRemainingPredictions.push({
+          flightNo: '夕方・夜便 (未発表)',
+          route: '東京(羽田) ➔ 地方往復 または ナイトステイ便',
+          time: '夕方〜20:00頃',
+          status: '🌙 19〜21時頃に確定',
+          isLanded: false,
+          isLive: false,
+          isPredicted: true
+        });
+        nightStayName = `未確定（現在羽田発着ローテーション中 / 19〜21時頃に最終確定）`;
+        pendingNightStayNote = `⏳ 本日はまだ日中〜夕方ローテーションの運航段階です。今夜の最終駐機先（＝明朝の始発空港）は19時〜21時頃に確定します。現在は今夜の最終着地シナリオ別にプランA〜Cを予測しています。`;
+      }
+    }
   }
 
   // 3. 向こう7日間の日付リストを構築
@@ -321,7 +387,62 @@ export async function generateWeeklyPrediction() {
   const destName1 = AIRPORT_NAMES[standard1.dest] || standard1.dest;
 
   let tomorrowPlans = [];
-  if (nightStayCode === 'HND') {
+  if (!isNightStayConfirmed) {
+    // まだ夕方以前で最終ナイトステイ先が未確定の場合：今夜の着地シナリオ別（プランA: 羽田帰還ステイ / プランB: 羽田帰還後・長崎ステイ / プランC: 現到着地ステイ）
+    tomorrowPlans = [
+      {
+        planId: 'plan-a',
+        planName: 'プランA',
+        rank: '本命 ◎',
+        probability: 45,
+        title: '【今夜羽田へ折返し・羽田ステイの場合】羽田始発 ➔ 長崎・福岡ルート',
+        routeSummary: '羽田 ➔ 長崎 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 広島(泊)',
+        airports: ['東京(羽田)', '長崎', '福岡', '広島'],
+        description: '今夜夕方の折り返し便で東京(羽田)へ戻り、そのまま羽田で夜間駐機した場合の明日の1日通しダイヤ',
+        flights: [
+          { step: '① 朝一便', time: '08:15発 - 10:10着', flightNo: 'NH661', route: '東京(羽田) ➔ 長崎', tag: '羽田始発' },
+          { step: '② 午前便', time: '10:55発 - 12:35着', flightNo: 'NH664', route: '長崎 ➔ 東京(羽田)', tag: '折返し復路' },
+          { step: '③ 午後便', time: '14:00発 - 16:00着', flightNo: 'NH257', route: '東京(羽田) ➔ 福岡', tag: '午後往路' },
+          { step: '④ 夕方便', time: '16:50発 - 18:35着', flightNo: 'NH262', route: '福岡 ➔ 東京(羽田)', tag: '夕方復路' },
+          { step: '⑤ 夜最終', time: '19:30発 - 21:00着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島', tag: '🌙夜間駐機' }
+        ]
+      },
+      {
+        planId: 'plan-b',
+        planName: 'プランB',
+        rank: '有力 ◯',
+        probability: 35,
+        title: '【今夜羽田帰還後に夜最終便で長崎ステイの場合】長崎始発 ➔ 伊丹・松山ルート',
+        routeSummary: '長崎 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 松山 ➔ 羽田',
+        airports: ['長崎', '東京(羽田)', '大阪(伊丹)', '松山'],
+        description: '今夜羽田へ戻った後、19:15発の最終便(NH669)で長崎へ飛び、明朝長崎からスタートする場合の1日通しダイヤ',
+        flights: [
+          { step: '① 朝一便', time: '08:25発 - 10:00着', flightNo: 'NH662', route: '長崎 ➔ 東京(羽田)', tag: '長崎始発' },
+          { step: '② 午前便', time: '11:00発 - 12:10着', flightNo: 'NH21', route: '東京(羽田) ➔ 大阪(伊丹)', tag: '午前往路' },
+          { step: '③ 午後便', time: '13:00発 - 14:10着', flightNo: 'NH26', route: '大阪(伊丹) ➔ 東京(羽田)', tag: '昼復路' },
+          { step: '④ 夕方便', time: '15:15発 - 16:45着', flightNo: 'NH595', route: '東京(羽田) ➔ 松山', tag: '午後往路' },
+          { step: '⑤ 夜最終', time: '17:35発 - 19:05着', flightNo: 'NH598', route: '松山 ➔ 東京(羽田)', tag: '🌙羽田帰還' }
+        ]
+      },
+      {
+        planId: 'plan-c',
+        planName: 'プランC',
+        rank: '対抗 ▲',
+        probability: 20,
+        title: `【今夜${origName1}で夜間駐機する場合】${origName1}始発 ➔ 福岡・新千歳ルート`,
+        routeSummary: `${origName1} ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田`,
+        airports: [origName1, '東京(羽田)', '福岡', '札幌(新千歳)'],
+        description: `今夜${origName1}空港でナイトステイし、明朝${standard1.flightNo}便（${standard1.depTime}発）で羽田へ向かう場合の1日通しダイヤ`,
+        flights: [
+          { step: '① 朝一便', time: `${standard1.depTime}発 - ${standard1.arrTime}着`, flightNo: standard1.flightNo, route: `${origName1} ➔ ${destName1}`, tag: `${origName1}始発` },
+          { step: '② 午前便', time: '10:30発 - 12:30着', flightNo: 'NH251', route: '東京(羽田) ➔ 福岡', tag: '午前往路' },
+          { step: '③ 午後便', time: '13:10発 - 14:50着', flightNo: 'NH256', route: '福岡 ➔ 東京(羽田)', tag: '昼復路' },
+          { step: '④ 夕方便', time: '15:45発 - 17:20着', flightNo: 'NH71', route: '東京(羽田) ➔ 札幌(新千歳)', tag: '夕方往路' },
+          { step: '⑤ 夜最終', time: '18:15発 - 19:55着', flightNo: 'NH76', route: '札幌(新千歳) ➔ 東京(羽田)', tag: '🌙羽田帰還' }
+        ]
+      }
+    ];
+  } else if (nightStayCode === 'HND') {
     tomorrowPlans = [
       {
         planId: 'plan-a',
@@ -516,37 +637,51 @@ export async function generateWeeklyPrediction() {
   for (const day of weeklyDays) {
     if (day.dayIndex === 0) {
       // 本日
-      weeklySchedule.push({
-        ...day,
-        statusType: 'today',
-        statusLabel: '本日（リアルタイム）',
-        currentAirport: currentAirport,
-        nightStay: nightStayName,
-        flights: todayFlights.length > 0 ? todayFlights.map(f => ({
+      const combinedTodayFlights = todayFlights.length > 0 ? [
+        ...todayFlights.map(f => ({
           flightNo: f.flightNo,
           route: f.route,
           time: `${f.depTime}発 - ${f.arrTime}着`,
           status: f.statusJa,
           isLanded: f.isLanded,
-          isLive: f.isLive
-        })) : [{
-          flightNo: '運航計画待機中',
-          route: `${currentAirport} 駐機中`,
-          time: '朝便発表待ち',
-          status: '待機中',
-          isLanded: false,
-          isLive: false
-        }]
+          isLive: f.isLive,
+          isPredicted: false
+        })),
+        ...todayRemainingPredictions
+      ] : [{
+        flightNo: '運航計画待機中',
+        route: `${currentAirport} 駐機中`,
+        time: '朝便発表待ち',
+        status: '待機中',
+        isLanded: false,
+        isLive: false,
+        isPredicted: false
+      }];
+
+      weeklySchedule.push({
+        ...day,
+        statusType: 'today',
+        statusLabel: '本日（リアルタイム＋夕方以降予測）',
+        currentAirport: currentAirport,
+        nightStay: nightStayName,
+        isNightStayConfirmed,
+        flights: combinedTodayFlights
       });
     } else if (day.dayIndex === 1) {
       // 明日
       weeklySchedule.push({
         ...day,
         statusType: 'tomorrow',
-        statusLabel: '明日（3大ルート予測：プランA・B・C）',
-        expectedStart: `${nightStayName}発 (${standard1.flightNo})`,
-        isRegionalNightStay: nightStayCode !== 'HND',
-        confirmedFirstFlight: nightStayCode !== 'HND' ? {
+        statusLabel: isNightStayConfirmed
+          ? '明日（ナイトステイ確定・3大ルート予測）'
+          : '明日（夕方時点の3大シナリオ予測：19〜21時頃に初便確定）',
+        expectedStart: isNightStayConfirmed
+          ? `${nightStayName}発 (${standard1.flightNo})`
+          : '今夜の最終便（19〜21時頃）で確定',
+        isNightStayConfirmed,
+        pendingNightStayNote,
+        isRegionalNightStay: isNightStayConfirmed && nightStayCode !== 'HND',
+        confirmedFirstFlight: (isNightStayConfirmed && nightStayCode !== 'HND') ? {
           flightNo: standard1.flightNo,
           route: `${origName1} ➔ ${destName1}`,
           time: `${standard1.depTime}発 - ${standard1.arrTime}着`,
