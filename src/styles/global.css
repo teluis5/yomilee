@@ -497,4 +497,10 @@ thead th {
 	padding: 0 !important;
 }
 
+/* アンカー広告（オーバーレイ）の上部表示を防止し、下部せり上げを徹底 */
+.adsbygoogle-noablate[style*="top: 0px"],
+.adsbygoogle-noablate[style*="top:0px"] {
+	display: none !important;
+}
+
 

@@ -107,7 +107,15 @@ const { title, description, image = FallbackImage } = Astro.props;
 <meta name="twitter:image" content={new URL(image.src, Astro.url)} />
 
 <!-- Google AdSense Script -->
-<script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8011635154814608" crossorigin="anonymous"></script>
+<script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8011635154814608" data-overlays="bottom" crossorigin="anonymous"></script>
+<!-- アンカー広告（下部せり上げオーバーレイ）の全ページ共通強制設定 -->
+<script is:inline>
+	(adsbygoogle = window.adsbygoogle || []).push({
+		google_ad_client: "ca-pub-8011635154814608",
+		enable_page_level_ads: true,
+		overlays: { bottom: true }
+	});
+</script>
 
 <!-- Twitter widgets Script (ツイート埋め込みが存在する場合のみ動的に遅延ロード) -->
 <script is:inline>
