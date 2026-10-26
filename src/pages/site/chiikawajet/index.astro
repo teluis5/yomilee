@@ -533,6 +533,16 @@ const pageSchema = {
 		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 	}
 
+	/* Google自動広告の不自然な割り込み・中途半端な空枠の完全遮断 */
+	:global(.google-auto-placed),
+	:global(ins.adsbygoogle:empty),
+	:global(ins.adsbygoogle[data-ad-status="unfilled"]) {
+		display: none !important;
+		height: 0 !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+
 	.dash-hero {
 		background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%);
 		border: 2px solid #bae6fd;

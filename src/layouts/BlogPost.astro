@@ -277,6 +277,15 @@ const articleSchema = {
 			.tag:hover {
 				background-color: #bae6fd;
 			}
+			/* Google自動広告の不自然な割り込み・中途半端な空枠の完全遮断 */
+			.google-auto-placed,
+			ins.adsbygoogle:empty,
+			ins.adsbygoogle[data-ad-status="unfilled"] {
+				display: none !important;
+				height: 0 !important;
+				margin: 0 !important;
+				padding: 0 !important;
+			}
 		</style>
 	</head>
 
@@ -285,7 +294,7 @@ const articleSchema = {
 		<main>
 			<div class="layout-container">
 				<!-- メインコンテンツ (左カラム) -->
-				<article class="layout-main">
+				<article class="layout-main google-anno-skip">
 					<Breadcrumb items={breadcrumbItems} />
 					<div class="title">
 						<div class="date">
