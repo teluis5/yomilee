@@ -2053,5 +2053,43 @@ const pageSchema = {
 				});
 			});
 		});
+
+		// 見出し直後およびブロック間の不自然な広告自動挿入を監視・排除
+		(() => {
+			function purgeIntrusiveAds() {
+				const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+				headings.forEach(h => {
+					let next = h.nextElementSibling;
+					while (next && (
+						next.classList.contains('google-auto-placed') ||
+						next.tagName === 'INS' ||
+						(next.id && next.id.startsWith('aswift_')) ||
+						next.classList.contains('adsbygoogle')
+					)) {
+						const target = next;
+						next = next.nextElementSibling;
+						target.remove();
+					}
+				});
+
+				const autoAds = document.querySelectorAll('.chiikawa-dashboard .google-auto-placed');
+				autoAds.forEach(el => el.remove());
+
+				const emptyAds = document.querySelectorAll('ins.adsbygoogle:not([data-ad-slot]), ins.adsbygoogle[data-ad-status="unfilled"]');
+				emptyAds.forEach(el => {
+					const wrapper = el.closest('.adsense-wrapper');
+					if (wrapper) wrapper.remove();
+					else el.remove();
+				});
+			}
+
+			purgeIntrusiveAds();
+			if (window.MutationObserver) {
+				const observer = new MutationObserver(() => {
+					purgeIntrusiveAds();
+				});
+				observer.observe(document.body, { childList: true, subtree: true });
+			}
+		})();
 	});
 </script>

@@ -484,3 +484,65 @@ thead th {
 	border-width: 0;
 }
 
+/* ==========================================================================
+   Google AdSense 自動広告の割り込み防止（見出し直後・文脈ブロック間の完全遮断）
+   ========================================================================== */
+/* 1. 見出し（H1〜H6）の直後に挿入される自動広告を完全遮断 */
+h1 + .google-auto-placed,
+h2 + .google-auto-placed,
+h3 + .google-auto-placed,
+h4 + .google-auto-placed,
+h5 + .google-auto-placed,
+h6 + .google-auto-placed,
+h1 + ins.adsbygoogle,
+h2 + ins.adsbygoogle,
+h3 + ins.adsbygoogle,
+h4 + ins.adsbygoogle,
+h1 + div[id^="aswift_"],
+h2 + div[id^="aswift_"],
+h3 + div[id^="aswift_"],
+h4 + div[id^="aswift_"] {
+	display: none !important;
+	height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+/* 2. つながりのあるブロック（表、リスト、カード、枠線ブロック等）の間への割り込み遮断 */
+.prose table + .google-auto-placed,
+.prose ul + .google-auto-placed,
+.prose ol + .google-auto-placed,
+.prose blockquote + .google-auto-placed,
+.prose div[class*="box"] + .google-auto-placed,
+.prose div[class*="card"] + .google-auto-placed,
+.prose div[class*="grid"] + .google-auto-placed,
+.prose .google-auto-placed + table,
+.prose .google-auto-placed + ul,
+.prose .google-auto-placed + ol,
+.prose .google-auto-placed + blockquote {
+	display: none !important;
+	height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+/* 3. 記事本文(.prose)および専用ダッシュボード内部の自動配置広告を全無効化 */
+.prose .google-auto-placed,
+.chiikawa-dashboard .google-auto-placed {
+	display: none !important;
+	height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+/* 4. 未設定枠・未充填スロットの空枠排除 */
+ins.adsbygoogle:empty,
+ins.adsbygoogle[data-ad-status="unfilled"],
+ins.adsbygoogle:not([data-ad-slot]) {
+	display: none !important;
+	height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+
