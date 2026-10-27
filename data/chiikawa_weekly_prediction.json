@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年10月27日 08:00",
-  "updatedAtIso": "2026-10-26T23:01:23.913Z",
+  "updatedAt": "2026年10月27日 09:03",
+  "updatedAtIso": "2026-10-27T00:05:21.849Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "広島 ➔ 東京(羽田) へ飛行中",
+    "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "未確定（現在羽田発着ローテーション中 / 19〜21時頃に最終確定）",
     "nightStayCode": "HND"
   },
@@ -82,7 +82,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降予測）",
-      "currentAirport": "広島 ➔ 東京(羽田) へ飛行中",
+      "currentAirport": "東京(羽田)",
       "nightStay": "未確定（現在羽田発着ローテーション中 / 19〜21時頃に最終確定）",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "⏳ 本日はまだ日中〜夕方ローテーションの運航段階です。今夜の最終駐機先（＝明朝の始発空港）は19時〜21時頃に確定します。現在は今夜の最終着地シナリオ別にプランA〜Cを予測しています。",
@@ -92,9 +92,9 @@
           "flightNo": "NH672",
           "route": "広島 ➔ 東京(羽田)",
           "time": "07:35発 - 08:55着",
-          "status": "飛行中 ✈️",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (08:41)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -767,7 +767,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 275,
+    "totalFleetFlights": 281,
     "fleetCount": 15
   }
 }
