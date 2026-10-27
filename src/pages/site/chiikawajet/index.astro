@@ -55,9 +55,24 @@ const pageSchema = {
 					<span class="status-label">現在の機体位置</span>
 					<strong class="status-value highlight">{aircraft.currentLocation}</strong>
 				</div>
-				<div class="status-item">
+				<div class="status-item nightstay-status-item">
 					<span class="status-label">今夜のナイトステイ（夜間駐機先）</span>
-					<strong class="status-value">{aircraft.nightStay} ({aircraft.nightStayCode})</strong>
+					{aircraft.isNightStayConfirmed ? (
+						<strong class="status-value highlight">{aircraft.nightStay}</strong>
+					) : (
+						<div class="nightstay-prob-wrap">
+							<strong class="status-value nightstay-prob-val">{aircraft.nightStay}</strong>
+							{aircraft.nightStayProbabilities && aircraft.nightStayProbabilities.length > 0 && (
+								<div class="nightstay-pills">
+									{aircraft.nightStayProbabilities.map((p) => (
+										<span class="ns-pill">
+											<b>{p.airport}</b> {p.probability}%
+										</span>
+									))}
+								</div>
+							)}
+						</div>
+					)}
 				</div>
 				<div class="status-item">
 					<span class="status-label">追跡機体記号</span>
@@ -233,6 +248,57 @@ const pageSchema = {
 
 										<div class="to-footer">
 											<span>{day.todayOutlook.notice}</span>
+										</div>
+									</div>
+								)}
+
+								{day.plans && day.plans.length > 0 && (
+									<div class="today-plans-wrapper">
+										<div class="timeline-intro-bar highlight-amber">
+											<span class="timeline-intro-icon">🎯</span>
+											<span>本日の残りフライト展開シナリオ（確率別プランA〜C）:</span>
+										</div>
+										<div class="plans-container">
+											{day.plans.map((plan) => (
+												<details class={`plan-card ${plan.planId}`} open>
+													<summary class="plan-summary">
+														<div class="plan-summary-left">
+															<span class={`plan-name-badge ${plan.planId}`}>{plan.planName}</span>
+															<span class="plan-prob-badge">
+																確率 <strong>{plan.probability}%</strong>
+																<small>({plan.rank})</small>
+															</span>
+															<strong class="plan-route-title">{plan.title}</strong>
+														</div>
+														<div class="plan-summary-right">
+															<span class="plan-route-flow">{plan.routeSummary}</span>
+															<span class="plan-detail-btn">詳細 ▾</span>
+														</div>
+													</summary>
+													<div class="plan-detail-body">
+														<div class="plan-desc-bar">
+															<span>💡 {plan.description}</span>
+														</div>
+														<div class="plan-flights-timeline">
+															{plan.flights.map((f) => (
+																<div class="plan-flight-row">
+																	<div class="pf-left">
+																		<span class="pf-step">{f.step}</span>
+																		<strong class="pf-time">{f.time}</strong>
+																	</div>
+																	<div class="pf-center">
+																		<strong class="pf-fno">{f.flightNo}</strong>
+																		<span class="pf-route">{f.route}</span>
+																	</div>
+																	<div class="pf-right">
+																		<span class="pf-tag">{f.tag}</span>
+																	</div>
+																</div>
+															))}
+														</div>
+													</div>
+												</details>
+											))}
 										</div>
 									</div>
 								)}
@@ -610,6 +676,41 @@ const pageSchema = {
 	.status-value.highlight {
 		color: #0284c7;
 		font-weight: bold;
+	}
+	.nightstay-prob-wrap {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+	.nightstay-prob-val {
+		font-size: 1.05rem;
+		color: #0284c7;
+		font-weight: 700;
+	}
+	.nightstay-pills {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		margin-top: 0.2rem;
+	}
+	.ns-pill {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+		background: #e0f2fe;
+		color: #0369a1;
+		font-size: 0.78rem;
+		padding: 0.15rem 0.5rem;
+		border-radius: 9999px;
+		border: 1px solid #bae6fd;
+	}
+	.highlight-amber {
+		background: #fffbeb !important;
+		border-color: #fde68a !important;
+		color: #b45309 !important;
+	}
+	.today-plans-wrapper {
+		margin-top: 1.5rem;
 	}
 	.status-tips {
 		background: #fffbeb;
