@@ -328,8 +328,8 @@ export async function generateWeeklyPrediction() {
     const lastArrHour = parseInt((lastToday.arrTime || '00:00').split(':')[0], 10) || 0;
     const currentJstHour = jstNow.getHours();
 
-    // 出発18時以降、または到着19時以降、または現在時刻20時以降ならナイトステイ確定
-    if (lastDepHour >= 18 || lastArrHour >= 19 || currentJstHour >= 20) {
+    // 出発19時以降、または到着20時以降、または現在時刻20時以降ならナイトステイ確定
+    if (lastDepHour >= 19 || lastArrHour >= 20 || currentJstHour >= 20) {
       isNightStayConfirmed = true;
       nightStayCode = lastToday.destCode;
       nightStayName = `${lastToday.destName}（確定）`;
@@ -341,11 +341,20 @@ export async function generateWeeklyPrediction() {
       nightStayCode = lastToday.destCode;
       
       // ナイトステイ先を「未定」ではなく確率で算出（合計が必ず100%になるように配分）
-      nightStayProbabilities = [
-        { airport: '長崎', code: 'NGS', probability: 50, note: '羽田19:15発(NH669) ➔ 長崎ナイトステイ（最有力）' },
-        { airport: '広島', code: 'HIJ', probability: 30, note: '羽田19:30発(NH685) ➔ 広島ナイトステイ（第2本命）' },
-        { airport: '東京(羽田)', code: 'HND', probability: 20, note: '夕方便羽田帰還後のそのまま夜間駐機・整備' }
-      ];
+      if (lastToday.destCode !== 'HND') {
+        const altRegional = lastToday.destCode === 'NGS' ? { airport: '広島', code: 'HIJ' } : { airport: '長崎', code: 'NGS' };
+        nightStayProbabilities = [
+          { airport: lastToday.destName, code: lastToday.destCode, probability: 55, note: `${lastToday.destName}到着後そのまま夜間駐機（最有力）` },
+          { airport: '東京(羽田)', code: 'HND', probability: 35, note: `${lastToday.destName}から夜便で羽田へ折返し帰還` },
+          { airport: altRegional.airport, code: altRegional.code, probability: 10, note: '羽田帰還後の夜間ステイ便充当' }
+        ];
+      } else {
+        nightStayProbabilities = [
+          { airport: '長崎', code: 'NGS', probability: 50, note: '羽田19:15発(NH669) ➔ 長崎ナイトステイ（最有力）' },
+          { airport: '広島', code: 'HIJ', probability: 30, note: '羽田19:30発(NH685) ➔ 広島ナイトステイ（第2本命）' },
+          { airport: '東京(羽田)', code: 'HND', probability: 20, note: '夕方便羽田帰還後のそのまま夜間駐機・整備' }
+        ];
+      }
 
       // ナイトステイ表示文字列（合計100%）
       nightStayName = `${nightStayProbabilities[0].airport} (${nightStayProbabilities[0].probability}%) / ${nightStayProbabilities[1].airport} (${nightStayProbabilities[1].probability}%) / ${nightStayProbabilities[2].airport} (${nightStayProbabilities[2].probability}%) [今夜の駐機確率]`;
@@ -520,60 +529,120 @@ export async function generateWeeklyPrediction() {
 
   let tomorrowPlans = [];
   if (!isNightStayConfirmed) {
-    // まだ夕方以前で最終ナイトステイ先が未確定の場合：今夜の着地シナリオ別（プランA: 羽田帰還ステイ / プランB: 羽田帰還後・長崎ステイ / プランC: 現到着地ステイ）
-    tomorrowPlans = [
-      {
-        planId: 'plan-a',
-        planName: 'プランA',
-        rank: '本命 ◎',
-        probability: 50,
-        title: '【今夜羽田へ折返し・羽田ステイの場合】羽田始発 ➔ 長崎・福岡ルート',
-        routeSummary: '羽田 ➔ 長崎 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 広島(泊)',
-        airports: ['東京(羽田)', '長崎', '福岡', '広島'],
-        description: '今夜夕方の折り返し便で東京(羽田)へ戻り、そのまま羽田で夜間駐機した場合の明日の1日通しダイヤ',
-        flights: [
-          { step: '① 朝一便', time: '08:15発 - 10:10着', flightNo: 'NH661', route: '東京(羽田) ➔ 長崎', tag: '羽田始発' },
-          { step: '② 午前便', time: '10:55発 - 12:35着', flightNo: 'NH664', route: '長崎 ➔ 東京(羽田)', tag: '折返し復路' },
-          { step: '③ 午後便', time: '14:00発 - 16:00着', flightNo: 'NH257', route: '東京(羽田) ➔ 福岡', tag: '午後往路' },
-          { step: '④ 夕方便', time: '16:50発 - 18:35着', flightNo: 'NH262', route: '福岡 ➔ 東京(羽田)', tag: '夕方復路' },
-          { step: '⑤ 夜最終', time: '19:30発 - 21:00着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島', tag: '🌙夜間駐機' }
-        ]
-      },
-      {
-        planId: 'plan-b',
-        planName: 'プランB',
-        rank: '有力 ◯',
-        probability: 30,
-        title: '【今夜羽田帰還後に夜最終便で長崎ステイの場合】長崎始発 ➔ 伊丹・松山ルート',
-        routeSummary: '長崎 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 松山 ➔ 羽田',
-        airports: ['長崎', '東京(羽田)', '大阪(伊丹)', '松山'],
-        description: '今夜羽田へ戻った後、19:15発の最終便(NH669)で長崎へ飛び、明朝長崎からスタートする場合の1日通しダイヤ',
-        flights: [
-          { step: '① 朝一便', time: '08:25発 - 10:00着', flightNo: 'NH662', route: '長崎 ➔ 東京(羽田)', tag: '長崎始発' },
-          { step: '② 午前便', time: '11:00発 - 12:10着', flightNo: 'NH21', route: '東京(羽田) ➔ 大阪(伊丹)', tag: '午前往路' },
-          { step: '③ 午後便', time: '13:00発 - 14:10着', flightNo: 'NH26', route: '大阪(伊丹) ➔ 東京(羽田)', tag: '昼復路' },
-          { step: '④ 夕方便', time: '15:15発 - 16:45着', flightNo: 'NH595', route: '東京(羽田) ➔ 松山', tag: '午後往路' },
-          { step: '⑤ 夜最終', time: '17:35発 - 19:05着', flightNo: 'NH598', route: '松山 ➔ 東京(羽田)', tag: '🌙羽田帰還' }
-        ]
-      },
-      {
-        planId: 'plan-c',
-        planName: 'プランC',
-        rank: '対抗 ▲',
-        probability: 20,
-        title: `【今夜${origName1}で夜間駐機する場合】${origName1}始発 ➔ 福岡・新千歳ルート`,
-        routeSummary: `${origName1} ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田`,
-        airports: [origName1, '東京(羽田)', '福岡', '札幌(新千歳)'],
-        description: `今夜${origName1}空港でナイトステイし、明朝${standard1.flightNo}便（${standard1.depTime}発）で羽田へ向かう場合の1日通しダイヤ`,
-        flights: [
-          { step: '① 朝一便', time: `${standard1.depTime}発 - ${standard1.arrTime}着`, flightNo: standard1.flightNo, route: `${origName1} ➔ ${destName1}`, tag: `${origName1}始発` },
-          { step: '② 午前便', time: '10:30発 - 12:30着', flightNo: 'NH251', route: '東京(羽田) ➔ 福岡', tag: '午前往路' },
-          { step: '③ 午後便', time: '13:10発 - 14:50着', flightNo: 'NH256', route: '福岡 ➔ 東京(羽田)', tag: '昼復路' },
-          { step: '④ 夕方便', time: '15:45発 - 17:20着', flightNo: 'NH71', route: '東京(羽田) ➔ 札幌(新千歳)', tag: '夕方往路' },
-          { step: '⑤ 夜最終', time: '18:15発 - 19:55着', flightNo: 'NH76', route: '札幌(新千歳) ➔ 東京(羽田)', tag: '🌙羽田帰還' }
-        ]
-      }
-    ];
+    if (nightStayCode !== 'HND') {
+      // 地方空港へ向かう便を運航中（まだ最終確定ではない）の場合：今夜の駐機確率（現到着地55% / 羽田35% / 地方10%）と連動
+      const altIsHij = nightStayCode === 'NGS';
+      tomorrowPlans = [
+        {
+          planId: 'plan-a',
+          planName: 'プランA',
+          rank: '本命 ◎',
+          probability: 55,
+          title: `【今夜${origName1}ステイの場合】${origName1}始発 ➔ 伊丹・松山ルート`,
+          routeSummary: `${origName1} ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 松山 ➔ 羽田`,
+          airports: [origName1, '東京(羽田)', '大阪(伊丹)', '松山'],
+          description: `今夜そのまま${origName1}で夜間駐機し、明朝${origName1}からスタートする場合の1日通しダイヤ`,
+          flights: [
+            { step: '① 朝一便', time: `${standard1.depTime}発 - ${standard1.arrTime}着`, flightNo: standard1.flightNo, route: `${origName1} ➔ ${destName1}`, tag: `${origName1}始発` },
+            { step: '② 午前便', time: '11:00発 - 12:10着', flightNo: 'NH21', route: '東京(羽田) ➔ 大阪(伊丹)', tag: '午前往路' },
+            { step: '③ 午後便', time: '13:00発 - 14:10着', flightNo: 'NH26', route: '大阪(伊丹) ➔ 東京(羽田)', tag: '昼復路' },
+            { step: '④ 夕方便', time: '15:15発 - 16:45着', flightNo: 'NH595', route: '東京(羽田) ➔ 松山', tag: '午後往路' },
+            { step: '⑤ 夜最終', time: '17:35発 - 19:05着', flightNo: 'NH598', route: '松山 ➔ 東京(羽田)', tag: '🌙羽田帰還' }
+          ]
+        },
+        {
+          planId: 'plan-b',
+          planName: 'プランB',
+          rank: '有力 ◯',
+          probability: 35,
+          title: '【今夜羽田帰還の場合】羽田始発 ➔ 長崎・福岡ルート',
+          routeSummary: '羽田 ➔ 長崎 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 広島(泊)',
+          airports: ['東京(羽田)', '長崎', '福岡', '広島'],
+          description: `夜便で${origName1}から東京(羽田)へ折返し帰還し、明朝羽田からスタートする場合の1日通しダイヤ`,
+          flights: [
+            { step: '① 朝一便', time: '08:15発 - 10:10着', flightNo: 'NH661', route: '東京(羽田) ➔ 長崎', tag: '羽田始発' },
+            { step: '② 午前便', time: '10:55発 - 12:35着', flightNo: 'NH664', route: '長崎 ➔ 東京(羽田)', tag: '折返し復路' },
+            { step: '③ 午後便', time: '14:00発 - 16:00着', flightNo: 'NH257', route: '東京(羽田) ➔ 福岡', tag: '午後往路' },
+            { step: '④ 夕方便', time: '16:50発 - 18:35着', flightNo: 'NH262', route: '福岡 ➔ 東京(羽田)', tag: '夕方復路' },
+            { step: '⑤ 夜最終', time: '19:30発 - 21:00着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島', tag: '🌙夜間駐機' }
+          ]
+        },
+        {
+          planId: 'plan-c',
+          planName: 'プランC',
+          rank: '対抗 ▲',
+          probability: 10,
+          title: altIsHij ? '【今夜広島ステイの場合】広島始発 ➔ 福岡・新千歳ルート' : '【今夜長崎ステイの場合】長崎始発 ➔ 福岡・新千歳ルート',
+          routeSummary: altIsHij ? '広島 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田' : '長崎 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田',
+          airports: [altIsHij ? '広島' : '長崎', '東京(羽田)', '福岡', '札幌(新千歳)'],
+          description: '羽田帰還後に夜最終便で地方ステイへ充当された場合の1日通しダイヤ',
+          flights: [
+            altIsHij
+              ? { step: '① 朝一便', time: '07:35発 - 08:55着', flightNo: 'NH672', route: '広島 ➔ 東京(羽田)', tag: '広島始発' }
+              : { step: '① 朝一便', time: '08:25発 - 10:00着', flightNo: 'NH662', route: '長崎 ➔ 東京(羽田)', tag: '長崎始発' },
+            { step: '② 午前便', time: '10:30発 - 12:30着', flightNo: 'NH251', route: '東京(羽田) ➔ 福岡', tag: '午前往路' },
+            { step: '③ 午後便', time: '13:10発 - 14:50着', flightNo: 'NH256', route: '福岡 ➔ 東京(羽田)', tag: '昼復路' },
+            { step: '④ 夕方便', time: '15:45発 - 17:20着', flightNo: 'NH71', route: '東京(羽田) ➔ 札幌(新千歳)', tag: '夕方往路' },
+            { step: '⑤ 夜最終', time: '18:15発 - 19:55着', flightNo: 'NH76', route: '札幌(新千歳) ➔ 東京(羽田)', tag: '🌙羽田帰還' }
+          ]
+        }
+      ];
+    } else {
+      // まだ最終ナイトステイ先が未確定の場合：今夜の駐機確率（長崎50% / 広島30% / 羽田20%）と連動した明日の1日通しダイヤ
+      tomorrowPlans = [
+        {
+          planId: 'plan-a',
+          planName: 'プランA',
+          rank: '本命 ◎',
+          probability: 50,
+          title: '【今夜長崎ステイの場合】長崎始発 ➔ 伊丹・松山ルート',
+          routeSummary: '長崎 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 松山 ➔ 羽田',
+          airports: ['長崎', '東京(羽田)', '大阪(伊丹)', '松山'],
+          description: '今夜19:15発の最終便(NH669)で長崎へステイし、明朝長崎からスタートする場合の1日通しダイヤ',
+          flights: [
+            { step: '① 朝一便', time: '08:25発 - 10:00着', flightNo: 'NH662', route: '長崎 ➔ 東京(羽田)', tag: '長崎始発' },
+            { step: '② 午前便', time: '11:00発 - 12:10着', flightNo: 'NH21', route: '東京(羽田) ➔ 大阪(伊丹)', tag: '午前往路' },
+            { step: '③ 午後便', time: '13:00発 - 14:10着', flightNo: 'NH26', route: '大阪(伊丹) ➔ 東京(羽田)', tag: '昼復路' },
+            { step: '④ 夕方便', time: '15:15発 - 16:45着', flightNo: 'NH595', route: '東京(羽田) ➔ 松山', tag: '午後往路' },
+            { step: '⑤ 夜最終', time: '17:35発 - 19:05着', flightNo: 'NH598', route: '松山 ➔ 東京(羽田)', tag: '🌙羽田帰還' }
+          ]
+        },
+        {
+          planId: 'plan-b',
+          planName: 'プランB',
+          rank: '有力 ◯',
+          probability: 30,
+          title: '【今夜広島ステイの場合】広島始発 ➔ 福岡・新千歳ルート',
+          routeSummary: '広島 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田',
+          airports: ['広島', '東京(羽田)', '福岡', '札幌(新千歳)'],
+          description: '今夜19:30発の最終便(NH685)で広島へステイし、明朝広島からスタートする場合の1日通しダイヤ',
+          flights: [
+            { step: '① 朝一便', time: '07:35発 - 08:55着', flightNo: 'NH672', route: '広島 ➔ 東京(羽田)', tag: '広島始発' },
+            { step: '② 午前便', time: '10:30発 - 12:30着', flightNo: 'NH251', route: '東京(羽田) ➔ 福岡', tag: '午前往路' },
+            { step: '③ 午後便', time: '13:10発 - 14:50着', flightNo: 'NH256', route: '福岡 ➔ 東京(羽田)', tag: '昼復路' },
+            { step: '④ 夕方便', time: '15:45発 - 17:20着', flightNo: 'NH71', route: '東京(羽田) ➔ 札幌(新千歳)', tag: '夕方往路' },
+            { step: '⑤ 夜最終', time: '18:15発 - 19:55着', flightNo: 'NH76', route: '札幌(新千歳) ➔ 東京(羽田)', tag: '🌙羽田帰還' }
+          ]
+        },
+        {
+          planId: 'plan-c',
+          planName: 'プランC',
+          rank: '対抗 ▲',
+          probability: 20,
+          title: '【今夜羽田ステイの場合】羽田始発 ➔ 長崎・福岡ルート',
+          routeSummary: '羽田 ➔ 長崎 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 広島(泊)',
+          airports: ['東京(羽田)', '長崎', '福岡', '広島'],
+          description: '今夜そのまま東京(羽田)で夜間駐機し、明朝羽田からスタートする場合の1日通しダイヤ',
+          flights: [
+            { step: '① 朝一便', time: '08:15発 - 10:10着', flightNo: 'NH661', route: '東京(羽田) ➔ 長崎', tag: '羽田始発' },
+            { step: '② 午前便', time: '10:55発 - 12:35着', flightNo: 'NH664', route: '長崎 ➔ 東京(羽田)', tag: '折返し復路' },
+            { step: '③ 午後便', time: '14:00発 - 16:00着', flightNo: 'NH257', route: '東京(羽田) ➔ 福岡', tag: '午後往路' },
+            { step: '④ 夕方便', time: '16:50発 - 18:35着', flightNo: 'NH262', route: '福岡 ➔ 東京(羽田)', tag: '夕方復路' },
+            { step: '⑤ 夜最終', time: '19:30発 - 21:00着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島', tag: '🌙夜間駐機' }
+          ]
+        }
+      ];
+    }
   } else if (nightStayCode === 'HND') {
     tomorrowPlans = [
       {
