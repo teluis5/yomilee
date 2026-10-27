@@ -5,7 +5,7 @@ import predictionData from '../../../data/chiikawa_weekly_prediction.json';
 import heroImage from '../../../assets/images/chiikawajet_ogp.png';
 
 const title = "【毎日自動更新】ANAちいかわジェット運行予定＆週間フライト確率予測 | JA609A";
-const description = "ANA特別塗装機「ちいかわジェット（JA609A）」の本日のリアルタイム運行状況、明日の始発便予測、および向こう1週間の就航確率予報をAIデータ分析で毎日更新！羽田・福岡・長崎・広島など全国主要空港の遭遇レーダーを掲載。";
+const description = "ANA特別塗装機「ちいかわジェット（JA609A）」の本日のリアルタイム運行状況、明日の始発便予想、および向こう1週間の就航確率を過去の運航データ分析から毎日更新！羽田・福岡・長崎・広島など全国主要空港の遭遇レーダーを掲載。";
 
 const currentData = predictionData;
 const aircraft = currentData.aircraft;
@@ -44,7 +44,7 @@ const pageSchema = {
 			<h2 class="dash-title">✈️ ANAちいかわジェット 週間フライト確率予報</h2>
 			<p class="dash-lead">
 				世界に1機だけの特別塗装機<b>「ちいかわジェット（JA609A・ボーイング767-300ER）」</b>。<br />
-				本日のリアルタイム運航状況から、明日の始発便ダイヤ、さらに向こう1週間の路線投入確率をANA同型機データ（計{currentData.dbStats.totalFleetFlights}便）をもとに毎日自動解析・更新しています。
+				本日のリアルタイム運航状況から、明日の始発便ダイヤ、さらに向こう1週間の路線投入確率を、過去の運航データやダイヤ傾向（ANA同型機の蓄積フライト計{currentData.dbStats.totalFleetFlights}便）をもとに独自分析・毎日更新しています。
 			</p>
 		</div>
 
@@ -80,37 +80,37 @@ const pageSchema = {
 				</div>
 			</div>
 			<div class="status-tips">
-				💡 <b>先読みの法則</b>: 旅客機は夜間駐機した地方空港から翌朝の「朝一番便（羽田行き等）」に充当されるため、前夜にナイトステイ先が分かれば翌朝のフライトはほぼ100%特定できます！
+				💡 <b>先読みのポイント</b>: 旅客機は夜間駐機した地方空港から翌朝の「朝一番便（羽田行き等）」に充当されるため、前夜にナイトステイ先が分かれば翌朝のフライトはほぼ特定できます！
 			</div>
 		</div>
 
 		<!-- 読者への独自予測アピールバナー -->
 		<div class="prediction-feature-banner">
-			<div class="feature-badge">⚡ 当サイトだけの独自先読みロジック</div>
-			<h3 class="feature-title">公式発表は「当日朝」。でも当サイトなら「前夜」に明日の初便を95%特定できる理由</h3>
+			<div class="feature-badge">✈️ 運航ダイヤの独自分析</div>
+			<h3 class="feature-title">公式発表は「当日朝」。それでも「前夜」に明日の初便が高確率でわかる仕組み</h3>
 			<p class="feature-intro">
-				「ちいかわジェットに乗りたい」「空港の展望デッキで撮影したい」というファンのために、航空機の物理運用ルールとビッグデータを融合した独自予測エンジンを開発しました。
+				「ちいかわジェットに乗りたい」「空港の展望デッキで撮影したい」というファンのために、航空機の運用ルールと過去のフライト実績データを組み合わせ、翌日のスケジュールを独自に分析・予想しています。
 			</p>
 			<div class="feature-cards-grid">
 				<div class="f-card">
 					<div class="f-icon">🌙</div>
-					<h4 class="f-name">① 物理法則「ナイトステイ」先読み</h4>
+					<h4 class="f-name">① 夜間駐機（ナイトステイ）の運用ルール</h4>
 					<p class="f-desc">
-						旅客機は夜最後に到着した地方空港で夜を明かします。翌朝はその空港からの始発便（羽田行き等）にほぼ100%投入されるという<b>航空機の物理運用ルール</b>を活用し、前夜の時点で翌朝一番のダイヤを特定します。
+						旅客機は夜最後に到着した地方空港で夜を明かします。翌朝はその空港からの始発便（羽田行き等）に投入されるという<b>航空機の運用ルール</b>を活用し、前夜の時点で翌朝一番のダイヤを特定します。
 					</p>
 				</div>
 				<div class="f-card">
 					<div class="f-icon">📊</div>
-					<h4 class="f-name">② ANA同型機238便のビッグデータ</h4>
+					<h4 class="f-name">② ANA同型機の運航実績データ</h4>
 					<p class="f-desc">
-						ちいかわジェット（JA609A）だけでなく、同じ路線群を担当するANA保有の<b>B767-300ER型機全15機の運航履歴</b>を独自蓄積。「羽田着陸後、次どこへ飛ぶ確率が高いか？」を統計分析して週間確率を算出しています。
+						ちいかわジェット（JA609A）だけでなく、同じ路線群を担当するANA保有の<b>B767-300ER型機全15機のフライト履歴</b>を分析。「羽田到着後、次どこへ飛ぶ傾向があるか？」のパターンを蓄積して週間スケジュールを割り出しています。
 					</p>
 				</div>
 				<div class="f-card">
 					<div class="f-icon">⏱️</div>
-					<h4 class="f-name">③ 1日4回のリアルタイム自動補正</h4>
+					<h4 class="f-name">③ 1日を通したリアルタイム追跡</h4>
 					<p class="f-desc">
-						朝7時（初回予想）➔ 昼12時（午前便消化・遅延補正）➔ 夕方18時（ナイトステイ先見通し）➔ 夜22時（翌朝初便の確定）と、Flightradar24と直結して刻一刻と変わる運航計画に完全追従します。
+						朝の初回予想から昼の運航状況、夕方のナイトステイ先見通し、夜の翌朝初便確定まで、実際のフライト状況に合わせて最新の運行予想にアップデートしています。
 					</p>
 				</div>
 			</div>
@@ -417,16 +417,16 @@ const pageSchema = {
 		<!-- 中盤セクション区切り 手動広告枠 (4644769398) -->
 		<Ad position="bottom" />
 
-		<!-- AI予測精度スコアボード＆過去の答え合わせ -->
+		<!-- 運行予想の的中実績＆答え合わせ -->
 		<div class="accuracy-section">
-			<h2 class="section-heading">🎯 AI予測精度スコアボード＆過去の的中実績</h2>
+			<h2 class="section-heading">🎯 運行予想の的中実績（答え合わせ）</h2>
 			<p class="section-sub">
-				「本当に当たるの？」という疑問にお答えするため、毎日のナイトステイ予測と実際の運航実績をすべて照合・公開しています。
+				「予想はどれくらい当たっているの？」という疑問にお答えするため、毎日の運行予想と実際のフライト実績をすべて照合・公開しています。
 			</p>
 
 			<div class="accuracy-scoreboard">
 				<div class="score-main-card">
-					<span class="score-badge">高精度1日通しモデル</span>
+					<span class="score-badge">直近の的中実績</span>
 					<div class="score-number-wrap">
 						<span class="score-rate">{accuracyStats.dailyFullHitRate || accuracyStats.firstFlightHitRate}%</span>
 						<span class="score-label">1日通しルート的中率</span>
@@ -452,7 +452,7 @@ const pageSchema = {
 				</div>
 
 				<div class="past-verifications-wrap">
-					<h3 class="past-title">📋 直近の予測と実績（1日通し答え合わせタイムライン）</h3>
+					<h3 class="past-title">📋 直近の予想と実績（答え合わせタイムライン）</h3>
 					<div class="past-list">
 						{pastPredictions.map((p) => (
 							<div class="past-item">
@@ -506,7 +506,7 @@ const pageSchema = {
 		<div class="radar-section">
 			<h2 class="section-heading">📍 【公式就航17空港】ちいかわジェット遭遇確率レーダー</h2>
 			<p class="section-sub">
-				あなたの最寄り空港に向こう1週間でちいかわジェットが飛来する確率をAIデータ分析でランク付けしました。
+				あなたの最寄り空港に向こう1週間でちいかわジェットが飛来する確率を、過去の運航データとダイヤ傾向から算出しました。
 			</p>
 
 			<div class="radar-grid">
@@ -747,64 +747,64 @@ const pageSchema = {
 	}
 
 	.prediction-feature-banner {
-		background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+		background: #f0f7ff;
+		border: 1px solid #bae6fd;
 		border-radius: 12px;
-		padding: 1.75rem;
-		margin-bottom: 2.5rem;
-		color: #ffffff;
-		box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+		padding: 1.5rem 1.75rem;
+		margin-bottom: 2rem;
+		color: #0f172a;
 	}
 	.feature-badge {
 		display: inline-block;
-		background: #f59e0b;
-		color: #000000;
+		background: #0284c7;
+		color: #ffffff;
 		font-size: 0.75rem;
-		font-weight: 800;
-		padding: 0.2rem 0.6rem;
+		font-weight: 700;
+		padding: 0.2rem 0.65rem;
 		border-radius: 9999px;
-		letter-spacing: 0.05em;
-		margin-bottom: 0.75rem;
+		letter-spacing: 0.03em;
+		margin-bottom: 0.6rem;
 	}
 	.feature-title {
-		font-size: 1.35rem;
+		font-size: 1.25rem;
 		font-weight: 700;
-		color: #ffffff;
-		margin: 0 0 0.5rem 0;
-		line-height: 1.4;
+		color: #0f172a;
+		margin: 0 0 0.45rem 0;
+		line-height: 1.45;
 	}
 	.feature-intro {
-		font-size: 0.9rem;
-		color: #cbd5e1;
-		margin: 0 0 1.25rem 0;
+		font-size: 0.88rem;
+		color: #334155;
+		margin: 0 0 1.2rem 0;
 		line-height: 1.6;
 	}
 	.feature-cards-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-		gap: 1rem;
+		gap: 0.85rem;
 	}
 	.f-card {
-		background: rgba(255, 255, 255, 0.08);
-		border: 1px solid rgba(255, 255, 255, 0.15);
+		background: #ffffff;
+		border: 1px solid #cbd5e1;
 		border-radius: 8px;
 		padding: 1rem 1.15rem;
-		backdrop-filter: blur(4px);
+		box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 	}
 	.f-icon {
-		font-size: 1.5rem;
-		margin-bottom: 0.35rem;
+		font-size: 1.4rem;
+		margin-bottom: 0.3rem;
 	}
 	.f-name {
-		font-size: 0.95rem;
-		color: #67e8f9;
-		margin: 0 0 0.4rem 0;
+		font-size: 0.92rem;
+		color: #0369a1;
+		margin: 0 0 0.35rem 0;
 		font-weight: 700;
 	}
 	.f-desc {
 		font-size: 0.82rem;
-		color: #e2e8f0;
+		color: #475569;
 		margin: 0;
-		line-height: 1.6;
+		line-height: 1.55;
 	}
 
 	.section-heading {
@@ -1340,7 +1340,7 @@ const pageSchema = {
 		line-height: 1.4;
 	}
 
-	/* AI予測精度スコアボード */
+	/* 運行予想の的中実績スコアボード */
 	.accuracy-section {
 		margin-top: 2.5rem;
 		margin-bottom: 2.5rem;
@@ -1352,55 +1352,53 @@ const pageSchema = {
 		margin-top: 1rem;
 	}
 	.score-main-card {
-		background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-		border: 2px solid #f59e0b;
+		background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%);
+		border: 1px solid #0284c7;
 		border-radius: 12px;
-		padding: 1.5rem;
+		padding: 1.4rem 1.5rem;
 		color: #ffffff;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		box-shadow: 0 4px 15px rgba(245, 158, 11, 0.15);
+		box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
 	}
 	.score-badge {
 		align-self: flex-start;
-		background: #f59e0b;
-		color: #000000;
+		background: #ffffff;
+		color: #0369a1;
 		font-size: 0.75rem;
-		font-weight: 800;
-		padding: 0.2rem 0.6rem;
+		font-weight: 700;
+		padding: 0.2rem 0.65rem;
 		border-radius: 9999px;
-		letter-spacing: 0.05em;
+		letter-spacing: 0.03em;
 	}
 	.score-number-wrap {
-		margin: 1.25rem 0;
+		margin: 1rem 0;
 		text-align: center;
 	}
 	.score-rate {
 		display: block;
 		font-size: 3.5rem;
-		font-weight: 900;
+		font-weight: 800;
 		line-height: 1;
-		background: linear-gradient(135deg, #fbbf24 0%, #fef08a 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
+		color: #ffffff;
 		letter-spacing: -0.02em;
 	}
 	.score-label {
 		display: block;
-		margin-top: 0.5rem;
+		margin-top: 0.45rem;
 		font-size: 0.9rem;
-		color: #cbd5e1;
+		color: #e0f2fe;
 		font-weight: 600;
 	}
 	.score-sub-stats {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(2, 1fr);
 		gap: 0.5rem;
-		background: rgba(255, 255, 255, 0.05);
-		border: 1px solid rgba(255, 255, 255, 0.1);
+		background: rgba(255, 255, 255, 0.12);
+		border: 1px solid rgba(255, 255, 255, 0.2);
 		border-radius: 8px;
-		padding: 0.75rem 0.5rem;
+		padding: 0.65rem 0.5rem;
 		text-align: center;
 	}
 	.sub-stat-item {
@@ -1414,11 +1412,11 @@ const pageSchema = {
 		color: #ffffff;
 	}
 	.sub-stat-num.highlight-gold {
-		color: #fbbf24;
+		color: #fef08a;
 	}
 	.sub-stat-desc {
 		font-size: 0.68rem;
-		color: #94a3b8;
+		color: #e0f2fe;
 		line-height: 1.2;
 	}
 
