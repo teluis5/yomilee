@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年10月27日 12:00",
-  "updatedAtIso": "2026-10-27T03:00:27.950Z",
+  "updatedAt": "2026年10月27日 13:00",
+  "updatedAtIso": "2026-10-27T04:00:23.654Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "札幌(新千歳)",
-    "currentLocationCode": "CTS",
-    "isAirborne": false,
+    "currentLocation": "札幌(新千歳) ➔ 東京(羽田) へ飛行中",
+    "currentLocationCode": "HND",
+    "isAirborne": true,
     "nightStay": "長崎 (40%) / 広島 (30%) / 東京(羽田) (20%) [今夜の駐機確率]",
-    "nightStayCode": "CTS",
+    "nightStayCode": "HND",
     "isNightStayConfirmed": false,
     "nightStayProbabilities": [
       {
@@ -109,19 +109,19 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降予測）",
-      "currentAirport": "札幌(新千歳)",
+      "currentAirport": "札幌(新千歳) ➔ 東京(羽田) へ飛行中",
       "nightStay": "長崎 (40%) / 広島 (30%) / 東京(羽田) (20%) [今夜の駐機確率]",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "⏳ 本日の今夜の駐機先は「長崎 40% / 広島 30% / 羽田 20%」の確率で推移しています。夕方便で羽田へ戻った後の19時台の最終便アサイン（17:30〜19:00頃）で100%確定します。",
       "todayOutlook": {
         "title": "本日のこの後のフライト見通し＆夜の展開（確率予測）",
-        "currentFlightNote": "現在、NH59便（東京(羽田) ➔ 札幌(新千歳)、11:35着予定）を運航中",
+        "currentFlightNote": "現在、NH62便（札幌(新千歳) ➔ 東京(羽田)、14:10着予定）を運航中",
         "turnaround": {
-          "flightNo": "NH74 (予測)",
-          "route": "札幌(新千歳) ➔ 東京(羽田)",
-          "time": "17:30発 - 19:10着",
+          "flightNo": "ANA復路便 (予測)",
+          "route": "東京(羽田) ➔ 東京(羽田)",
+          "time": "17:30頃発 - 19:00頃着",
           "probability": 85,
-          "desc": "札幌(新千歳)到着後、約40〜45分の折返し時間で羽田へ戻る復路便（過去実績から確率85%）。羽田空港の展望デッキ・お出迎えは19:10頃が狙い目です。"
+          "desc": "東京(羽田)到着後、約40〜45分の折返し時間で羽田へ戻る復路便（過去実績から確率85%）。羽田空港の展望デッキ・お出迎えは19:00頃頃が狙い目です。"
         },
         "nightScenarios": [
           {
@@ -139,7 +139,7 @@
           {
             "label": "対抗 ▲【羽田そのままステイ】",
             "prob": 20,
-            "summary": "19:10羽田到着後、本日の全運航を終えて羽田で夜間駐機・整備",
+            "summary": "19:00頃羽田到着後、本日の全運航を終えて羽田で夜間駐機・整備",
             "detail": "明朝は羽田始発便（長崎・広島・福岡など）からスタートします。"
           }
         ],
@@ -177,19 +177,12 @@
           "planName": "プランA",
           "rank": "本命 ◎",
           "probability": 45,
-          "title": "【今夜長崎ステイ】札幌(新千歳)折返し ➔ 羽田 ➔ 長崎(泊)",
-          "routeSummary": "札幌(新千歳) ➔ 羽田 ➔ 長崎(泊)",
+          "title": "【今夜長崎ステイ】羽田 ➔ 長崎(泊)",
+          "routeSummary": "羽田 ➔ 長崎(泊)",
           "description": "夕方便で羽田へ戻った後、夜の最終便（NH669: 19:15発）で長崎へ向かい今夜ナイトステイする王道シナリオ",
           "flights": [
             {
-              "step": "① 夕方復路",
-              "time": "17:30発 - 19:10着",
-              "flightNo": "NH74 (予測)",
-              "route": "札幌(新千歳) ➔ 東京(羽田)",
-              "tag": "羽田帰還 (確率85%)"
-            },
-            {
-              "step": "② 夜最終便",
+              "step": "① 夜最終便",
               "time": "19:15発 - 21:15着",
               "flightNo": "NH669 (予測)",
               "route": "東京(羽田) ➔ 長崎",
@@ -202,19 +195,12 @@
           "planName": "プランB",
           "rank": "有力 ◯",
           "probability": 35,
-          "title": "【今夜広島ステイ】札幌(新千歳)折返し ➔ 羽田 ➔ 広島(泊)",
-          "routeSummary": "札幌(新千歳) ➔ 羽田 ➔ 広島(泊)",
+          "title": "【今夜広島ステイ】羽田 ➔ 広島(泊)",
+          "routeSummary": "羽田 ➔ 広島(泊)",
           "description": "羽田帰還後、19:30発の広島行き最終便（NH685）に充当され、広島空港で夜間駐機するパターン",
           "flights": [
             {
-              "step": "① 夕方復路",
-              "time": "17:30発 - 19:10着",
-              "flightNo": "NH74 (予測)",
-              "route": "札幌(新千歳) ➔ 東京(羽田)",
-              "tag": "羽田帰還 (確率85%)"
-            },
-            {
-              "step": "② 夜最終便",
+              "step": "① 夜最終便",
               "time": "19:30発 - 21:00着",
               "flightNo": "NH685 (予測)",
               "route": "東京(羽田) ➔ 広島",
@@ -227,19 +213,12 @@
           "planName": "プランC",
           "rank": "対抗 ▲",
           "probability": 20,
-          "title": "【今夜羽田ステイ】札幌(新千歳)折返し ➔ 羽田夜間駐機(泊)",
-          "routeSummary": "札幌(新千歳) ➔ 羽田(泊)",
+          "title": "【今夜羽田ステイ】羽田夜間駐機(泊)",
+          "routeSummary": "羽田(泊)",
           "description": "夕方便で羽田到着後、夜の追加運航を行わずに羽田で夜間駐機・機材整備に入るパターン（明朝は羽田始発）",
           "flights": [
             {
-              "step": "① 夕方復路",
-              "time": "17:30発 - 19:10着",
-              "flightNo": "NH74 (予測)",
-              "route": "札幌(新千歳) ➔ 東京(羽田)",
-              "tag": "羽田帰還 (確率85%)"
-            },
-            {
-              "step": "② 夜間駐機",
+              "step": "① 夜間駐機",
               "time": "19:30以降",
               "flightNo": "ステイ便なし",
               "route": "東京(羽田) そのまま夜間駐機",
@@ -265,6 +244,15 @@
           "status": "着陸済 (11:23)",
           "isLanded": true,
           "isLive": false,
+          "isPredicted": false
+        },
+        {
+          "flightNo": "NH62",
+          "route": "札幌(新千歳) ➔ 東京(羽田)",
+          "time": "12:30発 - 14:10着",
+          "status": "飛行中 ✈️",
+          "isLanded": false,
+          "isLive": true,
           "isPredicted": false
         }
       ]
@@ -394,22 +382,22 @@
           "planName": "プランC",
           "rank": "対抗 ▲",
           "probability": 20,
-          "title": "【今夜札幌(新千歳)で夜間駐機する場合】札幌(新千歳)始発 ➔ 福岡・新千歳ルート",
-          "routeSummary": "札幌(新千歳) ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田",
+          "title": "【今夜東京(羽田)で夜間駐機する場合】東京(羽田)始発 ➔ 福岡・新千歳ルート",
+          "routeSummary": "東京(羽田) ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田",
           "airports": [
-            "札幌(新千歳)",
+            "東京(羽田)",
             "東京(羽田)",
             "福岡",
             "札幌(新千歳)"
           ],
-          "description": "今夜札幌(新千歳)空港でナイトステイし、明朝NH50便（07:30発）で羽田へ向かう場合の1日通しダイヤ",
+          "description": "今夜東京(羽田)空港でナイトステイし、明朝NH661便（08:15発）で羽田へ向かう場合の1日通しダイヤ",
           "flights": [
             {
               "step": "① 朝一便",
-              "time": "07:30発 - 09:10着",
-              "flightNo": "NH50",
-              "route": "札幌(新千歳) ➔ 東京(羽田)",
-              "tag": "札幌(新千歳)始発"
+              "time": "08:15発 - 10:10着",
+              "flightNo": "NH661",
+              "route": "東京(羽田) ➔ 長崎",
+              "tag": "東京(羽田)始発"
             },
             {
               "step": "② 午前便",
@@ -928,7 +916,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 296,
+    "totalFleetFlights": 300,
     "fleetCount": 15
   }
 }
