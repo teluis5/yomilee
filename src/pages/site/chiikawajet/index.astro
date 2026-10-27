@@ -50,6 +50,15 @@ const pageSchema = {
 				<div class="status-box">
 					<span class="status-label">現在の位置</span>
 					<div class="status-val-main">{aircraft.currentLocation}</div>
+					{todayData && todayData.flights && todayData.flights.length > 0 && (() => {
+						const actFls = todayData.flights.filter((fl) => !fl.isPredicted);
+						const lastFl = actFls.length > 0 ? actFls[actFls.length - 1] : todayData.flights[0];
+						return (
+							<div style="font-size: 0.78rem; color: #0369a1; font-weight: 600;">
+								直近便: {lastFl.flightNo} ({lastFl.time})
+							</div>
+						);
+					})()}
 				</div>
 
 				<div class="status-box">
@@ -202,6 +211,7 @@ const pageSchema = {
 									<div class={`pcf-chip ${f.isHit ? 'hit' : 'miss'}`}>
 										<span class="pcf-no">{f.flightNo}</span>
 										<span class="pcf-rt">{f.route}</span>
+										{f.time && <span style="color: #64748b; font-size: 0.72rem;">({f.time.replace(/発 - /g, '-').replace(/着/g, '')})</span>}
 										<span class="pcf-res">{f.isHit ? '◯' : '△'}</span>
 									</div>
 								))}
