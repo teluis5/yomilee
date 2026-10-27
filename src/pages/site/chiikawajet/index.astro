@@ -84,38 +84,6 @@ const pageSchema = {
 			</div>
 		</div>
 
-		<!-- 読者への独自予測アピールバナー -->
-		<div class="prediction-feature-banner">
-			<div class="feature-badge">✈️ 運航ダイヤの独自分析</div>
-			<h3 class="feature-title">公式発表は「当日朝」。それでも「前夜」に明日の初便が高確率でわかる仕組み</h3>
-			<p class="feature-intro">
-				「ちいかわジェットに乗りたい」「空港の展望デッキで撮影したい」というファンのために、航空機の運用ルールと過去のフライト実績データを組み合わせ、翌日のスケジュールを独自に分析・予想しています。
-			</p>
-			<div class="feature-cards-grid">
-				<div class="f-card">
-					<div class="f-icon">🌙</div>
-					<h4 class="f-name">① 夜間駐機（ナイトステイ）の運用ルール</h4>
-					<p class="f-desc">
-						旅客機は夜最後に到着した地方空港で夜を明かします。翌朝はその空港からの始発便（羽田行き等）に投入されるという<b>航空機の運用ルール</b>を活用し、前夜の時点で翌朝一番のダイヤを特定します。
-					</p>
-				</div>
-				<div class="f-card">
-					<div class="f-icon">📊</div>
-					<h4 class="f-name">② ANA同型機の運航実績データ</h4>
-					<p class="f-desc">
-						ちいかわジェット（JA609A）だけでなく、同じ路線群を担当するANA保有の<b>B767-300ER型機全15機のフライト履歴</b>を分析。「羽田到着後、次どこへ飛ぶ傾向があるか？」のパターンを蓄積して週間スケジュールを割り出しています。
-					</p>
-				</div>
-				<div class="f-card">
-					<div class="f-icon">⏱️</div>
-					<h4 class="f-name">③ 1日を通したリアルタイム追跡</h4>
-					<p class="f-desc">
-						朝の初回予想から昼の運航状況、夕方のナイトステイ先見通し、夜の翌朝初便確定まで、実際のフライト状況に合わせて最新の運行予想にアップデートしています。
-					</p>
-				</div>
-			</div>
-		</div>
-
 		<!-- 週間フライト確率カレンダー -->
 		<div class="weekly-section">
 			<h2 class="section-heading">📅 向こう1週間の運行予定＆確率カレンダー</h2>
@@ -204,101 +172,40 @@ const pageSchema = {
 									<div class="today-outlook-card">
 										<div class="to-header">
 											<div class="to-header-left">
-												<span class="to-badge">🔮 今日のこの後の予定・フライト見通し</span>
+												<span class="to-badge">🔮 今日のこの後の見通し</span>
 												<strong class="to-title">{day.todayOutlook.title}</strong>
 											</div>
 											<span class="to-cur-note">📍 {day.todayOutlook.currentFlightNote}</span>
 										</div>
 
-										<div class="to-grid">
-											<!-- ① 夕方折返し便（確実） -->
-											<div class="to-box to-turnaround">
-												<div class="to-box-head">
-													<span class="to-tag tag-high">ほぼ確実・確率 {day.todayOutlook.turnaround.probability}%</span>
-													<h4 class="to-box-h">🔄 夕方の折返し羽田帰還便</h4>
+										<div class="to-grid-compact">
+											<!-- ① 夕方折返し便 -->
+											<div class="to-box-compact">
+												<div class="to-box-head-compact">
+													<span class="to-tag tag-high">確実（{day.todayOutlook.turnaround.probability}%）</span>
+													<b class="to-box-title">🔄 夕方の折返し羽田便</b>
 												</div>
-												<div class="to-flight-line">
-													<strong class="to-fno">{day.todayOutlook.turnaround.flightNo}</strong>
-													<strong class="to-time">⏰ {day.todayOutlook.turnaround.time}</strong>
+												<div class="to-flight-line-compact">
+													<span class="to-fno">{day.todayOutlook.turnaround.flightNo}</span>
 													<span class="to-route">{day.todayOutlook.turnaround.route}</span>
+													<span class="to-time">⏰ {day.todayOutlook.turnaround.time}</span>
 												</div>
-												<p class="to-desc">{day.todayOutlook.turnaround.desc}</p>
 											</div>
 
-											<!-- ② 今夜の夜間駐機シナリオ（2択） -->
-											<div class="to-box to-night">
-												<div class="to-box-head">
-													<span class="to-tag tag-scenarios">19時以降の着地予想</span>
-													<h4 class="to-box-h">🌙 今夜の夜間駐機（ナイトステイ）シナリオ</h4>
+											<!-- ② 今夜の駐機先確率 -->
+											<div class="to-box-compact">
+												<div class="to-box-head-compact">
+													<span class="to-tag tag-scenarios">夜間着地予想</span>
+													<b class="to-box-title">🌙 今夜のナイトステイ駐機先</b>
 												</div>
-												<div class="to-scenarios-list">
+												<div class="to-scenarios-compact">
 													{day.todayOutlook.nightScenarios.map((sc) => (
-														<div class="to-sc-item">
-															<div class="sc-head">
-																<b class="sc-label">{sc.label}</b>
-																<span class="sc-prob">確率 <strong>{sc.prob}%</strong></span>
-															</div>
-															<p class="sc-sum">{sc.summary}</p>
-															<small class="sc-sub">{sc.detail}</small>
-														</div>
+														<span class="to-sc-pill">
+															<b>{sc.label}</b> {sc.prob}%
+														</span>
 													))}
 												</div>
 											</div>
-										</div>
-
-										<div class="to-footer">
-											<span>{day.todayOutlook.notice}</span>
-										</div>
-									</div>
-								)}
-
-								{day.plans && day.plans.length > 0 && (
-									<div class="today-plans-wrapper">
-										<div class="timeline-intro-bar highlight-amber">
-											<span class="timeline-intro-icon">🎯</span>
-											<span>本日の残りフライト展開シナリオ（確率別プランA〜C）:</span>
-										</div>
-										<div class="plans-container">
-											{day.plans.map((plan) => (
-												<details class={`plan-card ${plan.planId}`} open>
-													<summary class="plan-summary">
-														<div class="plan-summary-left">
-															<span class={`plan-name-badge ${plan.planId}`}>{plan.planName}</span>
-															<span class="plan-prob-badge">
-																確率 <strong>{plan.probability}%</strong>
-																<small>({plan.rank})</small>
-															</span>
-															<strong class="plan-route-title">{plan.title}</strong>
-														</div>
-														<div class="plan-summary-right">
-															<span class="plan-route-flow">{plan.routeSummary}</span>
-															<span class="plan-detail-btn">詳細 ▾</span>
-														</div>
-													</summary>
-													<div class="plan-detail-body">
-														<div class="plan-desc-bar">
-															<span>💡 {plan.description}</span>
-														</div>
-														<div class="plan-flights-timeline">
-															{plan.flights.map((f) => (
-																<div class="plan-flight-row">
-																	<div class="pf-left">
-																		<span class="pf-step">{f.step}</span>
-																		<strong class="pf-time">{f.time}</strong>
-																	</div>
-																	<div class="pf-center">
-																		<strong class="pf-fno">{f.flightNo}</strong>
-																		<span class="pf-route">{f.route}</span>
-																	</div>
-																	<div class="pf-right">
-																		<span class="pf-tag">{f.tag}</span>
-																	</div>
-																</div>
-															))}
-														</div>
-													</div>
-												</details>
-											))}
 										</div>
 									</div>
 								)}
@@ -334,7 +241,7 @@ const pageSchema = {
 								<!-- プランA / プランB / プランC リスト -->
 								<div class="plans-container">
 									{(day.plans || []).map((plan) => (
-										<details class={`plan-card ${plan.planId}`} open data-airports={(plan.airports || []).join(',')}>
+										<details class={`plan-card ${plan.planId}`} open={plan.planId === 'plan-a'} data-airports={(plan.airports || []).join(',')}>
 											<summary class="plan-summary">
 												<div class="plan-summary-left">
 													<span class={`plan-name-badge ${plan.planId}`}>{plan.planName}</span>
@@ -452,9 +359,9 @@ const pageSchema = {
 				</div>
 
 				<div class="past-verifications-wrap">
-					<h3 class="past-title">📋 直近の予想と実績（答え合わせタイムライン）</h3>
+					<h3 class="past-title">📋 直近の予想と実績（答え合わせ）</h3>
 					<div class="past-list">
-						{pastPredictions.map((p) => (
+						{pastPredictions.slice(0, 2).map((p) => (
 							<div class="past-item">
 								<div class="past-item-header">
 									<div class="past-header-left">
@@ -497,6 +404,60 @@ const pageSchema = {
 								<p class="past-reason">💡 的中根拠: {p.reason}</p>
 							</div>
 						))}
+
+						{pastPredictions.length > 2 && (
+							<details class="past-more-accordion">
+								<summary class="past-more-summary">
+									<span>過去の実績をもっと見る（直近{pastPredictions.length}日分）</span>
+									<span class="pm-arrow">▾</span>
+								</summary>
+								<div class="past-more-body">
+									{pastPredictions.slice(2).map((p) => (
+										<div class="past-item" style="margin-top: 0.75rem;">
+											<div class="past-item-header">
+												<div class="past-header-left">
+													<span class="past-date">{p.date}</span>
+													<span class="past-type">{p.type}</span>
+												</div>
+												<span class="past-hit-badge">{p.hitLabel}</span>
+											</div>
+											<div class="past-comparison">
+												<div class="past-col">
+													<span class="past-col-label">【前夜の1日予想】</span>
+													<strong class="past-pred-val">{p.predicted}</strong>
+												</div>
+												<div class="past-arrow">➔</div>
+												<div class="past-col">
+													<span class="past-col-label">【当日の実際の運航】</span>
+													<strong class="past-actual-val">{p.actual}</strong>
+												</div>
+											</div>
+											{p.flights && p.flights.length > 0 && (
+												<div class="past-daily-flights">
+													<div class="pdf-title">1日の全フライト内訳＆個別照合:</div>
+													<div class="pdf-grid">
+														{p.flights.map((f) => (
+															<div class={`pdf-item ${f.isHit ? 'is-hit' : 'is-miss'}`}>
+																<div class="pdf-step-line">
+																	<span class="pdf-step">{f.step}</span>
+																	<span class="pdf-badge">{f.hitLabel}</span>
+																</div>
+																<div class="pdf-flight-info">
+																	<strong class="pdf-flight-no">{f.flightNo}</strong>
+																	<span class="pdf-route">{f.route}</span>
+																</div>
+																<span class="pdf-time">{f.time}</span>
+															</div>
+														))}
+													</div>
+												</div>
+											)}
+											<p class="past-reason">💡 的中根拠: {p.reason}</p>
+										</div>
+									))}
+								</div>
+							</details>
+						)}
 					</div>
 				</div>
 			</div>
@@ -510,7 +471,7 @@ const pageSchema = {
 			</p>
 
 			<div class="radar-grid">
-				{airportRadar.map((a) => (
+				{airportRadar.slice(0, 7).map((a) => (
 					<div class="radar-card">
 						<div class="radar-header">
 							<div class="airport-title">
@@ -527,6 +488,33 @@ const pageSchema = {
 					</div>
 				))}
 			</div>
+
+			{airportRadar.length > 7 && (
+				<details class="radar-more-accordion">
+					<summary class="radar-more-summary">
+						<span>その他の就航空港（{airportRadar.length - 7}空港）の遭遇確率を見る</span>
+						<span class="rm-arrow">▾</span>
+					</summary>
+					<div class="radar-grid radar-more-grid">
+						{airportRadar.slice(7).map((a) => (
+							<div class="radar-card radar-card-sub">
+								<div class="radar-header">
+									<div class="airport-title">
+										<strong class="airport-name">{a.name}</strong>
+										<span class="airport-code">{a.code}</span>
+									</div>
+									<div class="radar-level-badge">{a.level}</div>
+								</div>
+								<div class="radar-meter">
+									<div class="radar-meter-fill" style={`width: ${a.prob}%`}></div>
+								</div>
+								<div class="radar-prob-num">遭遇確率: <b>{a.prob}%</b></div>
+								<p class="radar-note">{a.note}</p>
+							</div>
+						))}
+					</div>
+				</details>
+			)}
 		</div>
 
 		<!-- ANA公式就航路線一覧カード -->
@@ -580,6 +568,44 @@ const pageSchema = {
 
 		<!-- 狙い撃ち搭乗＆撮影の極意 -->
 		<div class="tips-section">
+			<!-- 独自分析の仕組み（折りたたみ） -->
+			<details class="logic-accordion">
+				<summary class="logic-summary">
+					<span>💡 なぜ前夜に翌朝のフライトが高確率でわかるの？（仕組みを見る）</span>
+					<span class="logic-arrow">▾</span>
+				</summary>
+				<div class="prediction-feature-banner">
+					<div class="feature-badge">✈️ 運航ダイヤの独自分析</div>
+					<h3 class="feature-title">公式発表は「当日朝」。それでも「前夜」に明日の初便が高確率でわかる仕組み</h3>
+					<p class="feature-intro">
+						「ちいかわジェットに乗りたい」「空港の展望デッキで撮影したい」というファンのために、航空機の運用ルールと過去のフライト実績データを組み合わせ、翌日のスケジュールを独自に分析・予想しています。
+					</p>
+					<div class="feature-cards-grid">
+						<div class="f-card">
+							<div class="f-icon">🌙</div>
+							<h4 class="f-name">① 夜間駐機（ナイトステイ）の運用ルール</h4>
+							<p class="f-desc">
+								旅客機は夜最後に到着した地方空港で夜を明かします。翌朝はその空港からの始発便（羽田行き等）に投入されるという<b>航空機の運用ルール</b>を活用し、前夜の時点で翌朝一番のダイヤを特定します。
+							</p>
+						</div>
+						<div class="f-card">
+							<div class="f-icon">📊</div>
+							<h4 class="f-name">② ANA同型機の運航実績データ</h4>
+							<p class="f-desc">
+								ちいかわジェット（JA609A）だけでなく、同じ路線群を担当するANA保有の<b>B767-300ER型機全15機のフライト履歴</b>を分析。「羽田到着後、次どこへ飛ぶ傾向があるか？」のパターンを蓄積して週間スケジュールを割り出しています。
+							</p>
+						</div>
+						<div class="f-card">
+							<div class="f-icon">⏱️</div>
+							<h4 class="f-name">③ 1日を通したリアルタイム追跡</h4>
+							<p class="f-desc">
+								朝の初回予想から昼の運航状況、夕方のナイトステイ先見通し、夜の翌朝初便確定まで、実際のフライト状況に合わせて最新の運行予想にアップデートしています。
+							</p>
+						</div>
+					</div>
+				</div>
+			</details>
+
 			<h2 class="section-heading">🔍 ちいかわジェットを狙い撃ちする3大鉄則</h2>
 			<div class="tips-grid">
 				<div class="tip-box">
@@ -1939,14 +1965,13 @@ const pageSchema = {
 		font-weight: 600;
 	}
 
-	/* 今日のこの後の予定・見通しカード */
+	/* 今日のこの後の予定・見通しカード（コンパクト版） */
 	.today-outlook-card {
-		margin-top: 1.5rem;
-		background: #ffffff;
-		border: 2px solid #0284c7;
-		border-radius: 12px;
-		padding: 1.25rem;
-		box-shadow: 0 4px 14px rgba(2, 132, 199, 0.08);
+		margin-top: 1rem;
+		background: #f8fafc;
+		border: 1px solid #bae6fd;
+		border-radius: 10px;
+		padding: 0.85rem 1rem;
 	}
 	.to-header {
 		display: flex;
@@ -1954,72 +1979,60 @@ const pageSchema = {
 		justify-content: space-between;
 		flex-wrap: wrap;
 		gap: 0.5rem;
-		padding-bottom: 0.85rem;
-		border-bottom: 1px solid #e0f2fe;
-		margin-bottom: 1rem;
+		padding-bottom: 0.5rem;
+		border-bottom: 1px dashed #cbd5e1;
+		margin-bottom: 0.75rem;
 	}
 	.to-header-left {
-		display: flex;
-		align-items: center;
-		gap: 0.6rem;
-		flex-wrap: wrap;
-	}
-	.to-badge {
-		background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-		color: #ffffff;
-		font-size: 0.8rem;
-		font-weight: 800;
-		padding: 0.25rem 0.65rem;
-		border-radius: 6px;
-	}
-	.to-title {
-		font-size: 1.05rem;
-		color: #0f172a;
-	}
-	.to-cur-note {
-		font-size: 0.85rem;
-		color: #0369a1;
-		font-weight: 700;
-		background: #e0f2fe;
-		padding: 0.25rem 0.6rem;
-		border-radius: 6px;
-	}
-	.to-grid {
-		display: grid;
-		grid-template-columns: 1fr 1.1fr;
-		gap: 1rem;
-	}
-	.to-box {
-		border-radius: 10px;
-		padding: 1rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.6rem;
-	}
-	.to-turnaround {
-		background: #f8fafc;
-		border: 1.5px solid #cbd5e1;
-	}
-	.to-night {
-		background: #f0fdf4;
-		border: 1.5px solid #86efac;
-	}
-	.to-box-head {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
 		flex-wrap: wrap;
 	}
-	.to-box-h {
-		margin: 0;
+	.to-badge {
+		background: #0284c7;
+		color: #ffffff;
+		font-size: 0.75rem;
+		font-weight: 700;
+		padding: 0.15rem 0.5rem;
+		border-radius: 4px;
+	}
+	.to-title {
 		font-size: 0.95rem;
-		font-weight: 800;
 		color: #0f172a;
 	}
+	.to-cur-note {
+		font-size: 0.8rem;
+		color: #0369a1;
+		font-weight: 600;
+	}
+	.to-grid-compact {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+		gap: 0.75rem;
+	}
+	.to-box-compact {
+		background: #ffffff;
+		border: 1px solid #e2e8f0;
+		border-radius: 8px;
+		padding: 0.65rem 0.85rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+	.to-box-head-compact {
+		display: flex;
+		align-items: center;
+		gap: 0.45rem;
+	}
+	.to-box-title {
+		font-size: 0.88rem;
+		color: #1e293b;
+	}
 	.to-tag {
-		font-size: 0.72rem;
-		font-weight: 800;
-		padding: 0.15rem 0.5rem;
+		font-size: 0.7rem;
+		font-weight: 700;
+		padding: 0.1rem 0.45rem;
 		border-radius: 999px;
 	}
 	.tag-high {
@@ -2027,83 +2040,87 @@ const pageSchema = {
 		color: #ffffff;
 	}
 	.tag-scenarios {
-		background: #16a34a;
+		background: #0284c7;
 		color: #ffffff;
 	}
-	.to-flight-line {
+	.to-flight-line-compact {
 		display: flex;
 		align-items: center;
-		gap: 0.75rem;
-		background: #ffffff;
-		padding: 0.5rem 0.75rem;
-		border-radius: 6px;
-		border: 1px solid #e2e8f0;
+		gap: 0.6rem;
+		flex-wrap: wrap;
+		font-size: 0.85rem;
 	}
 	.to-fno {
 		color: #0284c7;
-		font-size: 1.05rem;
-	}
-	.to-time {
-		color: #0f172a;
-		font-size: 0.9rem;
+		font-weight: bold;
 	}
 	.to-route {
-		color: #334155;
-		font-weight: 700;
-		font-size: 0.9rem;
+		color: #0f172a;
+		font-weight: 600;
 	}
-	.to-desc {
-		margin: 0;
-		font-size: 0.85rem;
-		color: #475569;
-		line-height: 1.55;
-	}
-	.to-scenarios-list {
-		display: flex;
-		flex-direction: column;
-		gap: 0.6rem;
-	}
-	.to-sc-item {
-		background: #ffffff;
-		border: 1px solid #bbf7d0;
-		border-radius: 8px;
-		padding: 0.6rem 0.8rem;
-	}
-	.sc-head {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		margin-bottom: 0.2rem;
-	}
-	.sc-label {
-		color: #15803d;
-		font-size: 0.88rem;
-	}
-	.sc-prob {
+	.to-time {
+		color: #64748b;
 		font-size: 0.8rem;
-		color: #64748b;
 	}
-	.sc-prob strong {
-		color: #b45309;
-		font-size: 0.95rem;
+	.to-scenarios-compact {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
 	}
-	.sc-sum {
-		margin: 0 0 0.2rem 0;
-		font-size: 0.86rem;
-		color: #1e293b;
-		font-weight: 700;
-	}
-	.sc-sub {
-		color: #64748b;
+	.to-sc-pill {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+		background: #f0fdf4;
+		border: 1px solid #86efac;
+		color: #166534;
 		font-size: 0.78rem;
-		line-height: 1.4;
+		padding: 0.15rem 0.5rem;
+		border-radius: 9999px;
 	}
-	.to-footer {
-		margin-top: 0.9rem;
-		padding-top: 0.75rem;
-		border-top: 1px dashed #cbd5e1;
-		font-size: 0.82rem;
-		color: #64748b;
+
+	/* アコーディオン共通スタイル（もっと見る） */
+	.logic-accordion,
+	.past-more-accordion,
+	.radar-more-accordion {
+		margin-top: 1rem;
+		border: 1px solid #e2e8f0;
+		border-radius: 8px;
+		background: #ffffff;
+		overflow: hidden;
+	}
+	.logic-summary,
+	.past-more-summary,
+	.radar-more-summary {
+		padding: 0.75rem 1rem;
+		font-size: 0.88rem;
+		font-weight: 700;
+		color: #0284c7;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		background: #f8fafc;
+		user-select: none;
+		transition: background-color 0.2s;
+	}
+	.logic-summary:hover,
+	.past-more-summary:hover,
+	.radar-more-summary:hover {
+		background: #f1f5f9;
+	}
+	.logic-summary::-webkit-details-marker,
+	.past-more-summary::-webkit-details-marker,
+	.radar-more-summary::-webkit-details-marker {
+		display: none;
+	}
+	.past-more-body,
+	.radar-more-grid {
+		padding: 0.85rem 1rem;
+	}
+	.radar-card-sub {
+		background: #f8fafc;
+		border: 1px solid #e2e8f0;
 	}
 
 	@media (max-width: 768px) {
