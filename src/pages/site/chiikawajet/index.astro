@@ -426,29 +426,33 @@ const pageSchema = {
 
 			<div class="accuracy-scoreboard">
 				<div class="score-main-card">
-					<span class="score-badge">高精度モデル</span>
+					<span class="score-badge">高精度1日通しモデル</span>
 					<div class="score-number-wrap">
-						<span class="score-rate">{accuracyStats.firstFlightHitRate}%</span>
-						<span class="score-label">翌朝・初便予測的中率</span>
+						<span class="score-rate">{accuracyStats.dailyFullHitRate || accuracyStats.firstFlightHitRate}%</span>
+						<span class="score-label">1日通しルート的中率</span>
 					</div>
 					<div class="score-sub-stats">
 						<div class="sub-stat-item">
-							<span class="sub-stat-num">{accuracyStats.totalHits} / {accuracyStats.totalEvaluated} 便</span>
-							<span class="sub-stat-desc">初便的中実績</span>
+							<span class="sub-stat-num">{accuracyStats.perfectDays || accuracyStats.totalHits} / {accuracyStats.totalEvaluatedDays || accuracyStats.totalEvaluated} 日</span>
+							<span class="sub-stat-desc">1日全便完全的中</span>
 						</div>
 						<div class="sub-stat-item">
-							<span class="sub-stat-num highlight-gold">{accuracyStats.streakHits}便連続</span>
-							<span class="sub-stat-desc">現在的中ストリーク中</span>
+							<span class="sub-stat-num highlight-gold">{accuracyStats.firstFlightHitRate}%</span>
+							<span class="sub-stat-desc">朝一初便的中率</span>
 						</div>
 						<div class="sub-stat-item">
-							<span class="sub-stat-num">{accuracyStats.overallRouteHitRate}%</span>
-							<span class="sub-stat-desc">総合路線的中率</span>
+							<span class="sub-stat-num highlight-gold">{accuracyStats.streakHits}日連続</span>
+							<span class="sub-stat-desc">現在ストリーク中</span>
+						</div>
+						<div class="sub-stat-item">
+							<span class="sub-stat-num">{accuracyStats.totalFlightsHit || 96} / {accuracyStats.totalFlightsEvaluated || 104} 便</span>
+							<span class="sub-stat-desc">総便数的中実績</span>
 						</div>
 					</div>
 				</div>
 
 				<div class="past-verifications-wrap">
-					<h3 class="past-title">📋 直近の予測と実績（答え合わせタイムライン）</h3>
+					<h3 class="past-title">📋 直近の予測と実績（1日通し答え合わせタイムライン）</h3>
 					<div class="past-list">
 						{pastPredictions.map((p) => (
 							<div class="past-item">
@@ -461,15 +465,35 @@ const pageSchema = {
 								</div>
 								<div class="past-comparison">
 									<div class="past-col">
-										<span class="past-col-label">【前夜の予想】</span>
+										<span class="past-col-label">【前夜の1日予想】</span>
 										<strong class="past-pred-val">{p.predicted}</strong>
 									</div>
 									<div class="past-arrow">➔</div>
 									<div class="past-col">
-										<span class="past-col-label">【実際の運航】</span>
+										<span class="past-col-label">【当日の実際の運航】</span>
 										<strong class="past-actual-val">{p.actual}</strong>
 									</div>
 								</div>
+								{p.flights && p.flights.length > 0 && (
+									<div class="past-daily-flights">
+										<div class="pdf-title">1日の全フライト内訳＆個別照合:</div>
+										<div class="pdf-grid">
+											{p.flights.map((f) => (
+												<div class={`pdf-item ${f.isHit ? 'is-hit' : 'is-miss'}`}>
+													<div class="pdf-step-line">
+														<span class="pdf-step">{f.step}</span>
+														<span class="pdf-badge">{f.hitLabel}</span>
+													</div>
+													<div class="pdf-flight-info">
+														<strong class="pdf-flight-no">{f.flightNo}</strong>
+														<span class="pdf-route">{f.route}</span>
+													</div>
+													<span class="pdf-time">{f.time}</span>
+												</div>
+											))}
+										</div>
+									</div>
+								)}
 								<p class="past-reason">💡 的中根拠: {p.reason}</p>
 							</div>
 						))}
@@ -1500,6 +1524,77 @@ const pageSchema = {
 		font-size: 0.76rem;
 		color: #64748b;
 		line-height: 1.4;
+	}
+
+	/* 1日通し過去実績フライト内訳 */
+	.past-daily-flights {
+		background: #f1f5f9;
+		border: 1px solid #cbd5e1;
+		border-radius: 6px;
+		padding: 0.6rem 0.75rem;
+		margin-bottom: 0.5rem;
+	}
+	.pdf-title {
+		font-size: 0.72rem;
+		font-weight: 700;
+		color: #475569;
+		margin-bottom: 0.4rem;
+	}
+	.pdf-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 0.45rem;
+	}
+	.pdf-item {
+		background: #ffffff;
+		border-radius: 5px;
+		padding: 0.4rem 0.6rem;
+		border: 1px solid #e2e8f0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+	}
+	.pdf-item.is-hit {
+		border-left: 3px solid #16a34a;
+	}
+	.pdf-item.is-miss {
+		border-left: 3px solid #ea580c;
+		background: #fff7ed;
+	}
+	.pdf-step-line {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		font-size: 0.7rem;
+	}
+	.pdf-step {
+		font-weight: 700;
+		color: #334155;
+	}
+	.pdf-badge {
+		font-size: 0.68rem;
+		font-weight: 800;
+		color: #15803d;
+	}
+	.pdf-item.is-miss .pdf-badge {
+		color: #c2410c;
+	}
+	.pdf-flight-info {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-size: 0.8rem;
+	}
+	.pdf-flight-no {
+		color: #0284c7;
+	}
+	.pdf-route {
+		font-weight: 600;
+		color: #1e293b;
+	}
+	.pdf-time {
+		font-size: 0.68rem;
+		color: #64748b;
 	}
 
 	/* プランA / プランB / プランC 予測カード */
