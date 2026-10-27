@@ -88,7 +88,7 @@ const pageSchema = {
 		<div class="weekly-section">
 			<h2 class="section-heading">📅 向こう1週間の運行予定＆確率カレンダー</h2>
 			<p class="section-sub">
-				日付をタップすると詳細な予測ダイヤと投入確率が確認できます。
+				日付をタップすると詳細な予測ダイヤと投入確率が確認できます（※各日のプラン確率合計は100%です）。
 			</p>
 
 			<div class="schedule-timeline">
@@ -196,7 +196,7 @@ const pageSchema = {
 											<div class="to-box-compact">
 												<div class="to-box-head-compact">
 													<span class="to-tag tag-scenarios">夜間着地予想</span>
-													<b class="to-box-title">🌙 今夜のナイトステイ駐機先</b>
+													<b class="to-box-title">🌙 今夜のナイトステイ駐機先（合計100%）</b>
 												</div>
 												<div class="to-scenarios-compact">
 													{day.todayOutlook.nightScenarios.map((sc) => (
@@ -467,7 +467,7 @@ const pageSchema = {
 		<div class="radar-section">
 			<h2 class="section-heading">📍 【公式就航17空港】ちいかわジェット遭遇確率レーダー</h2>
 			<p class="section-sub">
-				あなたの最寄り空港に向こう1週間でちいかわジェットが飛来する確率を、過去の運航データとダイヤ傾向から算出しました。
+				あなたの最寄り空港に向こう1週間でちいかわジェットが飛来する確率を、過去の運航データとダイヤ傾向から算出しました。（※各空港ごとの独立した飛来チャンスを表しており、各日のプラン確率とは異なり合計は100%になりません）
 			</p>
 
 			<div class="radar-grid">

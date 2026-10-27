@@ -340,15 +340,14 @@ export async function generateWeeklyPrediction() {
       isNightStayConfirmed = false;
       nightStayCode = lastToday.destCode;
       
-      // ナイトステイ先を「未定」ではなく確率で算出（過去の運用実績・ダイヤに基づく）
+      // ナイトステイ先を「未定」ではなく確率で算出（合計が必ず100%になるように配分）
       nightStayProbabilities = [
-        { airport: '長崎', code: 'NGS', probability: 40, note: '羽田19:15発(NH669) ➔ 長崎ナイトステイ（最有力）' },
+        { airport: '長崎', code: 'NGS', probability: 50, note: '羽田19:15発(NH669) ➔ 長崎ナイトステイ（最有力）' },
         { airport: '広島', code: 'HIJ', probability: 30, note: '羽田19:30発(NH685) ➔ 広島ナイトステイ（第2本命）' },
-        { airport: '東京(羽田)', code: 'HND', probability: 20, note: '夕方便羽田帰還後のそのまま夜間駐機・整備' },
-        { airport: '松山', code: 'MYJ', probability: 10, note: '羽田19:35発(NH599) ➔ 松山ナイトステイ' }
+        { airport: '東京(羽田)', code: 'HND', probability: 20, note: '夕方便羽田帰還後のそのまま夜間駐機・整備' }
       ];
 
-      // ナイトステイ表示文字列（未定ではなく確率で表現）
+      // ナイトステイ表示文字列（合計100%）
       nightStayName = `${nightStayProbabilities[0].airport} (${nightStayProbabilities[0].probability}%) / ${nightStayProbabilities[1].airport} (${nightStayProbabilities[1].probability}%) / ${nightStayProbabilities[2].airport} (${nightStayProbabilities[2].probability}%) [今夜の駐機確率]`;
 
       const ret = TURNAROUND_RETURN_MAP[lastToday.destCode] || {
@@ -360,13 +359,13 @@ export async function generateWeeklyPrediction() {
         status: '🔄 折返し復路予測 (確率85%)'
       };
 
-      // 本日の残り展開プラン（プランA〜C）を確率ごとに算出
+      // 本日の残り展開プラン（プランA〜C）を確率ごとに算出（合計100%）
       todayPlans = [
         {
           planId: 'today-plan-a',
           planName: 'プランA',
           rank: '本命 ◎',
-          probability: 45,
+          probability: 50,
           title: `【今夜長崎ステイ】${lastToday.destName !== '東京(羽田)' ? `${lastToday.destName}折返し ➔ ` : ''}羽田 ➔ 長崎(泊)`,
           routeSummary: `${lastToday.destName !== '東京(羽田)' ? `${lastToday.destName} ➔ 羽田 ➔ ` : '羽田 ➔ '}長崎(泊)`,
           description: `夕方便で羽田へ戻った後、夜の最終便（NH669: 19:15発）で長崎へ向かい今夜ナイトステイする王道シナリオ`,
@@ -383,7 +382,7 @@ export async function generateWeeklyPrediction() {
               time: '19:15発 - 21:15着',
               flightNo: 'NH669 (予測)',
               route: '東京(羽田) ➔ 長崎',
-              tag: '🌙 長崎ナイトステイ (確率40%)'
+              tag: '🌙 長崎ナイトステイ (確率50%)'
             }
           ]
         },
@@ -391,7 +390,7 @@ export async function generateWeeklyPrediction() {
           planId: 'today-plan-b',
           planName: 'プランB',
           rank: '有力 ◯',
-          probability: 35,
+          probability: 30,
           title: `【今夜広島ステイ】${lastToday.destName !== '東京(羽田)' ? `${lastToday.destName}折返し ➔ ` : ''}羽田 ➔ 広島(泊)`,
           routeSummary: `${lastToday.destName !== '東京(羽田)' ? `${lastToday.destName} ➔ 羽田 ➔ ` : '羽田 ➔ '}広島(泊)`,
           description: `羽田帰還後、19:30発の広島行き最終便（NH685）に充当され、広島空港で夜間駐機するパターン`,
@@ -439,10 +438,10 @@ export async function generateWeeklyPrediction() {
         }
       ];
 
-      pendingNightStayNote = `⏳ 本日の今夜の駐機先は「長崎 40% / 広島 30% / 羽田 20%」の確率で推移しています。夕方便で羽田へ戻った後の19時台の最終便アサイン（17:30〜19:00頃）で100%確定します。`;
+      pendingNightStayNote = `⏳ 本日の今夜の駐機先は「長崎 50% / 広島 30% / 羽田 20%」の確率で推移しています（合計100%）。夕方便で羽田へ戻った後の19時台の最終便アサイン（17:30〜19:00頃）で100%確定します。`;
 
       todayOutlook = {
-        title: '本日のこの後のフライト見通し＆夜の展開（確率予測）',
+        title: '本日のこの後のフライト見通し＆夜の展開（確率合計100%）',
         currentFlightNote: `現在、${lastToday.flightNo}便（${lastToday.route}、${lastToday.arrTime}着予定）を運航中`,
         turnaround: {
           flightNo: ret.flightNo,
@@ -453,19 +452,19 @@ export async function generateWeeklyPrediction() {
         },
         nightScenarios: [
           {
-            label: '本命 ◎【長崎ナイトステイ】',
-            prob: 40,
+            label: '長崎ナイトステイ',
+            prob: 50,
             summary: `羽田帰還後、19:15発の長崎行き最終便(NH669)で長崎へ向かい夜間駐機`,
             detail: '明朝は長崎始発羽田行き（NH662: 08:25発）からスタートします。'
           },
           {
-            label: '有力 ◯【広島ナイトステイ】',
+            label: '広島ナイトステイ',
             prob: 30,
             summary: `羽田帰還後、19:30発の広島行き最終便(NH685)で広島へ向かい夜間駐機`,
             detail: '明朝は広島始発羽田行き（NH672: 07:35発）からスタートします。'
           },
           {
-            label: '対抗 ▲【羽田そのままステイ】',
+            label: '羽田そのままステイ',
             prob: 20,
             summary: `${ret.arrTime}羽田到着後、本日の全運航を終えて羽田で夜間駐機・整備`,
             detail: '明朝は羽田始発便（長崎・広島・福岡など）からスタートします。'
@@ -527,7 +526,7 @@ export async function generateWeeklyPrediction() {
         planId: 'plan-a',
         planName: 'プランA',
         rank: '本命 ◎',
-        probability: 45,
+        probability: 50,
         title: '【今夜羽田へ折返し・羽田ステイの場合】羽田始発 ➔ 長崎・福岡ルート',
         routeSummary: '羽田 ➔ 長崎 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 広島(泊)',
         airports: ['東京(羽田)', '長崎', '福岡', '広島'],
@@ -544,7 +543,7 @@ export async function generateWeeklyPrediction() {
         planId: 'plan-b',
         planName: 'プランB',
         rank: '有力 ◯',
-        probability: 35,
+        probability: 30,
         title: '【今夜羽田帰還後に夜最終便で長崎ステイの場合】長崎始発 ➔ 伊丹・松山ルート',
         routeSummary: '長崎 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 松山 ➔ 羽田',
         airports: ['長崎', '東京(羽田)', '大阪(伊丹)', '松山'],
@@ -581,7 +580,7 @@ export async function generateWeeklyPrediction() {
         planId: 'plan-a',
         planName: 'プランA',
         rank: '本命 ◎',
-        probability: 45,
+        probability: 50,
         title: '九州基幹（長崎・福岡）➔ 広島ステイ',
         routeSummary: '羽田 ➔ 長崎 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 広島(泊)',
         airports: ['東京(羽田)', '長崎', '福岡', '広島'],
@@ -598,7 +597,7 @@ export async function generateWeeklyPrediction() {
         planId: 'plan-b',
         planName: 'プランB',
         rank: '有力 ◯',
-        probability: 35,
+        probability: 30,
         title: '中国・四国（広島・松山）➔ 長崎ステイ',
         routeSummary: '羽田 ➔ 広島 ➔ 羽田 ➔ 松山 ➔ 羽田 ➔ 長崎(泊)',
         airports: ['東京(羽田)', '広島', '松山', '長崎'],
@@ -635,7 +634,7 @@ export async function generateWeeklyPrediction() {
         planId: 'plan-a',
         planName: 'プランA',
         rank: '本命 ◎',
-        probability: 45,
+        probability: 50,
         title: `${origName1}始発 ➔ 福岡往復 ➔ 広島ステイ`,
         routeSummary: `${origName1} ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 広島(泊)`,
         airports: [origName1, '東京(羽田)', '福岡', '広島'],
@@ -651,7 +650,7 @@ export async function generateWeeklyPrediction() {
         planId: 'plan-b',
         planName: 'プランB',
         rank: '有力 ◯',
-        probability: 35,
+        probability: 30,
         title: `${origName1}始発 ➔ 伊丹往復 ➔ 新千歳往復`,
         routeSummary: `${origName1} ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 新千歳 ➔ 羽田`,
         airports: [origName1, '東京(羽田)', '大阪(伊丹)', '札幌(新千歳)'],
@@ -687,7 +686,7 @@ export async function generateWeeklyPrediction() {
         planId: 'plan-a',
         planName: 'プランA',
         rank: '本命 ◎',
-        probability: 45,
+        probability: 50,
         title: `${origName1}始発 ➔ 広島往復 ➔ 松山往復`,
         routeSummary: `${origName1} ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 松山 ➔ 羽田`,
         airports: [origName1, '東京(羽田)', '広島', '松山'],
@@ -704,7 +703,7 @@ export async function generateWeeklyPrediction() {
         planId: 'plan-b',
         planName: 'プランB',
         rank: '有力 ◯',
-        probability: 35,
+        probability: 30,
         title: `${origName1}始発 ➔ 福岡往復 ➔ 長崎ステイ`,
         routeSummary: `${origName1} ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 長崎(泊)`,
         airports: [origName1, '東京(羽田)', '福岡', '長崎'],
@@ -862,16 +861,47 @@ export async function generateWeeklyPrediction() {
         };
       }).sort((a, b) => b.probability - a.probability);
 
+      const rawTop5 = predictionsForDay.slice(0, 5);
+      const rawTotal = rawTop5.reduce((sum, item) => sum + item.probability, 0);
+
       const planLetters = ['プランA', 'プランB', 'プランC', 'プランD', 'プランE'];
-      const top5Routes = predictionsForDay.slice(0, 5).map((item, idx) => ({
-        ...item,
-        planName: planLetters[idx] || `プラン${idx + 1}`
-      }));
+      let allocatedTotal = 0;
+      const top5Routes = rawTop5.map((item, idx) => {
+        let normalizedProb;
+        if (idx === rawTop5.length - 1) {
+          // 最後のプランで端数調整して合計を確実に100%にする
+          normalizedProb = 100 - allocatedTotal;
+        } else {
+          normalizedProb = Math.round((item.probability / rawTotal) * 100);
+          allocatedTotal += normalizedProb;
+        }
+
+        let rank = '可能性あり △';
+        let star = '★★☆☆☆';
+        if (normalizedProb >= 30) {
+          rank = '本命 ◎';
+          star = '★★★★★';
+        } else if (normalizedProb >= 20) {
+          rank = '有力 ◯';
+          star = '★★★★☆';
+        } else if (normalizedProb >= 12) {
+          rank = '注目 ▲';
+          star = '★★★☆☆';
+        }
+
+        return {
+          ...item,
+          probability: normalizedProb,
+          star,
+          rank,
+          planName: planLetters[idx] || `プラン${idx + 1}`
+        };
+      });
 
       weeklySchedule.push({
         ...day,
         statusType: 'forecast',
-        statusLabel: '週間確率予報（プランA〜E）',
+        statusLabel: '週間確率予報（プランA〜E・合計100%）',
         topRoute: top5Routes[0].route,
         topProbability: top5Routes[0].probability,
         routes: top5Routes
