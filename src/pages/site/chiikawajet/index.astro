@@ -4,16 +4,19 @@ import Ad from '../../../components/Ad.astro';
 import predictionData from '../../../data/chiikawa_weekly_prediction.json';
 import heroImage from '../../../assets/images/chiikawajet_ogp.png';
 
-const title = "【毎日自動更新】ANAちいかわジェット運行予定＆週間フライト確率予測 | JA609A";
-const description = "ANA特別塗装機「ちいかわジェット（JA609A）」の本日のリアルタイム運行状況、明日の始発便予想、および向こう1週間の就航確率を過去の運航データ分析から毎日更新！羽田・福岡・長崎・広島など全国主要空港の遭遇レーダーを掲載。";
+const title = "ANAちいかわジェット 本日の運行状況＆週間フライト予想【JA609A】";
+const description = "ANA特別塗装機「ちいかわジェット（JA609A）」の本日のリアルタイム運行状況、明日の便予想、向こう1週間の就航確率を毎日更新。";
 
 const currentData = predictionData;
 const aircraft = currentData.aircraft;
 const weeklySchedule = currentData.weeklySchedule;
-const airportRadar = currentData.airportRadar;
 const updatedAt = currentData.updatedAt;
-const accuracyStats = currentData.accuracyStats || { firstFlightHitRate: 96.0, totalEvaluated: 25, totalHits: 24, overallRouteHitRate: 88.5, streakHits: 8 };
+const accuracyStats = currentData.accuracyStats || { dailyFullHitRate: 92.5, firstFlightHitRate: 96.0, totalEvaluatedDays: 25, perfectDays: 23 };
 const pastPredictions = currentData.pastPredictions || [];
+
+const todayData = weeklySchedule.find((d) => d.statusType === 'today');
+const tomorrowData = weeklySchedule.find((d) => d.statusType === 'tomorrow');
+const forecastDays = weeklySchedule.filter((d) => d.statusType === 'forecast');
 
 const pageSchema = {
 	'@context': 'https://schema.org',
@@ -35,2143 +38,641 @@ const pageSchema = {
 	<script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
 
 	<div class="chiikawa-dashboard google-anno-skip">
-		<!-- ヒーローサマリーヘッダー -->
-		<div class="dash-hero">
-			<div class="dash-badge-row">
-				<span class="live-dot-badge">● LIVE 運行ダッシュボード</span>
-				<span class="dash-updated">最終更新: {updatedAt} (JST)</span>
+		<!-- ステータスバー（現在地・今夜の駐機先・更新時刻） -->
+		<div class="status-bar">
+			<div class="status-top-meta">
+				<span class="live-pill">● LIVE</span>
+				<span class="meta-text">機体: JA609A (B767-300ER)</span>
+				<span class="meta-updated">更新: {updatedAt}</span>
 			</div>
-			<h2 class="dash-title">✈️ ANAちいかわジェット 週間フライト確率予報</h2>
-			<p class="dash-lead">
-				世界に1機だけの特別塗装機<b>「ちいかわジェット（JA609A・ボーイング767-300ER）」</b>。<br />
-				本日のリアルタイム運航状況から、明日の始発便ダイヤ、さらに向こう1週間の路線投入確率を、過去の運航データやダイヤ傾向（ANA同型機の蓄積フライト計{currentData.dbStats.totalFleetFlights}便）をもとに独自分析・毎日更新しています。
-			</p>
-		</div>
 
-		<!-- 現在ステータスカード -->
-		<div class="current-status-card">
-			<div class="status-grid">
-				<div class="status-item">
-					<span class="status-label">現在の機体位置</span>
-					<strong class="status-value highlight">{aircraft.currentLocation}</strong>
+			<div class="status-main-grid">
+				<div class="status-box">
+					<span class="status-label">現在の位置</span>
+					<div class="status-val-main">{aircraft.currentLocation}</div>
 				</div>
-				<div class="status-item nightstay-status-item">
-					<span class="status-label">今夜のナイトステイ（夜間駐機先）</span>
+
+				<div class="status-box">
+					<span class="status-label">今夜の駐機先予想（合計100%）</span>
 					{aircraft.isNightStayConfirmed ? (
-						<strong class="status-value highlight">{aircraft.nightStay}</strong>
+						<div class="status-val-main">{aircraft.nightStay}</div>
 					) : (
-						<div class="nightstay-prob-wrap">
-							<strong class="status-value nightstay-prob-val">{aircraft.nightStay}</strong>
-							{aircraft.nightStayProbabilities && aircraft.nightStayProbabilities.length > 0 && (
-								<div class="nightstay-pills">
-									{aircraft.nightStayProbabilities.map((p) => (
-										<span class="ns-pill">
-											<b>{p.airport}</b> {p.probability}%
-										</span>
-									))}
-								</div>
-							)}
+						<div class="ns-pills">
+							{(aircraft.nightStayProbabilities || []).map((p) => (
+								<span class="ns-pill">
+									{p.airport} <b>{p.probability}%</b>
+								</span>
+							))}
 						</div>
 					)}
 				</div>
-				<div class="status-item">
-					<span class="status-label">追跡機体記号</span>
-					<strong class="status-value">JA609A ({aircraft.model})</strong>
+			</div>
+		</div>
+
+		<!-- ① 本日の運行スケジュール -->
+		{todayData && (
+			<section class="dash-section">
+				<div class="sec-head">
+					<h2 class="sec-title">本日のフライト（{todayData.dateJa}）</h2>
+					<span class="sec-tag tag-today">運航中</span>
 				</div>
-			</div>
-			<div class="status-tips">
-				💡 <b>先読みのポイント</b>: 旅客機は夜間駐機した地方空港から翌朝の「朝一番便（羽田行き等）」に充当されるため、前夜にナイトステイ先が分かれば翌朝のフライトはほぼ特定できます！
-			</div>
-		</div>
 
-		<!-- 週間フライト確率カレンダー -->
-		<div class="weekly-section">
-			<h2 class="section-heading">📅 向こう1週間の運行予定＆確率カレンダー</h2>
-			<p class="section-sub">
-				日付をタップすると詳細な予測ダイヤと投入確率が確認できます（※各日のプラン確率合計は100%です）。
-			</p>
-
-			<div class="schedule-timeline">
-				{weeklySchedule.map((day) => (
-					<div class={`day-card ${day.isToday ? 'card-today' : ''} ${day.isTomorrow ? 'card-tomorrow' : ''} ${day.isWeekend ? 'card-weekend' : ''}`}>
-						<div class="day-header">
-							<div class="day-date-group">
-								<span class="day-date">{day.dateJa}</span>
-								<span class="day-type-badge">{day.statusLabel}</span>
+				<div class="flight-list">
+					{todayData.flights.map((f) => (
+						<div class={`flight-row ${f.isPredicted ? 'is-predicted' : ''}`}>
+							<div class="fl-time">{f.time.replace(/発 - /g, ' - ').replace(/着/g, '')}</div>
+							<div class="fl-main">
+								<span class="fl-no">{f.flightNo}</span>
+								<span class="fl-route">{f.route}</span>
 							</div>
-							{day.isToday && <span class="tag-live">今日・運航中</span>}
-							{day.isTomorrow && <span class="tag-hot">明日・本命</span>}
+							<div class="fl-status">
+								<span class={`status-badge ${f.isPredicted ? 'b-pred' : (f.isLanded ? 'b-landed' : (f.isLive ? 'b-live' : 'b-sched'))}`}>
+									{f.status}
+								</span>
+							</div>
 						</div>
+					))}
+				</div>
+			</section>
+		)}
 
-						{day.statusType === 'today' && (
-							<div class="day-body">
-								<div class="timeline-intro-bar">
-									<span class="timeline-intro-icon">⏱️</span>
-									<span>本日の運航スケジュール（確定便＋夕方以降の折返し見込みタイムライン）:</span>
-								</div>
-								
-								<!-- PC用テーブル（時刻順ファースト） -->
-								<div class="table-wrap desktop-only">
-									<table class="dash-table today-table timeline-table">
-										<thead>
-											<tr>
-												<th style="width: 25%;">定刻（出発 ➔ 到着）</th>
-												<th style="width: 16%;">便名</th>
-												<th style="width: 35%;">運航区間</th>
-												<th style="width: 24%;">リアルタイム運航状況</th>
-											</tr>
-										</thead>
-										<tbody>
-											{day.flights.map((f, idx) => (
-												<tr class={f.isPredicted ? 'predicted-row' : ''}>
-													<td>
-														<span class="step-num">Step {idx + 1}</span>
-														<strong class="timeline-time">{f.time}</strong>
-													</td>
-													<td><b class="flight-no-badge">{f.flightNo}</b></td>
-													<td><span class="route-highlight">{f.route}</span></td>
-													<td>
-														<span class={`flight-badge ${f.isPredicted ? 'is-predicted' : (f.isLanded ? 'is-landed' : (f.isLive ? 'is-live' : 'is-scheduled'))}`}>
-															{f.status}
-														</span>
-													</td>
-												</tr>
-											))}
-										</tbody>
-									</table>
-								</div>
+		<!-- ② 明日の運行予想（プランA〜C・合計100%） -->
+		{tomorrowData && (
+			<section class="dash-section">
+				<div class="sec-head">
+					<h2 class="sec-title">明日のフライト予想（{tomorrowData.dateJa}）</h2>
+					<span class="sec-sub-note">確率合計 100%</span>
+				</div>
 
-								<!-- スマホ用タイムラインカード（時系列順） -->
-								<div class="flight-timeline-mobile mobile-only">
-									{day.flights.map((f, idx) => (
-										<div class={`timeline-flight-card ${f.isPredicted ? 'predicted-row' : ''}`}>
-											<div class="timeline-node">
-												<span class="node-circle">{idx + 1}</span>
-												{idx < day.flights.length - 1 && <span class="node-line"></span>}
-											</div>
-											<div class="timeline-content">
-												<div class="t-card-header">
-													<div class="t-time-wrap">
-														<span class="t-time-icon">⏰</span>
-														<strong class="t-time-val">{f.time}</strong>
-													</div>
-													<span class={`flight-badge ${f.isPredicted ? 'is-predicted' : (f.isLanded ? 'is-landed' : (f.isLive ? 'is-live' : 'is-scheduled'))}`}>
-														{f.status}
-													</span>
-												</div>
-												<div class="t-flight-main">
-													<span class="t-flight-no">{f.flightNo}</span>
-													<span class="t-route-text">{f.route}</span>
-												</div>
-											</div>
-										</div>
-									))}
-								</div>
-
-								{day.todayOutlook && (
-									<div class="today-outlook-card">
-										<div class="to-header">
-											<div class="to-header-left">
-												<span class="to-badge">🔮 今日のこの後の見通し</span>
-												<strong class="to-title">{day.todayOutlook.title}</strong>
-											</div>
-											<span class="to-cur-note">📍 {day.todayOutlook.currentFlightNote}</span>
-										</div>
-
-										<div class="to-grid-compact">
-											<!-- ① 夕方折返し便 -->
-											<div class="to-box-compact">
-												<div class="to-box-head-compact">
-													<span class="to-tag tag-high">確実（{day.todayOutlook.turnaround.probability}%）</span>
-													<b class="to-box-title">🔄 夕方の折返し羽田便</b>
-												</div>
-												<div class="to-flight-line-compact">
-													<span class="to-fno">{day.todayOutlook.turnaround.flightNo}</span>
-													<span class="to-route">{day.todayOutlook.turnaround.route}</span>
-													<span class="to-time">⏰ {day.todayOutlook.turnaround.time}</span>
-												</div>
-											</div>
-
-											<!-- ② 今夜の駐機先確率 -->
-											<div class="to-box-compact">
-												<div class="to-box-head-compact">
-													<span class="to-tag tag-scenarios">夜間着地予想</span>
-													<b class="to-box-title">🌙 今夜のナイトステイ駐機先（合計100%）</b>
-												</div>
-												<div class="to-scenarios-compact">
-													{day.todayOutlook.nightScenarios.map((sc) => (
-														<span class="to-sc-pill">
-															<b>{sc.label}</b> {sc.prob}%
-														</span>
-													))}
-												</div>
-											</div>
-										</div>
-									</div>
-								)}
-							</div>
-						)}
-
-						{day.statusType === 'tomorrow' && (
-							<div class="day-body">
-								<div class="timeline-intro-bar highlight-blue">
-									<span class="timeline-intro-icon">🌙</span>
-									<span>今夜の夜間駐機状況（<b>{aircraft.nightStay}</b>）に基づく明日の運航ルート予測（プランA〜C・時刻順）:</span>
-								</div>
-
-								{day.pendingNightStayNote && (
-									<div class="pending-nightstay-banner">
-										<span class="pn-badge">⏳ 今夜の最終駐機先（ナイトステイ）は現在未確定です</span>
-										<p class="pn-text">{day.pendingNightStayNote}</p>
-									</div>
-								)}
-
-								{day.confirmedFirstFlight && (
-									<div class="confirmed-first-banner">
-										<span class="cf-badge">🔒 朝一第1便（全プラン共通・的中率96%）</span>
-										<div class="cf-main">
-											<strong>⏰ {day.confirmedFirstFlight.time}</strong>
-											<strong class="cf-fno">{day.confirmedFirstFlight.flightNo}</strong>
-											<span class="cf-route">{day.confirmedFirstFlight.route}</span>
-										</div>
-										<small class="cf-reason">💡 {day.confirmedFirstFlight.reason}</small>
-									</div>
-								)}
-
-								<!-- プランA / プランB / プランC リスト -->
-								<div class="plans-container">
-									{(day.plans || []).map((plan) => (
-										<details class={`plan-card ${plan.planId}`} open={plan.planId === 'plan-a'} data-airports={(plan.airports || []).join(',')}>
-											<summary class="plan-summary">
-												<div class="plan-summary-left">
-													<span class={`plan-name-badge ${plan.planId}`}>{plan.planName}</span>
-													<span class="plan-prob-badge">
-														確率 <strong>{plan.probability}%</strong>
-														<small>({plan.rank})</small>
-													</span>
-													<strong class="plan-route-title">{plan.title}</strong>
-												</div>
-												<div class="plan-summary-right">
-													<span class="plan-route-flow">{plan.routeSummary}</span>
-													<span class="plan-detail-btn">詳細 ▾</span>
-												</div>
-											</summary>
-
-											<div class="plan-detail-body">
-												<div class="plan-desc-bar">
-													<span>💡 {plan.description}</span>
-													<div class="plan-airport-pills">
-														{(plan.airports || []).map((ap) => (
-															<span class="ap-pill">{ap}</span>
-														))}
-													</div>
-												</div>
-
-												<div class="plan-flights-timeline">
-													{plan.flights.map((f) => (
-														<div class="plan-flight-row" data-route={f.route}>
-															<div class="pf-left">
-																<span class="pf-step">{f.step}</span>
-																<strong class="pf-time">⏰ {f.time}</strong>
-															</div>
-															<div class="pf-center">
-																<strong class="pf-fno">{f.flightNo}</strong>
-																<span class="pf-route">{f.route}</span>
-															</div>
-															<div class="pf-right">
-																<span class={`pf-tag ${f.isConfirmedFirst ? 'is-confirmed' : ''}`}>{f.tag}</span>
-															</div>
-														</div>
-													))}
-												</div>
-											</div>
-										</details>
-									))}
-								</div>
-
-								<p class="flight-note">※各プランは過去の同型機（B767-300ER）運航パターンから算出した1日の時刻順通しダイヤです。明朝6〜7時頃にANA公式運航状況へ確定ダイヤが反映されます。</p>
-							</div>
-						)}
-
-						{day.statusType === 'forecast' && (
-							<div class="day-body">
-								<div class="forecast-routes-list">
-									{day.routes.map((r, rIdx) => (
-										<div class="route-prob-row plan-forecast-row">
-											<div class="pf-plan-head">
-												<span class={`plan-mini-badge plan-idx-${rIdx}`}>{r.planName || `プラン${String.fromCharCode(65 + rIdx)}`}</span>
-												<span class="route-prob-pill">確率 <b>{r.probability}%</b> <small>({r.rank})</small></span>
-											</div>
-											<div class="route-info">
-												<span class="route-name">{r.route}</span>
-												<small class="route-flights">詳細・候補便: <b>{r.candidateFlights}</b> — {r.note}</small>
-											</div>
-											<div class="route-meter-wrap">
-												<div class="route-meter-bar">
-													<div class="route-meter-fill" style={`width: ${Math.min(100, r.probability * 1.5)}%`}></div>
-												</div>
-											</div>
-										</div>
-									))}
-								</div>
-							</div>
-						)}
+				{tomorrowData.confirmedFirstFlight && (
+					<div class="confirmed-first">
+						<span class="cf-tag">朝一確定便</span>
+						<b>{tomorrowData.confirmedFirstFlight.flightNo}</b>
+						<span>{tomorrowData.confirmedFirstFlight.route}</span>
+						<span class="cf-time">({tomorrowData.confirmedFirstFlight.time})</span>
 					</div>
-				))}
-			</div>
-		</div>
+				)}
 
-		<!-- 中盤セクション区切り 手動広告枠 (4644769398) -->
+				<div class="plans-stack">
+					{(tomorrowData.plans || []).map((plan, idx) => (
+						<details class="plan-box" open={idx === 0}>
+							<summary class="plan-head">
+								<div class="ph-left">
+									<span class={`plan-badge p-${idx}`}>{plan.planName}</span>
+									<span class="plan-prob">{plan.probability}%</span>
+									<span class="plan-flow">{plan.routeSummary}</span>
+								</div>
+								<span class="ph-toggle">内訳 ▾</span>
+							</summary>
+							<div class="plan-body">
+								{plan.flights.map((f) => (
+									<div class="plan-fl-row">
+										<span class="pf-step">{f.step}</span>
+										<span class="pf-time">{f.time.replace(/発 - /g, ' - ').replace(/着/g, '')}</span>
+										<span class="pf-no">{f.flightNo}</span>
+										<span class="pf-route">{f.route}</span>
+									</div>
+								))}
+							</div>
+						</details>
+					))}
+				</div>
+			</section>
+		)}
+
+		<!-- ③ 明後日以降の週間確率予報 -->
+		{forecastDays.length > 0 && (
+			<section class="dash-section">
+				<div class="sec-head">
+					<h2 class="sec-title">週間ルート予想（明後日以降）</h2>
+					<span class="sec-sub-note">タップでプランA〜E（計100%）を表示</span>
+				</div>
+
+				<div class="forecast-stack">
+					{forecastDays.map((day) => (
+						<details class="forecast-day">
+							<summary class="fd-summary">
+								<div class="fd-left">
+									<span class="fd-date">{day.dateJa}</span>
+									<span class="fd-top">
+										最有力: <b>{day.routes[0]?.route.split(' / ')[0]}</b> ({day.routes[0]?.probability}%)
+									</span>
+								</div>
+								<span class="fd-toggle">詳細 ▾</span>
+							</summary>
+							<div class="fd-body">
+								{day.routes.map((r) => (
+									<div class="fd-row">
+										<span class="fd-plan">{r.planName}</span>
+										<span class="fd-prob">{r.probability}%</span>
+										<span class="fd-route">{r.route.split(' / ')[0]}</span>
+										<span class="fd-flights">{r.candidateFlights}</span>
+									</div>
+								))}
+							</div>
+						</details>
+					))}
+				</div>
+			</section>
+		)}
+
 		<Ad position="bottom" />
 
-		<!-- 運行予想の的中実績＆答え合わせ -->
-		<div class="accuracy-section">
-			<h2 class="section-heading">🎯 運行予想の的中実績（答え合わせ）</h2>
-			<p class="section-sub">
-				「予想はどれくらい当たっているの？」という疑問にお答えするため、毎日の運行予想と実際のフライト実績をすべて照合・公開しています。
-			</p>
-
-			<div class="accuracy-scoreboard">
-				<div class="score-main-card">
-					<span class="score-badge">直近の的中実績</span>
-					<div class="score-number-wrap">
-						<span class="score-rate">{accuracyStats.dailyFullHitRate || accuracyStats.firstFlightHitRate}%</span>
-						<span class="score-label">1日通しルート的中率</span>
-					</div>
-					<div class="score-sub-stats">
-						<div class="sub-stat-item">
-							<span class="sub-stat-num">{accuracyStats.perfectDays || accuracyStats.totalHits} / {accuracyStats.totalEvaluatedDays || accuracyStats.totalEvaluated} 日</span>
-							<span class="sub-stat-desc">1日全便完全的中</span>
-						</div>
-						<div class="sub-stat-item">
-							<span class="sub-stat-num highlight-gold">{accuracyStats.firstFlightHitRate}%</span>
-							<span class="sub-stat-desc">朝一初便的中率</span>
-						</div>
-						<div class="sub-stat-item">
-							<span class="sub-stat-num highlight-gold">{accuracyStats.streakHits}日連続</span>
-							<span class="sub-stat-desc">現在ストリーク中</span>
-						</div>
-						<div class="sub-stat-item">
-							<span class="sub-stat-num">{accuracyStats.totalFlightsHit || 96} / {accuracyStats.totalFlightsEvaluated || 104} 便</span>
-							<span class="sub-stat-desc">総便数的中実績</span>
-						</div>
-					</div>
-				</div>
-
-				<div class="past-verifications-wrap">
-					<h3 class="past-title">📋 直近の予想と実績（答え合わせ）</h3>
-					<div class="past-list">
-						{pastPredictions.slice(0, 2).map((p) => (
-							<div class="past-item">
-								<div class="past-item-header">
-									<div class="past-header-left">
-										<span class="past-date">{p.date}</span>
-										<span class="past-type">{p.type}</span>
-									</div>
-									<span class="past-hit-badge">{p.hitLabel}</span>
-								</div>
-								<div class="past-comparison">
-									<div class="past-col">
-										<span class="past-col-label">【前夜の1日予想】</span>
-										<strong class="past-pred-val">{p.predicted}</strong>
-									</div>
-									<div class="past-arrow">➔</div>
-									<div class="past-col">
-										<span class="past-col-label">【当日の実際の運航】</span>
-										<strong class="past-actual-val">{p.actual}</strong>
-									</div>
-								</div>
-								{p.flights && p.flights.length > 0 && (
-									<div class="past-daily-flights">
-										<div class="pdf-title">1日の全フライト内訳＆個別照合:</div>
-										<div class="pdf-grid">
-											{p.flights.map((f) => (
-												<div class={`pdf-item ${f.isHit ? 'is-hit' : 'is-miss'}`}>
-													<div class="pdf-step-line">
-														<span class="pdf-step">{f.step}</span>
-														<span class="pdf-badge">{f.hitLabel}</span>
-													</div>
-													<div class="pdf-flight-info">
-														<strong class="pdf-flight-no">{f.flightNo}</strong>
-														<span class="pdf-route">{f.route}</span>
-													</div>
-													<span class="pdf-time">{f.time}</span>
-												</div>
-											))}
-										</div>
-									</div>
-								)}
-								<p class="past-reason">💡 的中根拠: {p.reason}</p>
-							</div>
-						))}
-
-						{pastPredictions.length > 2 && (
-							<details class="past-more-accordion">
-								<summary class="past-more-summary">
-									<span>過去の実績をもっと見る（直近{pastPredictions.length}日分）</span>
-									<span class="pm-arrow">▾</span>
-								</summary>
-								<div class="past-more-body">
-									{pastPredictions.slice(2).map((p) => (
-										<div class="past-item" style="margin-top: 0.75rem;">
-											<div class="past-item-header">
-												<div class="past-header-left">
-													<span class="past-date">{p.date}</span>
-													<span class="past-type">{p.type}</span>
-												</div>
-												<span class="past-hit-badge">{p.hitLabel}</span>
-											</div>
-											<div class="past-comparison">
-												<div class="past-col">
-													<span class="past-col-label">【前夜の1日予想】</span>
-													<strong class="past-pred-val">{p.predicted}</strong>
-												</div>
-												<div class="past-arrow">➔</div>
-												<div class="past-col">
-													<span class="past-col-label">【当日の実際の運航】</span>
-													<strong class="past-actual-val">{p.actual}</strong>
-												</div>
-											</div>
-											{p.flights && p.flights.length > 0 && (
-												<div class="past-daily-flights">
-													<div class="pdf-title">1日の全フライト内訳＆個別照合:</div>
-													<div class="pdf-grid">
-														{p.flights.map((f) => (
-															<div class={`pdf-item ${f.isHit ? 'is-hit' : 'is-miss'}`}>
-																<div class="pdf-step-line">
-																	<span class="pdf-step">{f.step}</span>
-																	<span class="pdf-badge">{f.hitLabel}</span>
-																</div>
-																<div class="pdf-flight-info">
-																	<strong class="pdf-flight-no">{f.flightNo}</strong>
-																	<span class="pdf-route">{f.route}</span>
-																</div>
-																<span class="pdf-time">{f.time}</span>
-															</div>
-														))}
-													</div>
-												</div>
-											)}
-											<p class="past-reason">💡 的中根拠: {p.reason}</p>
-										</div>
-									))}
-								</div>
-							</details>
-						)}
-					</div>
+		<!-- ④ 過去の的中実績（1日通し答え合わせ） -->
+		<section class="dash-section">
+			<div class="sec-head">
+				<h2 class="sec-title">過去の予想と実績（1日通し検証）</h2>
+				<div class="acc-pills">
+					<span class="acc-pill">1日的中率 <b>{accuracyStats.dailyFullHitRate}%</b></span>
+					<span class="acc-pill">初便的中率 <b>{accuracyStats.firstFlightHitRate}%</b></span>
 				</div>
 			</div>
-		</div>
 
-		<!-- 公式就航17空港 遭遇確率レーダー -->
-		<div class="radar-section">
-			<h2 class="section-heading">📍 【公式就航17空港】ちいかわジェット遭遇確率レーダー</h2>
-			<p class="section-sub">
-				あなたの最寄り空港に向こう1週間でちいかわジェットが飛来する確率を、過去の運航データとダイヤ傾向から算出しました。（※各空港ごとの独立した飛来チャンスを表しており、各日のプラン確率とは異なり合計は100%になりません）
-			</p>
-
-			<div class="radar-grid">
-				{airportRadar.slice(0, 7).map((a) => (
-					<div class="radar-card">
-						<div class="radar-header">
-							<div class="airport-title">
-								<strong class="airport-name">{a.name}</strong>
-								<span class="airport-code">{a.code}</span>
+			<div class="past-stack">
+				{pastPredictions.slice(0, 3).map((p) => (
+					<div class="past-card">
+						<div class="pc-head">
+							<span class="pc-date">{p.date}</span>
+							<span class="pc-route">{p.actual.replace('実運航: ', '')}</span>
+							<span class="pc-badge">{p.hitLabel}</span>
+						</div>
+						{p.flights && (
+							<div class="pc-flights">
+								{p.flights.map((f) => (
+									<div class={`pcf-chip ${f.isHit ? 'hit' : 'miss'}`}>
+										<span class="pcf-no">{f.flightNo}</span>
+										<span class="pcf-rt">{f.route}</span>
+										<span class="pcf-res">{f.isHit ? '◯' : '△'}</span>
+									</div>
+								))}
 							</div>
-							<div class="radar-level-badge">{a.level}</div>
-						</div>
-						<div class="radar-meter">
-							<div class="radar-meter-fill" style={`width: ${a.prob}%`}></div>
-						</div>
-						<div class="radar-prob-num">遭遇確率: <b>{a.prob}%</b></div>
-						<p class="radar-note">{a.note}</p>
+						)}
 					</div>
 				))}
 			</div>
-
-			{airportRadar.length > 7 && (
-				<details class="radar-more-accordion">
-					<summary class="radar-more-summary">
-						<span>その他の就航空港（{airportRadar.length - 7}空港）の遭遇確率を見る</span>
-						<span class="rm-arrow">▾</span>
-					</summary>
-					<div class="radar-grid radar-more-grid">
-						{airportRadar.slice(7).map((a) => (
-							<div class="radar-card radar-card-sub">
-								<div class="radar-header">
-									<div class="airport-title">
-										<strong class="airport-name">{a.name}</strong>
-										<span class="airport-code">{a.code}</span>
-									</div>
-									<div class="radar-level-badge">{a.level}</div>
-								</div>
-								<div class="radar-meter">
-									<div class="radar-meter-fill" style={`width: ${a.prob}%`}></div>
-								</div>
-								<div class="radar-prob-num">遭遇確率: <b>{a.prob}%</b></div>
-								<p class="radar-note">{a.note}</p>
-							</div>
-						))}
-					</div>
-				</details>
-			)}
-		</div>
-
-		<!-- ANA公式就航路線一覧カード -->
-		<div class="official-routes-section">
-			<h2 class="section-heading">🗺️ 【ANA公式発表】就航路線一覧（2026年10月25日冬ダイヤ以降）</h2>
-			<p class="section-sub">
-				ANA公式サイトにて発表された、ちいかわジェット（JA609A）の定期就航路線（全20路線）です。
-			</p>
-
-			<div class="official-routes-card">
-				<div class="official-hub-block">
-					<div class="hub-header">
-						<span class="hub-badge">最大ハブ</span>
-						<strong class="hub-title">東京（羽田）発着（計15路線）</strong>
-					</div>
-					<div class="routes-tags">
-						<span class="r-tag">札幌(新千歳)</span>
-						<span class="r-tag">大阪(伊丹)</span>
-						<span class="r-tag">福岡</span>
-						<span class="r-tag">沖縄(那覇)</span>
-						<span class="r-tag">松山</span>
-						<span class="r-tag">長崎</span>
-						<span class="r-tag">広島</span>
-						<span class="r-tag">函館</span>
-						<span class="r-tag">熊本</span>
-						<span class="r-tag">鹿児島</span>
-						<span class="r-tag">宮崎</span>
-						<span class="r-tag">米子</span>
-						<span class="r-tag">山口宇部</span>
-						<span class="r-tag">高知</span>
-						<span class="r-tag">石垣</span>
-					</div>
-				</div>
-
-				<div class="official-subhubs-grid">
-					<div class="subhub-item">
-						<strong class="subhub-title">大阪（伊丹）発着</strong>
-						<p class="subhub-routes">札幌(新千歳)、沖縄(那覇)、東京(羽田)</p>
-					</div>
-					<div class="subhub-item">
-						<strong class="subhub-title">名古屋（中部）発着</strong>
-						<p class="subhub-routes">札幌(新千歳)、沖縄(那覇)</p>
-					</div>
-					<div class="subhub-item">
-						<strong class="subhub-title">福岡発着</strong>
-						<p class="subhub-routes">札幌(新千歳)、東京(羽田)</p>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- 狙い撃ち搭乗＆撮影の極意 -->
-		<div class="tips-section">
-			<!-- 独自分析の仕組み（折りたたみ） -->
-			<details class="logic-accordion">
-				<summary class="logic-summary">
-					<span>💡 なぜ前夜に翌朝のフライトが高確率でわかるの？（仕組みを見る）</span>
-					<span class="logic-arrow">▾</span>
-				</summary>
-				<div class="prediction-feature-banner">
-					<div class="feature-badge">✈️ 運航ダイヤの独自分析</div>
-					<h3 class="feature-title">公式発表は「当日朝」。それでも「前夜」に明日の初便が高確率でわかる仕組み</h3>
-					<p class="feature-intro">
-						「ちいかわジェットに乗りたい」「空港の展望デッキで撮影したい」というファンのために、航空機の運用ルールと過去のフライト実績データを組み合わせ、翌日のスケジュールを独自に分析・予想しています。
-					</p>
-					<div class="feature-cards-grid">
-						<div class="f-card">
-							<div class="f-icon">🌙</div>
-							<h4 class="f-name">① 夜間駐機（ナイトステイ）の運用ルール</h4>
-							<p class="f-desc">
-								旅客機は夜最後に到着した地方空港で夜を明かします。翌朝はその空港からの始発便（羽田行き等）に投入されるという<b>航空機の運用ルール</b>を活用し、前夜の時点で翌朝一番のダイヤを特定します。
-							</p>
-						</div>
-						<div class="f-card">
-							<div class="f-icon">📊</div>
-							<h4 class="f-name">② ANA同型機の運航実績データ</h4>
-							<p class="f-desc">
-								ちいかわジェット（JA609A）だけでなく、同じ路線群を担当するANA保有の<b>B767-300ER型機全15機のフライト履歴</b>を分析。「羽田到着後、次どこへ飛ぶ傾向があるか？」のパターンを蓄積して週間スケジュールを割り出しています。
-							</p>
-						</div>
-						<div class="f-card">
-							<div class="f-icon">⏱️</div>
-							<h4 class="f-name">③ 1日を通したリアルタイム追跡</h4>
-							<p class="f-desc">
-								朝の初回予想から昼の運航状況、夕方のナイトステイ先見通し、夜の翌朝初便確定まで、実際のフライト状況に合わせて最新の運行予想にアップデートしています。
-							</p>
-						</div>
-					</div>
-				</div>
-			</details>
-
-			<h2 class="section-heading">🔍 ちいかわジェットを狙い撃ちする3大鉄則</h2>
-			<div class="tips-grid">
-				<div class="tip-box">
-					<div class="tip-number">01</div>
-					<h3 class="tip-title">予約画面で「76P」または「763」を探す</h3>
-					<p class="tip-desc">
-						ANAの予約画面の機種欄に「76P」または「763」と書かれている便がボーイング767-300ER型機です。ちいかわジェットはこの型機のJA609A号機が担当しています。
-					</p>
-				</div>
-				<div class="tip-box">
-					<div class="tip-number">02</div>
-					<h3 class="tip-title">前夜のナイトステイ先から朝一便を絞り込む</h3>
-					<p class="tip-desc">
-						夜最後に地方空港に着陸した機体は、翌朝その空港からの羽田行き始発便（長崎ならNH662便、広島ならNH672便など）として100%固定投入されます。
-					</p>
-				</div>
-				<div class="tip-box">
-					<div class="tip-number">03</div>
-					<h3 class="tip-title">Flightradar24で「JA609A」を追跡する</h3>
-					<p class="tip-desc">
-						世界中の航空機を追跡できるFlightradar24で「JA609A」と検索すれば、当日の全飛行ルートと現在位置がリアルタイムに確認可能です。
-					</p>
-				</div>
-			</div>
-		</div>
+		</section>
 	</div>
 </Layout>
 
 <style>
-	.chiikawa-dashboard {
-		max-width: 960px;
-		margin: 0 auto;
-		padding: 1rem 0 3rem;
-		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	/* ブログレイアウト側の不要な装飾や巨大ヒーロー画像をリセット */
+	:global(.hero-image) {
+		display: none !important;
 	}
-
-	/* Google自動広告（.google-auto-placed）のみ完全遮断 */
 	:global(.google-auto-placed) {
 		display: none !important;
 		height: 0 !important;
-		margin: 0 !important;
+	}
+	.chiikawa-dashboard :global(h2),
+	.chiikawa-dashboard :global(h3),
+	.chiikawa-dashboard :global(h4) {
+		background: none !important;
+		border: none !important;
 		padding: 0 !important;
+		margin: 0 !important;
+	}
+	.chiikawa-dashboard :global(h3::after) {
+		display: none !important;
+	}
+	.chiikawa-dashboard :global(strong),
+	.chiikawa-dashboard :global(b) {
+		background: none !important;
 	}
 
-	.dash-hero {
-		background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%);
-		border: 2px solid #bae6fd;
-		border-radius: 12px;
-		padding: 1.75rem;
+	.chiikawa-dashboard {
+		max-width: 820px;
+		margin: 0 auto;
+		padding: 0.25rem 0 2rem;
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+		color: #1e293b;
+	}
+
+	/* ステータスバー */
+	.status-bar {
+		background: #f8fafc;
+		border: 1px solid #cbd5e1;
+		border-radius: 10px;
+		padding: 0.9rem 1.1rem;
 		margin-bottom: 1.5rem;
 	}
-	.dash-badge-row {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-		margin-bottom: 0.75rem;
-	}
-	.live-dot-badge {
-		background: #0284c7;
-		color: #ffffff;
-		font-weight: bold;
-		font-size: 0.85rem;
-		padding: 0.25rem 0.65rem;
-		border-radius: 9999px;
-		display: inline-flex;
-		align-items: center;
-		letter-spacing: 0.05em;
-	}
-	.dash-updated {
-		font-size: 0.85rem;
-		color: #64748b;
-	}
-	.dash-title {
-		margin: 0 0 0.75rem 0;
-		font-size: 1.6rem;
-		color: #0f172a;
-		line-height: 1.35;
-	}
-	.dash-lead {
-		margin: 0;
-		color: #334155;
-		font-size: 0.95rem;
-		line-height: 1.65;
-	}
-
-	.current-status-card {
-		background: #ffffff;
-		border: 1px solid #cbd5e1;
-		border-radius: 10px;
-		padding: 1.25rem;
-		margin-bottom: 2rem;
-		box-shadow: 0 2px 4px rgba(0,0,0,0.04);
-	}
-	.status-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-		gap: 1rem;
-		margin-bottom: 1rem;
-	}
-	.status-item {
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
-		border-radius: 8px;
-		padding: 0.85rem 1rem;
-	}
-	.status-label {
-		display: block;
-		font-size: 0.8rem;
-		color: #64748b;
-		margin-bottom: 0.35rem;
-	}
-	.status-value {
-		font-size: 1.15rem;
-		color: #1e293b;
-	}
-	.status-value.highlight {
-		color: #0284c7;
-		font-weight: bold;
-	}
-	.nightstay-prob-wrap {
-		display: flex;
-		flex-direction: column;
-		gap: 0.35rem;
-	}
-	.nightstay-prob-val {
-		font-size: 1.05rem;
-		color: #0284c7;
-		font-weight: 700;
-	}
-	.nightstay-pills {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.4rem;
-		margin-top: 0.2rem;
-	}
-	.ns-pill {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.25rem;
-		background: #e0f2fe;
-		color: #0369a1;
-		font-size: 0.78rem;
-		padding: 0.15rem 0.5rem;
-		border-radius: 9999px;
-		border: 1px solid #bae6fd;
-	}
-	.highlight-amber {
-		background: #fffbeb !important;
-		border-color: #fde68a !important;
-		color: #b45309 !important;
-	}
-	.today-plans-wrapper {
-		margin-top: 1.5rem;
-	}
-	.status-tips {
-		background: #fffbeb;
-		border: 1px solid #fde68a;
-		border-radius: 6px;
-		padding: 0.75rem 1rem;
-		font-size: 0.85rem;
-		color: #92400e;
-		line-height: 1.5;
-	}
-
-	.prediction-feature-banner {
-		background: #f0f7ff;
-		border: 1px solid #bae6fd;
-		border-radius: 12px;
-		padding: 1.5rem 1.75rem;
-		margin-bottom: 2rem;
-		color: #0f172a;
-	}
-	.feature-badge {
-		display: inline-block;
-		background: #0284c7;
-		color: #ffffff;
-		font-size: 0.75rem;
-		font-weight: 700;
-		padding: 0.2rem 0.65rem;
-		border-radius: 9999px;
-		letter-spacing: 0.03em;
-		margin-bottom: 0.6rem;
-	}
-	.feature-title {
-		font-size: 1.25rem;
-		font-weight: 700;
-		color: #0f172a;
-		margin: 0 0 0.45rem 0;
-		line-height: 1.45;
-	}
-	.feature-intro {
-		font-size: 0.88rem;
-		color: #334155;
-		margin: 0 0 1.2rem 0;
-		line-height: 1.6;
-	}
-	.feature-cards-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-		gap: 0.85rem;
-	}
-	.f-card {
-		background: #ffffff;
-		border: 1px solid #cbd5e1;
-		border-radius: 8px;
-		padding: 1rem 1.15rem;
-		box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-	}
-	.f-icon {
-		font-size: 1.4rem;
-		margin-bottom: 0.3rem;
-	}
-	.f-name {
-		font-size: 0.92rem;
-		color: #0369a1;
-		margin: 0 0 0.35rem 0;
-		font-weight: 700;
-	}
-	.f-desc {
-		font-size: 0.82rem;
-		color: #475569;
-		margin: 0;
-		line-height: 1.55;
-	}
-
-	.section-heading {
-		font-size: 1.35rem;
-		color: #1e293b;
-		margin: 2rem 0 0.4rem 0;
-		border-bottom: 2px solid #38bdf8;
-		padding-bottom: 0.4rem;
-	}
-	.section-sub {
-		color: #64748b;
-		font-size: 0.9rem;
-		margin: 0 0 1.25rem 0;
-	}
-
-	.schedule-timeline {
-		display: flex;
-		flex-direction: column;
-		gap: 1.25rem;
-	}
-	.day-card {
-		background: #ffffff;
-		border: 1px solid #e2e8f0;
-		border-radius: 10px;
-		padding: 1.25rem;
-		box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-		transition: border-color 0.2s ease;
-	}
-	.day-card.card-today {
-		border: 2px solid #38bdf8;
-		background: #f0f9ff;
-	}
-	.day-card.card-tomorrow {
-		border: 2px solid #818cf8;
-		background: #f5f3ff;
-	}
-	.day-card.card-weekend {
-		border-left: 4px solid #f43f5e;
-	}
-	.day-header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		margin-bottom: 1rem;
-		border-bottom: 1px dashed #cbd5e1;
-		padding-bottom: 0.65rem;
-	}
-	.day-date-group {
-		display: flex;
-		align-items: center;
-		gap: 0.65rem;
-	}
-	.day-date {
-		font-size: 1.2rem;
-		font-weight: bold;
-		color: #0f172a;
-	}
-	.day-type-badge {
-		font-size: 0.8rem;
-		background: #e2e8f0;
-		color: #475569;
-		padding: 0.2rem 0.5rem;
-		border-radius: 4px;
-	}
-	.tag-live {
-		background: #0284c7;
-		color: #fff;
-		font-size: 0.75rem;
-		font-weight: bold;
-		padding: 0.25rem 0.6rem;
-		border-radius: 9999px;
-	}
-	.tag-hot {
-		background: #6366f1;
-		color: #fff;
-		font-size: 0.75rem;
-		font-weight: bold;
-		padding: 0.25rem 0.6rem;
-		border-radius: 9999px;
-	}
-
-	.flight-intro {
-		margin: 0 0 0.75rem 0;
-		font-size: 0.9rem;
-		color: #334155;
-	}
-	.flight-note {
-		margin: 0.65rem 0 0 0;
-		font-size: 0.8rem;
-		color: #64748b;
-	}
-	.table-wrap {
-		overflow-x: auto;
-	}
-	.dash-table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: 0.9rem;
-	}
-	.dash-table th {
-		background: #f1f5f9;
-		color: #475569;
-		font-weight: 600;
-		padding: 0.6rem 0.75rem;
-		border: 1px solid #cbd5e1;
-		text-align: left;
-	}
-	.dash-table td {
-		padding: 0.6rem 0.75rem;
-		border: 1px solid #e2e8f0;
-		color: #1e293b;
-	}
-	.flight-badge {
-		display: inline-block;
-		font-size: 0.75rem;
-		font-weight: bold;
-		padding: 0.2rem 0.5rem;
-		border-radius: 4px;
-	}
-	.flight-badge.is-landed { background: #dcfce7; color: #15803d; }
-	.flight-badge.is-live { background: #e0f2fe; color: #0369a1; }
-	.flight-badge.is-scheduled { background: #f1f5f9; color: #64748b; }
-	.conf-badge {
-		background: #e0e7ff;
-		color: #4338ca;
-		font-weight: bold;
-		font-size: 0.8rem;
-		padding: 0.2rem 0.5rem;
-		border-radius: 4px;
-	}
-	.text-blue { color: #0284c7; }
-
-	.top-forecast-banner {
-		background: #f8fafc;
-		border: 1px solid #cbd5e1;
-		border-radius: 6px;
-		padding: 0.65rem 0.85rem;
+	.status-top-meta {
 		display: flex;
 		align-items: center;
 		gap: 0.75rem;
 		flex-wrap: wrap;
-		margin-bottom: 0.85rem;
-		font-size: 0.9rem;
-	}
-	.top-label { color: #64748b; font-size: 0.8rem; }
-	.top-route { color: #0f172a; font-size: 1rem; }
-	.top-prob {
-		margin-left: auto;
-		background: #fef08a;
-		color: #854d0e;
-		font-weight: bold;
-		font-size: 0.8rem;
-		padding: 0.2rem 0.5rem;
-		border-radius: 4px;
-	}
-
-	.forecast-routes-list {
-		display: flex;
-		flex-direction: column;
-		gap: 0.6rem;
-	}
-	.route-prob-row {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-		background: #ffffff;
-		border: 1px solid #f1f5f9;
-		border-radius: 6px;
-		padding: 0.5rem 0.75rem;
-	}
-	.route-info {
-		display: flex;
-		flex-direction: column;
-	}
-	.route-name { font-size: 0.9rem; font-weight: bold; color: #1e293b; }
-	.route-flights { font-size: 0.75rem; color: #64748b; }
-	.route-meter-wrap {
-		display: flex;
-		align-items: center;
-		gap: 0.65rem;
-	}
-	.route-meter-bar {
-		width: 100px;
-		height: 8px;
-		background: #e2e8f0;
-		border-radius: 4px;
-		overflow: hidden;
-	}
-	.route-meter-fill {
-		height: 100%;
-		background: linear-gradient(90deg, #38bdf8, #2563eb);
-		border-radius: 4px;
-	}
-	.route-prob-val {
-		font-size: 0.9rem;
-		font-weight: bold;
-		color: #0284c7;
-		min-width: 40px;
-		text-align: right;
-	}
-	.route-rank {
-		font-size: 0.75rem;
-		background: #f1f5f9;
-		color: #475569;
-		padding: 0.15rem 0.4rem;
-		border-radius: 3px;
-	}
-
-	.radar-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-		gap: 1rem;
-	}
-	.radar-card {
-		background: #ffffff;
-		border: 1px solid #cbd5e1;
-		border-radius: 8px;
-		padding: 1rem;
-		box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-	}
-	.radar-header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		margin-bottom: 0.5rem;
-	}
-	.airport-name { font-size: 0.95rem; color: #0f172a; }
-	.airport-code { font-size: 0.75rem; color: #64748b; margin-left: 0.25rem; }
-	.radar-level-badge {
-		font-size: 0.75rem;
-		font-weight: bold;
-		background: #eff6ff;
-		color: #1d4ed8;
-		padding: 0.15rem 0.4rem;
-		border-radius: 4px;
-	}
-	.radar-meter {
-		height: 6px;
-		background: #e2e8f0;
-		border-radius: 3px;
-		overflow: hidden;
-		margin-bottom: 0.4rem;
-	}
-	.radar-meter-fill {
-		height: 100%;
-		background: linear-gradient(90deg, #10b981, #0284c7);
-	}
-	.radar-prob-num {
-		font-size: 0.85rem;
-		color: #334155;
-		margin-bottom: 0.4rem;
-	}
-	.radar-note {
-		margin: 0;
-		font-size: 0.75rem;
-		color: #64748b;
-		line-height: 1.4;
-	}
-
-	.official-routes-card {
-		background: #ffffff;
-		border: 1px solid #cbd5e1;
-		border-radius: 10px;
-		padding: 1.25rem;
-		box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-		margin-bottom: 2rem;
-	}
-	.official-hub-block {
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
-		border-radius: 8px;
-		padding: 1.25rem;
-		margin-bottom: 1rem;
-	}
-	.hub-header {
-		display: flex;
-		align-items: center;
-		gap: 0.65rem;
-		margin-bottom: 0.85rem;
-	}
-	.hub-badge {
-		background: #0284c7;
-		color: #ffffff;
-		font-size: 0.75rem;
-		font-weight: 700;
-		padding: 0.15rem 0.5rem;
-		border-radius: 4px;
-	}
-	.hub-title {
-		font-size: 1.05rem;
-		color: #0f172a;
-	}
-	.routes-tags {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-	}
-	.r-tag {
-		background: #ffffff;
-		border: 1px solid #cbd5e1;
-		color: #1e293b;
-		font-size: 0.85rem;
-		font-weight: 600;
-		padding: 0.3rem 0.65rem;
-		border-radius: 6px;
-	}
-	.official-subhubs-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-		gap: 1rem;
-	}
-	.subhub-item {
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
-		border-radius: 8px;
-		padding: 1rem;
-	}
-	.subhub-title {
-		display: block;
-		font-size: 0.95rem;
-		color: #0284c7;
-		margin-bottom: 0.4rem;
-	}
-	.subhub-routes {
-		margin: 0;
-		font-size: 0.85rem;
-		color: #334155;
-		line-height: 1.5;
-	}
-
-	.tips-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-		gap: 1.25rem;
-	}
-	.tip-box {
-		background: #ffffff;
-		border: 1px solid #e2e8f0;
-		border-radius: 8px;
-		padding: 1.25rem;
-		position: relative;
-	}
-	.tip-number {
-		font-size: 1.8rem;
-		font-weight: 800;
-		color: #e2e8f0;
-		line-height: 1;
-		margin-bottom: 0.25rem;
-	}
-	.tip-title {
-		margin: 0 0 0.5rem 0;
-		font-size: 1rem;
-		color: #0f172a;
-	}
-	.tip-desc {
-		margin: 0;
-		font-size: 0.85rem;
-		color: #475569;
-		line-height: 1.6;
-	}
-
-	/* タイムライン・時刻順UI用スタイル */
-	.timeline-intro-bar {
-		background: #f0f9ff;
-		border-left: 4px solid #0284c7;
-		padding: 0.6rem 0.85rem;
-		border-radius: 4px;
-		font-size: 0.88rem;
-		color: #0369a1;
-		font-weight: 600;
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		margin-bottom: 0.85rem;
-	}
-	.timeline-intro-bar.highlight-blue {
-		background: #f5f3ff;
-		border-left-color: #6366f1;
-		color: #4338ca;
-	}
-	.timeline-intro-icon {
-		font-size: 1.1rem;
-	}
-
-	.timeline-table th {
-		background: #f8fafc;
-	}
-	.step-num {
-		display: inline-block;
-		font-size: 0.72rem;
-		font-weight: 700;
-		background: #0284c7;
-		color: #ffffff;
-		padding: 0.15rem 0.45rem;
-		border-radius: 4px;
-		margin-right: 0.4rem;
-		vertical-align: middle;
-	}
-	.tomorrow-table .step-num {
-		background: #6366f1;
-	}
-	.timeline-time {
-		font-size: 0.95rem;
-		color: #0f172a;
-		letter-spacing: 0.02em;
-	}
-	.flight-no-badge {
-		font-size: 0.95rem;
-		color: #0f172a;
-	}
-	.route-highlight {
-		font-weight: 600;
-		color: #1e293b;
-	}
-
-	/* スマホ用 縦型タイムラインUI */
-	.flight-timeline-mobile {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-		position: relative;
-		padding-left: 0.25rem;
-	}
-	.timeline-flight-card {
-		display: flex;
-		position: relative;
-		gap: 0.85rem;
-	}
-	.timeline-node {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		width: 28px;
-		flex-shrink: 0;
-	}
-	.node-circle {
-		width: 26px;
-		height: 26px;
-		border-radius: 50%;
-		background: #0284c7;
-		color: #ffffff;
-		font-size: 0.75rem;
-		font-weight: 800;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		box-shadow: 0 2px 4px rgba(2, 132, 199, 0.3);
-		z-index: 2;
-	}
-	.node-circle.blue-circle {
-		background: #6366f1;
-		box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
-	}
-	.node-line {
-		width: 2px;
-		flex-grow: 1;
-		background: #bae6fd;
-		margin: 4px 0;
-	}
-	.node-line.blue-line {
-		background: #c7d2fe;
-	}
-	.timeline-content {
-		flex-grow: 1;
-		background: #ffffff;
-		border: 1px solid #e2e8f0;
-		border-radius: 8px;
-		padding: 0.85rem 1rem;
-		box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-		margin-bottom: 0.75rem;
-	}
-	.timeline-flight-card.prediction-card .timeline-content {
-		border-left: 3px solid #818cf8;
-	}
-	.t-card-header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		margin-bottom: 0.4rem;
-	}
-	.t-time-wrap {
-		display: flex;
-		align-items: center;
-		gap: 0.35rem;
-	}
-	.t-time-icon {
-		font-size: 0.9rem;
-	}
-	.t-time-val {
-		font-size: 0.95rem;
-		color: #0f172a;
-		font-weight: 700;
-	}
-	.t-flight-main {
-		display: flex;
-		align-items: center;
-		gap: 0.6rem;
-		font-size: 0.95rem;
-	}
-	.t-flight-no {
-		font-size: 1.05rem;
-		font-weight: 800;
-		color: #0f172a;
-	}
-	.t-route-text {
-		font-weight: 600;
-		color: #334155;
-	}
-	.t-time-row {
-		display: flex;
-		align-items: center;
-		gap: 0.35rem;
-		margin-bottom: 0.35rem;
-	}
-	.t-step-tag {
-		font-size: 0.75rem;
-		font-weight: 700;
-		background: #e0e7ff;
-		color: #4338ca;
-		padding: 0.15rem 0.5rem;
-		border-radius: 4px;
-	}
-	.m-card-reason {
-		margin-top: 0.5rem;
-		font-size: 0.75rem;
-		color: #475569;
-		background: #f8fafc;
-		padding: 0.35rem 0.6rem;
-		border-radius: 4px;
-		border: 1px solid #f1f5f9;
-		line-height: 1.4;
-	}
-
-	/* 運行予想の的中実績スコアボード */
-	.accuracy-section {
-		margin-top: 2.5rem;
-		margin-bottom: 2.5rem;
-	}
-	.accuracy-scoreboard {
-		display: grid;
-		grid-template-columns: 340px 1fr;
-		gap: 1.25rem;
-		margin-top: 1rem;
-	}
-	.score-main-card {
-		background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%);
-		border: 1px solid #0284c7;
-		border-radius: 12px;
-		padding: 1.4rem 1.5rem;
-		color: #ffffff;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
-	}
-	.score-badge {
-		align-self: flex-start;
-		background: #ffffff;
-		color: #0369a1;
-		font-size: 0.75rem;
-		font-weight: 700;
-		padding: 0.2rem 0.65rem;
-		border-radius: 9999px;
-		letter-spacing: 0.03em;
-	}
-	.score-number-wrap {
-		margin: 1rem 0;
-		text-align: center;
-	}
-	.score-rate {
-		display: block;
-		font-size: 3.5rem;
-		font-weight: 800;
-		line-height: 1;
-		color: #ffffff;
-		letter-spacing: -0.02em;
-	}
-	.score-label {
-		display: block;
-		margin-top: 0.45rem;
-		font-size: 0.9rem;
-		color: #e0f2fe;
-		font-weight: 600;
-	}
-	.score-sub-stats {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		gap: 0.5rem;
-		background: rgba(255, 255, 255, 0.12);
-		border: 1px solid rgba(255, 255, 255, 0.2);
-		border-radius: 8px;
-		padding: 0.65rem 0.5rem;
-		text-align: center;
-	}
-	.sub-stat-item {
-		display: flex;
-		flex-direction: column;
-		gap: 0.2rem;
-	}
-	.sub-stat-num {
-		font-size: 0.95rem;
-		font-weight: 800;
-		color: #ffffff;
-	}
-	.sub-stat-num.highlight-gold {
-		color: #fef08a;
-	}
-	.sub-stat-desc {
-		font-size: 0.68rem;
-		color: #e0f2fe;
-		line-height: 1.2;
-	}
-
-	/* 答え合わせタイムライン */
-	.past-verifications-wrap {
-		background: #ffffff;
-		border: 1px solid #cbd5e1;
-		border-radius: 12px;
-		padding: 1.25rem;
-		box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-	}
-	.past-title {
-		margin: 0 0 1rem 0;
-		font-size: 1.05rem;
-		color: #0f172a;
-		border-bottom: 2px solid #e2e8f0;
-		padding-bottom: 0.5rem;
-	}
-	.past-list {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
-	}
-	.past-item {
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
-		border-radius: 8px;
-		padding: 0.85rem 1rem;
-		transition: border-color 0.2s ease;
-	}
-	.past-item:hover {
-		border-color: #94a3b8;
-	}
-	.past-item-header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		margin-bottom: 0.5rem;
-	}
-	.past-header-left {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
-	.past-date {
-		font-weight: 700;
-		font-size: 0.95rem;
-		color: #0f172a;
-	}
-	.past-type {
-		font-size: 0.72rem;
-		background: #e2e8f0;
-		color: #475569;
-		padding: 0.15rem 0.4rem;
-		border-radius: 4px;
-	}
-	.past-hit-badge {
-		background: #dcfce7;
-		color: #15803d;
-		font-weight: 800;
 		font-size: 0.78rem;
-		padding: 0.2rem 0.55rem;
-		border-radius: 9999px;
-		border: 1px solid #86efac;
-	}
-	.past-comparison {
-		display: flex;
-		align-items: center;
-		background: #ffffff;
-		border: 1px solid #e2e8f0;
-		border-radius: 6px;
-		padding: 0.5rem 0.75rem;
-		gap: 0.75rem;
-		margin-bottom: 0.45rem;
-		flex-wrap: wrap;
-	}
-	.past-col {
-		display: flex;
-		flex-direction: column;
-		flex: 1;
-		min-width: 140px;
-	}
-	.past-col-label {
-		font-size: 0.7rem;
 		color: #64748b;
-		margin-bottom: 0.15rem;
-	}
-	.past-pred-val {
-		font-size: 0.85rem;
-		color: #4338ca;
-	}
-	.past-arrow {
-		color: #94a3b8;
-		font-weight: bold;
-		font-size: 1rem;
-	}
-	.past-actual-val {
-		font-size: 0.85rem;
-		color: #15803d;
-	}
-	.past-reason {
-		margin: 0;
-		font-size: 0.76rem;
-		color: #64748b;
-		line-height: 1.4;
-	}
-
-	/* 1日通し過去実績フライト内訳 */
-	.past-daily-flights {
-		background: #f1f5f9;
-		border: 1px solid #cbd5e1;
-		border-radius: 6px;
-		padding: 0.6rem 0.75rem;
-		margin-bottom: 0.5rem;
-	}
-	.pdf-title {
-		font-size: 0.72rem;
-		font-weight: 700;
-		color: #475569;
-		margin-bottom: 0.4rem;
-	}
-	.pdf-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-		gap: 0.45rem;
-	}
-	.pdf-item {
-		background: #ffffff;
-		border-radius: 5px;
-		padding: 0.4rem 0.6rem;
-		border: 1px solid #e2e8f0;
-		display: flex;
-		flex-direction: column;
-		gap: 0.15rem;
-	}
-	.pdf-item.is-hit {
-		border-left: 3px solid #16a34a;
-	}
-	.pdf-item.is-miss {
-		border-left: 3px solid #ea580c;
-		background: #fff7ed;
-	}
-	.pdf-step-line {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		font-size: 0.7rem;
-	}
-	.pdf-step {
-		font-weight: 700;
-		color: #334155;
-	}
-	.pdf-badge {
-		font-size: 0.68rem;
-		font-weight: 800;
-		color: #15803d;
-	}
-	.pdf-item.is-miss .pdf-badge {
-		color: #c2410c;
-	}
-	.pdf-flight-info {
-		display: flex;
-		align-items: center;
-		gap: 0.4rem;
-		font-size: 0.8rem;
-	}
-	.pdf-flight-no {
-		color: #0284c7;
-	}
-	.pdf-route {
-		font-weight: 600;
-		color: #1e293b;
-	}
-	.pdf-time {
-		font-size: 0.68rem;
-		color: #64748b;
-	}
-
-	/* プランA / プランB / プランC 予測カード */
-	.confirmed-first-banner {
-		background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-		border: 2px solid #f59e0b;
-		border-radius: 8px;
-		padding: 0.75rem 1rem;
-		margin-bottom: 0.85rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.35rem;
-	}
-	.cf-badge {
-		align-self: flex-start;
-		background: #d97706;
-		color: #ffffff;
-		font-size: 0.72rem;
-		font-weight: 800;
-		padding: 0.15rem 0.55rem;
-		border-radius: 9999px;
-	}
-	.cf-main {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		flex-wrap: wrap;
-		font-size: 0.95rem;
-		color: #0f172a;
-	}
-	.cf-fno {
-		color: #0284c7;
-		font-size: 1.05rem;
-	}
-	.cf-route {
-		font-weight: 700;
-	}
-	.cf-reason {
-		color: #92400e;
-		font-size: 0.78rem;
-	}
-
-	/* プラン一覧コンテナ */
-	.plans-container {
-		display: flex;
-		flex-direction: column;
-		gap: 0.85rem;
-	}
-	.plan-card {
-		background: #ffffff;
-		border: 2px solid #cbd5e1;
-		border-radius: 10px;
-		overflow: hidden;
-		transition: all 0.2s ease;
-	}
-	.plan-card.plan-a {
-		border-color: #0284c7;
-		box-shadow: 0 3px 10px rgba(2, 132, 199, 0.08);
-	}
-	.plan-card.plan-b {
-		border-color: #6366f1;
-	}
-	.plan-card.plan-c {
-		border-color: #94a3b8;
-	}
-	.plan-card.is-dimmed {
-		opacity: 0.35;
-	}
-	.plan-summary {
-		list-style: none;
-		cursor: pointer;
-		padding: 0.85rem 1rem;
-		background: #f8fafc;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-		border-bottom: 1px solid #e2e8f0;
-	}
-	.plan-summary::-webkit-details-marker {
-		display: none;
-	}
-	.plan-card.plan-a .plan-summary {
-		background: linear-gradient(90deg, #e0f2fe 0%, #f0f9ff 100%);
-	}
-	.plan-card.plan-b .plan-summary {
-		background: linear-gradient(90deg, #e0e7ff 0%, #f5f3ff 100%);
-	}
-	.plan-summary-left {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: 0.55rem;
-	}
-	.plan-name-badge {
-		font-size: 0.85rem;
-		font-weight: 800;
-		padding: 0.2rem 0.65rem;
-		border-radius: 6px;
-		color: #ffffff;
-		background: #475569;
-	}
-	.plan-name-badge.plan-a {
-		background: #0284c7;
-	}
-	.plan-name-badge.plan-b {
-		background: #4f46e5;
-	}
-	.plan-name-badge.plan-c {
-		background: #475569;
-	}
-	.plan-prob-badge {
-		background: #ffffff;
-		border: 1px solid #cbd5e1;
-		padding: 0.15rem 0.55rem;
-		border-radius: 6px;
-		font-size: 0.85rem;
-		color: #0f172a;
-	}
-	.plan-prob-badge strong {
-		font-size: 1.05rem;
-		color: #b45309;
-	}
-	.plan-prob-badge small {
-		color: #475569;
-		margin-left: 0.2rem;
-		font-weight: 600;
-	}
-	.plan-route-title {
-		font-size: 0.98rem;
-		color: #0f172a;
-	}
-	.plan-summary-right {
-		display: flex;
-		align-items: center;
-		gap: 0.65rem;
-		margin-left: auto;
-	}
-	.plan-route-flow {
-		font-size: 0.8rem;
-		color: #334155;
-		background: rgba(255, 255, 255, 0.85);
-		padding: 0.2rem 0.55rem;
-		border-radius: 4px;
-		border: 1px solid #cbd5e1;
-		font-weight: 600;
-	}
-	.plan-detail-btn {
-		font-size: 0.78rem;
-		font-weight: 700;
-		color: #0284c7;
-		background: #ffffff;
-		border: 1px solid #bae6fd;
-		padding: 0.2rem 0.5rem;
-		border-radius: 4px;
-	}
-
-	/* プラン詳細ボディ */
-	.plan-detail-body {
-		padding: 0.85rem 1rem;
-		background: #ffffff;
-	}
-	.plan-desc-bar {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-		font-size: 0.8rem;
-		color: #475569;
 		margin-bottom: 0.65rem;
 		padding-bottom: 0.5rem;
-		border-bottom: 1px dashed #e2e8f0;
+		border-bottom: 1px solid #e2e8f0;
 	}
-	.plan-airport-pills {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.3rem;
-	}
-	.ap-pill {
+	.live-pill {
+		background: #0284c7;
+		color: #fff;
+		font-weight: 700;
 		font-size: 0.72rem;
-		font-weight: 700;
-		background: #f1f5f9;
-		color: #334155;
-		padding: 0.1rem 0.45rem;
-		border-radius: 9999px;
-		border: 1px solid #cbd5e1;
-	}
-
-	/* 1便＝1行のスリム時刻表 */
-	.plan-flights-timeline {
-		display: flex;
-		flex-direction: column;
-		gap: 0.4rem;
-	}
-	.plan-flight-row {
-		display: grid;
-		grid-template-columns: 230px 1fr auto;
-		align-items: center;
-		gap: 0.75rem;
-		padding: 0.5rem 0.75rem;
-		background: #f8fafc;
-		border: 1px solid #e2e8f0;
-		border-radius: 6px;
-		font-size: 0.9rem;
-		transition: all 0.15s ease;
-	}
-	.plan-flight-row.is-match {
-		background: #fef9c3;
-		border-color: #eab308;
-		box-shadow: 0 0 0 1px #eab308;
-	}
-	.pf-left {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
-	.pf-step {
-		font-size: 0.74rem;
-		font-weight: 700;
-		background: #e2e8f0;
-		color: #334155;
-		padding: 0.15rem 0.45rem;
-		border-radius: 4px;
-		white-space: nowrap;
-	}
-	.pf-time {
-		color: #0f172a;
-		font-size: 0.9rem;
-		white-space: nowrap;
-	}
-	.pf-center {
-		display: flex;
-		align-items: center;
-		gap: 0.6rem;
-		flex-wrap: wrap;
-	}
-	.pf-fno {
-		color: #0284c7;
-		font-size: 0.95rem;
-		min-width: 58px;
-	}
-	.pf-route {
-		font-weight: 700;
-		color: #1e293b;
-	}
-	.pf-right {
-		text-align: right;
-	}
-	.pf-tag {
-		font-size: 0.74rem;
-		font-weight: 700;
-		background: #e0f2fe;
-		color: #0369a1;
-		padding: 0.15rem 0.5rem;
-		border-radius: 4px;
-		white-space: nowrap;
-	}
-	.pf-tag.is-confirmed {
-		background: #fef3c7;
-		color: #b45309;
-		border: 1px solid #fcd34d;
-	}
-
-	/* 週間予報（2日後〜6日後）のプランA〜E行 */
-	.plan-forecast-row {
-		display: grid;
-		grid-template-columns: 200px 1fr auto;
-		align-items: center;
-		gap: 0.75rem;
-	}
-	.pf-plan-head {
-		display: flex;
-		align-items: center;
-		gap: 0.45rem;
-	}
-	.plan-mini-badge {
-		font-size: 0.76rem;
-		font-weight: 800;
-		color: #ffffff;
-		background: #64748b;
-		padding: 0.18rem 0.5rem;
-		border-radius: 4px;
-		white-space: nowrap;
-	}
-	.plan-mini-badge.plan-idx-0 { background: #0284c7; }
-	.plan-mini-badge.plan-idx-1 { background: #4f46e5; }
-	.plan-mini-badge.plan-idx-2 { background: #0d9488; }
-	.route-prob-pill {
-		font-size: 0.85rem;
-		color: #0f172a;
-		white-space: nowrap;
-	}
-	.route-prob-pill b {
-		color: #b45309;
-		font-size: 0.95rem;
-	}
-	.route-prob-pill small {
-		color: #64748b;
-		font-size: 0.75rem;
-	}
-
-	/* 夕方以降の折返し見込み行＆ナイトステイ未確定バナー */
-	tr.predicted-row td {
-		background: #fffbeb !important;
-		border-bottom: 1px dashed #fcd34d !important;
-	}
-	.timeline-flight-card.predicted-row .timeline-content {
-		background: #fffbeb;
-		border: 1.5px dashed #f59e0b;
-	}
-	.flight-badge.is-predicted {
-		background: #fef3c7;
-		color: #b45309;
-		border: 1px solid #f59e0b;
-		font-weight: 800;
-	}
-	.pending-nightstay-banner {
-		background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-		border: 2px solid #f59e0b;
-		border-radius: 10px;
-		padding: 0.9rem 1.15rem;
-		margin-bottom: 1rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.4rem;
-	}
-	.pn-badge {
-		display: inline-block;
-		align-self: flex-start;
-		background: #d97706;
-		color: #ffffff;
-		font-size: 0.78rem;
-		font-weight: 800;
-		padding: 0.2rem 0.65rem;
+		padding: 0.1rem 0.5rem;
 		border-radius: 999px;
 	}
-	.pn-text {
-		margin: 0;
-		font-size: 0.88rem;
-		color: #78350f;
-		line-height: 1.55;
-		font-weight: 600;
+	.meta-updated {
+		margin-left: auto;
+	}
+	.status-main-grid {
+		display: grid;
+		grid-template-columns: 1fr 1.6fr;
+		gap: 1rem;
+	}
+	.status-box {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+	.status-label {
+		font-size: 0.75rem;
+		color: #64748b;
+	}
+	.status-val-main {
+		font-size: 1.15rem;
+		font-weight: 700;
+		color: #0f172a;
+	}
+	.ns-pills {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+	.ns-pill {
+		background: #ffffff;
+		border: 1px solid #cbd5e1;
+		border-radius: 6px;
+		padding: 0.2rem 0.6rem;
+		font-size: 0.85rem;
+		color: #334155;
+	}
+	.ns-pill b {
+		color: #0284c7;
+		margin-left: 0.2rem;
 	}
 
-	/* 今日のこの後の予定・見通しカード（コンパクト版） */
-	.today-outlook-card {
-		margin-top: 1rem;
-		background: #f8fafc;
-		border: 1px solid #bae6fd;
-		border-radius: 10px;
-		padding: 0.85rem 1rem;
+	/* セクション共通 */
+	.dash-section {
+		margin-bottom: 1.75rem;
 	}
-	.to-header {
+	.sec-head {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		flex-wrap: wrap;
 		gap: 0.5rem;
-		padding-bottom: 0.5rem;
-		border-bottom: 1px dashed #cbd5e1;
-		margin-bottom: 0.75rem;
+		margin-bottom: 0.65rem;
+		padding-bottom: 0.35rem;
+		border-bottom: 2px solid #e2e8f0;
 	}
-	.to-header-left {
+	.sec-title {
+		font-size: 1.05rem !important;
+		font-weight: 700;
+		color: #0f172a;
+	}
+	.sec-tag {
+		font-size: 0.72rem;
+		font-weight: 700;
+		padding: 0.15rem 0.55rem;
+		border-radius: 4px;
+	}
+	.tag-today {
+		background: #e0f2fe;
+		color: #0369a1;
+	}
+	.sec-sub-note {
+		font-size: 0.75rem;
+		color: #64748b;
+	}
+
+	/* 本日のフライト一覧 */
+	.flight-list {
+		display: flex;
+		flex-direction: column;
+		border: 1px solid #e2e8f0;
+		border-radius: 8px;
+		overflow: hidden;
+		background: #fff;
+	}
+	.flight-row {
+		display: grid;
+		grid-template-columns: 120px 1fr auto;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.6rem 0.85rem;
+		border-bottom: 1px solid #f1f5f9;
+		font-size: 0.88rem;
+	}
+	.flight-row:last-child {
+		border-bottom: none;
+	}
+	.flight-row.is-predicted {
+		background: #f8fafc;
+	}
+	.fl-time {
+		font-weight: 600;
+		color: #475569;
+		font-size: 0.82rem;
+	}
+	.fl-main {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		flex-wrap: wrap;
+	}
+	.fl-no {
+		font-weight: 700;
+		color: #0284c7;
+		min-width: 58px;
+	}
+	.fl-route {
+		font-weight: 600;
+		color: #1e293b;
+	}
+	.status-badge {
+		font-size: 0.72rem;
+		font-weight: 600;
+		padding: 0.15rem 0.5rem;
+		border-radius: 4px;
+		white-space: nowrap;
+	}
+	.b-landed { background: #f1f5f9; color: #64748b; }
+	.b-live { background: #dcfce7; color: #15803d; }
+	.b-sched { background: #e0f2fe; color: #0369a1; }
+	.b-pred { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+
+	/* 明日のプラン */
+	.confirmed-first {
+		background: #fffbeb;
+		border: 1px solid #fcd34d;
+		border-radius: 6px;
+		padding: 0.5rem 0.75rem;
+		margin-bottom: 0.6rem;
+		font-size: 0.85rem;
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
 		flex-wrap: wrap;
 	}
-	.to-badge {
-		background: #0284c7;
-		color: #ffffff;
-		font-size: 0.75rem;
-		font-weight: 700;
-		padding: 0.15rem 0.5rem;
-		border-radius: 4px;
-	}
-	.to-title {
-		font-size: 0.95rem;
-		color: #0f172a;
-	}
-	.to-cur-note {
-		font-size: 0.8rem;
-		color: #0369a1;
-		font-weight: 600;
-	}
-	.to-grid-compact {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-		gap: 0.75rem;
-	}
-	.to-box-compact {
-		background: #ffffff;
-		border: 1px solid #e2e8f0;
-		border-radius: 8px;
-		padding: 0.65rem 0.85rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.4rem;
-	}
-	.to-box-head-compact {
-		display: flex;
-		align-items: center;
-		gap: 0.45rem;
-	}
-	.to-box-title {
-		font-size: 0.88rem;
-		color: #1e293b;
-	}
-	.to-tag {
+	.cf-tag {
+		background: #d97706;
+		color: #fff;
 		font-size: 0.7rem;
 		font-weight: 700;
 		padding: 0.1rem 0.45rem;
-		border-radius: 999px;
+		border-radius: 4px;
 	}
-	.tag-high {
-		background: #ef4444;
-		color: #ffffff;
-	}
-	.tag-scenarios {
-		background: #0284c7;
-		color: #ffffff;
-	}
-	.to-flight-line-compact {
-		display: flex;
-		align-items: center;
-		gap: 0.6rem;
-		flex-wrap: wrap;
-		font-size: 0.85rem;
-	}
-	.to-fno {
-		color: #0284c7;
-		font-weight: bold;
-	}
-	.to-route {
-		color: #0f172a;
-		font-weight: 600;
-	}
-	.to-time {
+	.cf-time {
 		color: #64748b;
 		font-size: 0.8rem;
 	}
-	.to-scenarios-compact {
+	.plans-stack {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 0.4rem;
+		flex-direction: column;
+		gap: 0.5rem;
 	}
-	.to-sc-pill {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.25rem;
-		background: #f0fdf4;
-		border: 1px solid #86efac;
-		color: #166534;
-		font-size: 0.78rem;
-		padding: 0.15rem 0.5rem;
-		border-radius: 9999px;
-	}
-
-	/* アコーディオン共通スタイル（もっと見る） */
-	.logic-accordion,
-	.past-more-accordion,
-	.radar-more-accordion {
-		margin-top: 1rem;
-		border: 1px solid #e2e8f0;
+	.plan-box {
+		border: 1px solid #cbd5e1;
 		border-radius: 8px;
-		background: #ffffff;
+		background: #fff;
 		overflow: hidden;
 	}
-	.logic-summary,
-	.past-more-summary,
-	.radar-more-summary {
-		padding: 0.75rem 1rem;
-		font-size: 0.88rem;
-		font-weight: 700;
-		color: #0284c7;
-		cursor: pointer;
+	.plan-head {
+		padding: 0.65rem 0.85rem;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		gap: 0.5rem;
+		cursor: pointer;
 		background: #f8fafc;
 		user-select: none;
-		transition: background-color 0.2s;
 	}
-	.logic-summary:hover,
-	.past-more-summary:hover,
-	.radar-more-summary:hover {
-		background: #f1f5f9;
-	}
-	.logic-summary::-webkit-details-marker,
-	.past-more-summary::-webkit-details-marker,
-	.radar-more-summary::-webkit-details-marker {
+	.plan-head::-webkit-details-marker {
 		display: none;
 	}
-	.past-more-body,
-	.radar-more-grid {
-		padding: 0.85rem 1rem;
+	.ph-left {
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
+		flex-wrap: wrap;
 	}
-	.radar-card-sub {
+	.plan-badge {
+		font-size: 0.72rem;
+		font-weight: 700;
+		padding: 0.15rem 0.5rem;
+		border-radius: 4px;
+		color: #fff;
+	}
+	.p-0 { background: #0284c7; }
+	.p-1 { background: #475569; }
+	.p-2 { background: #64748b; }
+	.plan-prob {
+		font-weight: 700;
+		font-size: 0.9rem;
+		color: #0f172a;
+	}
+	.plan-flow {
+		font-size: 0.85rem;
+		color: #334155;
+		font-weight: 600;
+	}
+	.ph-toggle {
+		font-size: 0.75rem;
+		color: #64748b;
+		white-space: nowrap;
+	}
+	.plan-body {
+		padding: 0.4rem 0.85rem;
+		border-top: 1px solid #e2e8f0;
+	}
+	.plan-fl-row {
+		display: grid;
+		grid-template-columns: 75px 105px 65px 1fr;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.35rem 0;
+		border-bottom: 1px dashed #f1f5f9;
+		font-size: 0.82rem;
+	}
+	.plan-fl-row:last-child {
+		border-bottom: none;
+	}
+	.pf-step { color: #64748b; font-size: 0.75rem; }
+	.pf-time { color: #475569; }
+	.pf-no { font-weight: 700; color: #0284c7; }
+	.pf-route { font-weight: 600; color: #1e293b; }
+
+	/* 週間予報 */
+	.forecast-stack {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+	.forecast-day {
+		border: 1px solid #e2e8f0;
+		border-radius: 6px;
+		background: #fff;
+	}
+	.fd-summary {
+		padding: 0.55rem 0.85rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		cursor: pointer;
+		font-size: 0.85rem;
+		user-select: none;
+	}
+	.fd-summary::-webkit-details-marker {
+		display: none;
+	}
+	.fd-left {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+	}
+	.fd-date {
+		font-weight: 700;
+		color: #0f172a;
+		min-width: 90px;
+	}
+	.fd-top {
+		color: #475569;
+	}
+	.fd-top b {
+		color: #0284c7;
+	}
+	.fd-toggle {
+		font-size: 0.75rem;
+		color: #64748b;
+	}
+	.fd-body {
+		padding: 0.4rem 0.85rem 0.6rem;
+		background: #f8fafc;
+		border-top: 1px solid #f1f5f9;
+	}
+	.fd-row {
+		display: grid;
+		grid-template-columns: 65px 45px 1fr auto;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.25rem 0;
+		font-size: 0.8rem;
+		border-bottom: 1px dashed #e2e8f0;
+	}
+	.fd-row:last-child {
+		border-bottom: none;
+	}
+	.fd-plan { font-weight: 600; color: #475569; }
+	.fd-prob { font-weight: 700; color: #0284c7; }
+	.fd-route { font-weight: 600; color: #1e293b; }
+	.fd-flights { color: #64748b; font-size: 0.75rem; }
+
+	/* 過去の的中実績 */
+	.acc-pills {
+		display: flex;
+		gap: 0.4rem;
+	}
+	.acc-pill {
+		background: #f0fdf4;
+		border: 1px solid #bbf7d0;
+		color: #166534;
+		font-size: 0.75rem;
+		padding: 0.15rem 0.55rem;
+		border-radius: 999px;
+	}
+	.past-stack {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+	.past-card {
+		border: 1px solid #e2e8f0;
+		border-radius: 8px;
+		padding: 0.65rem 0.85rem;
+		background: #fff;
+	}
+	.pc-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+		margin-bottom: 0.45rem;
+		font-size: 0.85rem;
+	}
+	.pc-date {
+		font-weight: 700;
+		color: #0f172a;
+	}
+	.pc-route {
+		color: #475569;
+		font-size: 0.8rem;
+	}
+	.pc-badge {
+		background: #dcfce7;
+		color: #15803d;
+		font-size: 0.72rem;
+		font-weight: 700;
+		padding: 0.1rem 0.45rem;
+		border-radius: 4px;
+	}
+	.pc-flights {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+		gap: 0.35rem;
+	}
+	.pcf-chip {
+		display: flex;
+		align-items: center;
+		gap: 0.35rem;
 		background: #f8fafc;
 		border: 1px solid #e2e8f0;
+		border-radius: 4px;
+		padding: 0.25rem 0.5rem;
+		font-size: 0.76rem;
 	}
-
-	@media (max-width: 768px) {
-		.to-grid {
-			grid-template-columns: 1fr;
-		}
+	.pcf-chip.hit {
+		border-left: 3px solid #16a34a;
 	}
-
-	.desktop-only {
-		display: block;
+	.pcf-no {
+		font-weight: 700;
+		color: #0284c7;
 	}
-	.mobile-only {
-		display: none;
+	.pcf-rt {
+		color: #334155;
+		flex: 1;
 	}
-
-	@media (max-width: 768px) {
-		.accuracy-scoreboard {
-			grid-template-columns: 1fr;
-		}
-		.plan-flight-row {
-			grid-template-columns: 1fr;
-			gap: 0.3rem;
-		}
-		.pf-left {
-			justify-content: space-between;
-		}
-		.pf-right {
-			text-align: left;
-		}
-		.plan-forecast-row {
-			grid-template-columns: 1fr;
-			gap: 0.35rem;
-		}
+	.pcf-res {
+		font-weight: 700;
+		color: #16a34a;
 	}
 
 	@media (max-width: 640px) {
-		.desktop-only {
-			display: none !important;
+		.status-main-grid {
+			grid-template-columns: 1fr;
+			gap: 0.65rem;
 		}
-		.mobile-only {
-			display: flex !important;
+		.flight-row {
+			grid-template-columns: 1fr auto;
+			gap: 0.25rem;
 		}
-		.dash-title { font-size: 1.35rem; }
-		.route-meter-bar { width: 60px; }
-		.day-header { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
-		.day-date { font-size: 1.05rem; }
-		.score-rate { font-size: 2.8rem; }
-		.score-sub-stats { grid-template-columns: 1fr; gap: 0.4rem; text-align: left; }
-		.sub-stat-item { flex-direction: row; justify-content: space-between; align-items: center; }
-		.past-comparison { flex-direction: column; align-items: flex-start; gap: 0.35rem; }
-		.past-arrow { display: none; }
-		.plan-summary-right { width: 100%; justify-content: space-between; }
+		.fl-time {
+			grid-column: 1 / -1;
+			font-size: 0.75rem;
+		}
+		.plan-fl-row {
+			grid-template-columns: 65px 1fr;
+			gap: 0.2rem 0.5rem;
+		}
+		.fd-row {
+			grid-template-columns: 55px 40px 1fr;
+		}
+		.fd-flights {
+			grid-column: 1 / -1;
+		}
 	}
 </style>
