@@ -297,28 +297,33 @@ async function fetchGoogleTrends() {
 }
 
 // -------------------------------------------------------------
-// カテゴリ自動判定ロジック
+// カテゴリ自動判定ロジック（ヨミトク 5大カテゴリ体系）
 // -------------------------------------------------------------
 function determineCategories(topic) {
   const text = `${topic.title} ${topic.description || ''}`;
 
-  // AI・テクノロジー・IT
-  const isTech = /AI|ChatGPT|Claude|Gemini|OpenAI|生成AI|LLM|プログラミング|スマホ|iPhone|Android|Pixel|Galaxy|格安SIM|povo|通信|ガジェット|スマートウォッチ|アプリ|Web|PC|MacBook|Windows|ソフトウェア|脆弱性/i.test(text);
+  // 1. スポーツ（野球・サッカー・格闘技・アスリート）
+  const isSports = /ドラフト|日本シリーズ|プロ野球|12球団|競合抽選|指名選手|育成指名|補強|巨人|ジャイアンツ|阪神タイガース|阪神|ベイスターズ|ソフトバンクホークス|ソフトバンク|東北楽天|楽天イーグルス|千葉ロッテ|ロッテ|オリックス|バファローズ|ヤクルトスワローズ|ヤクルト|日本ハム|ファイターズ|日ハム|埼玉西武|西武ライオンズ|中日ドラゴンズ|mlb|メジャーリーグ|メジャー挑戦|大谷翔平|佐々木朗希|プロ志望届|クライマックスシリーズ|高校野球|甲子園|現役ドラフト|二刀流|サッカー日本代表|ワールドカップ|オリンピック|箱根駅伝|大相撲|格闘技/i.test(text);
 
-  // 旅行・おでかけ・観光
-  const isTravel = /旅行|観光|おでかけ|ホテル|温泉|イルミネーション|紅葉|桜|スポット|京都|東京|北海道|飛行機|新幹線|空港|カフェ|グルメ/i.test(text);
+  // 2. IT・ガジェット・AI
+  const isTech = /AI|ChatGPT|Claude|Gemini|OpenAI|生成AI|LLM|プログラミング|スマホ|iPhone|Android|Pixel|Galaxy|格安SIM|povo|通信障害|ガジェット|スマートウォッチ|アプリ|Web開発|PC|MacBook|Windows|ソフトウェア|脆弱性|GitHub|Google|Apple|TSMC|RTX|PHP|アドセンス|WAF|セキュリティ/i.test(text);
 
-  // 新商品・暮らし・生活
-  const isLifestyle = /暮らし|生活|節約|家計|コストコ|無印|100均|ニトリ|カルディ|楽天|Amazon|新発売|新商品|家電|料理|レシピ|健康|睡眠|片付け|掃除|防災|育児/i.test(text);
+  // 3. 新商品・トレンド（店舗・発売・セール）
+  const isProduct = /新発売|新登場|新商品|先行予約|福袋|コラボ|限定発売|オープン|開店|新店舗|バロー|業務スーパー|コストコ|カルディ|無印良品|ニトリ|コンビニおにぎり|スタバ|ミスド|マクドナルド|Amazonセール|楽天スーパーセール|復刻シリーズ|ミニコンポ/i.test(text);
 
-  if (isTech && isLifestyle) {
-    return ['IT・ガジェット', 'ライフスタイル'];
+  // 4. 旅行・おでかけ・観光
+  const isTravel = /宿泊記|乗車記|観光列車|温泉|ホテル|旅館|絶景|観光|おでかけ|スポット|京都|北海道|萩|虎ノ門ヒルズ|豊島園|ディズニー|USJ|リゾート|ドライブ|瀬戸内海|鳥取|沖縄訪問|イルミネーション|紅葉|桜/i.test(text);
+
+  if (isSports) {
+    return ['スポーツ'];
   } else if (isTech) {
     return ['IT・ガジェット'];
+  } else if (isProduct) {
+    return ['新商品・トレンド'];
   } else if (isTravel) {
-    return ['旅行'];
+    return ['旅行・おでかけ'];
   } else {
-    return ['ライフスタイル'];
+    return ['暮らし・生活'];
   }
 }
 
@@ -468,14 +473,20 @@ function generateSingleFallbackArticle(topic, dateInfo, categories) {
   mainCleanTitle = mainCleanTitle.replace(/^[「『"']/, '').replace(/[」』"']$/, '').trim();
   const displayTitle = mainCleanTitle.length > 26 ? mainCleanTitle.slice(0, 25) + '…' : mainCleanTitle;
 
-  const isProduct = categories.includes('ライフスタイル') && /新発売|発売|新登場|登場|限定|新商品/i.test(topic.title);
+  const isSports = categories.includes('スポーツ');
+  const isProduct = categories.includes('新商品・トレンド');
   const isTech = categories.includes('IT・ガジェット');
+  const isTravel = categories.includes('旅行・おでかけ');
 
   let title = `【徹底解説】「${displayTitle}」の注目ポイント！知っておきたい要点と生活へのメリット`;
-  if (isProduct) {
+  if (isSports) {
+    title = `【徹底解説】「${displayTitle}」の注目ポイント！勝敗・活躍の要因とファンの反応`;
+  } else if (isProduct) {
     title = `【本音レビュー】「${displayTitle}」は何が進化した？買いのポイントと気になる注意点`;
   } else if (isTech) {
     title = `【徹底検証】最新技術「${displayTitle}」とは？日々の作業効率化と実践メリット`;
+  } else if (isTravel) {
+    title = `【現地ガイド】「${displayTitle}」の見どころ・魅力と知っておきたいポイント`;
   }
 
   const description = `ネットやSNSで話題の「${displayTitle}」について、等身大エディター目線でわかりやすく徹底解説！気になる概要から日々の生活や作業への活かし方、注意点までお届けします。`;
