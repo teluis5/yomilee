@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年10月28日 13:12",
-  "updatedAtIso": "2026-10-28T04:12:43.416Z",
+  "updatedAt": "2026年10月28日 14:00",
+  "updatedAtIso": "2026-10-28T05:01:09.788Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "東京(羽田) ➔ 大阪(伊丹) へ飛行中",
+    "currentLocation": "大阪(伊丹)",
     "currentLocationCode": "ITM",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "大阪(伊丹) (55%) / 東京(羽田) (35%) / 長崎 (10%) [今夜の駐機確率]",
     "nightStayCode": "ITM",
     "isNightStayConfirmed": false,
@@ -321,7 +321,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降予測）",
-      "currentAirport": "東京(羽田) ➔ 大阪(伊丹) へ飛行中",
+      "currentAirport": "大阪(伊丹)",
       "nightStay": "大阪(伊丹) (55%) / 東京(羽田) (35%) / 長崎 (10%) [今夜の駐機確率]",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "⏳ 本日の今夜の駐機先は「長崎 50% / 広島 30% / 羽田 20%」の確率で推移しています（合計100%）。夕方便で羽田へ戻った後の19時台の最終便アサイン（17:30〜19:00頃）で100%確定します。",
@@ -542,9 +542,9 @@
             "flightNo": "NH23",
             "route": "東京(羽田) ➔ 大阪(伊丹)",
             "time": "12:30発 - 13:40着",
-            "status": "飛行中 ✈️",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (13:37)",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -620,9 +620,9 @@
           "flightNo": "NH23",
           "route": "東京(羽田) ➔ 大阪(伊丹)",
           "time": "12:30発 - 13:40着",
-          "status": "飛行中 ✈️",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (13:37)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         }
       ]
@@ -1316,7 +1316,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 364,
+    "totalFleetFlights": 366,
     "fleetCount": 15
   }
 }
