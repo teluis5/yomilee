@@ -478,18 +478,18 @@ function generateSingleFallbackArticle(topic, dateInfo, categories) {
   const isTech = categories.includes('IT・ガジェット');
   const isTravel = categories.includes('旅行・おでかけ');
 
-  let title = `【徹底解説】「${displayTitle}」の注目ポイント！知っておきたい要点と生活へのメリット`;
+  let title = `【速報・本音レビュー】${displayTitle}は買い？注目の理由と知っておくべき真実`;
   if (isSports) {
-    title = `【徹底解説】「${displayTitle}」の注目ポイント！勝敗・活躍の要因とファンの反応`;
+    title = `【勝敗・採点分析】${displayTitle}！勝敗を分けた真因とファンの本音評価`;
   } else if (isProduct) {
-    title = `【本音レビュー】「${displayTitle}」は何が進化した？買いのポイントと気になる注意点`;
+    title = `【本音レビュー】${displayTitle}は買いか見送りか？進化した点・欠点まとめ`;
   } else if (isTech) {
-    title = `【徹底検証】最新技術「${displayTitle}」とは？日々の作業効率化と実践メリット`;
+    title = `【徹底検証】${displayTitle}は何が凄い？従来との違いと今すぐ使える活用術`;
   } else if (isTravel) {
-    title = `【現地ガイド】「${displayTitle}」の見どころ・魅力と知っておきたいポイント`;
+    title = `【2026最新ガイド】${displayTitle}の混雑・日程・見どころ攻略まとめ`;
   }
 
-  const description = `ネットやSNSで話題の「${displayTitle}」について、等身大エディター目線でわかりやすく徹底解説！気になる概要から日々の生活や作業への活かし方、注意点までお届けします。`;
+  const description = `いまネットや検索で大注目の「${displayTitle}」について、等身大エディター目線で徹底分析！スペックや一次情報の丸写しではなく、メリット・デメリット・ファンの本音を分かりやすく総括します。`;
 
   let mdx = `---
 title: "${title}"
@@ -703,10 +703,37 @@ async function main() {
     }
   }
 
-  // スコア順にソート（画像ありボーナス ＋ 指定ジャンル適合ブースト）
+  // スコア順にソート（メガトレンド最優先 ＋ 画像ありボーナス ＋ 指定ジャンル適合ブースト）
+  function calcMegaTrendScore(item) {
+    let score = item.score || 50;
+    if (item.image || item.picture) score += 20;
+
+    // ソース元ブースト
+    if (item.sourceType === 'google_trends') score += 200; // Google急上昇（最優先）
+    if (item.sourceType === 'prtimes') score += 150;       // 新商品・新サービス発表
+    if (item.sourceType && item.sourceType.startsWith('yahoo_top')) score += 120; // Yahoo主要速報
+    if (item.sourceType && item.sourceType.startsWith('yahoo_it')) score += 90;
+
+    // スポーツ・野球・大型イベント・福袋・セール等の検索ボリューム爆発キーワード
+    const megaKeywords = /ドラフト|現役ドラフト|日本シリーズ|プロ野球|ストーブリーグ|FA|戦力外|新発売|福袋|ブラックフライデー|セール|コラボ|オープン|新店舗|iPhone|Android|Pixel|Apple|Google|ちいかわ|限定|先行予約/i;
+    if (megaKeywords.test(item.title)) score += 120;
+
+    // はてブの個人的な小ネタ・愚痴・日記系は大幅減点（検索需要が極小のため除外）
+    if (item.sourceType && item.sourceType.startsWith('hatena_')) {
+      const personalNoise = /おっさん|死ぬほど|ブス|因習村|BBQ|キムチ|手放し|潜入|コップ|沸騰|note|増田|anond/i;
+      if (personalNoise.test(item.title)) {
+        score -= 300;
+      } else {
+        score -= 50;
+      }
+    }
+
+    return score;
+  }
+
   uniqueCandidates.sort((a, b) => {
-    let aScore = a.score + (a.image || a.picture ? 15 : 0);
-    let bScore = b.score + (b.image || b.picture ? 15 : 0);
+    let aScore = calcMegaTrendScore(a);
+    let bScore = calcMegaTrendScore(b);
 
     if (genreArg === 'ai' || genreArg === 'tech') {
       const techPattern = /AI|ChatGPT|Claude|Gemini|OpenAI|生成AI|LLM|スマホ|iPhone|Android|Pixel|Galaxy|ガジェット|アプリ|新機能|ツール|Apple|Google|Microsoft/i;
