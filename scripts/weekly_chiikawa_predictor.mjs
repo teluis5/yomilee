@@ -44,6 +44,8 @@ function getAirportCodeFromName(name) {
   if (name.includes('高松')) return 'TAK';
   if (name.includes('熊本')) return 'KMJ';
   if (name.includes('大分')) return 'OIT';
+  if (name.includes('神戸')) return 'UKB';
+  if (name.includes('中部') || name.includes('名古屋')) return 'NGO';
   return '';
 }
 
@@ -289,13 +291,23 @@ const AIRPORT_NAMES = {
   AKJ: '旭川',
   MMB: '女満別',
   KMQ: '小松',
-  TOY: '富山'
+  TOY: '富山',
+  UKB: '神戸'
 };
 
 const DAY_NAMES = ['日', '月', '火', '水', '木', '金', '土'];
 
 // ナイトステイ先空港から翌朝最初に出発する標準便マスター
 const MORNING_DEPARTURE_STANDARDS = {
+  UKB: {
+    flightNo: 'NH412',
+    orig: 'UKB',
+    dest: 'HND',
+    depTime: '07:05',
+    arrTime: '08:15',
+    confidence: '95%',
+    reason: '神戸空港ナイトステイ機材の朝一羽田行き始発便（定番復帰便）'
+  },
   NGS: {
     flightNo: 'NH662',
     orig: 'NGS',
@@ -600,7 +612,107 @@ export async function generateWeeklyPrediction() {
       isNightStayConfirmed = false;
       
       // 昼便（19時前の到着）の場合、到着地でその日の全運航が終わって泊まる確率は極めて低く、基本は夕方羽田へ戻り羽田泊が最有力
-      if (lastDepHour < 17 && lastToday.destCode !== 'HND') {
+      if (lastToday.destCode === 'CTS') {
+        // 新千歳到着の場合：夜便はANA公式76P確定の地方間直行便 NH578（新千歳 ➔ 神戸 20:30着 / 神戸泊）が最有力！
+        nightStayProbabilities = [
+          { airport: '神戸', code: 'UKB', probability: 60, note: '新千歳18:30発(NH578: 76P確定)で神戸へ向かい夜間駐機（大本命）' },
+          { airport: '東京(羽田)', code: 'HND', probability: 35, note: '新千歳18:30発(NH76)等で羽田へ折り返し帰還・夜間整備' },
+          { airport: '札幌(新千歳)', code: 'CTS', probability: 5, note: '新千歳空港での夜間駐機（例外待機）' }
+        ];
+        nightStayCode = 'UKB';
+
+        todayPlans = [
+          {
+            planId: 'today-plan-a',
+            planName: 'プランA',
+            rank: '本命 ◎',
+            probability: 60,
+            title: '【地方直行・今夜神戸ステイ】新千歳 ➔ 神戸(泊)',
+            routeSummary: '札幌(新千歳) ➔ 神戸(泊)',
+            description: '新千歳到着後、18:30発の神戸行き(NH578)に充当され、夜20:30に神戸空港へ到着して夜間駐機する大本命シナリオ（ANA公式76P確定枠）',
+            flights: [
+              {
+                step: '① 夜直行便',
+                time: '18:30発 - 20:30着',
+                flightNo: 'NH578 (予測)',
+                route: '札幌(新千歳) ➔ 神戸',
+                tag: '✈️地方直行・神戸泊 (確率60%)'
+              }
+            ]
+          },
+          {
+            planId: 'today-plan-b',
+            planName: 'プランB',
+            rank: '有力 ◯',
+            probability: 35,
+            title: '【今夜羽田ステイ】新千歳折返し ➔ 羽田夜間駐機(泊)',
+            routeSummary: '札幌(新千歳) ➔ 羽田(泊)',
+            description: '新千歳から夜便で羽田へ戻り、羽田空港で夜間駐機・機材整備に入るシナリオ',
+            flights: [
+              {
+                step: '① 夜帰還便',
+                time: '18:30発 - 20:10着',
+                flightNo: 'NH76 (予測)',
+                route: '札幌(新千歳) ➔ 東京(羽田)',
+                tag: '🌙羽田帰還 (確率35%)'
+              }
+            ]
+          },
+          {
+            planId: 'today-plan-c',
+            planName: 'プランC',
+            rank: '対抗 ▲',
+            probability: 5,
+            title: '【新千歳そのまま夜間駐機(泊)】',
+            routeSummary: '札幌(新千歳) そのまま夜間駐機(泊)',
+            description: '新千歳到着後、夜の追加運航を行わずに新千歳空港で夜間駐機に入る例外パターン',
+            flights: [
+              {
+                step: '① 夜間駐機',
+                time: '18:00以降',
+                flightNo: 'ステイ便なし',
+                route: '札幌(新千歳) そのまま夜間駐機',
+                tag: '🌙新千歳ステイ (確率5%)'
+              }
+            ]
+          }
+        ];
+
+        pendingNightStayNote = `⏳ 現在NH1091便で新千歳へ飛行中。新千歳到着後は、ANA公式76P確定の「NH578便（新千歳 18:30発 ➔ 神戸 20:30着 / 神戸泊）」への充当（確率60%）または羽田帰還（確率35%）が極めて有力な情勢です。`;
+
+        todayOutlook = {
+          title: '本日のこの後のフライト見通し＆夜の展開（確率合計100%）',
+          currentFlightNote: `現在、${lastToday.flightNo}便（${lastToday.route}、${lastToday.arrTime}着予定）を運航中`,
+          turnaround: {
+            flightNo: 'NH578 (予測)',
+            route: '札幌(新千歳) ➔ 神戸',
+            time: '18:30発 - 20:30着',
+            probability: 60,
+            desc: '新千歳到着後、約100分の折返し時間で神戸へ直行する公式76P確定便（確率60%）。神戸空港着後はそのまま夜間駐機に入ります。'
+          },
+          nightScenarios: [
+            {
+              label: '神戸ナイトステイ（大本命）',
+              prob: 60,
+              summary: '新千歳到着後、18:30発の神戸行き(NH578: 76P確定)で神戸へ向かい夜間駐機',
+              detail: '明朝は神戸始発羽田行き（NH412: 07:05発）からスタートします。'
+            },
+            {
+              label: '羽田そのままステイ（帰還・整備）',
+              prob: 35,
+              summary: '夜便(NH76等)で羽田へ折り返し帰還し、羽田で夜間駐機・機材整備',
+              detail: '明朝は羽田始発便（長崎・広島・福岡など）からスタートします。'
+            },
+            {
+              label: '札幌(新千歳)夜間駐機（例外待機）',
+              prob: 5,
+              summary: '新千歳空港到着後、そのまま夜を明かす例外パターン',
+              detail: '明朝は新千歳始発羽田行き（NH50: 07:30発など）からスタートします。'
+            }
+          ],
+          notice: '💡 夜の最終便割り当ては、夕方17:30〜19:00頃にANA公式およびFlightradar24へ登録され次第、当画面にも自動反映されます。'
+        };
+      } else if (lastDepHour < 17 && lastToday.destCode !== 'HND') {
         // 昼間に地方空港（伊丹・鹿児島等）へ到着した場合：折り返して夕方便で羽田へ戻り、羽田泊が最有力
         nightStayProbabilities = [
           { airport: '東京(羽田)', code: 'HND', probability: 65, note: '夕方に羽田帰還後、そのまま羽田で夜間駐機（最有力）' },
@@ -637,125 +749,127 @@ export async function generateWeeklyPrediction() {
         status: '🔄 折返し復路予測 (確率85%)'
       };
 
-      // 本日の残り展開プラン（プランA〜C）を確率ごとに算出（合計100%）
-      todayPlans = [
-        {
-          planId: 'today-plan-a',
-          planName: 'プランA',
-          rank: '本命 ◎',
-          probability: 65,
-          title: `【今夜羽田ステイ】${lastToday.destName !== '東京(羽田)' ? `${lastToday.destName}折返し ➔ ` : ''}羽田夜間駐機(泊)`,
-          routeSummary: `${lastToday.destName !== '東京(羽田)' ? `${lastToday.destName} ➔ ` : ''}羽田(泊)`,
-          description: `夕方便で羽田到着後、夜の追加運航を行わずに羽田で夜間駐機・機材整備に入る最有力パターン（明朝は羽田始発）`,
-          flights: [
-            ...(lastToday.destCode !== 'HND' ? [{
-              step: '① 夕方復路',
-              time: `${ret.depTime}発 - ${ret.arrTime}着`,
-              flightNo: ret.flightNo,
-              route: `${ret.origName} ➔ ${ret.destName}`,
-              tag: '羽田帰還 (確率85%)'
-            }] : []),
-            {
-              step: lastToday.destCode !== 'HND' ? '② 夜間駐機' : '① 夜間駐機',
-              time: '19:30以降',
-              flightNo: 'ステイ便なし',
-              route: '東京(羽田) そのまま夜間駐機',
-              tag: '🌙 羽田ナイトステイ (確率65%)'
-            }
-          ]
-        },
-        {
-          planId: 'today-plan-b',
-          planName: 'プランB',
-          rank: '有力 ◯',
-          probability: 18,
-          title: `【今夜長崎ステイ】${lastToday.destName !== '東京(羽田)' ? `${lastToday.destName}折返し ➔ ` : ''}羽田 ➔ 長崎(泊)`,
-          routeSummary: `${lastToday.destName !== '東京(羽田)' ? `${lastToday.destName} ➔ 羽田 ➔ ` : '羽田 ➔ '}長崎(泊)`,
-          description: `夕方便で羽田へ戻った後、夜の最終便（NH669: 19:15発）で長崎へ向かい今夜ナイトステイするシナリオ`,
-          flights: [
-            ...(lastToday.destCode !== 'HND' ? [{
-              step: '① 夕方復路',
-              time: `${ret.depTime}発 - ${ret.arrTime}着`,
-              flightNo: ret.flightNo,
-              route: `${ret.origName} ➔ ${ret.destName}`,
-              tag: '羽田帰還 (確率85%)'
-            }] : []),
-            {
-              step: lastToday.destCode !== 'HND' ? '② 夜最終便' : '① 夜最終便',
-              time: '19:15発 - 21:15着',
-              flightNo: 'NH669 (予測)',
-              route: '東京(羽田) ➔ 長崎',
-              tag: '🌙 長崎ナイトステイ (確率18%)'
-            }
-          ]
-        },
-        {
-          planId: 'today-plan-c',
-          planName: 'プランC',
-          rank: '対抗 ▲',
-          probability: 12,
-          title: `【今夜広島ステイ】${lastToday.destName !== '東京(羽田)' ? `${lastToday.destName}折返し ➔ ` : ''}羽田 ➔ 広島(泊)`,
-          routeSummary: `${lastToday.destName !== '東京(羽田)' ? `${lastToday.destName} ➔ 羽田 ➔ ` : '羽田 ➔ '}広島(泊)`,
-          description: `羽田帰還後、19:40発の広島行き最終便（NH685）に充当され、広島空港で夜間駐機するパターン`,
-          flights: [
-            ...(lastToday.destCode !== 'HND' ? [{
-              step: '① 夕方復路',
-              time: `${ret.depTime}発 - ${ret.arrTime}着`,
-              flightNo: ret.flightNo,
-              route: `${ret.origName} ➔ ${ret.destName}`,
-              tag: '羽田帰還 (確率85%)'
-            }] : []),
-            {
-              step: lastToday.destCode !== 'HND' ? '② 夜最終便' : '① 夜最終便',
-              time: '19:40発 - 21:10着',
-              flightNo: 'NH685 (予測)',
-              route: '東京(羽田) ➔ 広島',
-              tag: '🌙 広島ナイトステイ (確率12%)'
-            }
-          ]
-        }
-      ];
-
-      pendingNightStayNote = `⏳ 本日の今夜の駐機先は「羽田 65% / 長崎 18% / 広島 12% / 伊丹 5%」の確率で推移しています（羽田泊が最有力）。夕方便で羽田へ戻った後の19時台の最終便アサイン（17:30〜19:00頃）で100%確定します。`;
-
-      todayOutlook = {
-        title: '本日のこの後のフライト見通し＆夜の展開（確率合計100%）',
-        currentFlightNote: `現在、${lastToday.flightNo}便（${lastToday.route}、${lastToday.arrTime}着予定）を運航中`,
-        turnaround: {
-          flightNo: ret.flightNo,
-          route: `${ret.origName} ➔ ${ret.destName}`,
-          time: `${ret.depTime}発 - ${ret.arrTime}着`,
-          probability: 85,
-          desc: `${lastToday.destName}到着後、約40〜45分の折返し時間で羽田へ戻る復路便（過去実績から確率85%）。羽田空港の展望デッキ・お出迎えは${ret.arrTime}頃が狙い目です。`
-        },
-        nightScenarios: [
+      if (lastToday.destCode !== 'CTS') {
+        // 本日の残り展開プラン（プランA〜C）を確率ごとに算出（合計100%）
+        todayPlans = [
           {
-            label: '羽田そのままステイ（整備・泊）',
-            prob: 65,
-            summary: `${ret.arrTime}羽田到着後、本日の全運航を終えて羽田で夜間駐機・機材整備（最有力）`,
-            detail: '明朝は羽田始発便（長崎・広島・福岡など）からスタートします。'
+            planId: 'today-plan-a',
+            planName: 'プランA',
+            rank: '本命 ◎',
+            probability: 65,
+            title: `【今夜羽田ステイ】${lastToday.destName !== '東京(羽田)' ? `${lastToday.destName}折返し ➔ ` : ''}羽田夜間駐機(泊)`,
+            routeSummary: `${lastToday.destName !== '東京(羽田)' ? `${lastToday.destName} ➔ ` : ''}羽田(泊)`,
+            description: `夕方便で羽田到着後、夜の追加運航を行わずに羽田で夜間駐機・機材整備に入る最有力パターン（明朝は羽田始発）`,
+            flights: [
+              ...(lastToday.destCode !== 'HND' ? [{
+                step: '① 夕方復路',
+                time: `${ret.depTime}発 - ${ret.arrTime}着`,
+                flightNo: ret.flightNo,
+                route: `${ret.origName} ➔ ${ret.destName}`,
+                tag: '羽田帰還 (確率85%)'
+              }] : []),
+              {
+                step: lastToday.destCode !== 'HND' ? '② 夜間駐機' : '① 夜間駐機',
+                time: '19:30以降',
+                flightNo: 'ステイ便なし',
+                route: '東京(羽田) そのまま夜間駐機',
+                tag: '🌙 羽田ナイトステイ (確率65%)'
+              }
+            ]
           },
           {
-            label: '長崎ナイトステイ',
-            prob: 18,
-            summary: `羽田帰還後、19:15発の長崎行き最終便(NH669)で長崎へ向かい夜間駐機`,
-            detail: '明朝は長崎始発羽田行き（NH662: 08:25発）からスタートします。'
+            planId: 'today-plan-b',
+            planName: 'プランB',
+            rank: '有力 ◯',
+            probability: 18,
+            title: `【今夜長崎ステイ】${lastToday.destName !== '東京(羽田)' ? `${lastToday.destName}折返し ➔ ` : ''}羽田 ➔ 長崎(泊)`,
+            routeSummary: `${lastToday.destName !== '東京(羽田)' ? `${lastToday.destName} ➔ 羽田 ➔ ` : '羽田 ➔ '}長崎(泊)`,
+            description: `夕方便で羽田へ戻った後、夜の最終便（NH669: 19:15発）で長崎へ向かい今夜ナイトステイするシナリオ`,
+            flights: [
+              ...(lastToday.destCode !== 'HND' ? [{
+                step: '① 夕方復路',
+                time: `${ret.depTime}発 - ${ret.arrTime}着`,
+                flightNo: ret.flightNo,
+                route: `${ret.origName} ➔ ${ret.destName}`,
+                tag: '羽田帰還 (確率85%)'
+              }] : []),
+              {
+                step: lastToday.destCode !== 'HND' ? '② 夜最終便' : '① 夜最終便',
+                time: '19:15発 - 21:15着',
+                flightNo: 'NH669 (予測)',
+                route: '東京(羽田) ➔ 長崎',
+                tag: '🌙 長崎ナイトステイ (確率18%)'
+              }
+            ]
           },
           {
-            label: '広島ナイトステイ',
-            prob: 12,
-            summary: `羽田帰還後、19:40発の広島行き最終便(NH685)で広島へ向かい夜間駐機`,
-            detail: '明朝は広島始発羽田行き（NH672: 07:35発）からスタートします。'
-          },
-          {
-            label: '大阪(伊丹)夜間駐機（例外待機）',
-            prob: 5,
-            summary: `折返し復路に充当されず、伊丹空港で夜を明かす例外パターン`,
-            detail: '明朝は伊丹始発羽田行き（NH14: 07:05発など）からスタートします。'
+            planId: 'today-plan-c',
+            planName: 'プランC',
+            rank: '対抗 ▲',
+            probability: 12,
+            title: `【今夜広島ステイ】${lastToday.destName !== '東京(羽田)' ? `${lastToday.destName}折返し ➔ ` : ''}羽田 ➔ 広島(泊)`,
+            routeSummary: `${lastToday.destName !== '東京(羽田)' ? `${lastToday.destName} ➔ 羽田 ➔ ` : '羽田 ➔ '}広島(泊)`,
+            description: `羽田帰還後、19:40発の広島行き最終便（NH685）に充当され、広島空港で夜間駐機するパターン`,
+            flights: [
+              ...(lastToday.destCode !== 'HND' ? [{
+                step: '① 夕方復路',
+                time: `${ret.depTime}発 - ${ret.arrTime}着`,
+                flightNo: ret.flightNo,
+                route: `${ret.origName} ➔ ${ret.destName}`,
+                tag: '羽田帰還 (確率85%)'
+              }] : []),
+              {
+                step: lastToday.destCode !== 'HND' ? '② 夜最終便' : '① 夜最終便',
+                time: '19:40発 - 21:10着',
+                flightNo: 'NH685 (予測)',
+                route: '東京(羽田) ➔ 広島',
+                tag: '🌙 広島ナイトステイ (確率12%)'
+              }
+            ]
           }
-        ],
-        notice: '💡 夜の最終便割り当ては、夕方17:30〜19:00頃にANA公式およびFlightradar24へ登録され次第、当画面にも自動反映されます。'
-      };
+        ];
+
+        pendingNightStayNote = `⏳ 本日の今夜の駐機先は「羽田 65% / 長崎 18% / 広島 12% / 伊丹 5%」の確率で推移しています（羽田泊が最有力）。夕方便で羽田へ戻った後の19時台の最終便アサイン（17:30〜19:00頃）で100%確定します。`;
+
+        todayOutlook = {
+          title: '本日のこの後のフライト見通し＆夜の展開（確率合計100%）',
+          currentFlightNote: `現在、${lastToday.flightNo}便（${lastToday.route}、${lastToday.arrTime}着予定）を運航中`,
+          turnaround: {
+            flightNo: ret.flightNo,
+            route: `${ret.origName} ➔ ${ret.destName}`,
+            time: `${ret.depTime}発 - ${ret.arrTime}着`,
+            probability: 85,
+            desc: `${lastToday.destName}到着後、約40〜45分の折返し時間で羽田へ戻る復路便（過去実績から確率85%）。羽田空港の展望デッキ・お出迎えは${ret.arrTime}頃が狙い目です。`
+          },
+          nightScenarios: [
+            {
+              label: '羽田そのままステイ（整備・泊）',
+              prob: 65,
+              summary: `${ret.arrTime}羽田到着後、本日の全運航を終えて羽田で夜間駐機・機材整備（最有力）`,
+              detail: '明朝は羽田始発便（長崎・広島・福岡など）からスタートします。'
+            },
+            {
+              label: '長崎ナイトステイ',
+              prob: 18,
+              summary: `羽田帰還後、19:15発の長崎行き最終便(NH669)で長崎へ向かい夜間駐機`,
+              detail: '明朝は長崎始発羽田行き（NH662: 08:25発）からスタートします。'
+            },
+            {
+              label: '広島ナイトステイ',
+              prob: 12,
+              summary: `羽田帰還後、19:40発の広島行き最終便(NH685)で広島へ向かい夜間駐機`,
+              detail: '明朝は広島始発羽田行き（NH672: 07:35発）からスタートします。'
+            },
+            {
+              label: '大阪(伊丹)夜間駐機（例外待機）',
+              prob: 5,
+              summary: `折返し復路に充当されず、伊丹空港で夜を明かす例外パターン`,
+              detail: '明朝は伊丹始発羽田行き（NH14: 07:05発など）からスタートします。'
+            }
+          ],
+          notice: '💡 夜の最終便割り当ては、夕方17:30〜19:00頃にANA公式およびFlightradar24へ登録され次第、当画面にも自動反映されます。'
+        };
+      }
     }
   }
 
