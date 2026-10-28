@@ -417,7 +417,7 @@ export async function generateWeeklyPrediction() {
             }] : []),
             {
               step: lastToday.destCode !== 'HND' ? '② 夜最終便' : '① 夜最終便',
-              time: '19:30発 - 21:00着',
+              time: '19:40発 - 21:10着',
               flightNo: 'NH685 (予測)',
               route: '東京(羽田) ➔ 広島',
               tag: '🌙 広島ナイトステイ (確率30%)'
@@ -564,11 +564,11 @@ export async function generateWeeklyPrediction() {
           airports: ['東京(羽田)', '長崎', '福岡', '広島'],
           description: `夜便で${origName1}から東京(羽田)へ折返し帰還し、明朝羽田からスタートする場合の1日通しダイヤ`,
           flights: [
-            { step: '① 朝一便', time: '08:15発 - 10:10着', flightNo: 'NH661', route: '東京(羽田) ➔ 長崎', tag: '羽田始発' },
-            { step: '② 午前便', time: '10:55発 - 12:35着', flightNo: 'NH664', route: '長崎 ➔ 東京(羽田)', tag: '折返し復路' },
-            { step: '③ 午後便', time: '14:00発 - 16:00着', flightNo: 'NH257', route: '東京(羽田) ➔ 福岡', tag: '午後往路' },
-            { step: '④ 夕方便', time: '16:50発 - 18:35着', flightNo: 'NH262', route: '福岡 ➔ 東京(羽田)', tag: '夕方復路' },
-            { step: '⑤ 夜最終', time: '19:30発 - 21:00着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島', tag: '🌙夜間駐機' }
+            { step: '① 朝一便', time: '08:30発 - 10:30着', flightNo: 'NH661', route: '東京(羽田) ➔ 長崎', tag: '羽田始発' },
+            { step: '② 午前便', time: '11:20発 - 12:55着', flightNo: 'NH664', route: '長崎 ➔ 東京(羽田)', tag: '折返し復路' },
+            { step: '③ 午後便', time: '14:15発 - 16:10着', flightNo: 'NH257', route: '東京(羽田) ➔ 福岡', tag: '午後往路' },
+            { step: '④ 夕方便', time: '17:05発 - 18:45着', flightNo: 'NH262', route: '福岡 ➔ 東京(羽田)', tag: '夕方復路' },
+            { step: '⑤ 夜最終', time: '19:40発 - 21:10着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島', tag: '🌙夜間駐機' }
           ]
         },
         {
@@ -638,11 +638,11 @@ export async function generateWeeklyPrediction() {
           airports: ['東京(羽田)', '長崎', '福岡', '広島'],
           description: '今夜そのまま東京(羽田)で夜間駐機し、明朝羽田からスタートする場合の1日通しダイヤ',
           flights: [
-            { step: '① 朝一便', time: '08:15発 - 10:10着', flightNo: 'NH661', route: '東京(羽田) ➔ 長崎', tag: '羽田始発' },
-            { step: '② 午前便', time: '10:55発 - 12:35着', flightNo: 'NH664', route: '長崎 ➔ 東京(羽田)', tag: '折返し復路' },
-            { step: '③ 午後便', time: '14:00発 - 16:00着', flightNo: 'NH257', route: '東京(羽田) ➔ 福岡', tag: '午後往路' },
-            { step: '④ 夕方便', time: '16:50発 - 18:35着', flightNo: 'NH262', route: '福岡 ➔ 東京(羽田)', tag: '夕方復路' },
-            { step: '⑤ 夜最終', time: '19:30発 - 21:00着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島', tag: '🌙夜間駐機' }
+            { step: '① 朝一便', time: '08:30発 - 10:30着', flightNo: 'NH661', route: '東京(羽田) ➔ 長崎', tag: '羽田始発' },
+            { step: '② 午前便', time: '11:20発 - 12:55着', flightNo: 'NH664', route: '長崎 ➔ 東京(羽田)', tag: '折返し復路' },
+            { step: '③ 午後便', time: '14:15発 - 16:10着', flightNo: 'NH257', route: '東京(羽田) ➔ 福岡', tag: '午後往路' },
+            { step: '④ 夕方便', time: '17:05発 - 18:45着', flightNo: 'NH262', route: '福岡 ➔ 東京(羽田)', tag: '夕方復路' },
+            { step: '⑤ 夜最終', time: '19:40発 - 21:10着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島', tag: '🌙夜間駐機' }
           ]
         }
       ];
@@ -659,11 +659,11 @@ export async function generateWeeklyPrediction() {
         airports: ['東京(羽田)', '長崎', '福岡', '広島'],
         description: '朝一で長崎を往復後、午後は福岡線を往復し、夜に広島へステイする王道ローテーション',
         flights: [
-          { step: '① 朝一便', time: '08:15発 - 10:10着', flightNo: 'NH661', route: '東京(羽田) ➔ 長崎', tag: '朝一始発' },
-          { step: '② 午前便', time: '10:55発 - 12:35着', flightNo: 'NH664', route: '長崎 ➔ 東京(羽田)', tag: '折返し復路' },
-          { step: '③ 午後便', time: '14:00発 - 16:00着', flightNo: 'NH257', route: '東京(羽田) ➔ 福岡', tag: '午後往路' },
-          { step: '④ 夕方便', time: '16:50発 - 18:35着', flightNo: 'NH262', route: '福岡 ➔ 東京(羽田)', tag: '夕方復路' },
-          { step: '⑤ 夜最終', time: '19:30発 - 21:00着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島', tag: '🌙夜間駐機' }
+          { step: '① 朝一便', time: '08:30発 - 10:30着', flightNo: 'NH661', route: '東京(羽田) ➔ 長崎', tag: '朝一始発' },
+          { step: '② 午前便', time: '11:20発 - 12:55着', flightNo: 'NH664', route: '長崎 ➔ 東京(羽田)', tag: '折返し復路' },
+          { step: '③ 午後便', time: '14:15発 - 16:10着', flightNo: 'NH257', route: '東京(羽田) ➔ 福岡', tag: '午後往路' },
+          { step: '④ 夕方便', time: '17:05発 - 18:45着', flightNo: 'NH262', route: '福岡 ➔ 東京(羽田)', tag: '夕方復路' },
+          { step: '⑤ 夜最終', time: '19:40発 - 21:10着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島', tag: '🌙夜間駐機' }
         ]
       },
       {
@@ -676,10 +676,10 @@ export async function generateWeeklyPrediction() {
         airports: ['東京(羽田)', '広島', '松山', '長崎'],
         description: '午前に広島、午後に松山を往復し、夜19:15発の長崎便でナイトステイに入る西日本パターン',
         flights: [
-          { step: '① 朝一便', time: '08:30発 - 10:00着', flightNo: 'NH675', route: '東京(羽田) ➔ 広島', tag: '朝一始発' },
-          { step: '② 午前便', time: '10:45発 - 12:05着', flightNo: 'NH678', route: '広島 ➔ 東京(羽田)', tag: '折返し復路' },
-          { step: '③ 午後便', time: '14:15発 - 15:45着', flightNo: 'NH593', route: '東京(羽田) ➔ 松山', tag: '午後往路' },
-          { step: '④ 夕方便', time: '16:35発 - 18:05着', flightNo: 'NH596', route: '松山 ➔ 東京(羽田)', tag: '夕方復路' },
+          { step: '① 朝一便', time: '09:10発 - 10:30着', flightNo: 'NH675', route: '東京(羽田) ➔ 広島', tag: '朝一始発' },
+          { step: '② 午前便', time: '12:45発 - 14:05着', flightNo: 'NH678', route: '広島 ➔ 東京(羽田)', tag: '折返し復路' },
+          { step: '③ 午後便', time: '14:15発 - 15:50着', flightNo: 'NH593', route: '東京(羽田) ➔ 松山', tag: '午後往路' },
+          { step: '④ 夕方便', time: '16:40発 - 18:10着', flightNo: 'NH596', route: '松山 ➔ 東京(羽田)', tag: '夕方復路' },
           { step: '⑤ 夜最終', time: '19:15発 - 21:15着', flightNo: 'NH669', route: '東京(羽田) ➔ 長崎', tag: '🌙夜間駐機' }
         ]
       },
@@ -693,10 +693,10 @@ export async function generateWeeklyPrediction() {
         airports: ['東京(羽田)', '福岡', '大阪(伊丹)', '札幌(新千歳)'],
         description: '福岡・伊丹・新千歳の3大幹線をピストン運航する大型機サポートパターン',
         flights: [
-          { step: '① 朝一便', time: '08:20発 - 10:15着', flightNo: 'NH243', route: '東京(羽田) ➔ 福岡', tag: '朝一始発' },
-          { step: '② 午前便', time: '11:05発 - 12:45着', flightNo: 'NH250', route: '福岡 ➔ 東京(羽田)', tag: '折返し復路' },
+          { step: '① 朝一便', time: '08:30発 - 10:30着', flightNo: 'NH243', route: '東京(羽田) ➔ 福岡', tag: '朝一始発' },
+          { step: '② 午前便', time: '11:45発 - 13:25着', flightNo: 'NH250', route: '福岡 ➔ 東京(羽田)', tag: '折返し復路' },
           { step: '③ 午後便', time: '14:00発 - 15:10着', flightNo: 'NH27', route: '東京(羽田) ➔ 大阪(伊丹)', tag: '午後往路' },
-          { step: '④ 夕方便', time: '16:00発 - 17:15着', flightNo: 'NH32', route: '大阪(伊丹) ➔ 東京(羽田)', tag: '夕方復路' },
+          { step: '④ 夕方便', time: '15:40発 - 16:50着', flightNo: 'NH32', route: '大阪(伊丹) ➔ 東京(羽田)', tag: '夕方復路' },
           { step: '⑤ 夜最終', time: '18:00発 - 19:35着', flightNo: 'NH75', route: '東京(羽田) ➔ 札幌(新千歳)', tag: '🌙夜間駐機' }
         ]
       }
@@ -716,7 +716,7 @@ export async function generateWeeklyPrediction() {
           { step: '① 朝一便', time: `${standard1.depTime}発 - ${standard1.arrTime}着`, flightNo: standard1.flightNo, route: `${origName1} ➔ ${destName1}`, tag: '🔒初便95%確定', isConfirmedFirst: true },
           { step: '② 昼往路', time: '11:45発 - 13:45着', flightNo: 'NH253', route: '東京(羽田) ➔ 福岡', tag: '昼往路' },
           { step: '③ 午後便', time: '14:35発 - 16:20着', flightNo: 'NH258', route: '福岡 ➔ 東京(羽田)', tag: '午後復路' },
-          { step: '④ 夜最終', time: '19:30発 - 21:00着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島', tag: '🌙夜間駐機' }
+          { step: '④ 夜最終', time: '19:40発 - 21:10着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島', tag: '🌙夜間駐機' }
         ]
       },
       {
@@ -747,8 +747,8 @@ export async function generateWeeklyPrediction() {
         description: `羽田での整備後、午後に四国（松山）を往復し、夜再び長崎ステイへ戻るパターン`,
         flights: [
           { step: '① 朝一便', time: `${standard1.depTime}発 - ${standard1.arrTime}着`, flightNo: standard1.flightNo, route: `${origName1} ➔ ${destName1}`, tag: '🔒初便95%確定', isConfirmedFirst: true },
-          { step: '② 午後便', time: '14:15発 - 15:45着', flightNo: 'NH593', route: '東京(羽田) ➔ 松山', tag: '午後往路' },
-          { step: '③ 夕方便', time: '16:35発 - 18:05着', flightNo: 'NH596', route: '松山 ➔ 東京(羽田)', tag: '夕方復路' },
+          { step: '② 午後便', time: '14:15発 - 15:50着', flightNo: 'NH593', route: '東京(羽田) ➔ 松山', tag: '午後往路' },
+          { step: '③ 夕方便', time: '16:40発 - 18:10着', flightNo: 'NH596', route: '松山 ➔ 東京(羽田)', tag: '夕方復路' },
           { step: '④ 夜最終', time: '19:15発 - 21:15着', flightNo: 'NH669', route: '東京(羽田) ➔ 長崎', tag: '🌙夜間駐機' }
         ]
       }
@@ -892,21 +892,21 @@ export async function generateWeeklyPrediction() {
             planName: 'プランA',
             probability: 50,
             flights: [
-              { step: '① 朝一便', time: '08:15発 - 10:10着', flightNo: 'NH661', route: '東京(羽田) ➔ 長崎' },
-              { step: '② 午前便', time: '10:55発 - 12:35着', flightNo: 'NH664', route: '長崎 ➔ 東京(羽田)' },
-              { step: '③ 午後便', time: '14:00発 - 16:00着', flightNo: 'NH257', route: '東京(羽田) ➔ 福岡' },
-              { step: '④ 夕方便', time: '16:50発 - 18:35着', flightNo: 'NH262', route: '福岡 ➔ 東京(羽田)' },
-              { step: '⑤ 夜最終', time: '19:30発 - 21:00着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島' }
+              { step: '① 朝一便', time: '08:30発 - 10:30着', flightNo: 'NH661', route: '東京(羽田) ➔ 長崎' },
+              { step: '② 午前便', time: '11:20発 - 12:55着', flightNo: 'NH664', route: '長崎 ➔ 東京(羽田)' },
+              { step: '③ 午後便', time: '14:15発 - 16:10着', flightNo: 'NH257', route: '東京(羽田) ➔ 福岡' },
+              { step: '④ 夕方便', time: '17:05発 - 18:45着', flightNo: 'NH262', route: '福岡 ➔ 東京(羽田)' },
+              { step: '⑤ 夜最終', time: '19:40発 - 21:10着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島' }
             ]
           },
           {
             planName: 'プランB',
             probability: 30,
             flights: [
-              { step: '① 朝一便', time: '08:30発 - 10:00着', flightNo: 'NH675', route: '東京(羽田) ➔ 広島' },
-              { step: '② 午前便', time: '10:45発 - 12:05着', flightNo: 'NH678', route: '広島 ➔ 東京(羽田)' },
-              { step: '③ 午後便', time: '14:15発 - 15:45着', flightNo: 'NH593', route: '東京(羽田) ➔ 松山' },
-              { step: '④ 夕方便', time: '16:35発 - 18:05着', flightNo: 'NH596', route: '松山 ➔ 東京(羽田)' },
+              { step: '① 朝一便', time: '09:10発 - 10:30着', flightNo: 'NH675', route: '東京(羽田) ➔ 広島' },
+              { step: '② 午前便', time: '12:45発 - 14:05着', flightNo: 'NH678', route: '広島 ➔ 東京(羽田)' },
+              { step: '③ 午後便', time: '14:15発 - 15:50着', flightNo: 'NH593', route: '東京(羽田) ➔ 松山' },
+              { step: '④ 夕方便', time: '16:40発 - 18:10着', flightNo: 'NH596', route: '松山 ➔ 東京(羽田)' },
               { step: '⑤ 夜最終', time: '19:15発 - 21:15着', flightNo: 'NH669', route: '東京(羽田) ➔ 長崎' }
             ]
           },
@@ -914,10 +914,10 @@ export async function generateWeeklyPrediction() {
             planName: 'プランC',
             probability: 20,
             flights: [
-              { step: '① 朝一便', time: '08:20発 - 10:15着', flightNo: 'NH243', route: '東京(羽田) ➔ 福岡' },
-              { step: '② 午前便', time: '11:05発 - 12:45着', flightNo: 'NH250', route: '福岡 ➔ 東京(羽田)' },
+              { step: '① 朝一便', time: '08:30発 - 10:30着', flightNo: 'NH243', route: '東京(羽田) ➔ 福岡' },
+              { step: '② 午前便', time: '11:45発 - 13:25着', flightNo: 'NH250', route: '福岡 ➔ 東京(羽田)' },
               { step: '③ 午後便', time: '14:00発 - 15:10着', flightNo: 'NH27', route: '東京(羽田) ➔ 大阪(伊丹)' },
-              { step: '④ 夕方便', time: '16:00発 - 17:15着', flightNo: 'NH32', route: '大阪(伊丹) ➔ 東京(羽田)' },
+              { step: '④ 夕方便', time: '15:40発 - 16:50着', flightNo: 'NH32', route: '大阪(伊丹) ➔ 東京(羽田)' },
               { step: '⑤ 夜最終', time: '18:00発 - 19:35着', flightNo: 'NH75', route: '東京(羽田) ➔ 札幌(新千歳)' }
             ]
           }
@@ -1188,7 +1188,7 @@ export async function generateWeeklyPrediction() {
         { step: '① 朝一初便', flightNo: 'NH662', route: '長崎 ➔ 羽田', time: '08:25発 - 09:50着', isHit: true, hitLabel: '🎯 的中' },
         { step: '② 午前便', flightNo: 'NH677', route: '羽田 ➔ 広島', time: '10:15発 - 11:40着', isHit: true, hitLabel: '🎯 的中' },
         { step: '③ 昼復路', flightNo: 'NH682', route: '広島 ➔ 羽田', time: '12:45発 - 14:05着', isHit: true, hitLabel: '🎯 的中' },
-        { step: '④ 夜ステイ便', flightNo: 'NH687', route: '羽田 ➔ 広島', time: '19:30発 - 21:00着', isHit: true, hitLabel: '🎯 的中(泊)' }
+        { step: '④ 夜ステイ便', flightNo: 'NH687', route: '羽田 ➔ 広島', time: '19:40発 - 21:10着', isHit: true, hitLabel: '🎯 的中(泊)' }
       ],
       reason: '長崎ナイトステイからの羽田帰還後、広島往復・夜広島ステイの定番運用に完全投入'
     },
@@ -1216,8 +1216,8 @@ export async function generateWeeklyPrediction() {
       actual: '実運航: 広島 ➔ 羽田 ➔ 松山 ➔ 羽田 ➔ 神戸(泊)',
       flights: [
         { step: '① 朝一初便', flightNo: 'NH672', route: '広島 ➔ 羽田', time: '07:35発 - 08:55着', isHit: true, hitLabel: '🎯 的中' },
-        { step: '② 午後便', flightNo: 'NH593', route: '羽田 ➔ 松山', time: '14:15発 - 15:45着', isHit: true, hitLabel: '🎯 的中' },
-        { step: '③ 夕方復路', flightNo: 'NH596', route: '松山 ➔ 羽田', time: '16:35発 - 18:05着', isHit: true, hitLabel: '🎯 的中' },
+        { step: '② 午後便', flightNo: 'NH593', route: '羽田 ➔ 松山', time: '14:15発 - 15:50着', isHit: true, hitLabel: '🎯 的中' },
+        { step: '③ 夕方復路', flightNo: 'NH596', route: '松山 ➔ 羽田', time: '16:40発 - 18:10着', isHit: true, hitLabel: '🎯 的中' },
         { step: '④ 夜ステイ便', flightNo: 'NH415', route: '羽田 ➔ 神戸', time: '19:40発 - 20:55着', isHit: true, hitLabel: '🎯 的中(泊)' }
       ],
       reason: '広島朝一羽田便から四国（松山）夕方往復、夜の神戸ナイトステイ便へ投入'
