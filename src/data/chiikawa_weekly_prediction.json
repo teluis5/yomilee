@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年10月28日 22:01",
-  "updatedAtIso": "2026-10-28T13:01:15.563Z",
+  "updatedAt": "2026年10月28日 23:01",
+  "updatedAtIso": "2026-10-28T14:01:14.795Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "神戸 ➔ 東京(羽田) へ飛行中",
+    "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "東京(羽田)（確定）",
     "nightStayCode": "HND",
     "isNightStayConfirmed": true,
@@ -310,7 +310,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降予測）",
-      "currentAirport": "神戸 ➔ 東京(羽田) へ飛行中",
+      "currentAirport": "東京(羽田)",
       "nightStay": "東京(羽田)（確定）",
       "isNightStayConfirmed": true,
       "pendingNightStayNote": null,
@@ -483,9 +483,9 @@
             "flightNo": "NH416",
             "route": "神戸 ➔ 東京(羽田)",
             "time": "21:20発 - 22:30着",
-            "status": "飛行中 ✈️",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (22:20)",
+            "isLanded": true,
+            "isLive": false
           }
         }
       ],
@@ -539,9 +539,9 @@
           "flightNo": "NH416",
           "route": "神戸 ➔ 東京(羽田)",
           "time": "21:20発 - 22:30着",
-          "status": "飛行中 ✈️",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (22:20)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         }
       ]
