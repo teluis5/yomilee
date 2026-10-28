@@ -54,6 +54,89 @@ function parseTimeToMinutes(timeStr) {
   return parseInt(match[1], 10) * 60 + parseInt(match[2], 10);
 }
 
+// ANA公式B767確定枠数・過去実績・ナイトステイ整合度に基づく客観的プラン確率計算関数
+function evaluatePlanProbabilities(plans, targetDateStr, anaFleetData, fleetDb, confirmedNightStay = null) {
+  if (!plans || plans.length === 0) return plans;
+
+  const dKey = targetDateStr.replace(/-/g, '');
+  const dayFlights = (anaFleetData && anaFleetData.dates && anaFleetData.dates[dKey]) ? anaFleetData.dates[dKey] : {};
+  const totalAna767 = Object.values(dayFlights).filter(f => f.is767).length;
+
+  // DB実績の路線度数
+  const dbFlights = Object.values(fleetDb?.flights || {});
+  const totalDbFlights = dbFlights.length;
+  const dbRouteFreq = {};
+  for (const f of dbFlights) {
+    const r = `${f.orig}-${f.dest}`;
+    dbRouteFreq[r] = (dbRouteFreq[r] || 0) + 1;
+  }
+
+  const evaluated = plans.map(plan => {
+    let flightScoreSum = 0;
+    for (const f of plan.flights) {
+      const rawNum = f.flightNo.replace(/[^0-9]/g, '');
+      const anaInfo = dayFlights[`NH${parseInt(rawNum, 10)}`] || dayFlights[`NH${rawNum}`];
+      const is767 = anaInfo ? anaInfo.is767 : (f.is767Confirmed || f.model === '76P' || f.model === '763');
+      const modelFactor = is767 ? 1.0 : 0.2;
+
+      let rKey = '';
+      if (f.route && f.route.includes('➔')) {
+        const parts = f.route.split('➔').map(s => s.trim());
+        rKey = `${getAirportCodeFromName(parts[0])}-${getAirportCodeFromName(parts[1])}`;
+      } else if (f.orig && f.dest) {
+        rKey = `${f.orig}-${f.dest}`;
+      }
+
+      // ANA公式B767枠数比率
+      const route767Count = Object.values(dayFlights).filter(af => af.is767 && `${af.origin}-${af.dest}` === rKey).length;
+      const anaRatio = totalAna767 > 0 ? (route767Count / totalAna767) : 0.05;
+
+      // 過去実績比率
+      const histRatio = totalDbFlights > 0 ? ((dbRouteFreq[rKey] || 1) / totalDbFlights) : 0.05;
+
+      // フライト単体スコア
+      flightScoreSum += modelFactor * (anaRatio * 0.6 + histRatio * 0.4);
+    }
+
+    let avgScore = plan.flights.length > 0 ? (flightScoreSum / plan.flights.length) : 0.01;
+
+    // ナイトステイ整合ボーナス
+    if (confirmedNightStay && plan.flights.length > 0) {
+      const firstOrig = plan.flights[0].orig || getAirportCodeFromName(plan.flights[0].route.split('➔')[0]);
+      if (firstOrig === confirmedNightStay) {
+        avgScore *= 1.35; // 確定駐機先からのスタートは高確率
+      } else {
+        avgScore *= 0.3; // 駐機先が異なるプランは大幅減点
+      }
+    }
+
+    return {
+      plan,
+      rawScore: avgScore
+    };
+  });
+
+  const totalRawScore = evaluated.reduce((sum, item) => sum + item.rawScore, 0);
+  const targetCoverage = 0.82; // 上位3プラン合計約82%（残り18%はその他路線・機材整備予備枠）
+
+  evaluated.sort((a, b) => b.rawScore - a.rawScore);
+
+  const planLetters = ['プランA', 'プランB', 'プランC', 'プランD'];
+  const rankLabels = ['本命 ◎', '有力 ◯', '対抗 ▲', '注意 △'];
+
+  return evaluated.map((item, idx) => {
+    const rawProb = totalRawScore > 0 ? Math.round((item.rawScore / totalRawScore) * targetCoverage * 100) : 25;
+    const probability = Math.max(5, rawProb);
+    return {
+      ...item.plan,
+      planId: `plan-${String.fromCharCode(97 + idx)}`,
+      planName: planLetters[idx] || `プラン${idx + 1}`,
+      rank: rankLabels[idx] || '候補',
+      probability
+    };
+  });
+}
+
 // ANA公式運航状況と照合し、機種・発着時刻をエンリッチ＆767確定便へ自動最適化する関数
 function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData, minDepMinutes = 0) {
   if (!flight || !flight.flightNo || !dateStr || !anaFleetData.dates) return flight;
@@ -1041,6 +1124,8 @@ export async function generateWeeklyPrediction() {
       if (weeklyDays[1] && tomorrowPlans) {
         const tomorrowDateStr = weeklyDays[1].dateStr;
         tomorrowPlans = tomorrowPlans.map(plan => enrichPlanFlights(plan, tomorrowDateStr, anaFleetData));
+        // 客観的確率（ANA公式確定枠数比率・過去実績・ナイトステイ整合度）を動的計算（合計80%前後・100%以下）
+        tomorrowPlans = evaluatePlanProbabilities(tomorrowPlans, tomorrowDateStr, anaFleetData, fleetDb, isNightStayConfirmed ? nightStayCode : null);
       }
 
       // 明日の予想プラン（tomorrowPlans）を明日日付キーで保存（昨晩時点の予想として翌日参照するため）
@@ -1216,70 +1301,60 @@ export async function generateWeeklyPrediction() {
         flights: tomorrowFlights
       });
     } else {
-      // 2日後〜6日後
-      // 週末補正（土日は福岡・新千歳・那覇・石垣の確率が微増、広島が微減など）
-      const weekendFactor = day.isWeekend ? 1.2 : 1.0;
-      const predictionsForDay = baseRouteProbabilities.map((r, idx) => {
-        let prob = Math.round(r.baseProb * (day.isWeekend && (r.destCode === 'OKA' || r.destCode === 'CTS' || r.destCode === 'ISG') ? weekendFactor : 1.0));
-        // 少しずつ日によってバリエーションを出す（ランダムではなく周期的な傾向）
-        const cycleOffset = ((day.dayIndex * 7 + idx * 13) % 15) - 7;
-        prob = Math.max(5, Math.min(65, prob + cycleOffset));
+      // 2日後〜6日後（週間統計予測）
+      // DB実績（366便〜の実測度数）に基づく客観的ベース確率
+      const dbFlightsList = Object.values(fleetDb?.flights || {});
+      const totalDbF = dbFlightsList.length || 1;
+      const dbDestCount = {};
+      for (const f of dbFlightsList) {
+        dbDestCount[f.dest] = (dbDestCount[f.dest] || 0) + 1;
+        dbDestCount[f.orig] = (dbDestCount[f.orig] || 0) + 1;
+      }
 
-        let rank = '可能性あり △';
-        let star = '★★☆☆☆';
-        if (prob >= 35) {
-          rank = '本命 ◎';
-          star = '★★★★★';
-        } else if (prob >= 25) {
-          rank = '有力 ◯';
-          star = '★★★★☆';
-        } else if (prob >= 15) {
-          rank = '注目 ▲';
-          star = '★★★☆☆';
+      const predictionsForDay = baseRouteProbabilities.map((r) => {
+        // 実績出現率
+        const hits = dbDestCount[r.destCode] || 1;
+        const histRate = hits / (totalDbF * 2); // 0.05〜0.25程度
+        let baseProb = Math.round(histRate * 100 * 1.5); // スケール調整
+
+        // 週末ファクター（土日は観光・リゾートのCTS/OKA/ISGが+20%、平日ビジネスのITM/HIJが-15%）
+        if (day.isWeekend) {
+          if (r.destCode === 'CTS' || r.destCode === 'OKA' || r.destCode === 'ISG' || r.destCode === 'HKD') {
+            baseProb = Math.round(baseProb * 1.25);
+          } else if (r.destCode === 'ITM' || r.destCode === 'HIJ') {
+            baseProb = Math.round(baseProb * 0.85);
+          }
         }
 
+        const prob = Math.max(5, Math.min(45, baseProb));
         return {
           route: r.route,
           destCode: r.destCode,
           probability: prob,
-          star,
-          rank,
           candidateFlights: r.flights,
           note: r.note
         };
       }).sort((a, b) => b.probability - a.probability);
 
       const rawTop5 = predictionsForDay.slice(0, 5);
-      const rawTotal = rawTop5.reduce((sum, item) => sum + item.probability, 0);
-
       const planLetters = ['プランA', 'プランB', 'プランC', 'プランD', 'プランE'];
-      let allocatedTotal = 0;
-      const top5Routes = rawTop5.map((item, idx) => {
-        let normalizedProb;
-        if (idx === rawTop5.length - 1) {
-          // 最後のプランで端数調整して合計を確実に100%にする
-          normalizedProb = 100 - allocatedTotal;
-        } else {
-          normalizedProb = Math.round((item.probability / rawTotal) * 100);
-          allocatedTotal += normalizedProb;
-        }
 
+      const top5Routes = rawTop5.map((item, idx) => {
         let rank = '可能性あり △';
         let star = '★★☆☆☆';
-        if (normalizedProb >= 30) {
+        if (item.probability >= 25) {
           rank = '本命 ◎';
           star = '★★★★★';
-        } else if (normalizedProb >= 20) {
+        } else if (item.probability >= 18) {
           rank = '有力 ◯';
           star = '★★★★☆';
-        } else if (normalizedProb >= 12) {
+        } else if (item.probability >= 12) {
           rank = '注目 ▲';
           star = '★★★☆☆';
         }
 
         return {
           ...item,
-          probability: normalizedProb,
           star,
           rank,
           planName: planLetters[idx] || `プラン${idx + 1}`
@@ -1289,7 +1364,7 @@ export async function generateWeeklyPrediction() {
       weeklySchedule.push({
         ...day,
         statusType: 'forecast',
-        statusLabel: '週間確率予報（プランA〜E・合計100%）',
+        statusLabel: '週間ルート確率予報',
         topRoute: top5Routes[0].route,
         topProbability: top5Routes[0].probability,
         routes: top5Routes
