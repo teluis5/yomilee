@@ -78,11 +78,11 @@ const pageSchema = {
 			</div>
 		</div>
 
-		<!-- ① 本日の運行スケジュール（予想 vs 実際の比較） -->
+		<!-- ① 本日の運行スケジュール（昨晩時点の予想3プラン vs 実際の比較） -->
 		{todayData && (
 			<section class="dash-section">
 				<div class="sec-head">
-					<h2 class="sec-title">本日のフライト（{todayData.dateJa}）</h2>
+					<h2 class="sec-title">本日のフライト：昨晩時点の予想 vs 実際（{todayData.dateJa}）</h2>
 				</div>
 
 				{todayData.todayComparison && todayData.todayComparison.length > 0 ? (
@@ -91,36 +91,62 @@ const pageSchema = {
 							<thead>
 								<tr>
 									<th>便</th>
-									<th>予想</th>
+									<th>予想 {todayData.todayPlanHeaders?.[0]?.name || 'プランA'} ({todayData.todayPlanHeaders?.[0]?.prob ?? 50}%)</th>
+									<th>予想 {todayData.todayPlanHeaders?.[1]?.name || 'プランB'} ({todayData.todayPlanHeaders?.[1]?.prob ?? 30}%)</th>
+									<th>予想 {todayData.todayPlanHeaders?.[2]?.name || 'プランC'} ({todayData.todayPlanHeaders?.[2]?.prob ?? 20}%)</th>
 									<th>実際</th>
-									<th>状態</th>
 								</tr>
 							</thead>
 							<tbody>
 								{todayData.todayComparison.map((row, idx) => {
-									const pred = row.liveAdjustment || row.predicted;
-									const predRoute = pred.route.replace(/東京\(羽田\)/g, '羽田').replace(/大阪\(伊丹\)/g, '伊丹').replace(/札幌\(新千歳\)/g, '新千歳');
-									const predTime = pred.time.replace(/発 - /g, '-').replace(/着/g, '');
-									const act = row.actual;
-									const actRoute = act ? act.route.replace(/東京\(羽田\)/g, '羽田').replace(/大阪\(伊丹\)/g, '伊丹').replace(/札幌\(新千歳\)/g, '新千歳') : '';
-									const actTime = act ? act.time.replace(/発 - /g, '-').replace(/着/g, '') : '';
-									const cleanStatus = act ? act.status.replace(/ ✈️/g, '').replace(/ \(.*\)/g, '') : '運航前';
+									const fmt = (item) => {
+										if (!item) return null;
+										const rt = item.route.replace(/東京\(羽田\)/g, '羽田').replace(/大阪\(伊丹\)/g, '伊丹').replace(/札幌\(新千歳\)/g, '新千歳').replace(/ ➔ /g, '➔');
+										const tm = item.time.replace(/発 - /g, '-').replace(/着/g, '');
+										return { no: item.flightNo, rt, tm };
+									};
+									const pa = fmt(row.planA);
+									const pb = fmt(row.planB);
+									const pc = fmt(row.planC);
+									const act = fmt(row.actual);
+									const cleanStatus = row.actual ? row.actual.status.replace(/ ✈️/g, '').replace(/ \(.*\)/g, '') : '運航前';
 									return (
 										<tr class={act ? '' : 'row-muted'}>
 											<td class="col-num">#{idx + 1}</td>
-											<td class="col-pred">
-												<span class="fn-text">{pred.flightNo}</span> {predRoute} <span class="tm-text">({predTime})</span>
+											<td>
+												{pa ? (
+													<>
+														<div><span class="fn-text">{pa.no}</span> {pa.rt}</div>
+														<div class="tm-text">{pa.tm}</div>
+													</>
+												) : '—'}
+											</td>
+											<td>
+												{pb ? (
+													<>
+														<div><span class="fn-text">{pb.no}</span> {pb.rt}</div>
+														<div class="tm-text">{pb.tm}</div>
+													</>
+												) : '—'}
+											</td>
+											<td>
+												{pc ? (
+													<>
+														<div><span class="fn-text">{pc.no}</span> {pc.rt}</div>
+														<div class="tm-text">{pc.tm}</div>
+													</>
+												) : '—'}
 											</td>
 											<td class="col-act">
 												{act ? (
 													<>
-														<span class="fn-text">{act.flightNo}</span> {actRoute} <span class="tm-text">({actTime})</span>
+														<div><span class="fn-text">{act.no}</span> {act.rt}</div>
+														<div class="tm-text">{act.tm} ({cleanStatus})</div>
 													</>
 												) : (
-													<span class="tm-text">—</span>
+													<span class="tm-text">運航前</span>
 												)}
 											</td>
-											<td class="col-stat">{cleanStatus}</td>
 										</tr>
 									);
 								})}
@@ -484,8 +510,12 @@ const pageSchema = {
 	.simple-comp-table tr.row-muted td {
 		color: #94a3b8;
 	}
+	.simple-comp-table th:last-child,
+	.simple-comp-table td.col-act {
+		border-left: 2px solid #cbd5e1;
+	}
 	.col-num {
-		width: 38px;
+		width: 36px;
 		color: #64748b;
 		font-weight: 600;
 	}
