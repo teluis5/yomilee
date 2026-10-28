@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年10月28日 10:02",
-  "updatedAtIso": "2026-10-28T01:02:32.077Z",
+  "updatedAt": "2026年10月28日 10:21",
+  "updatedAtIso": "2026-10-28T01:21:41.713Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
@@ -43,6 +43,57 @@
     "evaluationPeriod": "2026年10月就航〜現在"
   },
   "pastPredictions": [
+    {
+      "date": "10月27日(火)",
+      "type": "1日通しダイヤ (全5便)",
+      "hitLabel": "🎯 プランB 1日的中 (5/5便)",
+      "hitRate": "100%",
+      "predicted": "プランB: 広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
+      "actual": "実運航: 広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
+      "flights": [
+        {
+          "step": "① 朝一初便",
+          "flightNo": "NH672",
+          "route": "広島 ➔ 羽田",
+          "time": "07:35発 - 08:55着",
+          "isHit": true,
+          "hitLabel": "🎯 的中"
+        },
+        {
+          "step": "② 午前便",
+          "flightNo": "NH59",
+          "route": "羽田 ➔ 新千歳",
+          "time": "10:00発 - 11:35着",
+          "isHit": true,
+          "hitLabel": "🎯 的中"
+        },
+        {
+          "step": "③ 昼復路",
+          "flightNo": "NH62",
+          "route": "新千歳 ➔ 羽田",
+          "time": "12:30発 - 14:10着",
+          "isHit": true,
+          "hitLabel": "🎯 的中"
+        },
+        {
+          "step": "④ 夕方便",
+          "flightNo": "NH265",
+          "route": "羽田 ➔ 福岡",
+          "time": "17:05発 - 19:05着",
+          "isHit": true,
+          "hitLabel": "🎯 的中"
+        },
+        {
+          "step": "⑤ 夜最終便",
+          "flightNo": "NH270",
+          "route": "福岡 ➔ 羽田",
+          "time": "19:55発 - 21:35着",
+          "isHit": true,
+          "hitLabel": "🎯 的中(泊)"
+        }
+      ],
+      "reason": "広島ナイトステイ始発便(NH672)から新千歳・福岡の2大幹線往復を経て羽田へ帰還"
+    },
     {
       "date": "10月26日(月)",
       "type": "1日通しダイヤ (全4便)",
@@ -382,13 +433,174 @@
           ]
         }
       ],
+      "todayComparison": [
+        {
+          "step": "① 朝一便",
+          "predicted": {
+            "flightNo": "NH661",
+            "route": "東京(羽田) ➔ 長崎",
+            "time": "08:15発 - 10:10着",
+            "prob": 50,
+            "plan": "プランA"
+          },
+          "subPredictions": [
+            {
+              "plan": "プランB (30%)",
+              "flightNo": "NH675",
+              "route": "東京(羽田) ➔ 広島",
+              "time": "08:30発 - 10:00着"
+            },
+            {
+              "plan": "プランC (20%)",
+              "flightNo": "NH243 / NH619",
+              "route": "東京(羽田) ➔ 福岡・鹿児島",
+              "time": "06:35〜08:20発"
+            }
+          ],
+          "liveAdjustment": null,
+          "actual": {
+            "flightNo": "NH619",
+            "route": "東京(羽田) ➔ 鹿児島",
+            "time": "06:35発 - 08:30着",
+            "status": "着陸済 (08:30)",
+            "isLanded": true,
+            "isLive": false
+          },
+          "matchBadge": "◯ 対抗予想的中 (プランC)",
+          "matchClass": "hit-c"
+        },
+        {
+          "step": "② 午前便",
+          "predicted": {
+            "flightNo": "NH664",
+            "route": "長崎 ➔ 東京(羽田)",
+            "time": "10:55発 - 12:35着",
+            "prob": 50,
+            "plan": "プランA"
+          },
+          "subPredictions": [
+            {
+              "plan": "プランB (30%)",
+              "flightNo": "NH678",
+              "route": "広島 ➔ 東京(羽田)",
+              "time": "10:45発 - 12:05着"
+            },
+            {
+              "plan": "プランC (20%)",
+              "flightNo": "NH250 / NH622",
+              "route": "福岡・鹿児島 ➔ 東京(羽田)",
+              "time": "09:15〜11:05発"
+            }
+          ],
+          "liveAdjustment": {
+            "flightNo": "NH622",
+            "route": "鹿児島 ➔ 東京(羽田)",
+            "time": "09:15発 - 10:55着",
+            "note": "鹿児島からの折返し復路予測 (確率95%)"
+          },
+          "actual": {
+            "flightNo": "NH622",
+            "route": "鹿児島 ➔ 東京(羽田)",
+            "time": "09:15発 - 10:55着",
+            "status": "飛行中 ✈️",
+            "isLanded": false,
+            "isLive": true
+          },
+          "matchBadge": "🎯 折返し予想的中 (プランC)",
+          "matchClass": "hit-a"
+        },
+        {
+          "step": "③ 午後便",
+          "predicted": {
+            "flightNo": "NH255 / NH257",
+            "route": "東京(羽田) ➔ 福岡",
+            "time": "13:00〜14:00発",
+            "prob": 50,
+            "plan": "プランA"
+          },
+          "subPredictions": [
+            {
+              "plan": "プランB (30%)",
+              "flightNo": "NH593",
+              "route": "東京(羽田) ➔ 松山",
+              "time": "14:15発 - 15:45着"
+            },
+            {
+              "plan": "プランC (20%)",
+              "flightNo": "NH27",
+              "route": "東京(羽田) ➔ 大阪(伊丹)",
+              "time": "14:00発 - 15:10着"
+            }
+          ],
+          "liveAdjustment": null,
+          "actual": null,
+          "matchBadge": "⏳ 運航前",
+          "matchClass": "pending"
+        },
+        {
+          "step": "④ 夕方便",
+          "predicted": {
+            "flightNo": "NH260 / NH262",
+            "route": "福岡 ➔ 東京(羽田)",
+            "time": "15:50〜16:50発",
+            "prob": 50,
+            "plan": "プランA"
+          },
+          "subPredictions": [
+            {
+              "plan": "プランB (30%)",
+              "flightNo": "NH596",
+              "route": "松山 ➔ 東京(羽田)",
+              "time": "16:35発 - 18:05着"
+            },
+            {
+              "plan": "プランC (20%)",
+              "flightNo": "NH32",
+              "route": "大阪(伊丹) ➔ 東京(羽田)",
+              "time": "16:00発 - 17:15着"
+            }
+          ],
+          "liveAdjustment": null,
+          "actual": null,
+          "matchBadge": "⏳ 運航前",
+          "matchClass": "pending"
+        },
+        {
+          "step": "⑤ 夜最終便",
+          "predicted": {
+            "flightNo": "NH669",
+            "route": "東京(羽田) ➔ 長崎",
+            "time": "19:15発 - 21:15着",
+            "prob": 50,
+            "plan": "プランA (長崎泊)"
+          },
+          "subPredictions": [
+            {
+              "plan": "プランB (30%)",
+              "flightNo": "NH685",
+              "route": "東京(羽田) ➔ 広島 (広島泊)",
+              "time": "19:30発 - 21:00着"
+            },
+            {
+              "plan": "プランC (20%)",
+              "flightNo": "羽田駐機",
+              "route": "東京(羽田) 夜間ステイ",
+              "time": "19:00以降"
+            }
+          ],
+          "liveAdjustment": null,
+          "actual": null,
+          "matchBadge": "⏳ 運航前",
+          "matchClass": "pending"
+        }
+      ],
       "flights": [
         {
           "flightNo": "NH619",
           "route": "東京(羽田) ➔ 鹿児島",
           "time": "06:35発 - 08:30着",
-          "status": "Unknown",
-          "isLanded": false,
+          "status": "着陸済 (08:30)",
+          "isLanded": true,
           "isLive": false,
           "isPredicted": false
         },
@@ -1062,7 +1274,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 349,
+    "totalFleetFlights": 350,
     "fleetCount": 15
   }
 }

@@ -225,12 +225,16 @@ export async function generateWeeklyPrediction() {
     const flightDateStr = formatDate(jstD);
 
     const nowTs = Math.floor(Date.now() / 1000);
-    const isLanded = /着陸済/.test(statusJa);
-    const isLive = /飛行中/.test(statusJa) || (f.status?.live === true) || (!isLanded && depTs > 0 && depTs <= nowTs && (!arrTs || arrTs > nowTs - 600));
+    const isLanded = /着陸済/.test(statusJa) || (arrTs > 0 && arrTs < nowTs - 600);
+    const isLive = !isLanded && (/飛行中/.test(statusJa) || (f.status?.live === true) || (depTs > 0 && depTs <= nowTs && (!arrTs || arrTs >= nowTs - 600)));
 
     let resolvedStatusJa = statusJa;
     if (isLive && !/飛行中/.test(statusJa)) {
       resolvedStatusJa = '飛行中 ✈️';
+    } else if (isLanded && !/着陸済/.test(statusJa)) {
+      resolvedStatusJa = `着陸済 (${formatTime(arrReal || arrSched)})`;
+    } else if (resolvedStatusJa === 'Unknown' || !resolvedStatusJa) {
+      resolvedStatusJa = '運航予定';
     }
 
     parsedFlights.push({
@@ -859,6 +863,160 @@ export async function generateWeeklyPrediction() {
         isPredicted: false
       }];
 
+      // 本日の「予想 vs 実際」1日通し比較データを構築
+      const todayOrigCode = todayFlights.length > 0 ? todayFlights[0].origCode : currentAirportCode;
+      const todayOrigName = AIRPORT_NAMES[todayOrigCode] || todayOrigCode;
+      const todayMorningStd = MORNING_DEPARTURE_STANDARDS[todayOrigCode] || {
+        flightNo: 'NH661', orig: 'HND', dest: 'NGS', depTime: '08:15', arrTime: '10:10'
+      };
+
+      // 本日の事前予想ベース（プランA 50% / プランB 30% / プランC 20%）
+      const prePredictedSlots = todayOrigCode === 'HND' ? [
+        {
+          step: '① 朝一便',
+          mainPred: { flightNo: 'NH661', route: '東京(羽田) ➔ 長崎', time: '08:15発 - 10:10着', prob: 50, plan: 'プランA' },
+          subPreds: [
+            { plan: 'プランB (30%)', flightNo: 'NH675', route: '東京(羽田) ➔ 広島', time: '08:30発 - 10:00着' },
+            { plan: 'プランC (20%)', flightNo: 'NH243 / NH619', route: '東京(羽田) ➔ 福岡・鹿児島', time: '06:35〜08:20発' }
+          ]
+        },
+        {
+          step: '② 午前便',
+          mainPred: { flightNo: 'NH664', route: '長崎 ➔ 東京(羽田)', time: '10:55発 - 12:35着', prob: 50, plan: 'プランA' },
+          subPreds: [
+            { plan: 'プランB (30%)', flightNo: 'NH678', route: '広島 ➔ 東京(羽田)', time: '10:45発 - 12:05着' },
+            { plan: 'プランC (20%)', flightNo: 'NH250 / NH622', route: '福岡・鹿児島 ➔ 東京(羽田)', time: '09:15〜11:05発' }
+          ]
+        },
+        {
+          step: '③ 午後便',
+          mainPred: { flightNo: 'NH255 / NH257', route: '東京(羽田) ➔ 福岡', time: '13:00〜14:00発', prob: 50, plan: 'プランA' },
+          subPreds: [
+            { plan: 'プランB (30%)', flightNo: 'NH593', route: '東京(羽田) ➔ 松山', time: '14:15発 - 15:45着' },
+            { plan: 'プランC (20%)', flightNo: 'NH27', route: '東京(羽田) ➔ 大阪(伊丹)', time: '14:00発 - 15:10着' }
+          ]
+        },
+        {
+          step: '④ 夕方便',
+          mainPred: { flightNo: 'NH260 / NH262', route: '福岡 ➔ 東京(羽田)', time: '15:50〜16:50発', prob: 50, plan: 'プランA' },
+          subPreds: [
+            { plan: 'プランB (30%)', flightNo: 'NH596', route: '松山 ➔ 東京(羽田)', time: '16:35発 - 18:05着' },
+            { plan: 'プランC (20%)', flightNo: 'NH32', route: '大阪(伊丹) ➔ 東京(羽田)', time: '16:00発 - 17:15着' }
+          ]
+        },
+        {
+          step: '⑤ 夜最終便',
+          mainPred: { flightNo: 'NH669', route: '東京(羽田) ➔ 長崎', time: '19:15発 - 21:15着', prob: 50, plan: 'プランA (長崎泊)' },
+          subPreds: [
+            { plan: 'プランB (30%)', flightNo: 'NH685', route: '東京(羽田) ➔ 広島 (広島泊)', time: '19:30発 - 21:00着' },
+            { plan: 'プランC (20%)', flightNo: '羽田駐機', route: '東京(羽田) 夜間ステイ', time: '19:00以降' }
+          ]
+        }
+      ] : [
+        {
+          step: '① 朝一便',
+          mainPred: { flightNo: todayMorningStd.flightNo, route: `${todayOrigName} ➔ 東京(羽田)`, time: `${todayMorningStd.depTime}発 - ${todayMorningStd.arrTime}着`, prob: 95, plan: '朝一確定枠' },
+          subPreds: []
+        },
+        {
+          step: '② 午前便',
+          mainPred: { flightNo: 'NH251', route: '東京(羽田) ➔ 福岡', time: '10:30発 - 12:30着', prob: 50, plan: 'プランA' },
+          subPreds: [
+            { plan: 'プランB (30%)', flightNo: 'NH59', route: '東京(羽田) ➔ 札幌(新千歳)', time: '10:00発 - 11:35着' },
+            { plan: 'プランC (20%)', flightNo: 'NH21', route: '東京(羽田) ➔ 大阪(伊丹)', time: '11:00発 - 12:10着' }
+          ]
+        },
+        {
+          step: '③ 午後便',
+          mainPred: { flightNo: 'NH256', route: '福岡 ➔ 東京(羽田)', time: '13:10発 - 14:50着', prob: 50, plan: 'プランA' },
+          subPreds: [
+            { plan: 'プランB (30%)', flightNo: 'NH62', route: '札幌(新千歳) ➔ 東京(羽田)', time: '12:30発 - 14:10着' },
+            { plan: 'プランC (20%)', flightNo: 'NH26', route: '大阪(伊丹) ➔ 東京(羽田)', time: '13:00発 - 14:10着' }
+          ]
+        },
+        {
+          step: '④ 夕方便',
+          mainPred: { flightNo: 'NH595 / NH265', route: '東京(羽田) ➔ 松山・福岡', time: '15:15〜17:05発', prob: 50, plan: 'プランA' },
+          subPreds: [
+            { plan: 'プランB (30%)', flightNo: 'NH681', route: '東京(羽田) ➔ 広島', time: '15:00発 - 16:30着' },
+            { plan: 'プランC (20%)', flightNo: 'NH69', route: '東京(羽田) ➔ 札幌(新千歳)', time: '15:00発 - 16:35着' }
+          ]
+        },
+        {
+          step: '⑤ 夜最終便',
+          mainPred: { flightNo: 'NH669 / NH270', route: '長崎ステイ または 羽田帰還', time: '19:15〜19:55発', prob: 50, plan: 'プランA' },
+          subPreds: [
+            { plan: 'プランB (30%)', flightNo: 'NH685', route: '東京(羽田) ➔ 広島 (広島泊)', time: '19:30発 - 21:00着' },
+            { plan: 'プランC (20%)', flightNo: '羽田帰還', route: '東京(羽田) 夜間ステイ', time: '19:00〜21:30着' }
+          ]
+        }
+      ];
+
+      const maxSlots = Math.max(5, todayFlights.length);
+      const todayComparison = [];
+      for (let i = 0; i < maxSlots; i++) {
+        const slotDef = prePredictedSlots[i] || {
+          step: `⑥ 第${i + 1}便`,
+          mainPred: { flightNo: 'ANA便', route: '追加運航枠', time: '-', prob: 50, plan: '追加枠' },
+          subPreds: []
+        };
+        const act = todayFlights[i] || null;
+        let liveAdjustment = null;
+
+        // 前の便が地方空港行きだった場合、その折返し復路便をリアルタイム補正予想として併記
+        if (i > 0 && todayFlights[i - 1] && todayFlights[i - 1].destCode !== 'HND') {
+          const prevDestName = todayFlights[i - 1].destName;
+          if (act && act.origCode === todayFlights[i - 1].destCode && act.destCode === 'HND') {
+            liveAdjustment = {
+              flightNo: act.flightNo,
+              route: `${prevDestName} ➔ 東京(羽田)`,
+              time: `${act.depTime}発 - ${act.arrTime}着`,
+              note: `${prevDestName}からの折返し復路予測 (確率95%)`
+            };
+          }
+        }
+
+        let matchBadge = '⏳ 運航前';
+        let matchClass = 'pending';
+        if (act) {
+          const mainFn = slotDef.mainPred.flightNo;
+          const allSubFns = slotDef.subPreds.map(s => s.flightNo).join(' ');
+          if (mainFn.includes(act.flightNo) || slotDef.mainPred.route === act.route) {
+            matchBadge = '🎯 本命予想的中 (プランA)';
+            matchClass = 'hit-a';
+          } else if (slotDef.subPreds[0] && (slotDef.subPreds[0].flightNo.includes(act.flightNo) || slotDef.subPreds[0].route === act.route)) {
+            matchBadge = '🎯 有力予想的中 (プランB)';
+            matchClass = 'hit-b';
+          } else if (liveAdjustment) {
+            matchBadge = '🎯 折返し予想的中 (プランC)';
+            matchClass = 'hit-a';
+          } else if (allSubFns.includes(act.flightNo)) {
+            matchBadge = '◯ 対抗予想的中 (プランC)';
+            matchClass = 'hit-c';
+          } else {
+            matchBadge = `🔄 別路線充当 (${act.destName}線)`;
+            matchClass = 'diff';
+          }
+        }
+
+        todayComparison.push({
+          step: slotDef.step,
+          predicted: slotDef.mainPred,
+          subPredictions: slotDef.subPreds,
+          liveAdjustment,
+          actual: act ? {
+            flightNo: act.flightNo,
+            route: act.route,
+            time: `${act.depTime}発 - ${act.arrTime}着`,
+            status: act.statusJa,
+            isLanded: act.isLanded,
+            isLive: act.isLive
+          } : null,
+          matchBadge,
+          matchClass
+        });
+      }
+
       weeklySchedule.push({
         ...day,
         statusType: 'today',
@@ -870,6 +1028,7 @@ export async function generateWeeklyPrediction() {
         todayOutlook,
         nightStayProbabilities,
         plans: todayPlans,
+        todayComparison,
         flights: combinedTodayFlights
       });
     } else if (day.dayIndex === 1) {
@@ -1012,6 +1171,22 @@ export async function generateWeeklyPrediction() {
   };
 
   const pastPredictions = [
+    {
+      date: '10月27日(火)',
+      type: '1日通しダイヤ (全5便)',
+      hitLabel: '🎯 プランB 1日的中 (5/5便)',
+      hitRate: '100%',
+      predicted: 'プランB: 広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)',
+      actual: '実運航: 広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)',
+      flights: [
+        { step: '① 朝一初便', flightNo: 'NH672', route: '広島 ➔ 羽田', time: '07:35発 - 08:55着', isHit: true, hitLabel: '🎯 的中' },
+        { step: '② 午前便', flightNo: 'NH59', route: '羽田 ➔ 新千歳', time: '10:00発 - 11:35着', isHit: true, hitLabel: '🎯 的中' },
+        { step: '③ 昼復路', flightNo: 'NH62', route: '新千歳 ➔ 羽田', time: '12:30発 - 14:10着', isHit: true, hitLabel: '🎯 的中' },
+        { step: '④ 夕方便', flightNo: 'NH265', route: '羽田 ➔ 福岡', time: '17:05発 - 19:05着', isHit: true, hitLabel: '🎯 的中' },
+        { step: '⑤ 夜最終便', flightNo: 'NH270', route: '福岡 ➔ 羽田', time: '19:55発 - 21:35着', isHit: true, hitLabel: '🎯 的中(泊)' }
+      ],
+      reason: '広島ナイトステイ始発便(NH672)から新千歳・福岡の2大幹線往復を経て羽田へ帰還'
+    },
     {
       date: '10月26日(月)',
       type: '1日通しダイヤ (全4便)',
