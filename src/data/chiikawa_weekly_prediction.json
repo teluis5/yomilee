@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年10月28日 12:53",
-  "updatedAtIso": "2026-10-28T03:53:16.392Z",
+  "updatedAt": "2026年10月28日 13:00",
+  "updatedAtIso": "2026-10-28T04:00:16.017Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
@@ -524,9 +524,9 @@
         {
           "step": "#3",
           "planA": {
-            "flightNo": "NH593",
-            "route": "東京(羽田) ➔ 松山",
-            "time": "14:15発 - 15:50着"
+            "flightNo": "NH23",
+            "route": "東京(羽田) ➔ 大阪(伊丹)",
+            "time": "12:30発 - 13:40着"
           },
           "planB": {
             "flightNo": "NH265",
@@ -534,9 +534,9 @@
             "time": "17:05発 - 19:05着"
           },
           "planC": {
-            "flightNo": "NH23",
-            "route": "東京(羽田) ➔ 大阪(伊丹)",
-            "time": "12:30発 - 13:40着"
+            "flightNo": "NH681",
+            "route": "東京(羽田) ➔ 広島",
+            "time": "15:00発 - 16:30着"
           },
           "actual": {
             "flightNo": "NH23",
@@ -550,9 +550,9 @@
         {
           "step": "#4",
           "planA": {
-            "flightNo": "NH596",
-            "route": "松山 ➔ 東京(羽田)",
-            "time": "16:40発 - 18:10着"
+            "flightNo": "NH38",
+            "route": "大阪(伊丹) ➔ 東京(羽田)",
+            "time": "19:00発 - 20:10着"
           },
           "planB": {
             "flightNo": "NH270",
@@ -560,9 +560,9 @@
             "time": "19:55発 - 21:35着"
           },
           "planC": {
-            "flightNo": "NH26",
-            "route": "大阪(伊丹) ➔ 東京(羽田)",
-            "time": "13:00発 - 14:10着"
+            "flightNo": "NH682",
+            "route": "広島 ➔ 東京(羽田)",
+            "time": "17:20発 - 18:45着"
           },
           "actual": null
         },
@@ -676,21 +676,21 @@
             },
             {
               "step": "④ 夕方便",
-              "time": "14:15発 - 15:50着",
-              "flightNo": "NH593",
+              "time": "17:25発 - 19:00着",
+              "flightNo": "NH595",
               "route": "東京(羽田) ➔ 松山",
               "tag": "午後往路",
-              "model": "76P",
-              "is767Confirmed": true
+              "model": "78P",
+              "is767Confirmed": false
             },
             {
               "step": "⑤ 夜最終",
-              "time": "16:40発 - 18:10着",
-              "flightNo": "NH596",
+              "time": "19:50発 - 21:15着",
+              "flightNo": "NH598",
               "route": "松山 ➔ 東京(羽田)",
               "tag": "🌙羽田帰還",
-              "model": "76P",
-              "is767Confirmed": true
+              "model": "78P",
+              "is767Confirmed": false
             }
           ]
         },
@@ -782,8 +782,8 @@
             },
             {
               "step": "② 午前便",
-              "time": "08:55発 - 10:55着",
-              "flightNo": "NH245",
+              "time": "17:05発 - 19:05着",
+              "flightNo": "NH265",
               "route": "東京(羽田) ➔ 福岡",
               "tag": "午前往路",
               "model": "76P",
@@ -791,8 +791,8 @@
             },
             {
               "step": "③ 午後便",
-              "time": "11:45発 - 13:25着",
-              "flightNo": "NH250",
+              "time": "19:55発 - 21:35着",
+              "flightNo": "NH270",
               "route": "福岡 ➔ 東京(羽田)",
               "tag": "昼復路",
               "model": "76P",
@@ -800,8 +800,8 @@
             },
             {
               "step": "④ 夕方便",
-              "time": "15:50発 - 17:20着",
-              "flightNo": "NH4729",
+              "time": "21:00発 - 22:35着",
+              "flightNo": "NH4739",
               "route": "東京(羽田) ➔ 札幌(新千歳)",
               "tag": "夕方往路",
               "model": "763",
@@ -809,8 +809,8 @@
             },
             {
               "step": "⑤ 夜最終",
-              "time": "18:00発 - 19:35着",
-              "flightNo": "NH4732",
+              "time": "21:00発 - 22:40着",
+              "flightNo": "NH4738",
               "route": "札幌(新千歳) ➔ 東京(羽田)",
               "tag": "🌙羽田帰還",
               "model": "763",

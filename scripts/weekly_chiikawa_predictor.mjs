@@ -55,7 +55,7 @@ function parseTimeToMinutes(timeStr) {
 }
 
 // ANA公式運航状況と照合し、機種・発着時刻をエンリッチ＆767確定便へ自動最適化する関数
-function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData) {
+function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData, minDepMinutes = 0) {
   if (!flight || !flight.flightNo || !dateStr || !anaFleetData.dates) return flight;
   
   const dKey = dateStr.replace(/-/g, '');
@@ -81,13 +81,34 @@ function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData) {
     destCode = flight.dest;
   }
 
-  // もし該当便が存在しないか、あるいは他機種（787/321等）だった場合
+  // もし該当便が前便到着時刻より前に出発してしまう場合、無効化して探索
+  if (anaInfo && minDepMinutes > 0) {
+    const currentDepMins = parseTimeToMinutes(anaInfo.depTime);
+    if (currentDepMins < minDepMinutes) {
+      anaInfo = null;
+    }
+  }
+
+  // もし該当便が存在しないか、時間逆転、あるいは他機種（787/321等）だった場合
   if (!anaInfo || !anaInfo.is767) {
     if (origCode && destCode) {
       // 同区間でB767-300ER（76P/763）が確定している便を探索
-      const candidates = Object.values(dayFlights).filter(f => f.is767 && f.origin === origCode && f.dest === destCode);
+      let candidates = Object.values(dayFlights).filter(f => f.is767 && f.origin === origCode && f.dest === destCode);
+      if (minDepMinutes > 0) {
+        const afterDep = candidates.filter(f => parseTimeToMinutes(f.depTime) >= minDepMinutes);
+        if (afterDep.length > 0) {
+          candidates = afterDep;
+        } else {
+          // B767確定便に折り返し該当便がない場合は全便から最短ターンアラウンド便を探索
+          const allRouteFlights = Object.values(dayFlights).filter(f => f.origin === origCode && f.dest === destCode && parseTimeToMinutes(f.depTime) >= minDepMinutes);
+          if (allRouteFlights.length > 0) {
+            candidates = allRouteFlights;
+          }
+        }
+      }
+
       if (candidates.length > 0) {
-        const prefMins = parseTimeToMinutes(flight.time || '12:00');
+        const prefMins = Math.max(parseTimeToMinutes(flight.time || '12:00'), minDepMinutes);
         candidates.sort((a, b) => {
           const diffA = Math.abs(parseTimeToMinutes(a.depTime) - prefMins);
           const diffB = Math.abs(parseTimeToMinutes(b.depTime) - prefMins);
@@ -115,6 +136,32 @@ function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData) {
     return updated;
   }
   return flight;
+}
+
+// 1日のプラン全フライトを順番にターンアラウンド時間を検証しながらエンリッチする関数
+function enrichPlanFlights(plan, dateStr, anaFleetData) {
+  if (!plan || !plan.flights) return plan;
+  let currentArrMins = 0;
+  const newFlights = [];
+
+  for (const fl of plan.flights) {
+    const minDep = currentArrMins > 0 ? currentArrMins + 35 : 0; // 最低ターンアラウンド35分
+    const enriched = enrichFlightWithAnaFleet(fl, dateStr, anaFleetData, minDep);
+    
+    // 到着時刻を更新
+    if (enriched && enriched.time) {
+      const arrMatch = enriched.time.match(/(\d{1,2}:\d{2})着/);
+      if (arrMatch) {
+        currentArrMins = parseTimeToMinutes(arrMatch[1]);
+      }
+    }
+    newFlights.push(enriched);
+  }
+
+  return {
+    ...plan,
+    flights: newFlights
+  };
 }
 
 // 日本語空港辞書
@@ -982,13 +1029,10 @@ export async function generateWeeklyPrediction() {
         }
       }
 
-      // 明日の予想プランをANA公式運航状況（76P/763機種確定データ）と照合・エンリッチ
+      // 明日の予想プランをANA公式運航状況（76P/763機種確定データ）と照合・エンリッチ（時間逆転防止バリデーション付）
       if (weeklyDays[1] && tomorrowPlans) {
         const tomorrowDateStr = weeklyDays[1].dateStr;
-        tomorrowPlans = tomorrowPlans.map(plan => ({
-          ...plan,
-          flights: plan.flights.map(fl => enrichFlightWithAnaFleet(fl, tomorrowDateStr, anaFleetData))
-        }));
+        tomorrowPlans = tomorrowPlans.map(plan => enrichPlanFlights(plan, tomorrowDateStr, anaFleetData));
       }
 
       // 明日の予想プラン（tomorrowPlans）を明日日付キーで保存（昨晩時点の予想として翌日参照するため）
@@ -1082,13 +1126,7 @@ export async function generateWeeklyPrediction() {
       }
 
       const lastNightPlans = snapshots[day.dateStr] || [];
-      const enrichList = (plan) => {
-        if (!plan || !plan.flights) return plan;
-        return {
-          ...plan,
-          flights: plan.flights.map(fl => enrichFlightWithAnaFleet(fl, day.dateStr, anaFleetData))
-        };
-      };
+      const enrichList = (plan) => enrichPlanFlights(plan, day.dateStr, anaFleetData);
       const planA = enrichList(lastNightPlans[0]) || { planName: 'プランA', probability: 50, flights: [] };
       const planB = enrichList(lastNightPlans[1]) || { planName: 'プランB', probability: 30, flights: [] };
       const planC = enrichList(lastNightPlans[2]) || { planName: 'プランC', probability: 20, flights: [] };
