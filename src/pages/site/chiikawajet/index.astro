@@ -82,70 +82,50 @@ const pageSchema = {
 		{todayData && (
 			<section class="dash-section">
 				<div class="sec-head">
-					<h2 class="sec-title">本日のフライト：予想 vs 実際（{todayData.dateJa}）</h2>
-					<span class="sec-tag tag-today">リアルタイム比較</span>
+					<h2 class="sec-title">本日のフライト（{todayData.dateJa}）</h2>
 				</div>
 
 				{todayData.todayComparison && todayData.todayComparison.length > 0 ? (
-					<div class="comp-table">
-						<div class="comp-thead">
-							<div class="ct-step">便枠</div>
-							<div class="ct-pred">本日の予想（確率合計100%）</div>
-							<div class="ct-act">実際の運航（実績・現在）</div>
-						</div>
-						{todayData.todayComparison.map((row) => (
-							<div class={`comp-row ${row.actual ? 'is-active' : 'is-upcoming'}`}>
-								<div class="comp-step-col">
-									<span class="cs-name">{row.step}</span>
-									<span class={`cs-badge m-${row.matchClass}`}>{row.matchBadge}</span>
-								</div>
-
-								<div class="comp-pred-col">
-									<div class="cp-main">
-										<span class="cp-plan">{row.predicted.plan} ({row.predicted.prob}%)</span>
-										<span class="cp-no">{row.predicted.flightNo}</span>
-										<span class="cp-route">{row.predicted.route}</span>
-										<span class="cp-time">{row.predicted.time.replace(/発 - /g, '-').replace(/着/g, '')}</span>
-									</div>
-									{row.subPredictions && row.subPredictions.length > 0 && (
-										<div class="cp-subs">
-											{row.subPredictions.map((sub) => (
-												<div class="cp-sub-item">
-													<span class="cps-plan">{sub.plan}:</span>
-													<span class="cps-no">{sub.flightNo}</span>
-													<span class="cps-rt">{sub.route}</span>
-													<span class="cps-tm">({sub.time.replace(/発 - /g, '-').replace(/着/g, '')})</span>
-												</div>
-											))}
-										</div>
-									)}
-									{row.liveAdjustment && (
-										<div class="cp-live-adj">
-											↳ 直前折返し予想(95%): <b>{row.liveAdjustment.flightNo}</b> {row.liveAdjustment.route} ({row.liveAdjustment.time.replace(/発 - /g, '-').replace(/着/g, '')})
-										</div>
-									)}
-								</div>
-
-								<div class="comp-act-col">
-									{row.actual ? (
-										<div class="ca-box">
-											<div class="ca-top">
-												<span class="ca-no">{row.actual.flightNo}</span>
-												<span class="ca-route">{row.actual.route}</span>
-											</div>
-											<div class="ca-meta">
-												<span class="ca-time">{row.actual.time.replace(/発 - /g, ' - ').replace(/着/g, '')}</span>
-												<span class={`status-badge ${row.actual.isLanded ? 'b-landed' : (row.actual.isLive ? 'b-live' : 'b-sched')}`}>
-													{row.actual.status}
-												</span>
-											</div>
-										</div>
-									) : (
-										<div class="ca-empty">⏳ 運航前（確定次第反映）</div>
-									)}
-								</div>
-							</div>
-						))}
+					<div class="simple-table-wrap">
+						<table class="simple-comp-table">
+							<thead>
+								<tr>
+									<th>便</th>
+									<th>予想</th>
+									<th>実際</th>
+									<th>状態</th>
+								</tr>
+							</thead>
+							<tbody>
+								{todayData.todayComparison.map((row, idx) => {
+									const pred = row.liveAdjustment || row.predicted;
+									const predRoute = pred.route.replace(/東京\(羽田\)/g, '羽田').replace(/大阪\(伊丹\)/g, '伊丹').replace(/札幌\(新千歳\)/g, '新千歳');
+									const predTime = pred.time.replace(/発 - /g, '-').replace(/着/g, '');
+									const act = row.actual;
+									const actRoute = act ? act.route.replace(/東京\(羽田\)/g, '羽田').replace(/大阪\(伊丹\)/g, '伊丹').replace(/札幌\(新千歳\)/g, '新千歳') : '';
+									const actTime = act ? act.time.replace(/発 - /g, '-').replace(/着/g, '') : '';
+									const cleanStatus = act ? act.status.replace(/ ✈️/g, '').replace(/ \(.*\)/g, '') : '運航前';
+									return (
+										<tr class={act ? '' : 'row-muted'}>
+											<td class="col-num">#{idx + 1}</td>
+											<td class="col-pred">
+												<span class="fn-text">{pred.flightNo}</span> {predRoute} <span class="tm-text">({predTime})</span>
+											</td>
+											<td class="col-act">
+												{act ? (
+													<>
+														<span class="fn-text">{act.flightNo}</span> {actRoute} <span class="tm-text">({actTime})</span>
+													</>
+												) : (
+													<span class="tm-text">—</span>
+												)}
+											</td>
+											<td class="col-stat">{cleanStatus}</td>
+										</tr>
+									);
+								})}
+							</tbody>
+						</table>
 					</div>
 				) : (
 					<div class="flight-list">
@@ -477,179 +457,56 @@ const pageSchema = {
 	.b-sched { background: #e0f2fe; color: #0369a1; }
 	.b-pred { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
 
-	/* 本日の予想 vs 実際 比較テーブル */
-	.comp-table {
-		border: 1px solid #cbd5e1;
-		border-radius: 8px;
-		overflow: hidden;
+	/* 本日の予想 vs 実際 シンプル比較表 */
+	.simple-table-wrap {
+		overflow-x: auto;
+	}
+	.simple-comp-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.85rem;
 		background: #fff;
+		border: 1px solid #e2e8f0;
 	}
-	.comp-thead {
-		display: grid;
-		grid-template-columns: 120px 1.25fr 1fr;
-		gap: 0.75rem;
-		background: #f1f5f9;
-		border-bottom: 1px solid #cbd5e1;
-		padding: 0.5rem 0.85rem;
-		font-size: 0.76rem;
-		font-weight: 700;
-		color: #475569;
-	}
-	.comp-row {
-		display: grid;
-		grid-template-columns: 120px 1.25fr 1fr;
-		gap: 0.75rem;
-		align-items: center;
-		padding: 0.65rem 0.85rem;
+	.simple-comp-table th,
+	.simple-comp-table td {
+		padding: 0.55rem 0.7rem;
 		border-bottom: 1px solid #e2e8f0;
-		font-size: 0.84rem;
+		text-align: left;
+		vertical-align: middle;
 	}
-	.comp-row:last-child {
-		border-bottom: none;
-	}
-	.comp-row.is-upcoming {
-		background: #fcfcfd;
-	}
-	.comp-step-col {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 0.25rem;
-	}
-	.cs-name {
-		font-weight: 700;
-		color: #0f172a;
-		font-size: 0.82rem;
-	}
-	.cs-badge {
-		font-size: 0.68rem;
-		font-weight: 700;
-		padding: 0.1rem 0.45rem;
-		border-radius: 4px;
-		line-height: 1.3;
-	}
-	.m-hit-a, .m-hit-b {
-		background: #dcfce7;
-		color: #15803d;
-	}
-	.m-hit-c {
-		background: #e0f2fe;
-		color: #0369a1;
-	}
-	.m-diff {
-		background: #fef3c7;
-		color: #92400e;
-	}
-	.m-pending {
-		background: #f1f5f9;
-		color: #64748b;
-	}
-	.comp-pred-col {
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
-		border-left: 2px solid #e2e8f0;
-		padding-left: 0.65rem;
-	}
-	.cp-main {
-		display: flex;
-		align-items: center;
-		gap: 0.4rem;
-		flex-wrap: wrap;
-	}
-	.cp-plan {
-		font-size: 0.7rem;
-		font-weight: 700;
-		background: #fffbeb;
-		color: #b45309;
-		border: 1px solid #fde68a;
-		padding: 0.05rem 0.35rem;
-		border-radius: 3px;
-	}
-	.cp-no {
-		font-weight: 700;
-		color: #0284c7;
-	}
-	.cp-route {
-		font-weight: 600;
-		color: #1e293b;
-	}
-	.cp-time {
-		font-size: 0.76rem;
-		color: #64748b;
-	}
-	.cp-subs {
-		display: flex;
-		flex-direction: column;
-		gap: 0.12rem;
-		font-size: 0.74rem;
-		color: #64748b;
-	}
-	.cp-sub-item {
-		display: flex;
-		align-items: center;
-		gap: 0.3rem;
-		flex-wrap: wrap;
-	}
-	.cps-plan {
+	.simple-comp-table th {
+		background: #f8fafc;
 		font-weight: 600;
 		color: #475569;
-	}
-	.cps-no {
-		font-weight: 600;
-		color: #0369a1;
-	}
-	.cp-live-adj {
-		font-size: 0.74rem;
-		background: #f0fdf4;
-		color: #166534;
-		border: 1px solid #bbf7d0;
-		border-radius: 4px;
-		padding: 0.15rem 0.45rem;
-		margin-top: 0.1rem;
-	}
-	.comp-act-col {
-		border-left: 2px solid #cbd5e1;
-		padding-left: 0.65rem;
-	}
-	.ca-box {
-		display: flex;
-		flex-direction: column;
-		gap: 0.2rem;
-	}
-	.ca-top {
-		display: flex;
-		align-items: center;
-		gap: 0.45rem;
-		flex-wrap: wrap;
-	}
-	.ca-no {
-		font-weight: 700;
-		color: #0f172a;
-		background: #e0f2fe;
-		padding: 0.05rem 0.4rem;
-		border-radius: 4px;
-		font-size: 0.82rem;
-	}
-	.ca-route {
-		font-weight: 700;
-		color: #0f172a;
-	}
-	.ca-meta {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		flex-wrap: wrap;
-	}
-	.ca-time {
 		font-size: 0.78rem;
-		font-weight: 600;
-		color: #475569;
 	}
-	.ca-empty {
-		font-size: 0.78rem;
+	.simple-comp-table tr.row-muted td {
 		color: #94a3b8;
+	}
+	.col-num {
+		width: 38px;
+		color: #64748b;
 		font-weight: 600;
+	}
+	.fn-text {
+		font-weight: 700;
+		color: #0f172a;
+		margin-right: 0.25rem;
+	}
+	.row-muted .fn-text {
+		color: #64748b;
+	}
+	.tm-text {
+		color: #64748b;
+		font-size: 0.78rem;
+		white-space: nowrap;
+	}
+	.col-stat {
+		width: 68px;
+		font-size: 0.78rem;
+		color: #475569;
+		white-space: nowrap;
 	}
 
 	/* 明日のプラン */
@@ -904,45 +761,10 @@ const pageSchema = {
 			grid-template-columns: 1fr;
 			gap: 0.65rem;
 		}
-		.comp-thead {
-			display: none;
-		}
-		.comp-row {
-			grid-template-columns: 1fr;
-			gap: 0.5rem;
-			padding: 0.75rem;
-		}
-		.comp-step-col {
-			flex-direction: row;
-			align-items: center;
-			justify-content: space-between;
-			border-bottom: 1px dashed #e2e8f0;
-			padding-bottom: 0.3rem;
-		}
-		.comp-pred-col {
-			border-left: 3px solid #f59e0b;
-			padding-left: 0.55rem;
-		}
-		.comp-pred-col::before {
-			content: "【予想（プランA〜C：計100%）】";
-			font-size: 0.68rem;
-			font-weight: 700;
-			color: #b45309;
-		}
-		.comp-act-col {
-			border-left: 3px solid #0284c7;
-			padding-left: 0.55rem;
-			background: #f8fafc;
-			padding: 0.4rem 0.55rem;
-			border-radius: 0 4px 4px 0;
-		}
-		.comp-act-col::before {
-			content: "【実際の運航】";
-			display: block;
-			font-size: 0.68rem;
-			font-weight: 700;
-			color: #0369a1;
-			margin-bottom: 0.15rem;
+		.simple-comp-table th,
+		.simple-comp-table td {
+			padding: 0.45rem 0.5rem;
+			font-size: 0.78rem;
 		}
 		.flight-row {
 			grid-template-columns: 1fr auto;
