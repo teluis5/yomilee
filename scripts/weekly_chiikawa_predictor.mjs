@@ -81,7 +81,7 @@ function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData, minDepMinutes =
     destCode = flight.dest;
   }
 
-  // もし該当便が前便到着時刻より前に出発してしまう場合、無効化して探索
+  // もし該当便が前便到着時刻より前に出発してしまう場合、無効化
   if (anaInfo && minDepMinutes > 0) {
     const currentDepMins = parseTimeToMinutes(anaInfo.depTime);
     if (currentDepMins < minDepMinutes) {
@@ -89,32 +89,40 @@ function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData, minDepMinutes =
     }
   }
 
-  // もし該当便が存在しないか、時間逆転、あるいは他機種（787/321等）だった場合
-  if (!anaInfo || !anaInfo.is767) {
+  // もし元の便が適正なターンアラウンド時間（40分〜120分以内）であれば、機材変更を想定して採用維持
+  const isOriginalTurnaroundValid = anaInfo && minDepMinutes > 0 &&
+    parseTimeToMinutes(anaInfo.depTime) >= minDepMinutes &&
+    parseTimeToMinutes(anaInfo.depTime) <= minDepMinutes + 90;
+
+  // もし該当便が存在しないか、時間逆転、または4時間以上空いてしまう場合
+  if (!anaInfo || (!anaInfo.is767 && !isOriginalTurnaroundValid)) {
     if (origCode && destCode) {
-      // 同区間でB767-300ER（76P/763）が確定している便を探索
-      let candidates = Object.values(dayFlights).filter(f => f.is767 && f.origin === origCode && f.dest === destCode);
+      // 1. 同区間で適正ターンアラウンド時間内（前便到着+35分〜+120分）のB767確定便を探す
+      let candidates = Object.values(dayFlights).filter(f => f.origin === origCode && f.dest === destCode);
+      let validTurnaroundCandidates = candidates;
       if (minDepMinutes > 0) {
-        const afterDep = candidates.filter(f => parseTimeToMinutes(f.depTime) >= minDepMinutes);
-        if (afterDep.length > 0) {
-          candidates = afterDep;
-        } else {
-          // B767確定便に折り返し該当便がない場合は全便から最短ターンアラウンド便を探索
-          const allRouteFlights = Object.values(dayFlights).filter(f => f.origin === origCode && f.dest === destCode && parseTimeToMinutes(f.depTime) >= minDepMinutes);
-          if (allRouteFlights.length > 0) {
-            candidates = allRouteFlights;
-          }
+        validTurnaroundCandidates = candidates.filter(f => {
+          const m = parseTimeToMinutes(f.depTime);
+          return m >= minDepMinutes && m <= minDepMinutes + 120; // 2時間以内の折り返し
+        });
+        if (validTurnaroundCandidates.length === 0) {
+          // 2時間以内がない場合は、直近の出発便（待機時間最小）
+          validTurnaroundCandidates = candidates.filter(f => parseTimeToMinutes(f.depTime) >= minDepMinutes);
         }
       }
 
-      if (candidates.length > 0) {
+      // 適正時間枠の中で、B767便があれば優先
+      const b767InWindow = validTurnaroundCandidates.filter(f => f.is767);
+      const searchPool = b767InWindow.length > 0 ? b767InWindow : validTurnaroundCandidates;
+
+      if (searchPool.length > 0) {
         const prefMins = Math.max(parseTimeToMinutes(flight.time || '12:00'), minDepMinutes);
-        candidates.sort((a, b) => {
+        searchPool.sort((a, b) => {
           const diffA = Math.abs(parseTimeToMinutes(a.depTime) - prefMins);
           const diffB = Math.abs(parseTimeToMinutes(b.depTime) - prefMins);
           return diffA - diffB;
         });
-        anaInfo = candidates[0];
+        anaInfo = searchPool[0];
       }
     }
   }

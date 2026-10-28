@@ -4,16 +4,16 @@
       "planId": "plan-a",
       "planName": "プランA",
       "rank": "本命 ◎",
-      "probability": 50,
-      "title": "【羽田泊】鹿児島始発 ➔ 伊丹往復 ➔ 広島ステイ",
-      "routeSummary": "羽田 ➔ 鹿児島 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 広島(泊)",
+      "probability": 55,
+      "title": "【羽田泊】鹿児島 ➔ 伊丹 ➔ 夕方福岡 ➔ 羽田帰還(6便フル運用)",
+      "routeSummary": "羽田 ➔ 鹿児島 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
       "airports": [
         "東京(羽田)",
         "鹿児島",
         "大阪(伊丹)",
-        "広島"
+        "福岡"
       ],
-      "description": "早朝の鹿児島便(NH619)でスタートし、昼は伊丹(NH23/28)を往復、夜は広島(NH685)へステイする運用",
+      "description": "早朝鹿児島往復(NH619/622)、昼伊丹往復(NH23/28)を経て、夕方便で福岡往復(NH265/270)をこなし羽田泊する王道3往復(6便)運用",
       "flights": [
         {
           "step": "① 朝一便",
@@ -47,16 +47,25 @@
           "time": "14:30発 - 15:40着",
           "flightNo": "NH28",
           "route": "大阪(伊丹) ➔ 東京(羽田)",
-          "tag": "夕方復路",
+          "tag": "折返し復路",
           "model": "738",
           "is767Confirmed": false
         },
         {
-          "step": "⑤ 夜最終",
-          "time": "19:40発 - 21:10着",
-          "flightNo": "NH685",
-          "route": "東京(羽田) ➔ 広島",
-          "tag": "🌙夜間駐機",
+          "step": "⑤ 夕方往路",
+          "time": "17:05発 - 19:05着",
+          "flightNo": "NH265",
+          "route": "東京(羽田) ➔ 福岡",
+          "tag": "夕方幹線",
+          "model": "76P",
+          "is767Confirmed": true
+        },
+        {
+          "step": "⑥ 夜復路",
+          "time": "19:55発 - 21:35着",
+          "flightNo": "NH270",
+          "route": "福岡 ➔ 東京(羽田)",
+          "tag": "🌙羽田帰還(泊)",
           "model": "76P",
           "is767Confirmed": true
         }
@@ -67,14 +76,14 @@
       "planName": "プランB",
       "rank": "有力 ◯",
       "probability": 30,
-      "title": "【羽田泊】長崎・福岡 西日本基幹 ➔ 長崎ステイ",
+      "title": "【羽田泊】長崎往復 ➔ 福岡往復 ➔ 長崎ステイ",
       "routeSummary": "羽田 ➔ 長崎 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 長崎(泊)",
       "airports": [
         "東京(羽田)",
         "長崎",
         "福岡"
       ],
-      "description": "朝の長崎便(NH661)から夕方の福岡便(NH265)、夜は長崎へステイする定番ローテーション",
+      "description": "朝の長崎便(NH661/664)から夕方の福岡便(NH265/270)、夜は長崎(NH669)へステイするパターン",
       "flights": [
         {
           "step": "① 朝一便",
@@ -127,7 +136,7 @@
       "planId": "plan-c",
       "planName": "プランC",
       "rank": "対抗 ▲",
-      "probability": 20,
+      "probability": 15,
       "title": "【羽田泊】新千歳往復 ➔ 広島往復 ➔ 羽田泊",
       "routeSummary": "羽田 ➔ 新千歳 ➔ 羽田 ➔ 広島 ➔ 羽田(泊)",
       "airports": [
@@ -283,21 +292,21 @@
         },
         {
           "step": "③ 午後便",
-          "time": "17:05発 - 19:05着",
-          "flightNo": "NH265",
+          "time": "14:15発 - 16:10着",
+          "flightNo": "NH257",
           "route": "東京(羽田) ➔ 福岡",
           "tag": "午後往路",
-          "model": "76P",
-          "is767Confirmed": true
+          "model": "722",
+          "is767Confirmed": false
         },
         {
           "step": "④ 夕方便",
-          "time": "19:55発 - 21:35着",
-          "flightNo": "NH270",
+          "time": "17:05発 - 18:45着",
+          "flightNo": "NH262",
           "route": "福岡 ➔ 東京(羽田)",
           "tag": "夕方復路",
-          "model": "76P",
-          "is767Confirmed": true
+          "model": "722",
+          "is767Confirmed": false
         },
         {
           "step": "⑤ 夜最終",
@@ -336,30 +345,30 @@
         },
         {
           "step": "② 午前便",
-          "time": "17:05発 - 19:05着",
-          "flightNo": "NH265",
+          "time": "11:25発 - 13:25着",
+          "flightNo": "NH251",
           "route": "東京(羽田) ➔ 福岡",
           "tag": "午前往路",
-          "model": "76P",
-          "is767Confirmed": true
+          "model": "722",
+          "is767Confirmed": false
         },
         {
           "step": "③ 午後便",
-          "time": "19:55発 - 21:35着",
-          "flightNo": "NH270",
+          "time": "14:15発 - 15:55着",
+          "flightNo": "NH256",
           "route": "福岡 ➔ 東京(羽田)",
           "tag": "昼復路",
-          "model": "76P",
-          "is767Confirmed": true
+          "model": "722",
+          "is767Confirmed": false
         },
         {
           "step": "④ 夕方便",
-          "time": "21:00発 - 22:35着",
-          "flightNo": "NH4739",
+          "time": "17:00発 - 18:35着",
+          "flightNo": "NH73",
           "route": "東京(羽田) ➔ 札幌(新千歳)",
           "tag": "夕方往路",
-          "model": "763",
-          "is767Confirmed": true
+          "model": "78K",
+          "is767Confirmed": false
         },
         {
           "step": "⑤ 夜最終",
