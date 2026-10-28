@@ -200,59 +200,7 @@
       "planId": "plan-a",
       "planName": "プランA",
       "rank": "本命 ◎",
-      "probability": 42,
-      "title": "【羽田始発の場合】羽田始発 ➔ 長崎・福岡ルート",
-      "routeSummary": "羽田 ➔ 長崎 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
-      "airports": [
-        "東京(羽田)",
-        "長崎",
-        "福岡"
-      ],
-      "description": "夜便で羽田へ戻り、明朝羽田からスタートする場合の1日通しダイヤ",
-      "flights": [
-        {
-          "step": "① 朝一便",
-          "time": "08:30発 - 10:30着",
-          "flightNo": "NH661",
-          "route": "東京(羽田) ➔ 長崎",
-          "tag": "羽田始発",
-          "model": "76P",
-          "is767Confirmed": true
-        },
-        {
-          "step": "② 午前便",
-          "time": "11:20発 - 12:55着",
-          "flightNo": "NH664",
-          "route": "長崎 ➔ 東京(羽田)",
-          "tag": "折返し復路",
-          "model": "76P",
-          "is767Confirmed": true
-        },
-        {
-          "step": "③ 午後便",
-          "time": "17:05発 - 19:05着",
-          "flightNo": "NH265",
-          "route": "東京(羽田) ➔ 福岡",
-          "tag": "午後往路",
-          "model": "76P",
-          "is767Confirmed": true
-        },
-        {
-          "step": "④ 夕方便",
-          "time": "19:55発 - 21:35着",
-          "flightNo": "NH270",
-          "route": "福岡 ➔ 東京(羽田)",
-          "tag": "夕方復路",
-          "model": "76P",
-          "is767Confirmed": true
-        }
-      ]
-    },
-    {
-      "planId": "plan-b",
-      "planName": "プランB",
-      "rank": "有力 ◯",
-      "probability": 27,
+      "probability": 44,
       "title": "【神戸ステイ】神戸始発 ➔ 羽田 ➔ 各地",
       "routeSummary": "神戸 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 松山 ➔ 羽田",
       "airports": [
@@ -309,10 +257,62 @@
       ]
     },
     {
+      "planId": "plan-b",
+      "planName": "プランB",
+      "rank": "有力 ◯",
+      "probability": 25,
+      "title": "【羽田始発の場合】羽田始発 ➔ 長崎・福岡ルート",
+      "routeSummary": "羽田 ➔ 長崎 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
+      "airports": [
+        "東京(羽田)",
+        "長崎",
+        "福岡"
+      ],
+      "description": "夜便で羽田へ戻り、明朝羽田からスタートする場合の1日通しダイヤ",
+      "flights": [
+        {
+          "step": "① 朝一便",
+          "time": "08:30発 - 10:30着",
+          "flightNo": "NH661",
+          "route": "東京(羽田) ➔ 長崎",
+          "tag": "羽田始発",
+          "model": "76P",
+          "is767Confirmed": true
+        },
+        {
+          "step": "② 午前便",
+          "time": "11:20発 - 12:55着",
+          "flightNo": "NH664",
+          "route": "長崎 ➔ 東京(羽田)",
+          "tag": "折返し復路",
+          "model": "76P",
+          "is767Confirmed": true
+        },
+        {
+          "step": "③ 午後便",
+          "time": "17:05発 - 19:05着",
+          "flightNo": "NH265",
+          "route": "東京(羽田) ➔ 福岡",
+          "tag": "午後往路",
+          "model": "76P",
+          "is767Confirmed": true
+        },
+        {
+          "step": "④ 夕方便",
+          "time": "19:55発 - 21:35着",
+          "flightNo": "NH270",
+          "route": "福岡 ➔ 東京(羽田)",
+          "tag": "夕方復路",
+          "model": "76P",
+          "is767Confirmed": true
+        }
+      ]
+    },
+    {
       "planId": "plan-c",
       "planName": "プランC",
       "rank": "対抗 ▲",
-      "probability": 12,
+      "probability": 13,
       "title": "【長崎ステイ】長崎始発 ➔ 福岡・新千歳",
       "routeSummary": "長崎 ➔ 羽田 ➔ 福岡 ➔ 羽田",
       "airports": [
