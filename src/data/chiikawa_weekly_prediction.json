@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年10月28日 16:01",
-  "updatedAtIso": "2026-10-28T07:01:27.406Z",
+  "updatedAt": "2026年10月28日 17:01",
+  "updatedAtIso": "2026-10-28T08:01:18.397Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "大阪(伊丹) ➔ 札幌(新千歳) へ飛行中",
+    "currentLocation": "札幌(新千歳)",
     "currentLocationCode": "CTS",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "東京(羽田) (95%) / 神戸 (4%) / 札幌(新千歳) (1%) [今夜の駐機確率]",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
@@ -321,7 +321,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降予測）",
-      "currentAirport": "大阪(伊丹) ➔ 札幌(新千歳) へ飛行中",
+      "currentAirport": "札幌(新千歳)",
       "nightStay": "東京(羽田) (95%) / 神戸 (4%) / 札幌(新千歳) (1%) [今夜の駐機確率]",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "🔒 新千歳発の羽田行き夜便は全便787/777のため、B767-300ERは「新千歳 ➔ 神戸(NH578: 76P確定) ➔ 羽田(NH416: 76P確定)」の三角運航で今夜22:30に羽田へ帰還・夜間駐機に入る見通し（確率95%で大本命）です！",
@@ -554,9 +554,9 @@
             "flightNo": "NH1091",
             "route": "大阪(伊丹) ➔ 札幌(新千歳)",
             "time": "15:00発 - 16:50着",
-            "status": "飛行中 ✈️",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (16:38)",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -622,9 +622,9 @@
           "flightNo": "NH1091",
           "route": "大阪(伊丹) ➔ 札幌(新千歳)",
           "time": "15:00発 - 16:50着",
-          "status": "飛行中 ✈️",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (16:38)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         }
       ]
@@ -948,12 +948,12 @@
           "rank": "可能性あり △"
         },
         {
-          "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
-          "destCode": "NGS",
+          "route": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
+          "destCode": "FUK",
           "isInterCity": false,
-          "probability": 9,
-          "candidateFlights": "NH661 / NH664 / NH669 / NH662",
-          "note": "九州の定番就航地。夜間ナイトステイが頻出",
+          "probability": 8,
+          "candidateFlights": "NH245 / NH250 / NH251 / NH256",
+          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度投入",
           "star": "★★☆☆☆",
           "rank": "可能性あり △"
         },
@@ -1003,22 +1003,22 @@
           "rank": "本命 ◎"
         },
         {
-          "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
-          "destCode": "NGS",
-          "isInterCity": false,
-          "probability": 9,
-          "candidateFlights": "NH661 / NH664 / NH669 / NH662",
-          "note": "九州の定番就航地。夜間ナイトステイが頻出",
-          "star": "★★☆☆☆",
-          "rank": "可能性あり △"
-        },
-        {
           "route": "羽田 ➔ 伊丹 / 伊丹 ➔ 羽田",
           "destCode": "ITM",
           "isInterCity": false,
           "probability": 9,
           "candidateFlights": "NH21 / NH26 / NH35 / NH40",
           "note": "伊丹シャトル便。早朝・昼間帯での充当実績多数",
+          "star": "★★☆☆☆",
+          "rank": "可能性あり △"
+        },
+        {
+          "route": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
+          "destCode": "FUK",
+          "isInterCity": false,
+          "probability": 8,
+          "candidateFlights": "NH245 / NH250 / NH251 / NH256",
+          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度投入",
           "star": "★★☆☆☆",
           "rank": "可能性あり △"
         },
@@ -1068,22 +1068,22 @@
           "rank": "本命 ◎"
         },
         {
-          "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
-          "destCode": "NGS",
-          "isInterCity": false,
-          "probability": 9,
-          "candidateFlights": "NH661 / NH664 / NH669 / NH662",
-          "note": "九州の定番就航地。夜間ナイトステイが頻出",
-          "star": "★★☆☆☆",
-          "rank": "可能性あり △"
-        },
-        {
           "route": "羽田 ➔ 伊丹 / 伊丹 ➔ 羽田",
           "destCode": "ITM",
           "isInterCity": false,
           "probability": 9,
           "candidateFlights": "NH21 / NH26 / NH35 / NH40",
           "note": "伊丹シャトル便。早朝・昼間帯での充当実績多数",
+          "star": "★★☆☆☆",
+          "rank": "可能性あり △"
+        },
+        {
+          "route": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
+          "destCode": "FUK",
+          "isInterCity": false,
+          "probability": 8,
+          "candidateFlights": "NH245 / NH250 / NH251 / NH256",
+          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度投入",
           "star": "★★☆☆☆",
           "rank": "可能性あり △"
         },
@@ -1143,12 +1143,12 @@
           "rank": "可能性あり △"
         },
         {
-          "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
-          "destCode": "NGS",
+          "route": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
+          "destCode": "FUK",
           "isInterCity": false,
-          "probability": 9,
-          "candidateFlights": "NH661 / NH664 / NH669 / NH662",
-          "note": "九州の定番就航地。夜間ナイトステイが頻出",
+          "probability": 8,
+          "candidateFlights": "NH245 / NH250 / NH251 / NH256",
+          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度投入",
           "star": "★★☆☆☆",
           "rank": "可能性あり △"
         },
@@ -1208,12 +1208,12 @@
           "rank": "可能性あり △"
         },
         {
-          "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
-          "destCode": "NGS",
+          "route": "羽田 ➔ 福岡 / 福岡 ➔ 羽田",
+          "destCode": "FUK",
           "isInterCity": false,
-          "probability": 9,
-          "candidateFlights": "NH661 / NH664 / NH669 / NH662",
-          "note": "九州の定番就航地。夜間ナイトステイが頻出",
+          "probability": 8,
+          "candidateFlights": "NH245 / NH250 / NH251 / NH256",
+          "note": "ANA屈指のドル箱幹線。平日・週末問わず高頻度投入",
           "star": "★★☆☆☆",
           "rank": "可能性あり △"
         },
@@ -1362,7 +1362,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 375,
+    "totalFleetFlights": 382,
     "fleetCount": 15
   }
 }
