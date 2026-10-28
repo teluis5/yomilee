@@ -652,10 +652,21 @@ export async function generateWeeklyPrediction() {
     const lastToday = todayFlights[todayFlights.length - 1];
     const lastDepHour = parseInt((lastToday.depTime || '00:00').split(':')[0], 10) || 0;
     const lastArrHour = parseInt((lastToday.arrTime || '00:00').split(':')[0], 10) || 0;
+    const lastArrMins = parseTimeToMinutes(lastToday.arrTime || '16:00');
     const currentJstHour = jstNow.getHours();
+    const todayDateKey = (fleetDb.todayDate || new Date().toISOString().split('T')[0]).replace(/-/g, '');
 
-    // 出発19時以降、または到着20時以降、または現在時刻20時以降ならナイトステイ確定
-    if (lastDepHour >= 19 || lastArrHour >= 20 || currentJstHour >= 20) {
+    // 到着空港から出発する適正ターンアラウンド次便候補を動的探索（B767確定枠優先）
+    const dynamicNextCandidates = findOptimalNextFlights(lastToday.destCode, lastArrMins, todayDateKey, anaFleetData);
+    const topNextCandidate = dynamicNextCandidates.length > 0 ? dynamicNextCandidates[0] : null;
+    const hasNext767Flight = Boolean(topNextCandidate && topNextCandidate.is767);
+
+    // 本当にナイトステイ確定（ステイ便なし）になるのは、
+    // ① 次のB767出発便が存在しない（本日の全運航終了）かつ 20時以降の到着、または
+    // ② 21時半以降の深夜到着便（NH416等の最終帰還便が到着した後）
+    const isTrulyFinalFlight = !hasNext767Flight && (lastArrHour >= 20 || currentJstHour >= 21 || lastToday.destCode === 'HND');
+
+    if (isTrulyFinalFlight) {
       isNightStayConfirmed = true;
       nightStayCode = lastToday.destCode;
       nightStayName = `${lastToday.destName}（確定）`;
@@ -665,17 +676,11 @@ export async function generateWeeklyPrediction() {
     } else {
       isNightStayConfirmed = false;
       
-      // ANA公式運航データから、到着空港発の適正ターンアラウンド次便候補を動的探索（他機種確定便除外・B767確定便優先）
-      const todayDateKey = (fleetDb.todayDate || new Date().toISOString().split('T')[0]).replace(/-/g, '');
-      const lastArrMins = parseTimeToMinutes(lastToday.arrTime || '16:00');
-      const dynamicNextCandidates = findOptimalNextFlights(lastToday.destCode, lastArrMins, todayDateKey, anaFleetData);
-
-      const topNextCandidate = dynamicNextCandidates.length > 0 ? dynamicNextCandidates[0] : null;
       const isTopNext767 = Boolean(topNextCandidate && topNextCandidate.is767);
       const isInterCityNext = Boolean(topNextCandidate && topNextCandidate.dest !== 'HND');
 
-      // 1. 到着空港から地方間直行便（新千歳-神戸、伊丹-新千歳等）のB767確定枠が存在する場合（例: NH578 新千歳 ➔ 神戸）
-      if (isTopNext767 && isInterCityNext) {
+      // 1. 到着空港からさらにB767確定枠の次便が存在する場合
+      if (isTopNext767) {
         const destCode = topNextCandidate.dest;
         const destName = AIRPORT_NAMES[destCode] || destCode;
         const fn = topNextCandidate.flightNo;
@@ -687,7 +692,7 @@ export async function generateWeeklyPrediction() {
         const secondCandidates = findOptimalNextFlights(destCode, secondArrMins, todayDateKey, anaFleetData);
         const topSecond = secondCandidates.length > 0 && secondCandidates[0].is767 ? secondCandidates[0] : null;
 
-        if (topSecond) {
+        if (isInterCityNext && topSecond) {
           // 三角運航で当夜のうちに羽田へ帰還する場合（新千歳 ➔ 神戸[NH578] ➔ 羽田[NH416] 22:30着）！
           const finalDestCode = topSecond.dest;
           const finalDestName = AIRPORT_NAMES[finalDestCode] || finalDestCode;
@@ -708,19 +713,19 @@ export async function generateWeeklyPrediction() {
               planName: 'プランA',
               rank: '本命 ◎',
               probability: 95,
-              title: `【三角運航・今夜羽田帰還】${lastToday.destName} ➔ ${destName}(NH578) ➔ ${finalDestName}(NH416・泊)`,
+              title: `【三角運航・今夜羽田帰還】${lastToday.destName} ➔ ${destName}(${fn}) ➔ ${finalDestName}(${fn2}・泊)`,
               routeSummary: `${lastToday.destName} ➔ ${destName} ➔ ${finalDestName}(泊)`,
-              description: `新千歳到着後、18:30発の神戸行き(NH578: 76P確定)で神戸へ向かい、約50分の折返しで夜の羽田行き最終便(NH416: 76P確定)に充当されて22:30に羽田へ帰還・夜間駐機に入る完璧な三角運航シナリオ（神戸泊はNH415のA321が担当）`,
+              description: `現在運航中の${lastToday.flightNo}便到着後、${destName}空港から夜の羽田行き最終便(${fn2}: 76P確定便)に充当されて22:30に羽田へ帰還・夜間駐機に入る完璧な三角運航シナリオ（神戸泊はNH415のA321が担当）`,
               flights: [
-                {
+                ...(lastToday.flightNo !== fn ? [{
                   step: '① 夜直行便',
-                  time: `${depTime}発 - ${arrTime}着`,
-                  flightNo: `${fn} (予測)`,
-                  route: `${lastToday.destName} ➔ ${destName}`,
-                  tag: `✈️地方直行 (76P確定)`
-                },
+                  time: `${lastToday.depTime}発 - ${lastToday.arrTime}着`,
+                  flightNo: lastToday.flightNo,
+                  route: `${lastToday.origName} ➔ ${lastToday.destName}`,
+                  tag: '✈️運航中 (76P確定)'
+                }] : []),
                 {
-                  step: '② 夜最終便',
+                  step: lastToday.flightNo !== fn ? '② 夜最終便' : '① 夜最終便',
                   time: `${depTime2}発 - ${arrTime2}着`,
                   flightNo: `${fn2} (予測)`,
                   route: `${destName} ➔ ${finalDestName}`,
@@ -735,7 +740,7 @@ export async function generateWeeklyPrediction() {
               probability: 4,
               title: `【${destName}夜間駐機(泊)】`,
               routeSummary: `${lastToday.destName} ➔ ${destName}(泊)`,
-              description: `${destName}到着後、NH416には充当されずに${destName}空港でそのまま夜間駐機に入るパターン`,
+              description: `${destName}到着後、${fn2}には充当されずに${destName}空港でそのまま夜間駐機に入るパターン`,
               flights: [
                 {
                   step: '① 夜直行便',
@@ -766,23 +771,23 @@ export async function generateWeeklyPrediction() {
             }
           ];
 
-          pendingNightStayNote = `🔒 新千歳発の羽田行き夜便は全便787/777のため、B767-300ERは「新千歳 ➔ 神戸(${fn}: 76P確定) ➔ 羽田(${fn2}: 76P確定)」の三角運航で今夜22:30に羽田へ帰還・夜間駐機に入る見通し（確率95%で大本命）です！`;
+          pendingNightStayNote = `🔒 現在${lastToday.flightNo}便で神戸へ飛行中。神戸到着（20:30）後、約50分の折返しで夜の羽田行き最終便「NH416便（神戸 21:20発 ➔ 羽田 22:30着 / 76P確定）」に充当され、今夜22:30に羽田へ帰還・夜間駐機に入る見通し（確率95%で大本命）です！`;
 
           todayOutlook = {
             title: '本日のこの後のフライト見通し＆夜の展開（ほぼ確定）',
             currentFlightNote: `現在、${lastToday.flightNo}便（${lastToday.route}、${lastToday.arrTime}着予定）を運航中`,
             turnaround: {
-              flightNo: `${fn} ➔ ${fn2}`,
-              route: `${lastToday.destName} ➔ ${destName} ➔ ${finalDestName}`,
-              time: `${depTime}発 - ${arrTime2}着`,
+              flightNo: `${fn2} (予測)`,
+              route: `${destName} ➔ ${finalDestName}`,
+              time: `${depTime2}発 - ${arrTime2}着`,
               probability: 95,
-              desc: `新千歳から18:30発の神戸行き(${fn}: 76P確定)で神戸へ向かい、50分の折返しで夜の神戸発羽田行き(${fn2}: 21:20発-22:30着 / 76P確定)に連続充当。今夜22:30に羽田空港へ帰還して夜間駐機に入ります。`
+              desc: `神戸空港到着後、約50分の折返し時間で夜の羽田行き最終便(${fn2}: 21:20発-22:30着 / 76P確定)に連続充当。今夜22:30に羽田空港へ帰還して夜間駐機に入ります。`
             },
             nightScenarios: [
               {
                 label: '東京(羽田)ナイトステイ（超本命・三角運航帰還）',
                 prob: 95,
-                summary: `新千歳 ➔ 神戸(${fn}) ➔ 羽田(${fn2}: 22:30着)で羽田帰還・夜間駐機`,
+                summary: `神戸到着後、NH416便(21:20発-22:30着)で羽田帰還・夜間駐機`,
                 detail: '明朝は羽田始発便（長崎往復・福岡往復など）からスタートします。'
               },
               {
@@ -800,13 +805,13 @@ export async function generateWeeklyPrediction() {
             ],
             notice: '💡 神戸空港ナイトステイ機材は羽田20:30発のNH415便(A321)が充当されるため、新千歳から到着するB767(NH578)はNH416便で羽田へ折り返すのがANAの基本機材循環です！'
           };
-        } else {
-          // 地方空港でそのままステイする場合
+        } else if (destCode === 'HND') {
+          // 神戸等から羽田へ戻る便（例: NH416 神戸 ➔ 羽田）の場合
           nightStayProbabilities = [
-            { airport: destName, code: destCode, probability: 95, note: `${lastToday.destName}${depTime}発(${fn}: 76P確定)で${destName}へ向かい夜間駐機（ほぼ確定・大本命）` },
+            { airport: '東京(羽田)', code: 'HND', probability: 95, note: `${lastToday.destName}到着後、${fn}(${depTime}発)で羽田へ帰還・夜間駐機（超本命）` },
             { airport: lastToday.destName, code: lastToday.destCode, probability: 5, note: `${lastToday.destName}空港での夜間駐機（例外待機）` }
           ];
-          nightStayCode = destCode;
+          nightStayCode = 'HND';
 
           todayPlans = [
             {
@@ -814,16 +819,16 @@ export async function generateWeeklyPrediction() {
               planName: 'プランA',
               rank: '本命 ◎',
               probability: 95,
-              title: `【地方直行・今夜${destName}ステイ】${lastToday.destName} ➔ ${destName}(泊)`,
-              routeSummary: `${lastToday.destName} ➔ ${destName}(泊)`,
-              description: `${lastToday.destName}到着後、${depTime}発の${destName}行き(${fn}: 76P確定便)に充当され、夜${arrTime}に${destName}空港へ到着して夜間駐機に入る確実視シナリオ`,
+              title: `【今夜羽田帰還】${lastToday.destName} ➔ 東京(羽田)(NH416・泊)`,
+              routeSummary: `${lastToday.destName} ➔ 東京(羽田)(泊)`,
+              description: `${lastToday.destName}到着後、夜の羽田行き最終便(${fn}: 76P確定)に充当されて22:30に羽田へ帰還・夜間駐機に入る確実視シナリオ（神戸泊はNH415のA321が担当）`,
               flights: [
                 {
-                  step: '① 夜直行便',
+                  step: '① 夜最終便',
                   time: `${depTime}発 - ${arrTime}着`,
                   flightNo: `${fn} (予測)`,
-                  route: `${lastToday.destName} ➔ ${destName}`,
-                  tag: `✈️地方直行・${destName}泊 (確率95%)`
+                  route: `${lastToday.destName} ➔ 東京(羽田)`,
+                  tag: '🌙羽田帰還・夜間駐機(泊)'
                 }
               ]
             },
@@ -832,48 +837,48 @@ export async function generateWeeklyPrediction() {
               planName: 'プランB',
               rank: '注意 △',
               probability: 5,
-              title: `【${lastToday.destName}そのまま夜間駐機(泊)】`,
+              title: `【${lastToday.destName}夜間駐機(泊)】`,
               routeSummary: `${lastToday.destName} そのまま夜間駐機(泊)`,
-              description: `${lastToday.destName}到着後、夜の追加運航を行わずに${lastToday.destName}空港で夜間駐機に入る例外パターン`,
+              description: `${lastToday.destName}到着後、${fn}には充当されずにそのまま夜間駐機に入る例外パターン`,
               flights: [
                 {
                   step: '① 夜間駐機',
-                  time: '18:00以降',
+                  time: '21:00以降',
                   flightNo: 'ステイ便なし',
                   route: `${lastToday.destName} そのまま夜間駐機`,
-                  tag: `🌙${lastToday.destName}ステイ (確率5%)`
+                  tag: `🌙${lastToday.destName}ステイ`
                 }
               ]
             }
           ];
 
-          pendingNightStayNote = `🔒 現在${lastToday.flightNo}便で${lastToday.destName}へ飛行中。${lastToday.destName}発の羽田行き夜便は全便B787/B777確定のため、B767充当枠は「${fn}便（${lastToday.destName} ${depTime}発 ➔ ${destName} ${arrTime}着 / ${destName}泊）」が唯一の選択肢（確率95%でほぼ確定）です！`;
+          pendingNightStayNote = `🔒 現在${lastToday.destName}空港に到着（または間もなく到着）。約50分の折返しで夜の羽田行き最終便「${fn}便（${lastToday.destName} ${depTime}発 ➔ 羽田 ${arrTime}着 / 76P確定）」に充当され、今夜22:30に羽田へ帰還・夜間駐機に入る見通し（確率95%で大本命）です！`;
 
           todayOutlook = {
             title: '本日のこの後のフライト見通し＆夜の展開（ほぼ確定）',
-            currentFlightNote: `現在、${lastToday.flightNo}便（${lastToday.route}、${lastToday.arrTime}着予定）を運航中`,
+            currentFlightNote: `現在、${lastToday.destName}空港にて折返し準備中（前便: ${lastToday.flightNo}、${lastToday.arrTime}着）`,
             turnaround: {
               flightNo: `${fn} (予測)`,
-              route: `${lastToday.destName} ➔ ${destName}`,
+              route: `${lastToday.destName} ➔ 東京(羽田)`,
               time: `${depTime}発 - ${arrTime}着`,
               probability: 95,
-              desc: `${lastToday.destName}到着後、約${Math.max(40, parseTimeToMinutes(depTime) - lastArrMins)}分の折返し時間で${destName}へ直行する公式76P確定便（確率95%・ほぼ一本被り）。${destName}空港到着後はそのまま夜間駐機に入ります。`
+              desc: `${lastToday.destName}到着後、約50分の折返し時間で夜の羽田行き最終便(${fn}: ${depTime}発-${arrTime}着 / 76P確定)に連続充当。今夜22:30に羽田空港へ帰還して夜間駐機に入ります。`
             },
             nightScenarios: [
               {
-                label: `${destName}ナイトステイ（大本命・ほぼ確定）`,
+                label: '東京(羽田)ナイトステイ（超本命・羽田帰還）',
                 prob: 95,
-                summary: `${lastToday.destName}到着後、${depTime}発の${destName}行き(${fn}: 76P確定)で${destName}へ向かい夜間駐機`,
-                detail: `明朝は${destName}始発羽田行き（${MORNING_DEPARTURE_STANDARDS[destCode]?.flightNo || '朝一便'}: ${MORNING_DEPARTURE_STANDARDS[destCode]?.depTime || '07:00'}発）からスタートします。`
+                summary: `${fn}便(${depTime}発-${arrTime}着)で羽田帰還・夜間駐機`,
+                detail: '明朝は羽田始発便（長崎往復・福岡往復など）からスタートします。'
               },
               {
-                label: `${lastToday.destName}夜間駐機（例外待機）`,
+                label: `${lastToday.destName}空港夜間駐機（例外待機）`,
                 prob: 5,
                 summary: `${lastToday.destName}空港到着後、そのまま夜を明かす例外パターン`,
-                detail: `明朝は${lastToday.destName}始発羽田行きからスタートします。`
+                detail: `明朝は${lastToday.destName}始発羽田行き（NH412: 07:05発）からスタートします。`
               }
             ],
-            notice: `💡 ${lastToday.destName}発の羽田行き夜便はすべて大型機（B787/B777）のため、B767-300ERは${fn}便（${destName}行き）への充当がほぼ確定的な情勢です。`
+            notice: '💡 神戸空港ナイトステイ機材は羽田20:30発のNH415便(A321)が充当されるため、新千歳から到着するB767(NH578)はNH416便で羽田へ折り返すのがANAの基本機材循環です！'
           };
         }
       } else if (lastDepHour < 17 && lastToday.destCode !== 'HND') {
@@ -913,7 +918,7 @@ export async function generateWeeklyPrediction() {
         status: '🔄 折返し復路予測 (確率85%)'
       };
 
-      if (lastToday.destCode !== 'CTS') {
+      if (lastToday.destCode !== 'CTS' && !isTopNext767) {
         // 本日の残り展開プラン（プランA〜C）を確率ごとに算出（合計100%）
         todayPlans = [
           {
