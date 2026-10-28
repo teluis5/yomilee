@@ -13,6 +13,109 @@ const SRC_DATA_DIR = path.join(YOMILEE_ROOT, 'src', 'data');
 const HISTORY_FILE = path.join(DATA_DIR, 'ana_b767_flight_history.json');
 const OUTPUT_JSON_FILE = path.join(DATA_DIR, 'chiikawa_weekly_prediction.json');
 const SRC_OUTPUT_JSON_FILE = path.join(SRC_DATA_DIR, 'chiikawa_weekly_prediction.json');
+const ANA_FLEET_STATUS_FILE = path.join(DATA_DIR, 'ana_fleet_status.json');
+
+// ANA公式運航状況（確定機種データ）のロード
+function loadAnaFleetStatus() {
+  if (fs.existsSync(ANA_FLEET_STATUS_FILE)) {
+    try {
+      const data = JSON.parse(fs.readFileSync(ANA_FLEET_STATUS_FILE, 'utf-8'));
+      return data;
+    } catch (e) {
+      console.warn('⚠️ ana_fleet_status.json の読み込みに失敗しました:', e.message);
+    }
+  }
+  return { dates: {} };
+}
+
+// 空港名からIATAコードへの逆引きヘルパー
+function getAirportCodeFromName(name) {
+  if (!name) return '';
+  if (name.includes('羽田')) return 'HND';
+  if (name.includes('伊丹')) return 'ITM';
+  if (name.includes('福岡')) return 'FUK';
+  if (name.includes('新千歳') || name.includes('札幌')) return 'CTS';
+  if (name.includes('広島')) return 'HIJ';
+  if (name.includes('長崎')) return 'NGS';
+  if (name.includes('松山')) return 'MYJ';
+  if (name.includes('鹿児島')) return 'KOJ';
+  if (name.includes('那覇') || name.includes('沖縄')) return 'OKA';
+  if (name.includes('函館')) return 'HKD';
+  if (name.includes('高松')) return 'TAK';
+  if (name.includes('熊本')) return 'KMJ';
+  if (name.includes('大分')) return 'OIT';
+  return '';
+}
+
+function parseTimeToMinutes(timeStr) {
+  if (!timeStr) return 0;
+  const match = timeStr.match(/(\d{1,2}):(\d{2})/);
+  if (!match) return 0;
+  return parseInt(match[1], 10) * 60 + parseInt(match[2], 10);
+}
+
+// ANA公式運航状況と照合し、機種・発着時刻をエンリッチ＆767確定便へ自動最適化する関数
+function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData) {
+  if (!flight || !flight.flightNo || !dateStr || !anaFleetData.dates) return flight;
+  
+  const dKey = dateStr.replace(/-/g, '');
+  const dayFlights = anaFleetData.dates[dKey];
+  if (!dayFlights) return flight;
+
+  const rawNum = flight.flightNo.replace(/[^0-9]/g, '');
+  if (!rawNum) return flight;
+
+  const normKey1 = `NH${parseInt(rawNum, 10)}`;
+  const normKey2 = `NH${rawNum}`;
+  let anaInfo = dayFlights[normKey1] || dayFlights[normKey2];
+
+  // 区間の発着空港コードを特定
+  let origCode = '';
+  let destCode = '';
+  if (flight.route && flight.route.includes('➔')) {
+    const parts = flight.route.split('➔').map(s => s.trim());
+    origCode = getAirportCodeFromName(parts[0]);
+    destCode = getAirportCodeFromName(parts[1]);
+  } else if (flight.orig && flight.dest) {
+    origCode = flight.orig;
+    destCode = flight.dest;
+  }
+
+  // もし該当便が存在しないか、あるいは他機種（787/321等）だった場合
+  if (!anaInfo || !anaInfo.is767) {
+    if (origCode && destCode) {
+      // 同区間でB767-300ER（76P/763）が確定している便を探索
+      const candidates = Object.values(dayFlights).filter(f => f.is767 && f.origin === origCode && f.dest === destCode);
+      if (candidates.length > 0) {
+        const prefMins = parseTimeToMinutes(flight.time || '12:00');
+        candidates.sort((a, b) => {
+          const diffA = Math.abs(parseTimeToMinutes(a.depTime) - prefMins);
+          const diffB = Math.abs(parseTimeToMinutes(b.depTime) - prefMins);
+          return diffA - diffB;
+        });
+        anaInfo = candidates[0];
+      }
+    }
+  }
+
+  if (anaInfo) {
+    const is767 = Boolean(anaInfo.is767);
+    const origName = AIRPORT_NAMES[anaInfo.origin] || anaInfo.origin;
+    const destName = AIRPORT_NAMES[anaInfo.dest] || anaInfo.dest;
+    const updated = {
+      ...flight,
+      flightNo: anaInfo.flightNo,
+      model: anaInfo.model,
+      is767Confirmed: is767,
+      route: `${origName} ➔ ${destName}`
+    };
+    if (anaInfo.depTime && anaInfo.arrTime) {
+      updated.time = `${anaInfo.depTime}発 - ${anaInfo.arrTime}着`;
+    }
+    return updated;
+  }
+  return flight;
+}
 
 // 日本語空港辞書
 const AIRPORT_NAMES = {
@@ -200,6 +303,11 @@ export async function generateWeeklyPrediction() {
   // 1. 同型機フライト履歴の収集＆学習更新
   const fleetDb = await collectFleetData();
   const totalFlightsCount = Object.keys(fleetDb.flights || {}).length;
+
+  // 1-b. ANA公式運航状況（確定機種データ）のロード
+  const anaFleetData = loadAnaFleetStatus();
+  const anaDateKeys = Object.keys(anaFleetData.dates || {});
+  console.log(`✈️ ANA公式運航状況ロード完了: 対象日 [${anaDateKeys.join(', ')}]`);
 
   // 2. JA609A の当日の状況を取得
   const rawFlights = fetchChiikawaFlights();
@@ -874,6 +982,15 @@ export async function generateWeeklyPrediction() {
         }
       }
 
+      // 明日の予想プランをANA公式運航状況（76P/763機種確定データ）と照合・エンリッチ
+      if (weeklyDays[1] && tomorrowPlans) {
+        const tomorrowDateStr = weeklyDays[1].dateStr;
+        tomorrowPlans = tomorrowPlans.map(plan => ({
+          ...plan,
+          flights: plan.flights.map(fl => enrichFlightWithAnaFleet(fl, tomorrowDateStr, anaFleetData))
+        }));
+      }
+
       // 明日の予想プラン（tomorrowPlans）を明日日付キーで保存（昨晩時点の予想として翌日参照するため）
       if (weeklyDays[1] && tomorrowPlans && tomorrowPlans.length >= 3) {
         snapshots[weeklyDays[1].dateStr] = tomorrowPlans;
@@ -964,10 +1081,17 @@ export async function generateWeeklyPrediction() {
         // ignore write errors
       }
 
-      const lastNightPlans = snapshots[day.dateStr];
-      const planA = lastNightPlans[0] || { planName: 'プランA', probability: 50, flights: [] };
-      const planB = lastNightPlans[1] || { planName: 'プランB', probability: 30, flights: [] };
-      const planC = lastNightPlans[2] || { planName: 'プランC', probability: 20, flights: [] };
+      const lastNightPlans = snapshots[day.dateStr] || [];
+      const enrichList = (plan) => {
+        if (!plan || !plan.flights) return plan;
+        return {
+          ...plan,
+          flights: plan.flights.map(fl => enrichFlightWithAnaFleet(fl, day.dateStr, anaFleetData))
+        };
+      };
+      const planA = enrichList(lastNightPlans[0]) || { planName: 'プランA', probability: 50, flights: [] };
+      const planB = enrichList(lastNightPlans[1]) || { planName: 'プランB', probability: 30, flights: [] };
+      const planC = enrichList(lastNightPlans[2]) || { planName: 'プランC', probability: 20, flights: [] };
 
       const maxSlots = Math.max(
         planA.flights.length,
