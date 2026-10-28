@@ -200,7 +200,7 @@
       "planId": "plan-a",
       "planName": "プランA",
       "rank": "本命 ◎",
-      "probability": 36,
+      "probability": 29,
       "title": "【羽田始発】長崎往復 ➔ 夕方福岡往復（本命シナリオ）",
       "routeSummary": "羽田 ➔ 長崎 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
       "airports": [
@@ -252,7 +252,7 @@
       "planId": "plan-b",
       "planName": "プランB",
       "rank": "有力 ◯",
-      "probability": 31,
+      "probability": 25,
       "title": "【羽田始発】伊丹往復 ➔ 広島往復 ➔ 広島ステイ",
       "routeSummary": "羽田 ➔ 伊丹 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
       "airports": [
@@ -314,6 +314,50 @@
       "planName": "プランC",
       "rank": "対抗 ▲",
       "probability": 15,
+      "title": "【地方間直行・日本縦断周遊】羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
+      "routeSummary": "羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
+      "airports": [
+        "東京(羽田)",
+        "大阪(伊丹)",
+        "札幌(新千歳)",
+        "中部(セントレア)"
+      ],
+      "description": "羽田から伊丹へ飛んだ後、羽田に戻らず地方間直行便(NH777)で新千歳へ北上し、さらに中部へ直行(NH712)して夜間駐機する日本列島周遊シナリオ（全便767確定枠）",
+      "flights": [
+        {
+          "step": "① 昼往路",
+          "time": "12:30発 - 13:40着",
+          "flightNo": "NH23",
+          "route": "東京(羽田) ➔ 大阪(伊丹)",
+          "tag": "伊丹往路",
+          "model": "76P",
+          "is767Confirmed": true
+        },
+        {
+          "step": "② 地方直行",
+          "time": "16:00発 - 17:50着",
+          "flightNo": "NH777",
+          "route": "大阪(伊丹) ➔ 札幌(新千歳)",
+          "tag": "✈️地方直行(76P)",
+          "model": "76P",
+          "is767Confirmed": true
+        },
+        {
+          "step": "③ 夜直行",
+          "time": "18:35発 - 20:25着",
+          "flightNo": "NH712",
+          "route": "札幌(新千歳) ➔ 名古屋(中部)",
+          "tag": "🌙地方直行・中部泊",
+          "model": "76P",
+          "is767Confirmed": true
+        }
+      ]
+    },
+    {
+      "planId": "plan-d",
+      "planName": "プランD",
+      "rank": "注意 △",
+      "probability": 12,
       "title": "【長崎ステイの場合】長崎始発 ➔ 伊丹往復 ➔ 福岡往復",
       "routeSummary": "長崎 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
       "airports": [

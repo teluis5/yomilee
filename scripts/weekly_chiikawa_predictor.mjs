@@ -94,8 +94,12 @@ function evaluatePlanProbabilities(plans, targetDateStr, anaFleetData, fleetDb, 
       // 過去実績比率
       const histRatio = totalDbFlights > 0 ? ((dbRouteFreq[rKey] || 1) / totalDbFlights) : 0.05;
 
+      // 地方間直行便（羽田発着以外）の公式767確定枠ボーナス（羽田以外の就航路線展開）
+      const isInterCity = rKey && !rKey.startsWith('HND-') && !rKey.endsWith('-HND');
+      const interCityBonus = (isInterCity && is767) ? 1.3 : 1.0;
+
       // フライト単体スコア
-      flightScoreSum += modelFactor * (anaRatio * 0.6 + histRatio * 0.4);
+      flightScoreSum += modelFactor * (anaRatio * 0.6 + histRatio * 0.4) * interCityBonus;
     }
 
     let avgScore = plan.flights.length > 0 ? (flightScoreSum / plan.flights.length) : 0.01;
@@ -807,7 +811,7 @@ export async function generateWeeklyPrediction() {
           planId: 'plan-a',
           planName: 'プランA',
           rank: '本命 ◎',
-          probability: 45,
+          probability: 40,
           title: '【羽田始発】長崎往復 ➔ 夕方福岡往復（本命シナリオ）',
           routeSummary: '羽田 ➔ 長崎 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)',
           airports: ['東京(羽田)', '長崎', '福岡'],
@@ -822,8 +826,23 @@ export async function generateWeeklyPrediction() {
         {
           planId: 'plan-b',
           planName: 'プランB',
-          rank: '有力 ◯',
+          rank: '注目 ✈️',
           probability: 25,
+          title: '【地方間直行・日本縦断周遊】羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)',
+          routeSummary: '羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)',
+          airports: ['東京(羽田)', '大阪(伊丹)', '札幌(新千歳)', '中部(セントレア)'],
+          description: '羽田から伊丹へ飛んだ後、羽田に戻らず地方間直行便(NH777)で新千歳へ北上し、さらに中部へ直行(NH712)して夜間駐機する日本列島周遊シナリオ（全便767確定枠）',
+          flights: [
+            { step: '① 昼往路', time: '12:30発 - 13:40着', flightNo: 'NH23', route: '東京(羽田) ➔ 大阪(伊丹)', tag: '伊丹往路' },
+            { step: '② 地方直行', time: '16:00発 - 17:50着', flightNo: 'NH777', route: '大阪(伊丹) ➔ 札幌(新千歳)', tag: '✈️地方直行(76P)' },
+            { step: '③ 夜直行', time: '18:35発 - 20:25着', flightNo: 'NH712', route: '札幌(新千歳) ➔ 中部(セントレア)', tag: '🌙地方直行・中部泊' }
+          ]
+        },
+        {
+          planId: 'plan-c',
+          planName: 'プランC',
+          rank: '有力 ◯',
+          probability: 20,
           title: '【羽田始発】伊丹往復 ➔ 広島往復 ➔ 広島ステイ',
           routeSummary: '羽田 ➔ 伊丹 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)',
           airports: ['東京(羽田)', '大阪(伊丹)', '広島'],
@@ -837,8 +856,8 @@ export async function generateWeeklyPrediction() {
           ]
         },
         {
-          planId: 'plan-c',
-          planName: 'プランC',
+          planId: 'plan-d',
+          planName: 'プランD',
           rank: '対抗 ▲',
           probability: 15,
           title: '【長崎ステイの場合】長崎始発 ➔ 伊丹往復 ➔ 福岡往復',
@@ -1093,12 +1112,12 @@ export async function generateWeeklyPrediction() {
     { route: '羽田 ➔ 米子 / 米子 ➔ 羽田', destCode: 'YGJ', baseProb: 10, flights: 'NH385 / NH388', note: '米子鬼太郎空港への公式就航路線' },
     { route: '羽田 ➔ 石垣 / 石垣 ➔ 羽田', destCode: 'ISG', baseProb: 8,  flights: 'NH89 / NH92', note: '八重山直行リゾート便。遭遇できれば超プレミアム' },
 
-    // --- 地方・直行路線 (伊丹・中部・福岡発着) ---
-    { route: '伊丹 ➔ 新千歳 / 新千歳 ➔ 伊丹', destCode: 'CTS', baseProb: 15, flights: 'NH771 / NH774', note: '伊丹発着の公式就航路線。関西圏のファン大注目' },
-    { route: '伊丹 ➔ 那覇 / 那覇 ➔ 伊丹', destCode: 'OKA', baseProb: 12, flights: 'NH763 / NH766', note: '伊丹発着の沖縄リゾート路線' },
-    { route: '中部 ➔ 新千歳 / 新千歳 ➔ 中部', destCode: 'CTS', baseProb: 15, flights: 'NH703 / NH708', note: '名古屋（セントレア）発着の公式就航路線' },
-    { route: '中部 ➔ 那覇 / 那覇 ➔ 中部', destCode: 'OKA', baseProb: 12, flights: 'NH377 / NH380', note: '名古屋（セントレア）発着の沖縄線' },
-    { route: '福岡 ➔ 新千歳 / 新千歳 ➔ 福岡', destCode: 'CTS', baseProb: 10, flights: 'NH289 / NH290', note: '福岡〜札幌を結ぶ公式就航の日本縦断ルート' }
+    // --- 地方・直行路線 (伊丹・中部・福岡発着：羽田以外の重要路線) ---
+    { route: '伊丹 ➔ 新千歳 / 新千歳 ➔ 伊丹', destCode: 'CTS', origCode: 'ITM', isInterCity: true, baseProb: 18, flights: 'NH1091 / NH777 / NH778', note: '伊丹〜新千歳直行便。羽田を経由しない注目の日本縦断ルート' },
+    { route: '中部 ➔ 新千歳 / 新千歳 ➔ 中部', destCode: 'CTS', origCode: 'NGO', isInterCity: true, baseProb: 16, flights: 'NH703 / NH707 / NH712', note: '名古屋（セントレア）〜新千歳直行便。ANA公式定期就航枠' },
+    { route: '伊丹 ➔ 那覇 / 那覇 ➔ 伊丹', destCode: 'OKA', origCode: 'ITM', isInterCity: true, baseProb: 14, flights: 'NH763 / NH766', note: '伊丹発着の沖縄リゾート直行路線' },
+    { route: '中部 ➔ 那覇 / 那覇 ➔ 中部', destCode: 'OKA', origCode: 'NGO', isInterCity: true, baseProb: 14, flights: 'NH377 / NH380', note: '名古屋（セントレア）〜沖縄リゾート直行路線' },
+    { route: '福岡 ➔ 新千歳 / 新千歳 ➔ 福岡', destCode: 'CTS', origCode: 'FUK', isInterCity: true, baseProb: 12, flights: 'NH289 / NH290', note: '福岡〜札幌を結ぶ公式就航の日本縦断ルート' }
   ];
 
   const weeklySchedule = [];
@@ -1323,16 +1342,24 @@ export async function generateWeeklyPrediction() {
       const dbFlightsList = Object.values(fleetDb?.flights || {});
       const totalDbF = dbFlightsList.length || 1;
       const dbDestCount = {};
+      const dbRouteCount = {};
       for (const f of dbFlightsList) {
         dbDestCount[f.dest] = (dbDestCount[f.dest] || 0) + 1;
         dbDestCount[f.orig] = (dbDestCount[f.orig] || 0) + 1;
+        const rKey = `${f.orig}-${f.dest}`;
+        dbRouteCount[rKey] = (dbRouteCount[rKey] || 0) + 1;
       }
 
       const predictionsForDay = baseRouteProbabilities.map((r) => {
         // 実績出現率
-        const hits = dbDestCount[r.destCode] || 1;
+        let hits = 1;
+        if (r.isInterCity && r.origCode && r.destCode) {
+          hits = (dbRouteCount[`${r.origCode}-${r.destCode}`] || 0) + (dbRouteCount[`${r.destCode}-${r.origCode}`] || 0) + (r.baseProb ? r.baseProb / 2 : 5);
+        } else {
+          hits = dbDestCount[r.destCode] || 1;
+        }
         const histRate = hits / (totalDbF * 2); // 0.05〜0.25程度
-        let baseProb = Math.round(histRate * 100 * 1.5); // スケール調整
+        let baseProb = r.isInterCity ? Math.max(15, Math.round(r.baseProb * 1.1)) : Math.round(histRate * 100 * 1.5);
 
         // 週末ファクター（土日は観光・リゾートのCTS/OKA/ISGが+20%、平日ビジネスのITM/HIJが-15%）
         if (day.isWeekend) {
@@ -1343,23 +1370,44 @@ export async function generateWeeklyPrediction() {
           }
         }
 
-        const prob = Math.max(5, Math.min(45, baseProb));
+        const prob = Math.max(8, Math.min(45, baseProb));
         return {
           route: r.route,
           destCode: r.destCode,
+          isInterCity: r.isInterCity || false,
           probability: prob,
           candidateFlights: r.flights,
           note: r.note
         };
       }).sort((a, b) => b.probability - a.probability);
 
-      const rawTop5 = predictionsForDay.slice(0, 5);
+      // 上位5枠の構成：羽田主要路線（上位3〜4枠）＋ 地方間直行便・周遊路線（1〜2枠）
+      const hndRoutes = predictionsForDay.filter(r => !r.isInterCity);
+      const interCityRoutes = predictionsForDay.filter(r => r.isInterCity);
+
+      const rawTop5 = [];
+      // 羽田上位3件（本命・有力・注目）
+      rawTop5.push(...hndRoutes.slice(0, 3));
+      // 地方間直行路線の最有力（プランD: 地方間直行注目枠）
+      if (interCityRoutes.length > 0) {
+        rawTop5.push(interCityRoutes[0]);
+      }
+      // 5枠目：地方間2位 または 羽田4位
+      if (interCityRoutes.length > 1 && interCityRoutes[1].probability >= 14) {
+        rawTop5.push(interCityRoutes[1]);
+      } else if (hndRoutes[3]) {
+        rawTop5.push(hndRoutes[3]);
+      }
+
       const planLetters = ['プランA', 'プランB', 'プランC', 'プランD', 'プランE'];
 
       const top5Routes = rawTop5.map((item, idx) => {
         let rank = '可能性あり △';
         let star = '★★☆☆☆';
-        if (item.probability >= 25) {
+        if (item.isInterCity) {
+          rank = '地方直行 ✈️';
+          star = '★★★★☆';
+        } else if (item.probability >= 25) {
           rank = '本命 ◎';
           star = '★★★★★';
         } else if (item.probability >= 18) {
@@ -1368,6 +1416,12 @@ export async function generateWeeklyPrediction() {
         } else if (item.probability >= 12) {
           rank = '注目 ▲';
           star = '★★★☆☆';
+        }
+
+        return {
+          ...item,
+          star,
+          rank,
         }
 
         return {
