@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年10月29日 20:00",
-  "updatedAtIso": "2026-10-29T11:00:43.266Z",
+  "updatedAt": "2026年10月29日 21:01",
+  "updatedAtIso": "2026-10-29T12:02:24.894Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "鹿児島 ➔ 東京(羽田) へ飛行中",
+    "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "東京(羽田)（確定）",
     "nightStayCode": "HND",
     "isNightStayConfirmed": true,
@@ -326,7 +326,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降予測）",
-      "currentAirport": "鹿児島 ➔ 東京(羽田) へ飛行中",
+      "currentAirport": "東京(羽田)",
       "nightStay": "東京(羽田)（確定）",
       "isNightStayConfirmed": true,
       "pendingNightStayNote": null,
@@ -499,9 +499,9 @@
             "flightNo": "NH630",
             "route": "鹿児島 ➔ 東京(羽田)",
             "time": "19:20発 - 21:00着",
-            "status": "飛行中 ✈️",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (20:50)",
+            "isLanded": true,
+            "isLive": false
           }
         }
       ],
@@ -555,9 +555,9 @@
           "flightNo": "NH630",
           "route": "鹿児島 ➔ 東京(羽田)",
           "time": "19:20発 - 21:00着",
-          "status": "飛行中 ✈️",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (20:50)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         }
       ]
@@ -1347,7 +1347,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 475,
+    "totalFleetFlights": 477,
     "fleetCount": 15
   }
 }
