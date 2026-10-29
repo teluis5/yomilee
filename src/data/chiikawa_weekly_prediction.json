@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年10月30日 07:00",
-  "updatedAtIso": "2026-10-29T22:00:27.437Z",
+  "updatedAt": "2026年10月30日 08:00",
+  "updatedAtIso": "2026-10-29T23:00:30.688Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
@@ -535,14 +535,14 @@
         "route": "広島 ➔ 東京(羽田)",
         "time": "07:30発 - 08:50着",
         "confidence": "95%",
-        "reason": "広島空港ナイトステイ機材の朝一羽田行き（定番ビジネス路線）（過去同型機実績 5回連続投入）"
+        "reason": "広島空港ナイトステイ機材の朝一羽田行き（定番ビジネス路線）（過去同型機実績 6回連続投入）"
       },
       "plans": [
         {
           "planId": "plan-a",
           "planName": "プランA",
           "rank": "本命 ◎",
-          "probability": 43,
+          "probability": 42,
           "title": "広島始発 ➔ 福岡往復 ➔ 長崎ステイ",
           "routeSummary": "広島 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 長崎(泊)",
           "airports": [
@@ -600,6 +600,71 @@
           "planId": "plan-b",
           "planName": "プランB",
           "rank": "有力 ◯",
+          "probability": 21,
+          "title": "広島始発 ➔ 広島往復 ➔ 松山往復",
+          "routeSummary": "広島 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 松山 ➔ 羽田",
+          "airports": [
+            "広島",
+            "東京(羽田)",
+            "広島",
+            "松山"
+          ],
+          "description": "広島からの朝一始発便（95%確定）で羽田到着後、広島と松山を巡る王道ローテーション",
+          "flights": [
+            {
+              "step": "① 朝一便",
+              "time": "07:35発 - 08:55着",
+              "flightNo": "NH672",
+              "route": "広島 ➔ 東京(羽田)",
+              "tag": "🔒初便95%確定",
+              "isConfirmedFirst": true,
+              "model": "763",
+              "is767Confirmed": true,
+              "is767Strict": true
+            },
+            {
+              "step": "② 午前便",
+              "time": "10:25発 - 11:55着",
+              "flightNo": "NH677",
+              "route": "東京(羽田) ➔ 広島",
+              "tag": "午前往路",
+              "model": "321",
+              "is767Confirmed": false,
+              "is767Strict": false
+            },
+            {
+              "step": "③ 昼復路",
+              "time": "17:20発 - 18:45着",
+              "flightNo": "NH682",
+              "route": "広島 ➔ 東京(羽田)",
+              "tag": "昼復路",
+              "model": "788/763",
+              "is767Confirmed": true,
+              "is767Strict": false
+            },
+            {
+              "step": "④ 午後便",
+              "time": "19:40発 - 21:15着",
+              "flightNo": "NH599",
+              "route": "東京(羽田) ➔ 松山",
+              "tag": "午後往路",
+              "model": "788",
+              "is767Confirmed": false,
+              "is767Strict": false
+            },
+            {
+              "step": "⑤ 夜最終",
+              "time": "17:35発 - 19:05着",
+              "flightNo": "NH598",
+              "route": "松山 ➔ 東京(羽田)",
+              "tag": "🌙羽田帰還"
+            }
+          ]
+        },
+        {
+          "planId": "plan-c",
+          "planName": "プランC",
+          "rank": "対抗 ▲",
           "probability": 21,
           "title": "広島始発 ➔ 新千歳往復 ➔ 伊丹往復",
           "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 伊丹 ➔ 羽田",
@@ -661,71 +726,6 @@
               "model": "781",
               "is767Confirmed": false,
               "is767Strict": false
-            }
-          ]
-        },
-        {
-          "planId": "plan-c",
-          "planName": "プランC",
-          "rank": "対抗 ▲",
-          "probability": 21,
-          "title": "広島始発 ➔ 広島往復 ➔ 松山往復",
-          "routeSummary": "広島 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 松山 ➔ 羽田",
-          "airports": [
-            "広島",
-            "東京(羽田)",
-            "広島",
-            "松山"
-          ],
-          "description": "広島からの朝一始発便（95%確定）で羽田到着後、広島と松山を巡る王道ローテーション",
-          "flights": [
-            {
-              "step": "① 朝一便",
-              "time": "07:35発 - 08:55着",
-              "flightNo": "NH672",
-              "route": "広島 ➔ 東京(羽田)",
-              "tag": "🔒初便95%確定",
-              "isConfirmedFirst": true,
-              "model": "763",
-              "is767Confirmed": true,
-              "is767Strict": true
-            },
-            {
-              "step": "② 午前便",
-              "time": "10:25発 - 11:55着",
-              "flightNo": "NH677",
-              "route": "東京(羽田) ➔ 広島",
-              "tag": "午前往路",
-              "model": "321",
-              "is767Confirmed": false,
-              "is767Strict": false
-            },
-            {
-              "step": "③ 昼復路",
-              "time": "17:20発 - 18:45着",
-              "flightNo": "NH682",
-              "route": "広島 ➔ 東京(羽田)",
-              "tag": "昼復路",
-              "model": "788/763",
-              "is767Confirmed": true,
-              "is767Strict": false
-            },
-            {
-              "step": "④ 午後便",
-              "time": "19:40発 - 21:15着",
-              "flightNo": "NH599",
-              "route": "東京(羽田) ➔ 松山",
-              "tag": "午後往路",
-              "model": "788",
-              "is767Confirmed": false,
-              "is767Strict": false
-            },
-            {
-              "step": "⑤ 夜最終",
-              "time": "17:35発 - 19:05着",
-              "flightNo": "NH598",
-              "route": "松山 ➔ 東京(羽田)",
-              "tag": "🌙羽田帰還"
             }
           ]
         }
@@ -934,23 +934,23 @@
           "planName": "プランA"
         },
         {
+          "route": "羽田 ➔ 広島 / 広島 ➔ 羽田",
+          "destCode": "HIJ",
+          "isInterCity": false,
+          "probability": 22,
+          "candidateFlights": "NH672 / NH685 / NH681 / NH682",
+          "note": "🔒火曜ダイヤで763単独確定枠あり。B767の主力ビジネス路線。安定したデイリー運用",
+          "star": "★★★★☆",
+          "rank": "有力 ◯",
+          "planName": "プランB"
+        },
+        {
           "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
           "destCode": "CTS",
           "isInterCity": false,
           "probability": 22,
           "candidateFlights": "NH59 / NH62 / NH69 / NH74",
           "note": "北海道幹線。大型機サポートや週末に高頻度充当",
-          "star": "★★★★☆",
-          "rank": "有力 ◯",
-          "planName": "プランB"
-        },
-        {
-          "route": "羽田 ➔ 広島 / 広島 ➔ 羽田",
-          "destCode": "HIJ",
-          "isInterCity": false,
-          "probability": 21,
-          "candidateFlights": "NH672 / NH685 / NH681 / NH682",
-          "note": "🔒火曜ダイヤで763単独確定枠あり。B767の主力ビジネス路線。安定したデイリー運用",
           "star": "★★★★☆",
           "rank": "有力 ◯",
           "planName": "プランC"
@@ -1242,7 +1242,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 478,
+    "totalFleetFlights": 482,
     "fleetCount": 15
   }
 }
