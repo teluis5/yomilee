@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年10月29日 15:01",
-  "updatedAtIso": "2026-10-29T06:03:06.060Z",
+  "updatedAt": "2026年10月29日 16:02",
+  "updatedAtIso": "2026-10-29T07:03:13.894Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "大阪(伊丹) ➔ 東京(羽田) へ飛行中",
+    "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "東京(羽田) (95%) / 長崎 (4%) / 東京(羽田) (1%) [今夜の駐機確率]",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
@@ -321,7 +321,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降予測）",
-      "currentAirport": "大阪(伊丹) ➔ 東京(羽田) へ飛行中",
+      "currentAirport": "東京(羽田)",
       "nightStay": "東京(羽田) (95%) / 長崎 (4%) / 東京(羽田) (1%) [今夜の駐機確率]",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "🔒 現在NH28便で神戸へ飛行中。神戸到着（20:30）後、約50分の折返しで夜の羽田行き最終便「NH416便（神戸 21:20発 ➔ 羽田 22:30着 / 76P確定）」に充当され、今夜22:30に羽田へ帰還・夜間駐機に入る見通し（確率95%で大本命）です！",
@@ -554,9 +554,9 @@
             "flightNo": "NH28",
             "route": "大阪(伊丹) ➔ 東京(羽田)",
             "time": "14:30発 - 15:40着",
-            "status": "飛行中 ✈️",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (15:26)",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -611,9 +611,9 @@
           "flightNo": "NH28",
           "route": "大阪(伊丹) ➔ 東京(羽田)",
           "time": "14:30発 - 15:40着",
-          "status": "飛行中 ✈️",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (15:26)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         }
       ]
@@ -914,13 +914,13 @@
       "statusType": "forecast",
       "statusLabel": "週間ルート確率予報",
       "topRoute": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
-      "topProbability": 33,
+      "topProbability": 31,
       "routes": [
         {
           "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
           "destCode": "CTS",
           "isInterCity": false,
-          "probability": 33,
+          "probability": 31,
           "candidateFlights": "NH55 / NH60 / NH71 / NH76",
           "note": "北海道幹線。大型機サポートや週末に高頻度充当",
           "star": "★★★★★",
@@ -979,13 +979,13 @@
       "statusType": "forecast",
       "statusLabel": "週間ルート確率予報",
       "topRoute": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
-      "topProbability": 33,
+      "topProbability": 31,
       "routes": [
         {
           "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
           "destCode": "CTS",
           "isInterCity": false,
-          "probability": 33,
+          "probability": 31,
           "candidateFlights": "NH55 / NH60 / NH71 / NH76",
           "note": "北海道幹線。大型機サポートや週末に高頻度充当",
           "star": "★★★★★",
@@ -1044,13 +1044,13 @@
       "statusType": "forecast",
       "statusLabel": "週間ルート確率予報",
       "topRoute": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
-      "topProbability": 26,
+      "topProbability": 25,
       "routes": [
         {
           "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
           "destCode": "CTS",
           "isInterCity": false,
-          "probability": 26,
+          "probability": 25,
           "candidateFlights": "NH55 / NH60 / NH71 / NH76",
           "note": "北海道幹線。大型機サポートや週末に高頻度充当",
           "star": "★★★★★",
@@ -1109,13 +1109,13 @@
       "statusType": "forecast",
       "statusLabel": "週間ルート確率予報",
       "topRoute": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
-      "topProbability": 26,
+      "topProbability": 25,
       "routes": [
         {
           "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
           "destCode": "CTS",
           "isInterCity": false,
-          "probability": 26,
+          "probability": 25,
           "candidateFlights": "NH55 / NH60 / NH71 / NH76",
           "note": "北海道幹線。大型機サポートや週末に高頻度充当",
           "star": "★★★★★",
@@ -1174,13 +1174,13 @@
       "statusType": "forecast",
       "statusLabel": "週間ルート確率予報",
       "topRoute": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
-      "topProbability": 26,
+      "topProbability": 25,
       "routes": [
         {
           "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
           "destCode": "CTS",
           "isInterCity": false,
-          "probability": 26,
+          "probability": 25,
           "candidateFlights": "NH55 / NH60 / NH71 / NH76",
           "note": "北海道幹線。大型機サポートや週末に高頻度充当",
           "star": "★★★★★",
@@ -1351,7 +1351,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 448,
+    "totalFleetFlights": 454,
     "fleetCount": 15
   }
 }
