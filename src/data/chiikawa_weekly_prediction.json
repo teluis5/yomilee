@@ -1,28 +1,23 @@
 {
-  "updatedAt": "2026年10月29日 19:01",
-  "updatedAtIso": "2026-10-29T10:02:17.033Z",
+  "updatedAt": "2026年10月29日 20:00",
+  "updatedAtIso": "2026-10-29T11:00:43.266Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "鹿児島",
-    "currentLocationCode": "KOJ",
-    "isAirborne": false,
-    "nightStay": "東京(羽田) (95%) / 鹿児島 (5%) [今夜の駐機確率]",
+    "currentLocation": "鹿児島 ➔ 東京(羽田) へ飛行中",
+    "currentLocationCode": "HND",
+    "isAirborne": true,
+    "nightStay": "東京(羽田)（確定）",
     "nightStayCode": "HND",
-    "isNightStayConfirmed": false,
+    "isNightStayConfirmed": true,
     "nightStayProbabilities": [
       {
         "airport": "東京(羽田)",
         "code": "HND",
-        "probability": 95,
-        "note": "鹿児島到着後、折返しNH630(19:20発 ➔ 21:00着 / 76P確定)で羽田へ帰還・そのまま夜間駐機（超本命）"
-      },
-      {
-        "airport": "鹿児島",
-        "code": "KOJ",
-        "probability": 5,
-        "note": "鹿児島空港での夜間駐機（機材変更等の例外待機）"
+        "probability": 100,
+        "isConfirmed": true,
+        "note": "最終便到着による確定"
       }
     ]
   },
@@ -331,88 +326,21 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降予測）",
-      "currentAirport": "鹿児島",
-      "nightStay": "東京(羽田) (95%) / 鹿児島 (5%) [今夜の駐機確率]",
-      "isNightStayConfirmed": false,
-      "pendingNightStayNote": "🔒 現在NH627便（東京(羽田) ➔ 鹿児島、18:35着）を運航中。鹿児島到着後、約45分の折返しで羽田行き最終便「NH630便（鹿児島 19:20発 ➔ 羽田 21:00着 / 76P確定）」に充当され、今夜21:00に羽田へ帰還・そのまま羽田ナイトステイに入る見通し（確率95%で大本命）です！（※19時台の長崎行きNH669や広島行きNH685は他機体が担当確定）",
-      "todayOutlook": {
-        "title": "本日のこの後のフライト見通し＆夜の展開（76P確定＋他機体消去法で特定）",
-        "currentFlightNote": "現在、NH627便（東京(羽田) ➔ 鹿児島、18:35着予定）を運航中",
-        "turnaround": {
-          "flightNo": "NH630 (予測)",
-          "route": "鹿児島 ➔ 東京(羽田)",
-          "time": "19:20発 - 21:00着",
-          "probability": 95,
-          "desc": "鹿児島到着(18:35)後、約45分の折返し時間で羽田行き「NH630便(19:20発-21:00着 / 76P確定)」に連続充当。今夜21:00に羽田空港へ帰還し、本日の全運航を終えて羽田夜間駐機に入ります。"
-        },
-        "nightScenarios": [
-          {
-            "label": "東京(羽田)ナイトステイ（超本命・折返し羽田帰還）",
-            "prob": 95,
-            "summary": "NH630便(19:20発-21:00着)で羽田帰還後、そのまま羽田で夜間駐機・整備",
-            "detail": "羽田帰還が21:00頃のため夜の地方ステイ便(19時台発)への再出発はなく、明朝は羽田始発便（長崎・鹿児島・福岡など）からスタートします。"
-          },
-          {
-            "label": "鹿児島空港夜間駐機（例外待機）",
-            "prob": 5,
-            "summary": "鹿児島空港到着後、そのまま夜を明かす例外パターン",
-            "detail": "明朝は鹿児島始発羽田行きからスタートします。"
-          }
-        ],
-        "notice": "💡 同型機15機のリアルタイム消去法により、今夜の地方ステイ便（長崎NH669・広島NH685・中部NH712）はすべて別機体（JA617A・JA608A・JA610A等）が担当確定しているため、JA609Aの今夜羽田帰還・羽田ステイが95%確実視されます！"
-      },
+      "currentAirport": "鹿児島 ➔ 東京(羽田) へ飛行中",
+      "nightStay": "東京(羽田)（確定）",
+      "isNightStayConfirmed": true,
+      "pendingNightStayNote": null,
+      "todayOutlook": null,
       "nightStayProbabilities": [
         {
           "airport": "東京(羽田)",
           "code": "HND",
-          "probability": 95,
-          "note": "鹿児島到着後、折返しNH630(19:20発 ➔ 21:00着 / 76P確定)で羽田へ帰還・そのまま夜間駐機（超本命）"
-        },
-        {
-          "airport": "鹿児島",
-          "code": "KOJ",
-          "probability": 5,
-          "note": "鹿児島空港での夜間駐機（機材変更等の例外待機）"
+          "probability": 100,
+          "isConfirmed": true,
+          "note": "最終便到着による確定"
         }
       ],
-      "plans": [
-        {
-          "planId": "today-plan-a",
-          "planName": "プランA",
-          "rank": "本命 ◎",
-          "probability": 95,
-          "title": "【今夜羽田帰還】鹿児島 ➔ 東京(羽田)(NH630・泊)",
-          "routeSummary": "鹿児島 ➔ 東京(羽田)(泊)",
-          "description": "鹿児島到着(18:35)後、約45分の折返しで夜の羽田行き「NH630便(19:20発 ➔ 21:00着 / ODPT 76P確定)」に充当されて羽田へ帰還・夜間駐機に入る確実視シナリオ（21:00以降の羽田発76P便は0便のため羽田泊確定）",
-          "flights": [
-            {
-              "step": "① 折返し復路(最終)",
-              "time": "19:20発 - 21:00着",
-              "flightNo": "NH630 (予測)",
-              "route": "鹿児島 ➔ 東京(羽田)",
-              "tag": "🌙76P確定・羽田帰還(泊)"
-            }
-          ]
-        },
-        {
-          "planId": "today-plan-b",
-          "planName": "プランB",
-          "rank": "注意 △",
-          "probability": 5,
-          "title": "【鹿児島夜間駐機(泊)】",
-          "routeSummary": "鹿児島 そのまま夜間駐機(泊)",
-          "description": "鹿児島到着後、NH630便には充当されずにそのまま鹿児島空港で夜間駐機に入る例外パターン",
-          "flights": [
-            {
-              "step": "① 夜間駐機",
-              "time": "18:35以降",
-              "flightNo": "ステイ便なし",
-              "route": "鹿児島 そのまま夜間駐機",
-              "tag": "🌙鹿児島ステイ"
-            }
-          ]
-        }
-      ],
+      "plans": [],
       "todayPlanHeaders": [
         {
           "name": "プランA",
@@ -567,7 +495,14 @@
             "time": "19:20発 - 21:00着"
           },
           "planC": null,
-          "actual": null
+          "actual": {
+            "flightNo": "NH630",
+            "route": "鹿児島 ➔ 東京(羽田)",
+            "time": "19:20発 - 21:00着",
+            "status": "飛行中 ✈️",
+            "isLanded": false,
+            "isLive": true
+          }
         }
       ],
       "flights": [
@@ -617,13 +552,13 @@
           "isPredicted": false
         },
         {
-          "flightNo": "NH630 (予測)",
+          "flightNo": "NH630",
           "route": "鹿児島 ➔ 東京(羽田)",
           "time": "19:20発 - 21:00着",
-          "status": "🔄 76P確定・折返し羽田帰還 (確率95%)",
+          "status": "飛行中 ✈️",
           "isLanded": false,
-          "isLive": false,
-          "isPredicted": true
+          "isLive": true,
+          "isPredicted": false
         }
       ]
     },
@@ -636,10 +571,10 @@
       "isTomorrow": true,
       "isWeekend": false,
       "statusType": "tomorrow",
-      "statusLabel": "明日（夕方時点の3大シナリオ予測：19〜21時頃に初便確定）",
-      "expectedStart": "今夜の最終便（19〜21時頃）で確定",
-      "isNightStayConfirmed": false,
-      "pendingNightStayNote": "🔒 現在NH627便（東京(羽田) ➔ 鹿児島、18:35着）を運航中。鹿児島到着後、約45分の折返しで羽田行き最終便「NH630便（鹿児島 19:20発 ➔ 羽田 21:00着 / 76P確定）」に充当され、今夜21:00に羽田へ帰還・そのまま羽田ナイトステイに入る見通し（確率95%で大本命）です！（※19時台の長崎行きNH669や広島行きNH685は他機体が担当確定）",
+      "statusLabel": "明日（ナイトステイ確定・3大ルート予測）",
+      "expectedStart": "東京(羽田)（確定）発 (NH661)",
+      "isNightStayConfirmed": true,
+      "pendingNightStayNote": null,
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
@@ -715,7 +650,7 @@
           "planName": "プランB",
           "rank": "有力 ◯",
           "probability": 26,
-          "title": "【羽田泊スジ②・黄金固定68分乗継】朝イチ福岡往復 ➔ 昼松山往復 ➔ 長崎ステイ(763単独確定枠)",
+          "title": "【羽田泊スジ②・黄金固定乗継】朝イチ福岡往復 ➔ 昼松山往復 ➔ 長崎ステイ(763単独確定枠)",
           "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 松山 ➔ 羽田 ➔ 長崎(泊)",
           "airports": [
             "東京(羽田)",
@@ -949,27 +884,27 @@
       "isWeekend": true,
       "statusType": "forecast",
       "statusLabel": "週間ルート確率予報（ODPT曜日ダイヤ連動）",
-      "topRoute": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
-      "topProbability": 28,
+      "topRoute": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
+      "topProbability": 26,
       "routes": [
         {
-          "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
-          "destCode": "CTS",
+          "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
+          "destCode": "NGS",
           "isInterCity": false,
-          "probability": 28,
-          "candidateFlights": "NH59 / NH62 / NH69 / NH74",
-          "note": "北海道幹線。大型機サポートや週末に高頻度充当",
+          "probability": 26,
+          "candidateFlights": "NH661 / NH664 / NH662 / NH663",
+          "note": "🔒土曜ダイヤで763単独確定枠あり。九州の定番就航地。夜間ナイトステイが頻出",
           "star": "★★★★★",
           "rank": "本命 ◎",
           "planName": "プランA"
         },
         {
-          "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
-          "destCode": "NGS",
+          "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
+          "destCode": "CTS",
           "isInterCity": false,
-          "probability": 25,
-          "candidateFlights": "NH661 / NH664 / NH662 / NH663",
-          "note": "🔒土曜ダイヤで763単独確定枠あり。九州の定番就航地。夜間ナイトステイが頻出",
+          "probability": 26,
+          "candidateFlights": "NH59 / NH62 / NH69 / NH74",
+          "note": "北海道幹線。大型機サポートや週末に高頻度充当",
           "star": "★★★★★",
           "rank": "本命 ◎",
           "planName": "プランB"
@@ -1020,13 +955,13 @@
       "statusType": "forecast",
       "statusLabel": "週間ルート確率予報（ODPT曜日ダイヤ連動）",
       "topRoute": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
-      "topProbability": 34,
+      "topProbability": 32,
       "routes": [
         {
           "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
           "destCode": "CTS",
           "isInterCity": false,
-          "probability": 34,
+          "probability": 32,
           "candidateFlights": "NH55 / NH59 / NH58 / NH62",
           "note": "北海道幹線。大型機サポートや週末に高頻度充当",
           "star": "★★★★★",
@@ -1048,7 +983,7 @@
           "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
           "destCode": "NGS",
           "isInterCity": false,
-          "probability": 19,
+          "probability": 20,
           "candidateFlights": "NH662 / NH661 / NH664 / NH669",
           "note": "九州の定番就航地。夜間ナイトステイが頻出",
           "star": "★★★★☆",
@@ -1107,7 +1042,7 @@
           "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
           "destCode": "CTS",
           "isInterCity": false,
-          "probability": 28,
+          "probability": 27,
           "candidateFlights": "NH59 / NH62 / NH69 / NH74",
           "note": "北海道幹線。大型機サポートや週末に高頻度充当",
           "star": "★★★★★",
@@ -1118,7 +1053,7 @@
           "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
           "destCode": "NGS",
           "isInterCity": false,
-          "probability": 25,
+          "probability": 26,
           "candidateFlights": "NH661 / NH664 / NH662 / NH663",
           "note": "🔒月曜ダイヤで763単独確定枠あり。九州の定番就航地。夜間ナイトステイが頻出",
           "star": "★★★★★",
@@ -1177,7 +1112,7 @@
           "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
           "destCode": "CTS",
           "isInterCity": false,
-          "probability": 23,
+          "probability": 22,
           "candidateFlights": "NH59 / NH62 / NH69 / NH74",
           "note": "北海道幹線。大型機サポートや週末に高頻度充当",
           "star": "★★★★☆",
@@ -1244,23 +1179,23 @@
           "planName": "プランA"
         },
         {
-          "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
-          "destCode": "CTS",
+          "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
+          "destCode": "NGS",
           "isInterCity": false,
           "probability": 26,
-          "candidateFlights": "NH62 / NH59 / NH69 / NH74",
-          "note": "🔒水曜ダイヤで763単独確定枠あり。北海道幹線。大型機サポートや週末に高頻度充当",
+          "candidateFlights": "NH661 / NH664 / NH662 / NH669",
+          "note": "🔒水曜ダイヤで763単独確定枠あり。九州の定番就航地。夜間ナイトステイが頻出",
           "star": "★★★★★",
           "rank": "本命 ◎",
           "planName": "プランB"
         },
         {
-          "route": "羽田 ➔ 長崎 / 長崎 ➔ 羽田",
-          "destCode": "NGS",
+          "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
+          "destCode": "CTS",
           "isInterCity": false,
           "probability": 25,
-          "candidateFlights": "NH661 / NH664 / NH662 / NH669",
-          "note": "🔒水曜ダイヤで763単独確定枠あり。九州の定番就航地。夜間ナイトステイが頻出",
+          "candidateFlights": "NH62 / NH59 / NH69 / NH74",
+          "note": "🔒水曜ダイヤで763単独確定枠あり。北海道幹線。大型機サポートや週末に高頻度充当",
           "star": "★★★★★",
           "rank": "本命 ◎",
           "planName": "プランC"
@@ -1412,7 +1347,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 468,
+    "totalFleetFlights": 475,
     "fleetCount": 15
   }
 }
