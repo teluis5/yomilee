@@ -181,12 +181,19 @@ export async function collectFleetData() {
     byReg[f.reg].push(f);
   }
 
-  // 各ナイトステイ空港からの翌朝初便の出現頻度を集計
+  // 各ナイトステイ空港からの翌朝初便の出現頻度を集計（ANA国内定期便 NH1〜NH1999 のみ対象）
   const nightStayPatterns = {}; // { [airport]: { [flightNo]: count } }
   const turnaroundPatterns = {}; // { [route]: { [nextFlightNo]: count } }
+  const flightTransitions = {}; // { [currFlightNo]: { [nextFlightNo]: count } }
+
+  const isAnaRegularDomestic = (fn) => {
+    if (!fn || !fn.startsWith('NH')) return false;
+    const num = parseInt(fn.replace(/[^0-9]/g, ''), 10);
+    return num >= 1 && num < 2000;
+  };
 
   for (const reg in byReg) {
-    const list = byReg[reg];
+    const list = byReg[reg].filter(f => isAnaRegularDomestic(f.flightNo) && f.orig !== f.dest);
     for (let i = 0; i < list.length - 1; i++) {
       const curr = list[i];
       const next = list[i + 1];
@@ -202,11 +209,14 @@ export async function collectFleetData() {
           nightStayPatterns[stayAirport][next.flightNo] = (nightStayPatterns[stayAirport][next.flightNo] || 0) + 1;
         }
 
-        // 3時間以内の場合は「同日ターンアラウンド（折り返し）」とみなす
-        if (gapHours >= 0.5 && gapHours <= 3) {
+        // 3.5時間以内の場合は「同日ターンアラウンド（折り返し・次便接続）」とみなす
+        if (gapHours >= 0.4 && gapHours <= 3.5) {
           const key = `${curr.orig}->${curr.dest}`;
           if (!turnaroundPatterns[key]) turnaroundPatterns[key] = {};
           turnaroundPatterns[key][next.flightNo] = (turnaroundPatterns[key][next.flightNo] || 0) + 1;
+
+          if (!flightTransitions[curr.flightNo]) flightTransitions[curr.flightNo] = {};
+          flightTransitions[curr.flightNo][next.flightNo] = (flightTransitions[curr.flightNo][next.flightNo] || 0) + 1;
         }
       }
     }
@@ -214,6 +224,7 @@ export async function collectFleetData() {
 
   db.nightStays = nightStayPatterns;
   db.turnarounds = turnaroundPatterns;
+  db.flightTransitions = flightTransitions;
   db.lastUpdated = new Date().toISOString();
 
   saveHistory(db);

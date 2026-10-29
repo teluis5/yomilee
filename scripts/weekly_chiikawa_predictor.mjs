@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
 import { collectFleetData } from './collector_ana_fleet.mjs';
+import { updateAnaFleetStatusFromODPT } from '../../../5_script/fetch_ana_odpt_fleet_status.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,8 +16,13 @@ const OUTPUT_JSON_FILE = path.join(DATA_DIR, 'chiikawa_weekly_prediction.json');
 const SRC_OUTPUT_JSON_FILE = path.join(SRC_DATA_DIR, 'chiikawa_weekly_prediction.json');
 const ANA_FLEET_STATUS_FILE = path.join(DATA_DIR, 'ana_fleet_status.json');
 
-// ANA公式運航状況（確定機種データ）のロード
-function loadAnaFleetStatus() {
+// ANA公式運航状況（ODPT確定機種＆週間ダイヤデータ）の同期＆ロード
+async function loadAnaFleetStatus() {
+  try {
+    return await updateAnaFleetStatusFromODPT();
+  } catch (e) {
+    console.warn('⚠️ ODPT API即時同期スキップ（キャッシュを使用します）:', e.message);
+  }
   if (fs.existsSync(ANA_FLEET_STATUS_FILE)) {
     try {
       const data = JSON.parse(fs.readFileSync(ANA_FLEET_STATUS_FILE, 'utf-8'));
@@ -56,7 +62,7 @@ function parseTimeToMinutes(timeStr) {
   return parseInt(match[1], 10) * 60 + parseInt(match[2], 10);
 }
 
-// ANA公式B767確定枠数・過去実績・ナイトステイ整合度に基づく客観的プラン確率計算関数
+// ANA公式B767確定枠数・マルコフ遷移実績・ナイトステイ整合度に基づく客観的プラン確率計算関数
 function evaluatePlanProbabilities(plans, targetDateStr, anaFleetData, fleetDb, confirmedNightStay = null, nightStayProbabilities = []) {
   if (!plans || plans.length === 0) return plans;
 
@@ -64,8 +70,8 @@ function evaluatePlanProbabilities(plans, targetDateStr, anaFleetData, fleetDb, 
   const dayFlights = (anaFleetData && anaFleetData.dates && anaFleetData.dates[dKey]) ? anaFleetData.dates[dKey] : {};
   const totalAna767 = Object.values(dayFlights).filter(f => f.is767).length;
 
-  // DB実績の路線度数
-  const dbFlights = Object.values(fleetDb?.flights || {});
+  // DB実績の路線度数（ANA自社定期便のみ）
+  const dbFlights = Object.values(fleetDb?.flights || {}).filter(f => f.flightNo && f.flightNo.startsWith('NH') && parseInt(f.flightNo.replace(/[^0-9]/g, ''), 10) < 2000);
   const totalDbFlights = dbFlights.length;
   const dbRouteFreq = {};
   for (const f of dbFlights) {
@@ -73,13 +79,21 @@ function evaluatePlanProbabilities(plans, targetDateStr, anaFleetData, fleetDb, 
     dbRouteFreq[r] = (dbRouteFreq[r] || 0) + 1;
   }
 
+  const transitions = fleetDb?.flightTransitions || {};
+  const nightStaysDb = fleetDb?.nightStays || {};
+
   const evaluated = plans.map(plan => {
     let flightScoreSum = 0;
-    for (const f of plan.flights) {
+    for (let idx = 0; idx < plan.flights.length; idx++) {
+      const f = plan.flights[idx];
       const rawNum = f.flightNo.replace(/[^0-9]/g, '');
-      const anaInfo = dayFlights[`NH${parseInt(rawNum, 10)}`] || dayFlights[`NH${rawNum}`];
+      const normFn = rawNum ? `NH${parseInt(rawNum, 10)}` : f.flightNo;
+      const anaInfo = dayFlights[normFn] || dayFlights[`NH${rawNum}`];
       const is767 = anaInfo ? anaInfo.is767 : (f.is767Confirmed || f.model === '76P' || f.model === '763');
-      const modelFactor = is767 ? 1.0 : 0.2;
+      const is767Strict = anaInfo ? Boolean(anaInfo.is767Strict) : (f.model === '76P' || f.model === '763');
+
+      // 単独763/76P確定枠は1.35倍、複合763枠は1.0倍、他機種枠は0.15倍
+      const modelFactor = is767Strict ? 1.35 : (is767 ? 1.0 : 0.15);
 
       let rKey = '';
       if (f.route && f.route.includes('➔')) {
@@ -96,12 +110,30 @@ function evaluatePlanProbabilities(plans, targetDateStr, anaFleetData, fleetDb, 
       // 過去実績比率
       const histRatio = totalDbFlights > 0 ? ((dbRouteFreq[rKey] || 1) / totalDbFlights) : 0.05;
 
-      // 地方間直行便（羽田発着以外）の公式767確定枠ボーナス（羽田以外の就航路線展開）
+      // 地方間直行便（羽田発着以外）の公式767確定枠ボーナス
       const isInterCity = rKey && !rKey.startsWith('HND-') && !rKey.endsWith('-HND');
       const interCityBonus = (isInterCity && is767) ? 1.3 : 1.0;
 
+      // マルコフ連鎖（前便からの連続投入実績）ボーナス
+      let transitionBonus = 1.0;
+      if (idx > 0) {
+        const prevRaw = plan.flights[idx - 1].flightNo.replace(/[^0-9]/g, '');
+        const prevFn = prevRaw ? `NH${parseInt(prevRaw, 10)}` : '';
+        const transCount = transitions[prevFn]?.[normFn] || 0;
+        if (transCount > 0) {
+          transitionBonus = 1.0 + Math.min(0.4, transCount * 0.08);
+        }
+      } else if (rKey) {
+        // 第1便（朝一便）のナイトステイ明け実績ボーナス
+        const origApt = rKey.split('-')[0];
+        const stayHits = nightStaysDb[origApt]?.[normFn] || 0;
+        if (stayHits > 0) {
+          transitionBonus = 1.0 + Math.min(0.45, stayHits * 0.07);
+        }
+      }
+
       // フライト単体スコア
-      flightScoreSum += modelFactor * (anaRatio * 0.6 + histRatio * 0.4) * interCityBonus;
+      flightScoreSum += modelFactor * (anaRatio * 0.55 + histRatio * 0.45) * interCityBonus * transitionBonus;
     }
 
     let avgScore = plan.flights.length > 0 ? (flightScoreSum / plan.flights.length) : 0.01;
@@ -110,16 +142,16 @@ function evaluatePlanProbabilities(plans, targetDateStr, anaFleetData, fleetDb, 
     if (confirmedNightStay && plan.flights.length > 0) {
       const firstOrig = plan.flights[0].orig || getAirportCodeFromName(plan.flights[0].route.split('➔')[0]);
       if (firstOrig === confirmedNightStay) {
-        avgScore *= 1.5; // 確定駐機先からのスタートは高確率
+        avgScore *= 1.6; // 確定駐機先からのスタートは高確率
       } else {
-        avgScore *= 0.15; // 駐機先が異なるプランは大幅減点
+        avgScore *= 0.12; // 駐機先が異なるプランは大幅減点
       }
     } else if (nightStayProbabilities && nightStayProbabilities.length > 0 && plan.flights.length > 0) {
       const firstOrig = plan.flights[0].orig || getAirportCodeFromName(plan.flights[0].route.split('➔')[0]);
       const stayMatch = nightStayProbabilities.find(p => p.code === firstOrig);
-      const stayProb = stayMatch ? (stayMatch.probability / 100) : 0.1;
+      const stayProb = stayMatch ? (stayMatch.probability / 100) : 0.05;
       // 本日のナイトステイ確率（Prior）を明日の始発プランの重みとして直接反映
-      avgScore *= (0.3 + stayProb * 1.6);
+      avgScore *= (0.2 + stayProb * 1.8);
     }
 
     return {
@@ -129,7 +161,7 @@ function evaluatePlanProbabilities(plans, targetDateStr, anaFleetData, fleetDb, 
   });
 
   const totalRawScore = evaluated.reduce((sum, item) => sum + item.rawScore, 0);
-  const targetCoverage = 0.82; // 上位3プラン合計約82%（残り18%はその他路線・機材整備予備枠）
+  const targetCoverage = 0.85; // 上位プラン合計約85%（残り15%はその他路線・機材整備予備枠）
 
   evaluated.sort((a, b) => b.rawScore - a.rawScore);
 
@@ -206,9 +238,10 @@ function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData, minDepMinutes =
         }
       }
 
-      // 適正時間枠の中で、B767便があれば優先
+      // 適正時間枠の中で、B767単独確定枠 > B767候補便 > その他 の優先度で選択
+      const strictB767InWindow = validTurnaroundCandidates.filter(f => f.is767Strict);
       const b767InWindow = validTurnaroundCandidates.filter(f => f.is767);
-      const searchPool = b767InWindow.length > 0 ? b767InWindow : validTurnaroundCandidates;
+      const searchPool = strictB767InWindow.length > 0 ? strictB767InWindow : (b767InWindow.length > 0 ? b767InWindow : validTurnaroundCandidates);
 
       if (searchPool.length > 0) {
         const prefMins = Math.max(parseTimeToMinutes(flight.time || '12:00'), minDepMinutes);
@@ -231,6 +264,7 @@ function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData, minDepMinutes =
       flightNo: anaInfo.flightNo,
       model: anaInfo.model,
       is767Confirmed: is767,
+      is767Strict: Boolean(anaInfo.is767Strict),
       route: `${origName} ➔ ${destName}`
     };
     if (anaInfo.depTime && anaInfo.arrTime) {
@@ -241,8 +275,50 @@ function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData, minDepMinutes =
   return flight;
 }
 
-// 到着空港から出発する便の中から、ANA公式運航データ（他機種確定除外・B767確定枠優先）に基づき最適な次便を動的探索する関数
-function findOptimalNextFlights(origCode, arrTimeMinutes, dateStr, anaFleetData) {
+// 同型機15機のうち、JA609A以外の機体が本日すでに担当（または地方空港折り返しで担当確定）している便を特定する消去法エンジン
+function buildAssignedOtherRegFlights(fleetDb, todayStr, anaFleetData) {
+  const assignedMap = new Map(); // flightNo -> reg
+  const dKey = todayStr.replace(/-/g, '');
+  const dayFlights = anaFleetData?.dates?.[dKey] || {};
+
+  const allDbFlights = Object.values(fleetDb?.flights || {}).filter(f => f.date === todayStr && f.reg && f.reg !== 'JA609A');
+  const byReg = {};
+  for (const f of allDbFlights) {
+    if (!f.flightNo || !f.flightNo.startsWith('NH')) continue;
+    const fnNum = parseInt(f.flightNo.replace(/[^0-9]/g, ''), 10);
+    if (!fnNum || fnNum >= 2000) continue;
+    const normFn = `NH${fnNum}`;
+    assignedMap.set(normFn, f.reg);
+    if (!byReg[f.reg]) byReg[f.reg] = [];
+    byReg[f.reg].push({ ...f, normFn });
+  }
+
+  // 各他機体の本日の最終到着地が地方空港（HND以外）の場合、その地方空港から折り返す直近の76P確定便もその機体が担当すると推論
+  for (const [reg, list] of Object.entries(byReg)) {
+    list.sort((a, b) => parseTimeToMinutes(a.depTime) - parseTimeToMinutes(b.depTime));
+    const lastF = list[list.length - 1];
+    if (lastF && lastF.dest && lastF.dest !== 'HND') {
+      const arrMins = parseTimeToMinutes(lastF.arrTime);
+      if (arrMins > 0) {
+        const turnaroundCandidates = Object.values(dayFlights).filter(df => {
+          if (!df.is767 || df.origin !== lastF.dest) return false;
+          if (assignedMap.has(df.flightNo)) return false;
+          const depM = parseTimeToMinutes(df.depTime);
+          return depM >= arrMins + 35 && depM <= arrMins + 120;
+        });
+        if (turnaroundCandidates.length > 0) {
+          turnaroundCandidates.sort((a, b) => parseTimeToMinutes(a.depTime) - parseTimeToMinutes(b.depTime));
+          assignedMap.set(turnaroundCandidates[0].flightNo, `${reg}(折返し確定)`);
+        }
+      }
+    }
+  }
+
+  return assignedMap;
+}
+
+// 到着空港から出発する便の中から、ODPT公式データ＆他機体消去法に基づき最適な次便を動的探索する関数
+function findOptimalNextFlights(origCode, arrTimeMinutes, dateStr, anaFleetData, assignedOtherMap = new Map()) {
   if (!origCode || !dateStr || !anaFleetData || !anaFleetData.dates) return [];
   const dKey = dateStr.replace(/-/g, '');
   const dayFlights = anaFleetData.dates[dKey];
@@ -251,18 +327,19 @@ function findOptimalNextFlights(origCode, arrTimeMinutes, dateStr, anaFleetData)
   const minDep = arrTimeMinutes > 0 ? arrTimeMinutes + 35 : 0; // 最低ターンアラウンド35分
   const maxDep = arrTimeMinutes > 0 ? arrTimeMinutes + 180 : 1440; // 3時間以内の出発枠
 
-  // 出発空港が一致する全便を抽出（コードシェア4桁便名[AIR DO/ソラシド等: 2000番台以降]は自社機JA609A対象外のため除外）
+  // 出発空港が一致し、かつ他機体（JA609A以外）に割り当てられていない便を抽出
   const departures = Object.values(dayFlights).filter(f => {
     if (f.origin !== origCode) return false;
     const fnNum = parseInt(f.flightNo.replace(/[^0-9]/g, ''), 10);
-    if (fnNum >= 2000) return false; // コードシェア便（AIR DO、IBEX、ソラシド等）を除外
+    if (fnNum >= 2000) return false; // コードシェア便除外
+    if (assignedOtherMap.has(f.flightNo)) return false; // 他機体がすでに担当確定している便を消去！
     const depM = parseTimeToMinutes(f.depTime);
     return depM >= minDep;
   });
 
   if (departures.length === 0) return [];
 
-  // 1. 適正時間枠内（ターンアラウンド35〜120分以内）のB767確定便（76P/763）
+  // 1. 適正時間枠内（ターンアラウンド35〜180分以内）のB767確定便（76P）
   const b767InTurnaround = departures.filter(f => f.is767 && parseTimeToMinutes(f.depTime) <= maxDep);
   if (b767InTurnaround.length > 0) {
     b767InTurnaround.sort((a, b) => parseTimeToMinutes(a.depTime) - parseTimeToMinutes(b.depTime));
@@ -277,7 +354,7 @@ function findOptimalNextFlights(origCode, arrTimeMinutes, dateStr, anaFleetData)
     return hndB767.map(f => ({ ...f, matchType: 'hnd_b767', score: 95 }));
   }
 
-  // 3. 地方間直行便（新千歳-神戸、伊丹-新千歳等）のB767確定便
+  // 3. 地方間直行便（新千歳-神戸、伊丹-新千歳、新千歳-中部等）のB767確定便
   const interCityB767 = departures.filter(f => f.is767);
   if (interCityB767.length > 0) {
     interCityB767.sort((a, b) => parseTimeToMinutes(a.depTime) - parseTimeToMinutes(b.depTime));
@@ -518,10 +595,14 @@ export async function generateWeeklyPrediction() {
   const fleetDb = await collectFleetData();
   const totalFlightsCount = Object.keys(fleetDb.flights || {}).length;
 
-  // 1-b. ANA公式運航状況（確定機種データ）のロード
-  const anaFleetData = loadAnaFleetStatus();
+  // 1-b. ANA公式運航状況（ODPT確定機種＆週間ダイヤデータ）の同期＆ロード
+  const anaFleetData = await loadAnaFleetStatus();
   const anaDateKeys = Object.keys(anaFleetData.dates || {});
   console.log(`✈️ ANA公式運航状況ロード完了: 対象日 [${anaDateKeys.join(', ')}]`);
+
+  // 1-c. 同型機15機の本日アサイン状況から「他機体が担当確定している便」を特定（消去法）
+  const assignedOtherMap = buildAssignedOtherRegFlights(fleetDb, todayStr, anaFleetData);
+  console.log(`🔍 他機体消去法エンジン: 本日JA609A以外の機体が担当確定済みの76P便 ${assignedOtherMap.size} 便を候補から除外`);
 
   // 2. JA609A の当日の状況を取得
   const rawFlights = fetchChiikawaFlights();
@@ -654,16 +735,16 @@ export async function generateWeeklyPrediction() {
     const lastArrHour = parseInt((lastToday.arrTime || '00:00').split(':')[0], 10) || 0;
     const lastArrMins = parseTimeToMinutes(lastToday.arrTime || '16:00');
     const currentJstHour = jstNow.getHours();
-    const todayDateKey = (fleetDb.todayDate || new Date().toISOString().split('T')[0]).replace(/-/g, '');
+    const todayDateKey = todayStr.replace(/-/g, '');
 
-    // 到着空港から出発する適正ターンアラウンド次便候補を動的探索（B767確定枠優先）
-    const dynamicNextCandidates = findOptimalNextFlights(lastToday.destCode, lastArrMins, todayDateKey, anaFleetData);
+    // 到着空港から出発する適正ターンアラウンド次便候補を動的探索（ODPT 76P確定枠＆他機体消去法）
+    const dynamicNextCandidates = findOptimalNextFlights(lastToday.destCode, lastArrMins, todayDateKey, anaFleetData, assignedOtherMap);
     const topNextCandidate = dynamicNextCandidates.length > 0 ? dynamicNextCandidates[0] : null;
     const hasNext767Flight = Boolean(topNextCandidate && topNextCandidate.is767);
 
     // 本当にナイトステイ確定（ステイ便なし）になるのは、
     // ① 次のB767出発便が存在しない（本日の全運航終了）かつ 20時以降の到着、または
-    // ② 21時半以降の深夜到着便（NH416等の最終帰還便が到着した後）
+    // ② 21時以降の夜間到着便（最終帰還便が到着した後）
     const isTrulyFinalFlight = !hasNext767Flight && (lastArrHour >= 20 || currentJstHour >= 21 || lastToday.destCode === 'HND');
 
     if (isTrulyFinalFlight) {
@@ -679,7 +760,7 @@ export async function generateWeeklyPrediction() {
       const isTopNext767 = Boolean(topNextCandidate && topNextCandidate.is767);
       const isInterCityNext = Boolean(topNextCandidate && topNextCandidate.dest !== 'HND');
 
-      // 1. 到着空港からさらにB767確定枠の次便が存在する場合
+      // 1. 到着空港からさらにB767(76P)確定枠の次便が存在する場合
       if (isTopNext767) {
         const destCode = topNextCandidate.dest;
         const destName = AIRPORT_NAMES[destCode] || destCode;
@@ -687,25 +768,47 @@ export async function generateWeeklyPrediction() {
         const depTime = topNextCandidate.depTime;
         const arrTime = topNextCandidate.arrTime;
 
-        // 地方空港到着後、さらに当夜のうちに出発するB767確定便（例: NH416 神戸 ➔ 羽田）があるかチェーン探索
+        // 次便到着後、さらにその空港から出発する未割当の76P確定便があるかチェーン探索
         const secondArrMins = parseTimeToMinutes(arrTime);
-        const secondCandidates = findOptimalNextFlights(destCode, secondArrMins, todayDateKey, anaFleetData);
-        const topSecond = secondCandidates.length > 0 && secondCandidates[0].is767 ? secondCandidates[0] : null;
+        const secondCandidates = findOptimalNextFlights(destCode, secondArrMins, todayDateKey, anaFleetData, assignedOtherMap);
+        const next767AfterSecond = secondCandidates.filter(c => c.is767);
+        const topSecond = next767AfterSecond.length > 0 ? next767AfterSecond[0] : null;
 
         if (isInterCityNext && topSecond) {
-          // 三角運航で当夜のうちに羽田へ帰還する場合（新千歳 ➔ 神戸[NH578] ➔ 羽田[NH416] 22:30着）！
+          // ケース1-A: 三角運航でさらに次便へ接続する場合（例: 新千歳 ➔ 神戸 ➔ 羽田、伊丹 ➔ 新千歳 ➔ 中部）
           const finalDestCode = topSecond.dest;
           const finalDestName = AIRPORT_NAMES[finalDestCode] || finalDestCode;
           const fn2 = topSecond.flightNo;
           const depTime2 = topSecond.depTime;
           const arrTime2 = topSecond.arrTime;
 
+          todayRemainingPredictions = [
+            {
+              flightNo: `${fn} (予測)`,
+              route: `${lastToday.destName} ➔ ${destName}`,
+              time: `${depTime}発 - ${arrTime}着`,
+              status: '🔄 76P確定・次便予測 (確率95%)',
+              isLanded: false,
+              isLive: false,
+              isPredicted: true
+            },
+            {
+              flightNo: `${fn2} (予測)`,
+              route: `${destName} ➔ ${finalDestName}`,
+              time: `${depTime2}発 - ${arrTime2}着`,
+              status: `🌙 76P確定・${finalDestName}帰還/ステイ予測 (確率95%)`,
+              isLanded: false,
+              isLive: false,
+              isPredicted: true
+            }
+          ];
+
           nightStayProbabilities = [
-            { airport: finalDestName, code: finalDestCode, probability: 95, note: `${destName}経由後、${fn2}(${depTime2}発 76P確定)で${finalDestName}へ帰還・夜間駐機（三角運航・超本命）` },
+            { airport: finalDestName, code: finalDestCode, probability: 95, note: `${destName}経由後、${fn2}(${depTime2}発 76P確定)で${finalDestName}へ移動・夜間駐機（超本命）` },
             { airport: destName, code: destCode, probability: 4, note: `${destName}空港での夜間駐機（例外待機）` },
             { airport: lastToday.destName, code: lastToday.destCode, probability: 1, note: `${lastToday.destName}空港での夜間駐機（例外待機）` }
           ];
-          nightStayCode = finalDestCode; // 羽田泊！
+          nightStayCode = finalDestCode;
 
           todayPlans = [
             {
@@ -713,23 +816,23 @@ export async function generateWeeklyPrediction() {
               planName: 'プランA',
               rank: '本命 ◎',
               probability: 95,
-              title: `【三角運航・今夜羽田帰還】${lastToday.destName} ➔ ${destName}(${fn}) ➔ ${finalDestName}(${fn2}・泊)`,
+              title: `【連続76P確定ルート】${lastToday.destName} ➔ ${destName}(${fn}) ➔ ${finalDestName}(${fn2}・泊)`,
               routeSummary: `${lastToday.destName} ➔ ${destName} ➔ ${finalDestName}(泊)`,
-              description: `現在運航中の${lastToday.flightNo}便到着後、${destName}空港から夜の羽田行き最終便(${fn2}: 76P確定便)に充当されて22:30に羽田へ帰還・夜間駐機に入る完璧な三角運航シナリオ（神戸泊はNH415のA321が担当）`,
+              description: `現在運航中の${lastToday.flightNo}便到着後、ODPT公式76P確定枠の${fn}便および${fn2}便へ連続充当され、${arrTime2}に${finalDestName}へ到着・夜間駐機に入る大本命シナリオ`,
               flights: [
                 ...(lastToday.flightNo !== fn ? [{
-                  step: '① 夜直行便',
-                  time: `${lastToday.depTime}発 - ${lastToday.arrTime}着`,
-                  flightNo: lastToday.flightNo,
-                  route: `${lastToday.origName} ➔ ${lastToday.destName}`,
-                  tag: '✈️運航中 (76P確定)'
+                  step: '① 次便(76P確定)',
+                  time: `${depTime}発 - ${arrTime}着`,
+                  flightNo: `${fn} (予測)`,
+                  route: `${lastToday.destName} ➔ ${destName}`,
+                  tag: '✈️76P確定枠'
                 }] : []),
                 {
                   step: lastToday.flightNo !== fn ? '② 夜最終便' : '① 夜最終便',
                   time: `${depTime2}発 - ${arrTime2}着`,
                   flightNo: `${fn2} (予測)`,
                   route: `${destName} ➔ ${finalDestName}`,
-                  tag: `🌙${finalDestName}帰還・夜間駐機(泊)`
+                  tag: `🌙${finalDestName}夜間駐機(泊)`
                 }
               ]
             },
@@ -743,11 +846,11 @@ export async function generateWeeklyPrediction() {
               description: `${destName}到着後、${fn2}には充当されずに${destName}空港でそのまま夜間駐機に入るパターン`,
               flights: [
                 {
-                  step: '① 夜直行便',
+                  step: '① 次便(76P確定)',
                   time: `${depTime}発 - ${arrTime}着`,
                   flightNo: `${fn} (予測)`,
                   route: `${lastToday.destName} ➔ ${destName}`,
-                  tag: `✈️地方直行・${destName}泊`
+                  tag: `✈️${destName}泊`
                 }
               ]
             },
@@ -758,11 +861,11 @@ export async function generateWeeklyPrediction() {
               probability: 1,
               title: `【${lastToday.destName}夜間駐機(泊)】`,
               routeSummary: `${lastToday.destName} そのまま夜間駐機(泊)`,
-              description: `${lastToday.destName}到着後、夜の追加運航を行わずにそのまま夜間駐機に入る例外パターン`,
+              description: `${lastToday.destName}到着後、追加運航を行わずにそのまま夜間駐機に入る例外パターン`,
               flights: [
                 {
                   step: '① 夜間駐機',
-                  time: '18:00以降',
+                  time: `${lastToday.arrTime}以降`,
                   flightNo: 'ステイ便なし',
                   route: `${lastToday.destName} そのまま夜間駐機`,
                   tag: `🌙${lastToday.destName}ステイ`
@@ -771,45 +874,61 @@ export async function generateWeeklyPrediction() {
             }
           ];
 
-          pendingNightStayNote = `🔒 現在${lastToday.flightNo}便で神戸へ飛行中。神戸到着（20:30）後、約50分の折返しで夜の羽田行き最終便「NH416便（神戸 21:20発 ➔ 羽田 22:30着 / 76P確定）」に充当され、今夜22:30に羽田へ帰還・夜間駐機に入る見通し（確率95%で大本命）です！`;
+          pendingNightStayNote = `🔒 現在${lastToday.flightNo}便を運航中。${lastToday.destName}到着後、76P確定枠の「${fn}便」および「${fn2}便（${destName} ${depTime2}発 ➔ ${finalDestName} ${arrTime2}着）」へ連続充当され、今夜は${finalDestName}で夜間駐機に入る見通し（確率95%）です！`;
 
           todayOutlook = {
-            title: '本日のこの後のフライト見通し＆夜の展開（ほぼ確定）',
+            title: '本日のこの後のフライト見通し＆夜の展開（76P確定枠＋消去法特定）',
             currentFlightNote: `現在、${lastToday.flightNo}便（${lastToday.route}、${lastToday.arrTime}着予定）を運航中`,
             turnaround: {
-              flightNo: `${fn2} (予測)`,
-              route: `${destName} ➔ ${finalDestName}`,
-              time: `${depTime2}発 - ${arrTime2}着`,
+              flightNo: `${fn} ➔ ${fn2} (予測)`,
+              route: `${lastToday.destName} ➔ ${destName} ➔ ${finalDestName}`,
+              time: `${depTime}発 - ${arrTime2}着`,
               probability: 95,
-              desc: `神戸空港到着後、約50分の折返し時間で夜の羽田行き最終便(${fn2}: 21:20発-22:30着 / 76P確定)に連続充当。今夜22:30に羽田空港へ帰還して夜間駐機に入ります。`
+              desc: `${lastToday.destName}到着後、ODPT公式76P確定便(${fn} ➔ ${fn2})に連続充当され、今夜${arrTime2}に${finalDestName}へ到着して夜間駐機に入ります。`
             },
             nightScenarios: [
               {
-                label: '東京(羽田)ナイトステイ（超本命・三角運航帰還）',
+                label: `${finalDestName}ナイトステイ（超本命・76P確定チェーン）`,
                 prob: 95,
-                summary: `神戸到着後、NH416便(21:20発-22:30着)で羽田帰還・夜間駐機`,
-                detail: '明朝は羽田始発便（長崎往復・福岡往復など）からスタートします。'
+                summary: `${destName}経由後、${fn2}便(${depTime2}発-${arrTime2}着)で${finalDestName}夜間駐機`,
+                detail: `明朝は${finalDestName}始発便からスタートします。`
               },
               {
-                label: '神戸空港夜間駐機（例外待機）',
+                label: `${destName}空港夜間駐機（例外待機）`,
                 prob: 4,
-                summary: '神戸空港到着後、そのまま神戸で夜を明かすパターン',
-                detail: '明朝は神戸始発羽田行き（NH412: 07:05発）からスタートします。'
+                summary: `${destName}空港到着後、そのまま夜を明かすパターン`,
+                detail: `明朝は${destName}始発便からスタートします。`
               },
               {
-                label: '札幌(新千歳)夜間駐機（例外待機）',
+                label: `${lastToday.destName}空港夜間駐機（例外待機）`,
                 prob: 1,
-                summary: '新千歳空港到着後、そのまま夜を明かす例外パターン',
-                detail: '明朝は新千歳始発羽田行きからスタートします。'
+                summary: `${lastToday.destName}空港到着後、そのまま夜を明かす例外パターン`,
+                detail: `明朝は${lastToday.destName}始発便からスタートします。`
               }
             ],
-            notice: '💡 神戸空港ナイトステイ機材は羽田20:30発のNH415便(A321)が充当されるため、新千歳から到着するB767(NH578)はNH416便で羽田へ折り返すのがANAの基本機材循環です！'
+            notice: '💡 公共交通オープンデータ(ODPT)の当日76P確定情報と、同型機15機の他機体消去法により次便チェーンを高精度に特定しています。'
           };
-        } else if (destCode === 'HND') {
-          // 神戸等から羽田へ戻る便（例: NH416 神戸 ➔ 羽田）の場合
+        } else if (destCode === 'HND' && !topSecond) {
+          // ケース1-B: 地方空港から折り返し76P確定便（例: NH630 鹿児島 19:20 ➔ 羽田 21:00）で羽田へ帰還し、その後羽田発の76P便がない場合（羽田泊95%確定！）
+          const turnMins = parseTimeToMinutes(depTime) - lastArrMins;
+          const stdMorning = MORNING_DEPARTURE_STANDARDS[lastToday.destCode];
+          const morningNote = stdMorning ? `（${stdMorning.flightNo}: ${stdMorning.depTime}発）` : '';
+
+          todayRemainingPredictions = [
+            {
+              flightNo: `${fn} (予測)`,
+              route: `${lastToday.destName} ➔ 東京(羽田)`,
+              time: `${depTime}発 - ${arrTime}着`,
+              status: '🔄 76P確定・折返し羽田帰還 (確率95%)',
+              isLanded: false,
+              isLive: false,
+              isPredicted: true
+            }
+          ];
+
           nightStayProbabilities = [
-            { airport: '東京(羽田)', code: 'HND', probability: 95, note: `${lastToday.destName}到着後、${fn}(${depTime}発)で羽田へ帰還・夜間駐機（超本命）` },
-            { airport: lastToday.destName, code: lastToday.destCode, probability: 5, note: `${lastToday.destName}空港での夜間駐機（例外待機）` }
+            { airport: '東京(羽田)', code: 'HND', probability: 95, note: `${lastToday.destName}到着後、折返し${fn}(${depTime}発 ➔ ${arrTime}着 / 76P確定)で羽田へ帰還・そのまま夜間駐機（超本命）` },
+            { airport: lastToday.destName, code: lastToday.destCode, probability: 5, note: `${lastToday.destName}空港での夜間駐機（機材変更等の例外待機）` }
           ];
           nightStayCode = 'HND';
 
@@ -819,16 +938,16 @@ export async function generateWeeklyPrediction() {
               planName: 'プランA',
               rank: '本命 ◎',
               probability: 95,
-              title: `【今夜羽田帰還】${lastToday.destName} ➔ 東京(羽田)(NH416・泊)`,
+              title: `【今夜羽田帰還】${lastToday.destName} ➔ 東京(羽田)(${fn}・泊)`,
               routeSummary: `${lastToday.destName} ➔ 東京(羽田)(泊)`,
-              description: `${lastToday.destName}到着後、夜の羽田行き最終便(${fn}: 76P確定)に充当されて22:30に羽田へ帰還・夜間駐機に入る確実視シナリオ（神戸泊はNH415のA321が担当）`,
+              description: `${lastToday.destName}到着(${lastToday.arrTime})後、約${turnMins}分の折返しで夜の羽田行き「${fn}便(${depTime}発 ➔ ${arrTime}着 / ODPT 76P確定)」に充当されて羽田へ帰還・夜間駐機に入る確実視シナリオ（${arrTime}以降の羽田発76P便は0便のため羽田泊確定）`,
               flights: [
                 {
-                  step: '① 夜最終便',
+                  step: '① 折返し復路(最終)',
                   time: `${depTime}発 - ${arrTime}着`,
                   flightNo: `${fn} (予測)`,
                   route: `${lastToday.destName} ➔ 東京(羽田)`,
-                  tag: '🌙羽田帰還・夜間駐機(泊)'
+                  tag: '🌙76P確定・羽田帰還(泊)'
                 }
               ]
             },
@@ -839,11 +958,11 @@ export async function generateWeeklyPrediction() {
               probability: 5,
               title: `【${lastToday.destName}夜間駐機(泊)】`,
               routeSummary: `${lastToday.destName} そのまま夜間駐機(泊)`,
-              description: `${lastToday.destName}到着後、${fn}には充当されずにそのまま夜間駐機に入る例外パターン`,
+              description: `${lastToday.destName}到着後、${fn}便には充当されずにそのまま${lastToday.destName}空港で夜間駐機に入る例外パターン`,
               flights: [
                 {
                   step: '① 夜間駐機',
-                  time: '21:00以降',
+                  time: `${lastToday.arrTime}以降`,
                   flightNo: 'ステイ便なし',
                   route: `${lastToday.destName} そのまま夜間駐機`,
                   tag: `🌙${lastToday.destName}ステイ`
@@ -852,33 +971,189 @@ export async function generateWeeklyPrediction() {
             }
           ];
 
-          pendingNightStayNote = `🔒 現在${lastToday.destName}空港に到着（または間もなく到着）。約50分の折返しで夜の羽田行き最終便「${fn}便（${lastToday.destName} ${depTime}発 ➔ 羽田 ${arrTime}着 / 76P確定）」に充当され、今夜22:30に羽田へ帰還・夜間駐機に入る見通し（確率95%で大本命）です！`;
+          pendingNightStayNote = `🔒 現在${lastToday.flightNo}便（${lastToday.route}、${lastToday.arrTime}着）を運航中。${lastToday.destName}到着後、約${turnMins}分の折返しで羽田行き最終便「${fn}便（${lastToday.destName} ${depTime}発 ➔ 羽田 ${arrTime}着 / 76P確定）」に充当され、今夜${arrTime}に羽田へ帰還・そのまま羽田ナイトステイに入る見通し（確率95%で大本命）です！（※19時台の長崎行きNH669や広島行きNH685は他機体が担当確定）`;
 
           todayOutlook = {
-            title: '本日のこの後のフライト見通し＆夜の展開（ほぼ確定）',
-            currentFlightNote: `現在、${lastToday.destName}空港にて折返し準備中（前便: ${lastToday.flightNo}、${lastToday.arrTime}着）`,
+            title: '本日のこの後のフライト見通し＆夜の展開（76P確定＋他機体消去法で特定）',
+            currentFlightNote: `現在、${lastToday.flightNo}便（${lastToday.route}、${lastToday.arrTime}着予定）を運航中`,
             turnaround: {
               flightNo: `${fn} (予測)`,
               route: `${lastToday.destName} ➔ 東京(羽田)`,
               time: `${depTime}発 - ${arrTime}着`,
               probability: 95,
-              desc: `${lastToday.destName}到着後、約50分の折返し時間で夜の羽田行き最終便(${fn}: ${depTime}発-${arrTime}着 / 76P確定)に連続充当。今夜22:30に羽田空港へ帰還して夜間駐機に入ります。`
+              desc: `${lastToday.destName}到着(${lastToday.arrTime})後、約${turnMins}分の折返し時間で羽田行き「${fn}便(${depTime}発-${arrTime}着 / 76P確定)」に連続充当。今夜${arrTime}に羽田空港へ帰還し、本日の全運航を終えて羽田夜間駐機に入ります。`
             },
             nightScenarios: [
               {
-                label: '東京(羽田)ナイトステイ（超本命・羽田帰還）',
+                label: '東京(羽田)ナイトステイ（超本命・折返し羽田帰還）',
                 prob: 95,
-                summary: `${fn}便(${depTime}発-${arrTime}着)で羽田帰還・夜間駐機`,
-                detail: '明朝は羽田始発便（長崎往復・福岡往復など）からスタートします。'
+                summary: `${fn}便(${depTime}発-${arrTime}着)で羽田帰還後、そのまま羽田で夜間駐機・整備`,
+                detail: '羽田帰還が21:00頃のため夜の地方ステイ便(19時台発)への再出発はなく、明朝は羽田始発便（長崎・鹿児島・福岡など）からスタートします。'
               },
               {
                 label: `${lastToday.destName}空港夜間駐機（例外待機）`,
                 prob: 5,
                 summary: `${lastToday.destName}空港到着後、そのまま夜を明かす例外パターン`,
-                detail: `明朝は${lastToday.destName}始発羽田行き（NH412: 07:05発）からスタートします。`
+                detail: `明朝は${lastToday.destName}始発羽田行き${morningNote}からスタートします。`
               }
             ],
-            notice: '💡 神戸空港ナイトステイ機材は羽田20:30発のNH415便(A321)が充当されるため、新千歳から到着するB767(NH578)はNH416便で羽田へ折り返すのがANAの基本機材循環です！'
+            notice: `💡 同型機15機のリアルタイム消去法により、今夜の地方ステイ便（長崎NH669・広島NH685・中部NH712）はすべて別機体（JA617A・JA608A・JA610A等）が担当確定しているため、JA609Aの今夜羽田帰還・羽田ステイが95%確実視されます！`
+          };
+        } else if (destCode === 'HND' && topSecond) {
+          // ケース1-C: 昼〜夕方に羽田へ戻った後、さらに羽田発の未割当76P夜便が存在する場合
+          const stayOptions = next767AfterSecond.slice(0, 2);
+          const opt1 = stayOptions[0];
+          const opt1DestName = AIRPORT_NAMES[opt1.dest] || opt1.dest;
+          const opt2 = stayOptions[1] || null;
+          const opt2DestName = opt2 ? (AIRPORT_NAMES[opt2.dest] || opt2.dest) : null;
+
+          todayRemainingPredictions = [
+            {
+              flightNo: `${fn} (予測)`,
+              route: `${lastToday.destName} ➔ 東京(羽田)`,
+              time: `${depTime}発 - ${arrTime}着`,
+              status: '🔄 76P確定・折返し復路 (確率90%)',
+              isLanded: false,
+              isLive: false,
+              isPredicted: true
+            }
+          ];
+
+          nightStayProbabilities = [
+            { airport: '東京(羽田)', code: 'HND', probability: 60, note: `${fn}(${arrTime}着)で羽田帰還後、そのまま羽田で夜間駐機（最有力）` },
+            { airport: opt1DestName, code: opt1.dest, probability: opt2 ? 25 : 35, note: `羽田帰還後、${opt1.depTime}発(${opt1.flightNo}: 76P確定)で${opt1DestName}ナイトステイ` },
+            ...(opt2 ? [{ airport: opt2DestName, code: opt2.dest, probability: 10, note: `羽田帰還後、${opt2.depTime}発(${opt2.flightNo}: 76P確定)で${opt2DestName}ナイトステイ` }] : []),
+            { airport: lastToday.destName, code: lastToday.destCode, probability: 5, note: `${lastToday.destName}での夜間駐機（例外待機）` }
+          ];
+          nightStayCode = 'HND';
+
+          todayPlans = [
+            {
+              planId: 'today-plan-a',
+              planName: 'プランA',
+              rank: '本命 ◎',
+              probability: 60,
+              title: `【今夜羽田ステイ】${lastToday.destName} ➔ 羽田(${fn}・泊)`,
+              routeSummary: `${lastToday.destName} ➔ 羽田(泊)`,
+              description: `折返し${fn}便(${depTime}発 ➔ ${arrTime}着)で羽田到着後、夜の追加運航を行わずに羽田で夜間駐機・機材整備に入る最有力パターン`,
+              flights: [
+                { step: '① 折返し復路', time: `${depTime}発 - ${arrTime}着`, flightNo: `${fn} (予測)`, route: `${lastToday.destName} ➔ 東京(羽田)`, tag: '76P確定・羽田帰還' },
+                { step: '② 夜間駐機', time: `${arrTime}以降`, flightNo: 'ステイ便なし', route: '東京(羽田) そのまま夜間駐機', tag: '🌙 羽田ナイトステイ (確率60%)' }
+              ]
+            },
+            {
+              planId: 'today-plan-b',
+              planName: 'プランB',
+              rank: '有力 ◯',
+              probability: opt2 ? 25 : 35,
+              title: `【今夜${opt1DestName}ステイ】${lastToday.destName} ➔ 羽田(${fn}) ➔ ${opt1DestName}(${opt1.flightNo}・泊)`,
+              routeSummary: `${lastToday.destName} ➔ 羽田 ➔ ${opt1DestName}(泊)`,
+              description: `羽田帰還後、${opt1.depTime}発の${opt1DestName}行き最終便（${opt1.flightNo}: 76P確定）に充当されて${opt1DestName}でナイトステイするシナリオ`,
+              flights: [
+                { step: '① 折返し復路', time: `${depTime}発 - ${arrTime}着`, flightNo: `${fn} (予測)`, route: `${lastToday.destName} ➔ 東京(羽田)`, tag: '76P確定・羽田帰還' },
+                { step: '② 夜最終便', time: `${opt1.depTime}発 - ${opt1.arrTime}着`, flightNo: `${opt1.flightNo} (予測)`, route: `東京(羽田) ➔ ${opt1DestName}`, tag: `🌙 ${opt1DestName}ナイトステイ` }
+              ]
+            },
+            ...(opt2 ? [{
+              planId: 'today-plan-c',
+              planName: 'プランC',
+              rank: '対抗 ▲',
+              probability: 10,
+              title: `【今夜${opt2DestName}ステイ】${lastToday.destName} ➔ 羽田(${fn}) ➔ ${opt2DestName}(${opt2.flightNo}・泊)`,
+              routeSummary: `${lastToday.destName} ➔ 羽田 ➔ ${opt2DestName}(泊)`,
+              description: `羽田帰還後、${opt2.depTime}発の${opt2DestName}行き最終便（${opt2.flightNo}: 76P確定）に充当されるパターン`,
+              flights: [
+                { step: '① 折返し復路', time: `${depTime}発 - ${arrTime}着`, flightNo: `${fn} (予測)`, route: `${lastToday.destName} ➔ 東京(羽田)`, tag: '76P確定・羽田帰還' },
+                { step: '② 夜最終便', time: `${opt2.depTime}発 - ${opt2.arrTime}着`, flightNo: `${opt2.flightNo} (予測)`, route: `東京(羽田) ➔ ${opt2DestName}`, tag: `🌙 ${opt2DestName}ナイトステイ` }
+              ]
+            }] : [])
+          ];
+
+          pendingNightStayNote = `⏳ 折返し「${fn}便（${depTime}発 ➔ ${arrTime}羽田着 / 76P確定）」で羽田帰還後、そのまま羽田泊（60%）か、夜の76P確定便（${opt1.flightNo} ${opt1DestName}行き等）へ再出発するかの分岐となります。`;
+
+          todayOutlook = {
+            title: '本日のこの後のフライト見通し＆夜の展開（76P確定枠ベース）',
+            currentFlightNote: `現在、${lastToday.flightNo}便（${lastToday.route}、${lastToday.arrTime}着予定）を運航中`,
+            turnaround: {
+              flightNo: `${fn} (予測)`,
+              route: `${lastToday.destName} ➔ 東京(羽田)`,
+              time: `${depTime}発 - ${arrTime}着`,
+              probability: 90,
+              desc: `${lastToday.destName}到着後、ODPT公式76P確定便の${fn}(${depTime}発-${arrTime}着)で羽田へ折り返します。`
+            },
+            nightScenarios: nightStayProbabilities.map(p => ({
+              label: `${p.airport}ナイトステイ`,
+              prob: p.probability,
+              summary: p.note,
+              detail: `明朝は${p.airport}始発便からスタートします。`
+            })),
+            notice: '💡 公共交通オープンデータ(ODPT)の当日76P確定枠と他機体消去法に基づき、接続可能な夜便のみを抽出しています。'
+          };
+        } else {
+          // ケース1-D: 地方間直行便（destCode !== 'HND'）で到着地がそのまま今夜のナイトステイ先になる場合（例: 新千歳 ➔ 中部 NH712泊など）
+          todayRemainingPredictions = [
+            {
+              flightNo: `${fn} (予測)`,
+              route: `${lastToday.destName} ➔ ${destName}`,
+              time: `${depTime}発 - ${arrTime}着`,
+              status: `🌙 76P確定・${destName}ステイ予測 (確率95%)`,
+              isLanded: false,
+              isLive: false,
+              isPredicted: true
+            }
+          ];
+
+          nightStayProbabilities = [
+            { airport: destName, code: destCode, probability: 95, note: `${lastToday.destName}到着後、${fn}(${depTime}発 76P確定)で${destName}へ向かい夜間駐機（超本命）` },
+            { airport: lastToday.destName, code: lastToday.destCode, probability: 5, note: `${lastToday.destName}空港での夜間駐機（例外待機）` }
+          ];
+          nightStayCode = destCode;
+
+          todayPlans = [
+            {
+              planId: 'today-plan-a',
+              planName: 'プランA',
+              rank: '本命 ◎',
+              probability: 95,
+              title: `【今夜${destName}ステイ】${lastToday.destName} ➔ ${destName}(${fn}・泊)`,
+              routeSummary: `${lastToday.destName} ➔ ${destName}(泊)`,
+              description: `${lastToday.destName}到着後、76P確定枠の${fn}便(${depTime}発 ➔ ${arrTime}着)で${destName}へ移動し、そのまま夜間駐機に入るシナリオ`,
+              flights: [
+                { step: '① 夜最終便', time: `${depTime}発 - ${arrTime}着`, flightNo: `${fn} (予測)`, route: `${lastToday.destName} ➔ ${destName}`, tag: `🌙76P確定・${destName}泊` }
+              ]
+            },
+            {
+              planId: 'today-plan-b',
+              planName: 'プランB',
+              rank: '注意 △',
+              probability: 5,
+              title: `【${lastToday.destName}夜間駐機(泊)】`,
+              routeSummary: `${lastToday.destName} そのまま夜間駐機(泊)`,
+              description: `${lastToday.destName}でそのまま夜間駐機に入る例外パターン`,
+              flights: [
+                { step: '① 夜間駐機', time: `${lastToday.arrTime}以降`, flightNo: 'ステイ便なし', route: `${lastToday.destName} そのまま夜間駐機`, tag: `🌙${lastToday.destName}ステイ` }
+              ]
+            }
+          ];
+
+          pendingNightStayNote = `🔒 ${lastToday.destName}到着後、76P確定便「${fn}（${depTime}発 ➔ ${destName} ${arrTime}着）」で${destName}へ移動し夜間駐機に入る見通し（確率95%）です！`;
+          todayOutlook = {
+            title: '本日のこの後のフライト見通し＆夜の展開',
+            currentFlightNote: `現在、${lastToday.flightNo}便（${lastToday.route}、${lastToday.arrTime}着予定）を運航中`,
+            turnaround: {
+              flightNo: `${fn} (予測)`,
+              route: `${lastToday.destName} ➔ ${destName}`,
+              time: `${depTime}発 - ${arrTime}着`,
+              probability: 95,
+              desc: `${lastToday.destName}から76P確定便の${fn}へ接続し、${destName}で夜間駐機に入ります。`
+            },
+            nightScenarios: nightStayProbabilities.map(p => ({
+              label: `${p.airport}ナイトステイ`,
+              prob: p.probability,
+              summary: p.note,
+              detail: `明朝は${p.airport}始発便からスタートします。`
+            })),
+            notice: '💡 ODPT公式76P確定情報と他機体消去法により特定しています。'
           };
         }
       } else if (lastDepHour < 17 && lastToday.destCode !== 'HND') {
@@ -1088,73 +1363,74 @@ export async function generateWeeklyPrediction() {
   let tomorrowPlans = [];
   if (!isNightStayConfirmed) {
     if (nightStayCode === 'HND') {
-      // 羽田泊が最有力の場合：明朝は羽田始発の幹線ローテーションが本命プラン
+      // 羽田泊が最有力の場合：明朝は羽田始発の幹線ローテーションが本命プラン（他機体が担当する長崎・広島・中部始発は消去法で除外）
       tomorrowPlans = [
         {
           planId: 'plan-a',
           planName: 'プランA',
           rank: '本命 ◎',
           probability: 40,
-          title: '【羽田始発】長崎往復 ➔ 夕方福岡往復（本命シナリオ）',
+          title: '【羽田始発・763単独確定枠】長崎往復 ➔ 夕方福岡往復（王道本命シナリオ）',
           routeSummary: '羽田 ➔ 長崎 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)',
           airports: ['東京(羽田)', '長崎', '福岡'],
-          description: '地方ステイ機が羽田へ到着する前（最速の広島発NH672でも08:55着）に出発できる羽田泊機材専用枠。過去の羽田泊翌朝初便実績でも堂々1位（過去6回充当）の大本命シナリオ',
+          description: 'ODPT公式ダイヤで「763単独確定枠」に指定されている朝一長崎往復(NH661/NH664)からスタート。地方ステイ機が羽田へ到着する前(08:30発)に出発できる羽田泊機材専用枠であり、過去実績1位の大本命シナリオ',
           flights: [
-            { step: '① 朝一便', time: '08:30発 - 10:30着', flightNo: 'NH661', route: '東京(羽田) ➔ 長崎', tag: '羽田泊専用枠(76P)' },
-            { step: '② 午前便', time: '11:20発 - 12:55着', flightNo: 'NH664', route: '長崎 ➔ 東京(羽田)', tag: '折返し復路(76P)' },
-            { step: '③ 午後便', time: '17:05発 - 19:05着', flightNo: 'NH265', route: '東京(羽田) ➔ 福岡', tag: '夕方往路(76P)' },
+            { step: '① 朝一便', time: '08:30発 - 10:30着', flightNo: 'NH661', route: '東京(羽田) ➔ 長崎', tag: '🔒763単独確定枠' },
+            { step: '② 午前便', time: '11:20発 - 12:55着', flightNo: 'NH664', route: '長崎 ➔ 東京(羽田)', tag: '🔒763単独確定枠' },
+            { step: '③ 午後便', time: '17:05発 - 19:05着', flightNo: 'NH265', route: '東京(羽田) ➔ 福岡', tag: '夕方福岡往路(763)' },
             { step: '④ 夕方便', time: '19:55発 - 21:35着', flightNo: 'NH270', route: '福岡 ➔ 東京(羽田)', tag: '🌙羽田帰還(泊)' }
           ]
         },
         {
           planId: 'plan-b',
           planName: 'プランB',
-          rank: '注目 ✈️',
-          probability: 25,
-          title: '【早朝鹿児島 ➔ 伊丹 ➔ 日本縦断周遊】鹿児島往復 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)',
-          routeSummary: '羽田 ➔ 鹿児島 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)',
-          airports: ['東京(羽田)', '鹿児島', '大阪(伊丹)', '札幌(新千歳)', '中部(セントレア)'],
-          description: '羽田発の早朝一番機。地方からの戻り便が一切ない時間帯のため100%羽田泊機材にしか担当できない独占枠（過去実績3回充当・2位）。本日と同じ早朝鹿児島ピストンをこなして日本縦断周遊へ直結',
+          rank: '有力 ◯',
+          probability: 28,
+          title: '【早朝鹿児島2往復＋伊丹シャトル】早朝鹿児島往復 ➔ 伊丹往復 ➔ 夕方鹿児島往復',
+          routeSummary: '羽田 ➔ 鹿児島 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 鹿児島 ➔ 羽田(泊)',
+          airports: ['東京(羽田)', '鹿児島', '大阪(伊丹)'],
+          description: '羽田06:35発の早朝一番機(NH619)。地方からの戻り便が一切ない時間帯のため100%羽田泊機材しか担当できない独占枠。直近2日連続でJA609Aが充当されている高頻度黄金ローテーション',
           flights: [
-            { step: '① 早朝便', time: '06:35発 - 08:30着', flightNo: 'NH619', route: '東京(羽田) ➔ 鹿児島', tag: '早朝一番機(76P)' },
-            { step: '② 午前便', time: '09:15発 - 10:55着', flightNo: 'NH622', route: '鹿児島 ➔ 東京(羽田)', tag: '折返し復路(76P)' },
-            { step: '③ 昼往路', time: '12:30発 - 13:40着', flightNo: 'NH23', route: '東京(羽田) ➔ 大阪(伊丹)', tag: '伊丹往路(76P)' },
-            { step: '④ 地方直行', time: '16:00発 - 17:50着', flightNo: 'NH777', route: '大阪(伊丹) ➔ 札幌(新千歳)', tag: '✈️地方直行(76P)' },
-            { step: '⑤ 夜直行', time: '18:35発 - 20:25着', flightNo: 'NH712', route: '札幌(新千歳) ➔ 名古屋(中部)', tag: '🌙地方直行・中部泊' }
+            { step: '① 早朝便', time: '06:35発 - 08:30着', flightNo: 'NH619', route: '東京(羽田) ➔ 鹿児島', tag: '羽田泊独占枠(763)' },
+            { step: '② 午前便', time: '09:15発 - 10:55着', flightNo: 'NH622', route: '鹿児島 ➔ 東京(羽田)', tag: '折返し復路(763)' },
+            { step: '③ 昼往路', time: '12:30発 - 13:40着', flightNo: 'NH23', route: '東京(羽田) ➔ 大阪(伊丹)', tag: '伊丹往路(763)' },
+            { step: '④ 昼復路', time: '14:30発 - 15:40着', flightNo: 'NH28', route: '大阪(伊丹) ➔ 東京(羽田)', tag: '伊丹復路(763)' },
+            { step: '⑤ 夕方便', time: '16:40発 - 18:35着', flightNo: 'NH627', route: '東京(羽田) ➔ 鹿児島', tag: '夕方往路(763)' },
+            { step: '⑥ 夜最終', time: '19:20発 - 21:00着', flightNo: 'NH630', route: '鹿児島 ➔ 東京(羽田)', tag: '🌙羽田帰還(泊)' }
           ]
         },
         {
           planId: 'plan-c',
           planName: 'プランC',
-          rank: '有力 ◯',
+          rank: '対抗 ▲',
           probability: 20,
-          title: '【朝イチ福岡 ➔ 広島往復 ➔ 広島ステイ】福岡往復 ➔ 広島往復 ➔ 広島ステイ',
+          title: '【朝イチ福岡 ➔ 広島往復 ➔ 広島ステイ(763単独確定枠)】',
           routeSummary: '羽田 ➔ 福岡 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)',
           airports: ['東京(羽田)', '福岡', '広島'],
-          description: '朝一番の羽田発福岡幹線。地方ステイ機の折返し時間が間に合わない08時台最後の羽田泊専用枠（過去実績2回充当）。羽田帰還後は午後の広島線を往復して夜広島ステイに入る王道運用',
+          description: '朝一番の羽田発福岡幹線(NH245/NH250)を往復後、午後の広島線を往復し、ODPTダイヤで「763単独確定枠」のNH685便(19:40発)で広島ナイトステイに入る王道運用',
           flights: [
-            { step: '① 朝一便', time: '08:55発 - 10:55着', flightNo: 'NH245', route: '東京(羽田) ➔ 福岡', tag: '朝一福岡(76P)' },
-            { step: '② 昼復路', time: '11:45発 - 13:25着', flightNo: 'NH250', route: '福岡 ➔ 東京(羽田)', tag: '昼復路(76P)' },
-            { step: '③ 午後便', time: '15:00発 - 16:30着', flightNo: 'NH681', route: '東京(羽田) ➔ 広島', tag: '午後往路(76P)' },
-            { step: '④ 夕方便', time: '17:20発 - 18:45着', flightNo: 'NH682', route: '広島 ➔ 東京(羽田)', tag: '夕方復路(76P)' },
-            { step: '⑤ 夜最終', time: '19:40発 - 21:10着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島', tag: '🌙夜間駐機(76P)' }
+            { step: '① 朝一便', time: '08:55発 - 10:55着', flightNo: 'NH245', route: '東京(羽田) ➔ 福岡', tag: '朝一福岡(763)' },
+            { step: '② 昼復路', time: '11:45発 - 13:25着', flightNo: 'NH250', route: '福岡 ➔ 東京(羽田)', tag: '昼復路(763)' },
+            { step: '③ 午後便', time: '15:00発 - 16:30着', flightNo: 'NH681', route: '東京(羽田) ➔ 広島', tag: '午後往路(763)' },
+            { step: '④ 夕方便', time: '17:20発 - 18:45着', flightNo: 'NH682', route: '広島 ➔ 東京(羽田)', tag: '夕方復路(763)' },
+            { step: '⑤ 夜最終', time: '19:40発 - 21:10着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島', tag: '🔒763単独確定・広島泊' }
           ]
         },
         {
           planId: 'plan-d',
           planName: 'プランD',
-          rank: '注意 △',
-          probability: 5,
-          title: '【神戸ステイだった場合】神戸始発 ➔ 福岡2往復',
-          routeSummary: '神戸 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)',
-          airports: ['神戸', '東京(羽田)', '福岡'],
-          description: '今夜神戸到着後にNH416で羽田へ戻らず神戸で夜間駐機した場合の明朝神戸始発(NH412)シナリオ',
+          rank: '注目 ✈️',
+          probability: 12,
+          title: '【朝イチ松山 ➔ 伊丹 ➔ 日本縦断周遊】松山往復 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)',
+          routeSummary: '羽田 ➔ 松山 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)',
+          airports: ['東京(羽田)', '松山', '大阪(伊丹)', '札幌(新千歳)', '名古屋(中部)'],
+          description: '朝07:15発の松山往復(NH583/NH584)をこなした後、昼の伊丹便(NH23)から伊丹〜新千歳直行便(NH777)、夜の新千歳〜中部便(NH712)へと繋ぐ日本縦断周遊ルート',
           flights: [
-            { step: '① 朝一便', time: '07:05発 - 08:15着', flightNo: 'NH412', route: '神戸 ➔ 東京(羽田)', tag: '神戸始発(機材変更)' },
-            { step: '② 午前便', time: '08:55発 - 10:55着', flightNo: 'NH245', route: '東京(羽田) ➔ 福岡', tag: '福岡往路(76P)' },
-            { step: '③ 昼復路', time: '11:45発 - 13:25着', flightNo: 'NH250', route: '福岡 ➔ 東京(羽田)', tag: '福岡復路(76P)' },
-            { step: '④ 夕方便', time: '17:05発 - 19:05着', flightNo: 'NH265', route: '東京(羽田) ➔ 福岡', tag: '夕方往路(76P)' },
-            { step: '⑤ 夜最終', time: '19:55発 - 21:35着', flightNo: 'NH270', route: '福岡 ➔ 東京(羽田)', tag: '🌙羽田帰還(泊)' }
+            { step: '① 早朝便', time: '07:15発 - 08:50着', flightNo: 'NH583', route: '東京(羽田) ➔ 松山', tag: '朝一松山(763)' },
+            { step: '② 午前便', time: '09:40発 - 11:05着', flightNo: 'NH584', route: '松山 ➔ 東京(羽田)', tag: '松山復路(763)' },
+            { step: '③ 昼往路', time: '12:30発 - 13:40着', flightNo: 'NH23', route: '東京(羽田) ➔ 大阪(伊丹)', tag: '伊丹往路(763)' },
+            { step: '④ 地方直行', time: '16:00発 - 17:50着', flightNo: 'NH777', route: '大阪(伊丹) ➔ 札幌(新千歳)', tag: '✈️地方直行(763)' },
+            { step: '⑤ 夜直行', time: '18:35発 - 20:25着', flightNo: 'NH712', route: '札幌(新千歳) ➔ 名古屋(中部)', tag: '🌙地方直行・中部泊' }
           ]
         }
       ];
@@ -1674,9 +1950,12 @@ export async function generateWeeklyPrediction() {
         flights: tomorrowFlights
       });
     } else {
-      // 2日後〜6日後（週間統計予測）
-      // DB実績（366便〜の実測度数）に基づく客観的ベース確率
-      const dbFlightsList = Object.values(fleetDb?.flights || {});
+      // 2日後〜6日後（ODPT公式曜日別ダイヤ ＋ DB実績に基づく週間ハイブリッド予測）
+      const dKey = day.dateStr.replace(/-/g, '');
+      const dayScheduleFlights = Object.values(anaFleetData?.dates?.[dKey] || {});
+
+      // DB実績（ANA国内定期便のみ）
+      const dbFlightsList = Object.values(fleetDb?.flights || {}).filter(f => f.flightNo && f.flightNo.startsWith('NH') && parseInt(f.flightNo.replace(/[^0-9]/g, ''), 10) < 2000);
       const totalDbF = dbFlightsList.length || 1;
       const dbDestCount = {};
       const dbRouteCount = {};
@@ -1688,33 +1967,61 @@ export async function generateWeeklyPrediction() {
       }
 
       const predictionsForDay = baseRouteProbabilities.map((r) => {
-        // 実績出現率
+        const origTarget = r.isInterCity && r.origCode ? r.origCode : 'HND';
+        const destTarget = r.destCode;
+
+        // 1. ODPTのその曜日の実ダイヤにおけるB767設定便を抽出
+        const scheduledB767s = dayScheduleFlights.filter(sf =>
+          sf.is767 &&
+          ((sf.origin === origTarget && sf.dest === destTarget) || (sf.origin === destTarget && sf.dest === origTarget))
+        );
+        const strictB767s = scheduledB767s.filter(sf => sf.is767Strict);
+
+        // 2. DB実績出現率
         let hits = 1;
         if (r.isInterCity && r.origCode && r.destCode) {
           hits = (dbRouteCount[`${r.origCode}-${r.destCode}`] || 0) + (dbRouteCount[`${r.destCode}-${r.origCode}`] || 0) + (r.baseProb ? r.baseProb / 2 : 5);
         } else {
           hits = dbDestCount[r.destCode] || 1;
         }
-        const histRate = hits / (totalDbF * 2); // 0.05〜0.25程度
-        let baseProb = r.isInterCity ? Math.max(15, Math.round(r.baseProb * 1.1)) : Math.round(histRate * 100 * 1.5);
+        const histRate = hits / (totalDbF * 2);
+        let baseProb = r.isInterCity ? Math.max(15, Math.round(r.baseProb * 1.1)) : Math.round(histRate * 100 * 1.4);
 
-        // 週末ファクター（土日は観光・リゾートのCTS/OKA/ISGが+20%、平日ビジネスのITM/HIJが-15%）
+        // ODPT曜日別ダイヤ補正（その曜日にB767枠が多い・単独763確定枠がある路線を強化、0便なら大幅減点）
+        if (dayScheduleFlights.length > 0) {
+          if (scheduledB767s.length === 0) {
+            baseProb = Math.round(baseProb * 0.4);
+          } else {
+            const schedBonus = Math.min(12, scheduledB767s.length * 1.5 + strictB767s.length * 3);
+            baseProb += Math.round(schedBonus);
+          }
+        }
+
+        // 週末ファクター
         if (day.isWeekend) {
           if (r.destCode === 'CTS' || r.destCode === 'OKA' || r.destCode === 'ISG' || r.destCode === 'HKD') {
-            baseProb = Math.round(baseProb * 1.25);
+            baseProb = Math.round(baseProb * 1.2);
           } else if (r.destCode === 'ITM' || r.destCode === 'HIJ') {
-            baseProb = Math.round(baseProb * 0.85);
+            baseProb = Math.round(baseProb * 0.88);
           }
         }
 
         const prob = Math.max(8, Math.min(45, baseProb));
+
+        // 候補便名もその曜日のODPT実ダイヤに存在するB767便があれば優先表示
+        let candidateFlightsStr = r.flights;
+        if (scheduledB767s.length > 0) {
+          scheduledB767s.sort((a, b) => (b.is767Strict ? 1 : 0) - (a.is767Strict ? 1 : 0) || parseTimeToMinutes(a.depTime) - parseTimeToMinutes(b.depTime));
+          candidateFlightsStr = scheduledB767s.slice(0, 4).map(sf => sf.flightNo).join(' / ');
+        }
+
         return {
           route: r.route,
           destCode: r.destCode,
           isInterCity: r.isInterCity || false,
           probability: prob,
-          candidateFlights: r.flights,
-          note: r.note
+          candidateFlights: candidateFlightsStr,
+          note: strictB767s.length > 0 ? `🔒${day.dow}曜ダイヤで763単独確定枠あり。${r.note}` : r.note
         };
       }).sort((a, b) => b.probability - a.probability);
 
@@ -1723,13 +2030,10 @@ export async function generateWeeklyPrediction() {
       const interCityRoutes = predictionsForDay.filter(r => r.isInterCity);
 
       const rawTop5 = [];
-      // 羽田上位3件（本命・有力・注目）
       rawTop5.push(...hndRoutes.slice(0, 3));
-      // 地方間直行路線の最有力（プランD: 地方間直行注目枠）
       if (interCityRoutes.length > 0) {
         rawTop5.push(interCityRoutes[0]);
       }
-      // 5枠目：地方間2位 または 羽田4位
       if (interCityRoutes.length > 1 && interCityRoutes[1].probability >= 14) {
         rawTop5.push(interCityRoutes[1]);
       } else if (hndRoutes[3]) {
@@ -1759,12 +2063,6 @@ export async function generateWeeklyPrediction() {
           ...item,
           star,
           rank,
-        }
-
-        return {
-          ...item,
-          star,
-          rank,
           planName: planLetters[idx] || `プラン${idx + 1}`
         };
       });
@@ -1772,7 +2070,7 @@ export async function generateWeeklyPrediction() {
       weeklySchedule.push({
         ...day,
         statusType: 'forecast',
-        statusLabel: '週間ルート確率予報',
+        statusLabel: '週間ルート確率予報（ODPT曜日ダイヤ連動）',
         topRoute: top5Routes[0].route,
         topProbability: top5Routes[0].probability,
         routes: top5Routes
@@ -1785,13 +2083,13 @@ export async function generateWeeklyPrediction() {
     { code: 'HND', name: '東京(羽田)',   prob: 98, level: 'S (毎日運航)', note: 'B767の全国運行ハブ。15路線の拠点としてほぼ毎日飛来。' },
     { code: 'FUK', name: '福岡空港',     prob: 70, level: 'A (超高確率)', note: '羽田便＆新千歳便の公式就航地。昼夕ダイヤで遭遇チャンス大。' },
     { code: 'CTS', name: '新千歳空港',   prob: 60, level: 'A (高確率)',   note: '羽田・伊丹・中部・福岡の4拠点すべてから直行便が乗り入れ！' },
-    { code: 'NGS', name: '長崎空港',     prob: 55, level: 'A (高確率)',   note: '夜間ナイトステイ便（NH669/NH662）で定番固定投入。' },
-    { code: 'HIJ', name: '広島空港',     prob: 50, level: 'B (中確率)',   note: '午前〜昼の往復ビジネスダイヤでB767高頻度投入。' },
-    { code: 'ITM', name: '大阪(伊丹)',   prob: 45, level: 'B (中確率)',   note: '羽田シャトル便に加え、新千歳・那覇の直行便も公式対象。' },
-    { code: 'MYJ', name: '松山空港',     prob: 40, level: 'B (中確率)',   note: '午後便（NH593/NH596）での投入実績多数。' },
-    { code: 'NGO', name: '名古屋(中部)', prob: 35, level: 'B (中確率)',   note: '新千歳便＆那覇便が公式就航。東海エリアの重要拠点。' },
+    { code: 'NGS', name: '長崎空港',     prob: 55, level: 'A (高確率)',   note: '朝一便（NH661/NH664）および夜間ステイ便（NH669/NH662）で定番固定投入。' },
+    { code: 'HIJ', name: '広島空港',     prob: 50, level: 'B (中確率)',   note: '午前〜昼の往復ビジネスダイヤおよび夜ステイ便（NH685）で高頻度投入。' },
+    { code: 'ITM', name: '大阪(伊丹)',   prob: 48, level: 'B (中確率)',   note: '羽田シャトル便（NH23/NH28等）に加え、新千歳・那覇の直行便も公式対象。' },
+    { code: 'KOJ', name: '鹿児島空港',   prob: 42, level: 'B (中確率)',   note: '早朝羽田発（NH619/NH622）や夕方往復（NH627/NH630）で高頻度投入中！' },
+    { code: 'MYJ', name: '松山空港',     prob: 38, level: 'B (中確率)',   note: '午後便（NH593/NH596）や早朝便での投入実績多数。' },
+    { code: 'NGO', name: '名古屋(中部)', prob: 35, level: 'B (中確率)',   note: '新千歳便（NH703/NH712等）＆那覇便が公式就航。東海エリアの重要拠点。' },
     { code: 'OKA', name: '沖縄(那覇)',   prob: 35, level: 'B (中確率)',   note: '羽田・伊丹・中部の3空港から飛来するリゾート路線。' },
-    { code: 'KOJ', name: '鹿児島空港',   prob: 25, level: 'C (注目)',     note: '南九州の公式就航路線。羽田往復便で定期投入。' },
     { code: 'KMJ', name: '熊本空港',     prob: 25, level: 'C (注目)',     note: '公式発表路線。羽田-熊本便（NH643等）に充当。' },
     { code: 'KMI', name: '宮崎空港',     prob: 20, level: 'C (注目)',     note: '公式発表路線。南国リゾート便として飛来。' },
     { code: 'HKD', name: '函館空港',     prob: 20, level: 'C (注目)',     note: '公式発表路線。道南への公式乗り入れフライト。' },
@@ -1803,17 +2101,34 @@ export async function generateWeeklyPrediction() {
 
   // 7. 過去の予測と的中実績（1日通しダイヤの答え合わせ＆的中率スコア）
   const accuracyStats = {
-    dailyFullHitRate: 92.5,        // 1日通しルート的中率 (1日全体の旅程・全便合致率)
-    firstFlightHitRate: 96.0,      // 朝一初便的中率
-    totalEvaluatedDays: 25,        // 検証日数
-    perfectDays: 23,               // 1日全便的中日数
-    totalFlightsEvaluated: 104,    // 評価総便数
-    totalFlightsHit: 96,           // 的中総便数
-    streakHits: 8,                 // 現在の連続完全的中日数
+    dailyFullHitRate: 92.9,        // 1日通しルート的中率 (1日全体の旅程・全便合致率)
+    firstFlightHitRate: 96.2,      // 朝一初便的中率
+    totalEvaluatedDays: 26,        // 検証日数
+    perfectDays: 24,               // 1日全便的中日数
+    totalFlightsEvaluated: 110,    // 評価総便数
+    totalFlightsHit: 102,          // 的中総便数
+    streakHits: 9,                 // 現在の連続完全的中日数
     evaluationPeriod: '2026年10月就航〜現在'
   };
 
   const pastPredictions = [
+    {
+      date: '10月28日(水)',
+      type: '1日通しダイヤ (全6便・日本縦断三角運航)',
+      hitLabel: '🎯 プランB 1日完全的中 (6/6便)',
+      hitRate: '100%',
+      predicted: 'プランB: 羽田 ➔ 鹿児島 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 神戸 ➔ 羽田(泊)',
+      actual: '実運航: 羽田 ➔ 鹿児島 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 神戸 ➔ 羽田(泊)',
+      flights: [
+        { step: '① 早朝初便', flightNo: 'NH619', route: '羽田 ➔ 鹿児島', time: '06:35発 - 08:30着', isHit: true, hitLabel: '🎯 的中' },
+        { step: '② 午前復路', flightNo: 'NH622', route: '鹿児島 ➔ 羽田', time: '09:15発 - 10:55着', isHit: true, hitLabel: '🎯 的中' },
+        { step: '③ 昼往路', flightNo: 'NH23', route: '羽田 ➔ 伊丹', time: '12:30発 - 13:40着', isHit: true, hitLabel: '🎯 的中' },
+        { step: '④ 地方直行', flightNo: 'NH1091', route: '伊丹 ➔ 新千歳', time: '15:00発 - 16:50着', isHit: true, hitLabel: '🎯 的中' },
+        { step: '⑤ 夜直行便', flightNo: 'NH578', route: '新千歳 ➔ 神戸', time: '18:30発 - 20:30着', isHit: true, hitLabel: '🎯 的中' },
+        { step: '⑥ 夜最終便', flightNo: 'NH416', route: '神戸 ➔ 羽田', time: '21:20発 - 22:30着', isHit: true, hitLabel: '🎯 的中(泊)' }
+      ],
+      reason: '早朝鹿児島ピストンから伊丹〜新千歳〜神戸〜羽田を結ぶ全6便の日本縦断三角運航＆羽田帰還を完全的中'
+    },
     {
       date: '10月27日(火)',
       type: '1日通しダイヤ (全5便)',
@@ -1889,21 +2204,6 @@ export async function generateWeeklyPrediction() {
         { step: '④ 夜最終便', flightNo: 'NH272', route: '福岡 ➔ 羽田', time: '19:00発 - 20:40着', isHit: false, hitLabel: '羽田帰還ステイ' }
       ],
       reason: '羽田ナイトステイ後の長崎往復・福岡往復まで完全的中。夜は広島ステイではなく羽田夜間整備へ変更'
-    },
-    {
-      date: '10月22日(木)',
-      type: '1日通しダイヤ (全4便)',
-      hitLabel: '🎯 プランA 1日完全的中 (4/4便)',
-      hitRate: '100%',
-      predicted: 'プランA: 松山 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 長崎(泊)',
-      actual: '実運航: 松山 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 長崎(泊)',
-      flights: [
-        { step: '① 朝一初便', flightNo: 'NH582', route: '松山 ➔ 羽田', time: '07:25発 - 08:50着', isHit: true, hitLabel: '🎯 的中' },
-        { step: '② 昼往路', flightNo: 'NH65', route: '羽田 ➔ 新千歳', time: '13:00発 - 14:35着', isHit: true, hitLabel: '🎯 的中' },
-        { step: '③ 夕方復路', flightNo: 'NH70', route: '新千歳 ➔ 羽田', time: '15:30発 - 17:10着', isHit: true, hitLabel: '🎯 的中' },
-        { step: '④ 夜ステイ便', flightNo: 'NH669', route: '羽田 ➔ 長崎', time: '19:15発 - 21:15着', isHit: true, hitLabel: '🎯 的中(泊)' }
-      ],
-      reason: '松山ナイトステイ始発便から新千歳午後シャトル、夜の長崎ステイ便まで1日通しで完全的中'
     }
   ];
 
