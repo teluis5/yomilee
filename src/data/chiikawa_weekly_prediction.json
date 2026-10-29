@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年10月29日 10:01",
-  "updatedAtIso": "2026-10-29T01:01:08.860Z",
+  "updatedAt": "2026年10月29日 11:01",
+  "updatedAtIso": "2026-10-29T02:01:09.646Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "鹿児島 ➔ 東京(羽田) へ飛行中",
+    "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "東京(羽田) (95%) / 大阪(伊丹) (4%) / 東京(羽田) (1%) [今夜の駐機確率]",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
@@ -321,7 +321,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降予測）",
-      "currentAirport": "鹿児島 ➔ 東京(羽田) へ飛行中",
+      "currentAirport": "東京(羽田)",
       "nightStay": "東京(羽田) (95%) / 大阪(伊丹) (4%) / 東京(羽田) (1%) [今夜の駐機確率]",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "🔒 現在NH622便で神戸へ飛行中。神戸到着（20:30）後、約50分の折返しで夜の羽田行き最終便「NH416便（神戸 21:20発 ➔ 羽田 22:30着 / 76P確定）」に充当され、今夜22:30に羽田へ帰還・夜間駐機に入る見通し（確率95%で大本命）です！",
@@ -502,9 +502,9 @@
             "flightNo": "NH622",
             "route": "鹿児島 ➔ 東京(羽田)",
             "time": "09:15発 - 10:55着",
-            "status": "飛行中 ✈️",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (10:50)",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -579,9 +579,9 @@
           "flightNo": "NH622",
           "route": "鹿児島 ➔ 東京(羽田)",
           "time": "09:15発 - 10:55着",
-          "status": "飛行中 ✈️",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (10:50)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         }
       ]
@@ -1319,7 +1319,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 424,
+    "totalFleetFlights": 431,
     "fleetCount": 15
   }
 }
