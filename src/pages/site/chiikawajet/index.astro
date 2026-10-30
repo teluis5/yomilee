@@ -343,36 +343,6 @@ const pageSchema = {
 				))}
 			</div>
 		</section>
-				<div class="acc-pills">
-					<span class="acc-pill">1日的中率 <b>{accuracyStats.dailyFullHitRate}%</b></span>
-					<span class="acc-pill">初便的中率 <b>{accuracyStats.firstFlightHitRate}%</b></span>
-				</div>
-			</div>
-
-			<div class="past-stack">
-				{pastPredictions.slice(0, 3).map((p) => (
-					<div class="past-card">
-						<div class="pc-head">
-							<span class="pc-date">{p.date}</span>
-							<span class="pc-route">{p.actual.replace('実運航: ', '')}</span>
-							<span class="pc-badge">{p.hitLabel}</span>
-						</div>
-						{p.flights && (
-							<div class="pc-flights">
-								{p.flights.map((f) => (
-									<div class={`pcf-chip ${f.isHit ? 'hit' : 'miss'}`}>
-										<span class="pcf-no">{f.flightNo}</span>
-										<span class="pcf-rt">{f.route}</span>
-										{f.time && <span style="color: #64748b; font-size: 0.72rem;">({f.time.replace(/発 - /g, '-').replace(/着/g, '')})</span>}
-										<span class="pcf-res">{f.isHit ? '◯' : '△'}</span>
-									</div>
-								))}
-							</div>
-						)}
-					</div>
-				))}
-			</div>
-		</section>
 	</div>
 </Layout>
 
