@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年10月30日 21:00",
-  "updatedAtIso": "2026-10-30T12:00:27.458Z",
+  "updatedAt": "2026年10月30日 21:34",
+  "updatedAtIso": "2026-10-30T12:35:07.935Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
@@ -462,11 +462,7 @@
         },
         {
           "step": "#5",
-          "planA": {
-            "flightNo": "NH39",
-            "route": "東京(羽田) ➔ 大阪(伊丹)",
-            "time": "19:00発 - 20:20着"
-          },
+          "planA": null,
           "planB": {
             "flightNo": "NH669",
             "route": "東京(羽田) ➔ 長崎",
@@ -574,7 +570,7 @@
           "rank": "本命 ◎",
           "probability": 41,
           "title": "大阪(伊丹)始発 ➔ 福岡往復 ➔ 長崎ステイ",
-          "routeSummary": "大阪(伊丹) ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 長崎(泊)",
+          "routeSummary": "伊丹 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 長崎(泊)",
           "airports": [
             "大阪(伊丹)",
             "東京(羽田)",
@@ -592,7 +588,9 @@
               "isConfirmedFirst": true,
               "model": "788/763",
               "is767Confirmed": true,
-              "is767Strict": false
+              "is767Strict": false,
+              "orig": "ITM",
+              "dest": "HND"
             },
             {
               "step": "② 午前便",
@@ -602,7 +600,9 @@
               "tag": "午前往路",
               "model": "772",
               "is767Confirmed": false,
-              "is767Strict": false
+              "is767Strict": false,
+              "orig": "HND",
+              "dest": "FUK"
             },
             {
               "step": "③ 午後便",
@@ -612,19 +612,24 @@
               "tag": "昼復路",
               "model": "772",
               "is767Confirmed": false,
-              "is767Strict": false
+              "is767Strict": false,
+              "orig": "FUK",
+              "dest": "HND"
             },
             {
               "step": "④ 夜最終",
               "time": "19:15発 - 21:15着",
               "flightNo": "NH669",
               "route": "東京(羽田) ➔ 長崎",
-              "tag": "🌙夜間駐機",
+              "tag": "🌙長崎ナイトステイ(泊)",
               "model": "788/763",
               "is767Confirmed": true,
-              "is767Strict": false
+              "is767Strict": false,
+              "orig": "HND",
+              "dest": "NGS"
             }
-          ]
+          ],
+          "stayCode": "NGS"
         },
         {
           "planId": "plan-b",
@@ -632,7 +637,7 @@
           "rank": "有力 ◯",
           "probability": 40,
           "title": "大阪(伊丹)始発 ➔ 広島往復 ➔ 松山往復",
-          "routeSummary": "大阪(伊丹) ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 松山 ➔ 羽田",
+          "routeSummary": "伊丹 ➔ 羽田 ➔ 広島(泊)",
           "airports": [
             "大阪(伊丹)",
             "東京(羽田)",
@@ -650,7 +655,9 @@
               "isConfirmedFirst": true,
               "model": "788/763",
               "is767Confirmed": true,
-              "is767Strict": false
+              "is767Strict": false,
+              "orig": "ITM",
+              "dest": "HND"
             },
             {
               "step": "② 午前便",
@@ -660,36 +667,12 @@
               "tag": "午前往路",
               "model": "763",
               "is767Confirmed": true,
-              "is767Strict": true
-            },
-            {
-              "step": "③ 昼復路",
-              "time": "12:45発 - 14:05着",
-              "flightNo": "NH682",
-              "route": "広島 ➔ 東京(羽田)",
-              "tag": "昼復路"
-            },
-            {
-              "step": "④ 午後便",
-              "time": "17:25発 - 19:00着",
-              "flightNo": "NH595",
-              "route": "東京(羽田) ➔ 松山",
-              "tag": "午後往路",
-              "model": "788",
-              "is767Confirmed": false,
-              "is767Strict": false
-            },
-            {
-              "step": "⑤ 夜最終",
-              "time": "19:50発 - 21:15着",
-              "flightNo": "NH598",
-              "route": "松山 ➔ 東京(羽田)",
-              "tag": "🌙羽田帰還",
-              "model": "788",
-              "is767Confirmed": false,
-              "is767Strict": false
+              "is767Strict": true,
+              "orig": "HND",
+              "dest": "HIJ"
             }
-          ]
+          ],
+          "stayCode": "HIJ"
         },
         {
           "planId": "plan-c",
@@ -697,7 +680,7 @@
           "rank": "対抗 ▲",
           "probability": 19,
           "title": "大阪(伊丹)始発 ➔ 新千歳往復 ➔ 伊丹往復",
-          "routeSummary": "大阪(伊丹) ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 伊丹 ➔ 羽田",
+          "routeSummary": "伊丹 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 伊丹 ➔ 羽田(泊)",
           "airports": [
             "大阪(伊丹)",
             "東京(羽田)",
@@ -715,7 +698,9 @@
               "isConfirmedFirst": true,
               "model": "788/763",
               "is767Confirmed": true,
-              "is767Strict": false
+              "is767Strict": false,
+              "orig": "ITM",
+              "dest": "HND"
             },
             {
               "step": "② 午前便",
@@ -725,7 +710,9 @@
               "tag": "午前往路",
               "model": "772",
               "is767Confirmed": false,
-              "is767Strict": false
+              "is767Strict": false,
+              "orig": "HND",
+              "dest": "CTS"
             },
             {
               "step": "③ 午後便",
@@ -735,7 +722,9 @@
               "tag": "昼復路",
               "model": "772",
               "is767Confirmed": false,
-              "is767Strict": false
+              "is767Strict": false,
+              "orig": "CTS",
+              "dest": "HND"
             },
             {
               "step": "④ 夕方便",
@@ -745,19 +734,24 @@
               "tag": "夕方往路",
               "model": "321",
               "is767Confirmed": false,
-              "is767Strict": false
+              "is767Strict": false,
+              "orig": "HND",
+              "dest": "ITM"
             },
             {
               "step": "⑤ 夜最終",
               "time": "17:50発 - 19:05着",
               "flightNo": "NH36",
               "route": "大阪(伊丹) ➔ 東京(羽田)",
-              "tag": "🌙羽田帰還",
+              "tag": "🌙76P確定・羽田帰還(泊)",
               "model": "781",
               "is767Confirmed": false,
-              "is767Strict": false
+              "is767Strict": false,
+              "orig": "ITM",
+              "dest": "HND"
             }
-          ]
+          ],
+          "stayCode": "HND"
         }
       ],
       "flights": [
@@ -1272,7 +1266,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 533,
+    "totalFleetFlights": 535,
     "fleetCount": 15
   }
 }
