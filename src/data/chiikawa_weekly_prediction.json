@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年10月30日 17:00",
-  "updatedAtIso": "2026-10-30T08:00:25.635Z",
+  "updatedAt": "2026年10月30日 18:00",
+  "updatedAtIso": "2026-10-30T09:00:26.177Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "広島 ➔ 東京(羽田) へ飛行中",
+    "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "大阪(伊丹) (95%) / 東京(羽田) (5%) [今夜の駐機確率]",
     "nightStayCode": "ITM",
     "isNightStayConfirmed": false,
@@ -331,7 +331,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降予測）",
-      "currentAirport": "広島 ➔ 東京(羽田) へ飛行中",
+      "currentAirport": "東京(羽田)",
       "nightStay": "大阪(伊丹) (95%) / 東京(羽田) (5%) [今夜の駐機確率]",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "🔒 東京(羽田)到着後、76P確定便「NH39（19:00発 ➔ 大阪(伊丹) 20:20着）」で大阪(伊丹)へ移動し夜間駐機に入る見通し（確率95%）です！",
@@ -527,9 +527,9 @@
             "flightNo": "NH680",
             "route": "広島 ➔ 東京(羽田)",
             "time": "16:15発 - 17:40着",
-            "status": "飛行中 ✈️",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (17:24)",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -595,9 +595,9 @@
           "flightNo": "NH680",
           "route": "広島 ➔ 東京(羽田)",
           "time": "16:15発 - 17:40着",
-          "status": "飛行中 ✈️",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (17:24)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -969,23 +969,23 @@
           "planName": "プランA"
         },
         {
+          "route": "羽田 ➔ 広島 / 広島 ➔ 羽田",
+          "destCode": "HIJ",
+          "isInterCity": false,
+          "probability": 22,
+          "candidateFlights": "NH672 / NH685 / NH681 / NH682",
+          "note": "🔒火曜ダイヤで763単独確定枠あり。B767の主力ビジネス路線。安定したデイリー運用",
+          "star": "★★★★☆",
+          "rank": "有力 ◯",
+          "planName": "プランB"
+        },
+        {
           "route": "羽田 ➔ 新千歳 / 新千歳 ➔ 羽田",
           "destCode": "CTS",
           "isInterCity": false,
           "probability": 22,
           "candidateFlights": "NH59 / NH62 / NH69 / NH74",
           "note": "北海道幹線。大型機サポートや週末に高頻度充当",
-          "star": "★★★★☆",
-          "rank": "有力 ◯",
-          "planName": "プランB"
-        },
-        {
-          "route": "羽田 ➔ 広島 / 広島 ➔ 羽田",
-          "destCode": "HIJ",
-          "isInterCity": false,
-          "probability": 21,
-          "candidateFlights": "NH672 / NH685 / NH681 / NH682",
-          "note": "🔒火曜ダイヤで763単独確定枠あり。B767の主力ビジネス路線。安定したデイリー運用",
           "star": "★★★★☆",
           "rank": "有力 ◯",
           "planName": "プランC"
@@ -1277,7 +1277,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 519,
+    "totalFleetFlights": 524,
     "fleetCount": 15
   }
 }
