@@ -188,38 +188,72 @@ const pageSchema = {
 			</section>
 		)}
 
-		<!-- ③ 明日以降の予定（週間ルート予想） -->
+		<!-- ③ 明日以降の予定（週間タイムテーブル連鎖予想） -->
 		{forecastDays.length > 0 && (
 			<section class="dash-section">
 				<div class="sec-head">
-					<h2 class="sec-title">明日以降の予定（週間ルート予想）</h2>
-					<span class="sec-sub-note">タップで上位候補プランA〜Eを表示</span>
+					<h2 class="sec-title">明日以降の予定（週間連鎖タイムテーブル予想）</h2>
+					<span class="sec-sub-note">タップで各日のプランA〜C詳細フライトを展開</span>
 				</div>
 
 				<div class="forecast-stack">
-					{forecastDays.map((day) => (
-						<details class="forecast-day">
-							<summary class="fd-summary">
-								<div class="fd-left">
-									<span class="fd-date">{day.dateJa}</span>
-									<span class="fd-top">
-										最有力: <b>{day.routes[0]?.route.split(' / ')[0]}</b> ({day.routes[0]?.probability}%)
-									</span>
-								</div>
-								<span class="fd-toggle">詳細 ▾</span>
-							</summary>
-							<div class="fd-body">
-								{day.routes.map((r) => (
-									<div class="fd-row">
-										<span class="fd-plan">{r.planName}</span>
-										<span class="fd-prob">{r.probability}%</span>
-										<span class="fd-route">{r.route.split(' / ')[0]}</span>
-										<span class="fd-flights">{r.candidateFlights}</span>
+					{forecastDays.map((day) => {
+						const hasPlans = Array.isArray(day.plans) && day.plans.length > 0;
+						const topPlan = hasPlans ? day.plans[0] : null;
+						const topSummary = topPlan ? (topPlan.routeSummary || topPlan.title) : (day.routes?.[0]?.route?.split(' / ')[0] || '');
+						const topProb = topPlan ? topPlan.probability : (day.routes?.[0]?.probability || 35);
+
+						return (
+							<details class="forecast-day">
+								<summary class="fd-summary">
+									<div class="fd-left">
+										<span class="fd-date">{day.dateJa}</span>
+										<span class="fd-top">
+											本命スジ: <b>{topSummary}</b> ({topProb}%)
+										</span>
 									</div>
-								))}
-							</div>
-						</details>
-					))}
+									<span class="fd-toggle">タイムテーブル ▾</span>
+								</summary>
+								<div class="fd-body">
+									{hasPlans ? (
+										<div class="plans-stack" style="margin-top: 0.35rem;">
+											{day.plans.map((plan, pIdx) => (
+												<div class="plan-box" style="margin-bottom: 0.6rem; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.6rem 0.75rem;">
+													<div class="plan-head" style="display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.35rem;">
+														<span class={`plan-badge p-${pIdx}`} style="font-weight: 700; font-size: 0.78rem;">{plan.planName}</span>
+														<span class="plan-prob" style="font-size: 0.85rem; font-weight: 700; color: #2563eb;">{plan.probability}%</span>
+														<span class="plan-flow" style="font-size: 0.8rem; color: #1e293b; font-weight: 600;">{plan.title || plan.routeSummary}</span>
+													</div>
+													{plan.description && (
+														<p style="font-size: 0.75rem; color: #64748b; margin: 0.2rem 0 0.4rem; line-height: 1.4;">
+															{plan.description}
+														</p>
+													)}
+													{plan.flights && plan.flights.map((f) => (
+														<div class="plan-fl-row" style="font-size: 0.78rem; padding: 0.25rem 0; display: flex; align-items: center; gap: 0.4rem; border-top: 1px dashed #f1f5f9;">
+															<span class="pf-step" style="color: #64748b; font-size: 0.72rem; min-width: 48px;">{f.step}</span>
+															<span class="pf-time" style="color: #334155; font-family: monospace; font-size: 0.76rem; min-width: 86px;">{f.time?.replace(/発 - /g, ' - ').replace(/着/g, '')}</span>
+															<span class="pf-no" style="font-weight: 700; color: #0f172a; min-width: 52px;">{f.flightNo}</span>
+															<span class="pf-route" style="color: #1e293b; flex: 1;">{f.route} {f.tag ? `[${f.tag}]` : ''}</span>
+														</div>
+													))}
+												</div>
+											))}
+										</div>
+									) : (
+										day.routes && day.routes.map((r) => (
+											<div class="fd-row">
+												<span class="fd-plan">{r.planName}</span>
+												<span class="fd-prob">{r.probability}%</span>
+												<span class="fd-route">{r.route.split(' / ')[0]}</span>
+												<span class="fd-flights">{r.candidateFlights}</span>
+											</div>
+										))
+									)}
+								</div>
+							</details>
+						);
+					})}
 				</div>
 			</section>
 		)}
