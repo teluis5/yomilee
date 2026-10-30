@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年10月30日 20:00",
-  "updatedAtIso": "2026-10-30T11:00:30.230Z",
+  "updatedAt": "2026年10月30日 21:00",
+  "updatedAtIso": "2026-10-30T12:00:27.458Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "東京(羽田) ➔ 大阪(伊丹) へ飛行中",
+    "currentLocation": "大阪(伊丹)",
     "currentLocationCode": "ITM",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "大阪(伊丹)（確定）",
     "nightStayCode": "ITM",
     "isNightStayConfirmed": true,
@@ -326,7 +326,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降予測）",
-      "currentAirport": "東京(羽田) ➔ 大阪(伊丹) へ飛行中",
+      "currentAirport": "大阪(伊丹)",
       "nightStay": "大阪(伊丹)（確定）",
       "isNightStayConfirmed": true,
       "pendingNightStayNote": null,
@@ -481,9 +481,9 @@
             "flightNo": "NH39",
             "route": "東京(羽田) ➔ 大阪(伊丹)",
             "time": "19:00発 - 20:20着",
-            "status": "飛行中 ✈️",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (20:22)",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -539,9 +539,9 @@
           "flightNo": "NH39",
           "route": "東京(羽田) ➔ 大阪(伊丹)",
           "time": "19:00発 - 20:20着",
-          "status": "飛行中 ✈️",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (20:22)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         }
       ]
@@ -1272,7 +1272,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 531,
+    "totalFleetFlights": 533,
     "fleetCount": 15
   }
 }
