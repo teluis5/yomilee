@@ -145,7 +145,11 @@ const pageSchema = {
 			<section class="dash-section">
 				<div class="sec-head">
 					<h2 class="sec-title">明日の予定（{tomorrowData.dateJa}）</h2>
-					<span class="sec-sub-note">客観推定確率（ANA公式76P枠・実績連動）</span>
+					<span class="sec-sub-note">今日の宿泊地シナリオ＆ANA公式76P枠連動</span>
+				</div>
+
+				<div style="font-size: 0.82rem; color: #475569; margin: -0.25rem 0 0.85rem; line-height: 1.5; background: #f0f9ff; padding: 0.55rem 0.8rem; border-radius: 6px; border-left: 3px solid #0284c7;">
+					💡 <b>宿泊地連動予報</b>: 今夜の最終宿泊地（羽田60% / 広島25% / 長崎15%）の展開に応じて、明朝の出発地（羽田・広島・長崎）が連動して決まります。各宿泊先シナリオに対応した翌日の運航スジを展開しています。
 				</div>
 
 				{tomorrowData.confirmedFirstFlight && (
@@ -164,17 +168,22 @@ const pageSchema = {
 								<div class="ph-left">
 									<span class={`plan-badge p-${idx}`}>{plan.planName}</span>
 									<span class="plan-prob">{plan.probability}%</span>
-									<span class="plan-flow">{plan.routeSummary}</span>
+									<span class="plan-flow">{plan.title || plan.routeSummary}</span>
 								</div>
 								<span class="ph-toggle">内訳 ▾</span>
 							</summary>
 							<div class="plan-body">
+								{plan.description && (
+									<p style="font-size: 0.8rem; color: #475569; margin: 0.35rem 0 0.5rem; line-height: 1.45;">
+										{plan.description}
+									</p>
+								)}
 								{plan.flights.map((f) => (
 									<div class="plan-fl-row">
 										<span class="pf-step">{f.step}</span>
 										<span class="pf-time">{f.time.replace(/発 - /g, ' - ').replace(/着/g, '')}</span>
 										<span class="pf-no">{f.flightNo}</span>
-										<span class="pf-route">{f.route}</span>
+										<span class="pf-route">{f.route} {f.tag ? `[${f.tag}]` : ''}</span>
 									</div>
 								))}
 							</div>
