@@ -320,8 +320,11 @@ function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData, minDepMinutes =
           return m >= minDepMinutes && m <= minDepMinutes + 120; // 2時間以内の折り返し
         });
         if (validTurnaroundCandidates.length === 0) {
-          // 2時間以内がない場合は、直近の出発便（待機時間最小）
-          validTurnaroundCandidates = candidates.filter(f => parseTimeToMinutes(f.depTime) >= minDepMinutes);
+          // 2時間以内がない場合は、直近の出発便（前便から最大180分・3時間以内）
+          validTurnaroundCandidates = candidates.filter(f => {
+            const m = parseTimeToMinutes(f.depTime);
+            return m >= minDepMinutes && m <= minDepMinutes + 180;
+          });
         }
       }
 
@@ -332,12 +335,18 @@ function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData, minDepMinutes =
 
       if (searchPool.length > 0) {
         const prefMins = Math.max(parseTimeToMinutes(flight.time || '12:00'), minDepMinutes);
-        searchPool.sort((a, b) => {
-          const diffA = Math.abs(parseTimeToMinutes(a.depTime) - prefMins);
-          const diffB = Math.abs(parseTimeToMinutes(b.depTime) - prefMins);
-          return diffA - diffB;
-        });
-        anaInfo = searchPool[0];
+        // 元の予定時刻から最大150分（2.5時間）以内の便に限定（夜便への極端なワープを完全防止）
+        const withinWindow = searchPool.filter(f => Math.abs(parseTimeToMinutes(f.depTime) - prefMins) <= 150);
+        const finalPool = withinWindow.length > 0 ? withinWindow : searchPool.filter(f => Math.abs(parseTimeToMinutes(f.depTime) - prefMins) <= 240);
+
+        if (finalPool.length > 0) {
+          finalPool.sort((a, b) => {
+            const diffA = Math.abs(parseTimeToMinutes(a.depTime) - prefMins);
+            const diffB = Math.abs(parseTimeToMinutes(b.depTime) - prefMins);
+            return diffA - diffB;
+          });
+          anaInfo = finalPool[0];
+        }
       }
     }
   }
@@ -1832,32 +1841,31 @@ export async function generateWeeklyPrediction() {
         planId: 'plan-a',
         planName: 'プランA',
         rank: '本命 ◎',
-        probability: 50,
-        title: `${origName1}始発 ➔ 広島往復 ➔ 松山往復`,
-        routeSummary: `${origName1} ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 松山 ➔ 羽田`,
-        airports: [origName1, '東京(羽田)', '広島', '松山'],
-        description: `${origName1}からの朝一始発便（95%確定）で羽田到着後、広島と松山を巡る王道ローテーション`,
+        probability: 45,
+        title: `${origName1}始発 ➔ 松山往復 ➔ 広島ステイ(763確定枠)`,
+        routeSummary: `${origName1} ➔ 羽田 ➔ 松山 ➔ 羽田 ➔ 広島(泊)`,
+        airports: [origName1, '東京(羽田)', '松山', '広島'],
+        description: `${origName1}からの朝一始発便（95%確定）で羽田到着後、昼の松山往復を経て、夜はODPT公式763確定枠の広島便(NH685)で広島ナイトステイへ入る大本命ローテーション`,
         flights: [
           { step: '① 朝一便', time: `${standard1.depTime}発 - ${standard1.arrTime}着`, flightNo: standard1.flightNo, route: `${origName1} ➔ ${destName1}`, tag: '🔒初便95%確定', isConfirmedFirst: true },
-          { step: '② 午前便', time: '10:15発 - 11:40着', flightNo: 'NH677', route: '東京(羽田) ➔ 広島', tag: '午前往路' },
-          { step: '③ 昼復路', time: '12:45発 - 14:05着', flightNo: 'NH682', route: '広島 ➔ 東京(羽田)', tag: '昼復路' },
-          { step: '④ 午後便', time: '15:15発 - 16:45着', flightNo: 'NH595', route: '東京(羽田) ➔ 松山', tag: '午後往路' },
-          { step: '⑤ 夜最終', time: '17:35発 - 19:05着', flightNo: 'NH598', route: '松山 ➔ 東京(羽田)', tag: '🌙羽田帰還' }
+          { step: '② 昼往路', time: '14:15発 - 15:50着', flightNo: 'NH593', route: '東京(羽田) ➔ 松山', tag: '午後松山往路(763)' },
+          { step: '③ 夕復路', time: '16:40発 - 18:10着', flightNo: 'NH596', route: '松山 ➔ 東京(羽田)', tag: '夕方松山復路(763)' },
+          { step: '④ 夜最終', time: '19:40発 - 21:10着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島', tag: '🔒763確定・広島泊' }
         ]
       },
       {
         planId: 'plan-b',
         planName: 'プランB',
         rank: '有力 ◯',
-        probability: 30,
+        probability: 35,
         title: `${origName1}始発 ➔ 福岡往復 ➔ 長崎ステイ`,
         routeSummary: `${origName1} ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 長崎(泊)`,
         airports: [origName1, '東京(羽田)', '福岡', '長崎'],
         description: `${origName1}から羽田へ戻った後、福岡幹線を往復し、夜19:15発の長崎便でステイする九州集中パターン`,
         flights: [
           { step: '① 朝一便', time: `${standard1.depTime}発 - ${standard1.arrTime}着`, flightNo: standard1.flightNo, route: `${origName1} ➔ ${destName1}`, tag: '🔒初便95%確定', isConfirmedFirst: true },
-          { step: '② 午前便', time: '10:30発 - 12:30着', flightNo: 'NH251', route: '東京(羽田) ➔ 福岡', tag: '午前往路' },
-          { step: '③ 午後便', time: '13:10発 - 14:50着', flightNo: 'NH256', route: '福岡 ➔ 東京(羽田)', tag: '昼復路' },
+          { step: '② 午前便', time: '11:25発 - 13:25着', flightNo: 'NH251', route: '東京(羽田) ➔ 福岡', tag: '午前往路' },
+          { step: '③ 午後便', time: '14:15発 - 15:55着', flightNo: 'NH256', route: '福岡 ➔ 東京(羽田)', tag: '昼復路' },
           { step: '④ 夜最終', time: '19:15発 - 21:15着', flightNo: 'NH669', route: '東京(羽田) ➔ 長崎', tag: '🌙夜間駐機' }
         ]
       },
@@ -1867,15 +1875,15 @@ export async function generateWeeklyPrediction() {
         rank: '対抗 ▲',
         probability: 20,
         title: `${origName1}始発 ➔ 新千歳往復 ➔ 伊丹往復`,
-        routeSummary: `${origName1} ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 伊丹 ➔ 羽田`,
+        routeSummary: `${origName1} ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 伊丹 ➔ 羽田(泊)`,
         airports: [origName1, '東京(羽田)', '札幌(新千歳)', '大阪(伊丹)'],
         description: `羽田から新千歳・伊丹の主要幹線をピストン運航するパターン`,
         flights: [
           { step: '① 朝一便', time: `${standard1.depTime}発 - ${standard1.arrTime}着`, flightNo: standard1.flightNo, route: `${origName1} ➔ ${destName1}`, tag: '🔒初便95%確定', isConfirmedFirst: true },
-          { step: '② 午前便', time: '10:00発 - 11:35着', flightNo: 'NH59', route: '東京(羽田) ➔ 札幌(新千歳)', tag: '午前往路' },
-          { step: '③ 午後便', time: '12:30発 - 14:10着', flightNo: 'NH64', route: '札幌(新千歳) ➔ 東京(羽田)', tag: '昼復路' },
-          { step: '④ 夕方便', time: '15:00発 - 16:10着', flightNo: 'NH31', route: '東京(羽田) ➔ 大阪(伊丹)', tag: '夕方往路' },
-          { step: '⑤ 夜最終', time: '17:00発 - 18:15着', flightNo: 'NH36', route: '大阪(伊丹) ➔ 東京(羽田)', tag: '🌙羽田帰還' }
+          { step: '② 午前便', time: '11:00発 - 12:40着', flightNo: 'NH61', route: '東京(羽田) ➔ 札幌(新千歳)', tag: '午前往路' },
+          { step: '③ 午後便', time: '13:30発 - 15:10着', flightNo: 'NH64', route: '札幌(新千歳) ➔ 東京(羽田)', tag: '昼復路' },
+          { step: '④ 夕方便', time: '16:00発 - 17:10着', flightNo: 'NH33', route: '東京(羽田) ➔ 大阪(伊丹)', tag: '夕方往路' },
+          { step: '⑤ 夜最終', time: '17:50発 - 19:05着', flightNo: 'NH36', route: '大阪(伊丹) ➔ 東京(羽田)', tag: '🌙羽田帰還' }
         ]
       }
     ];

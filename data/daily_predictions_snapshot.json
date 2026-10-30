@@ -605,7 +605,74 @@
       "planId": "plan-a",
       "planName": "プランA",
       "rank": "本命 ◎",
-      "probability": 41,
+      "probability": 48,
+      "title": "大阪(伊丹)始発 ➔ 松山往復 ➔ 広島ステイ(763確定枠)",
+      "routeSummary": "伊丹 ➔ 羽田 ➔ 松山 ➔ 羽田 ➔ 広島(泊)",
+      "airports": [
+        "大阪(伊丹)",
+        "東京(羽田)",
+        "松山",
+        "広島"
+      ],
+      "description": "大阪(伊丹)からの朝一始発便（95%確定）で羽田到着後、昼の松山往復を経て、夜はODPT公式763確定枠の広島便(NH685)で広島ナイトステイへ入る大本命ローテーション",
+      "flights": [
+        {
+          "step": "① 朝一便",
+          "time": "09:00発 - 10:10着",
+          "flightNo": "NH18",
+          "route": "大阪(伊丹) ➔ 東京(羽田)",
+          "tag": "🔒初便95%確定",
+          "isConfirmedFirst": true,
+          "model": "788/763",
+          "is767Confirmed": true,
+          "is767Strict": false,
+          "orig": "ITM",
+          "dest": "HND"
+        },
+        {
+          "step": "② 昼往路",
+          "time": "14:15発 - 15:50着",
+          "flightNo": "NH593",
+          "route": "東京(羽田) ➔ 松山",
+          "tag": "午後松山往路(763)",
+          "model": "788/763",
+          "is767Confirmed": true,
+          "is767Strict": false,
+          "orig": "HND",
+          "dest": "MYJ"
+        },
+        {
+          "step": "③ 夕復路",
+          "time": "16:40発 - 18:10着",
+          "flightNo": "NH596",
+          "route": "松山 ➔ 東京(羽田)",
+          "tag": "夕方松山復路(763)",
+          "model": "788/763",
+          "is767Confirmed": true,
+          "is767Strict": false,
+          "orig": "MYJ",
+          "dest": "HND"
+        },
+        {
+          "step": "④ 夜最終",
+          "time": "19:40発 - 21:10着",
+          "flightNo": "NH685",
+          "route": "東京(羽田) ➔ 広島",
+          "tag": "🌙広島ナイトステイ(泊)",
+          "model": "763",
+          "is767Confirmed": true,
+          "is767Strict": true,
+          "orig": "HND",
+          "dest": "HIJ"
+        }
+      ],
+      "stayCode": "HIJ"
+    },
+    {
+      "planId": "plan-b",
+      "planName": "プランB",
+      "rank": "有力 ◯",
+      "probability": 35,
       "title": "大阪(伊丹)始発 ➔ 福岡往復 ➔ 長崎ステイ",
       "routeSummary": "伊丹 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 長崎(泊)",
       "airports": [
@@ -669,53 +736,10 @@
       "stayCode": "NGS"
     },
     {
-      "planId": "plan-b",
-      "planName": "プランB",
-      "rank": "有力 ◯",
-      "probability": 40,
-      "title": "大阪(伊丹)始発 ➔ 広島往復 ➔ 松山往復",
-      "routeSummary": "伊丹 ➔ 羽田 ➔ 広島(泊)",
-      "airports": [
-        "大阪(伊丹)",
-        "東京(羽田)",
-        "広島",
-        "松山"
-      ],
-      "description": "大阪(伊丹)からの朝一始発便（95%確定）で羽田到着後、広島と松山を巡る王道ローテーション",
-      "flights": [
-        {
-          "step": "① 朝一便",
-          "time": "09:00発 - 10:10着",
-          "flightNo": "NH18",
-          "route": "大阪(伊丹) ➔ 東京(羽田)",
-          "tag": "🔒初便95%確定",
-          "isConfirmedFirst": true,
-          "model": "788/763",
-          "is767Confirmed": true,
-          "is767Strict": false,
-          "orig": "ITM",
-          "dest": "HND"
-        },
-        {
-          "step": "② 午前便",
-          "time": "19:40発 - 21:10着",
-          "flightNo": "NH685",
-          "route": "東京(羽田) ➔ 広島",
-          "tag": "午前往路",
-          "model": "763",
-          "is767Confirmed": true,
-          "is767Strict": true,
-          "orig": "HND",
-          "dest": "HIJ"
-        }
-      ],
-      "stayCode": "HIJ"
-    },
-    {
       "planId": "plan-c",
       "planName": "プランC",
       "rank": "対抗 ▲",
-      "probability": 19,
+      "probability": 17,
       "title": "大阪(伊丹)始発 ➔ 新千歳往復 ➔ 伊丹往復",
       "routeSummary": "伊丹 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 伊丹 ➔ 羽田(泊)",
       "airports": [
