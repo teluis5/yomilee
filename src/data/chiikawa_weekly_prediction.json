@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年10月30日 12:00",
-  "updatedAtIso": "2026-10-30T03:00:27.841Z",
+  "updatedAt": "2026年10月30日 13:00",
+  "updatedAtIso": "2026-10-30T04:00:29.397Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "長崎 ➔ 東京(羽田) へ飛行中",
+    "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "東京(羽田) (95%) / 鹿児島 (4%) / 東京(羽田) (1%) [今夜の駐機確率]",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
@@ -337,7 +337,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降予測）",
-      "currentAirport": "長崎 ➔ 東京(羽田) へ飛行中",
+      "currentAirport": "東京(羽田)",
       "nightStay": "東京(羽田) (95%) / 鹿児島 (4%) / 東京(羽田) (1%) [今夜の駐機確率]",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "🔒 現在NH664便を運航中。東京(羽田)到着後、76P確定枠の「NH625便」および「NH628便（鹿児島 16:35発 ➔ 東京(羽田) 18:15着）」へ連続充当され、今夜は東京(羽田)で夜間駐機に入る見通し（確率95%）です！",
@@ -518,9 +518,9 @@
             "flightNo": "NH664",
             "route": "長崎 ➔ 東京(羽田)",
             "time": "11:20発 - 12:55着",
-            "status": "飛行中 ✈️",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (12:52)",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -606,9 +606,9 @@
           "flightNo": "NH664",
           "route": "長崎 ➔ 東京(羽田)",
           "time": "11:20発 - 12:55着",
-          "status": "飛行中 ✈️",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (12:52)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -1297,7 +1297,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 500,
+    "totalFleetFlights": 502,
     "fleetCount": 15
   }
 }
