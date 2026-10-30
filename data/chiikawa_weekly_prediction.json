@@ -1,34 +1,28 @@
 {
-  "updatedAt": "2026年10月30日 16:00",
-  "updatedAtIso": "2026-10-30T07:00:26.014Z",
+  "updatedAt": "2026年10月30日 17:00",
+  "updatedAtIso": "2026-10-30T08:00:25.635Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "広島",
-    "currentLocationCode": "HIJ",
-    "isAirborne": false,
-    "nightStay": "東京(羽田) (60%) / 広島 (25%) / 長崎 (15%) [今夜の駐機確率]",
-    "nightStayCode": "HND",
+    "currentLocation": "広島 ➔ 東京(羽田) へ飛行中",
+    "currentLocationCode": "HND",
+    "isAirborne": true,
+    "nightStay": "大阪(伊丹) (95%) / 東京(羽田) (5%) [今夜の駐機確率]",
+    "nightStayCode": "ITM",
     "isNightStayConfirmed": false,
     "nightStayProbabilities": [
       {
+        "airport": "大阪(伊丹)",
+        "code": "ITM",
+        "probability": 95,
+        "note": "東京(羽田)到着後、NH39(19:00発 76P確定)で大阪(伊丹)へ向かい夜間駐機（超本命）"
+      },
+      {
         "airport": "東京(羽田)",
         "code": "HND",
-        "probability": 60,
-        "note": "NH680(17:40着)で羽田帰還後、そのまま羽田で夜間駐機（最有力）"
-      },
-      {
-        "airport": "広島",
-        "code": "HIJ",
-        "probability": 25,
-        "note": "羽田帰還後、19:40発(NH685: 76P確定)で広島ナイトステイ（明朝初便NH672は🔒763単独確定）"
-      },
-      {
-        "airport": "長崎",
-        "code": "NGS",
-        "probability": 15,
-        "note": "羽田帰還後、19:15発(NH669: 76P確定)で長崎ナイトステイ（明朝初便NH662）"
+        "probability": 5,
+        "note": "東京(羽田)空港での夜間駐機（例外待機）"
       }
     ]
   },
@@ -337,60 +331,48 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降予測）",
-      "currentAirport": "広島",
-      "nightStay": "東京(羽田) (60%) / 広島 (25%) / 長崎 (15%) [今夜の駐機確率]",
+      "currentAirport": "広島 ➔ 東京(羽田) へ飛行中",
+      "nightStay": "大阪(伊丹) (95%) / 東京(羽田) (5%) [今夜の駐機確率]",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "⏳ 折返し「NH680便（16:15発 ➔ 17:40羽田着 / 76P確定）」で羽田帰還後、そのまま羽田泊（60%）か、夜の76P確定便（NH685 広島行き 25% / NH669 長崎行き 15%）へ再出発するかの分岐となります。",
+      "pendingNightStayNote": "🔒 東京(羽田)到着後、76P確定便「NH39（19:00発 ➔ 大阪(伊丹) 20:20着）」で大阪(伊丹)へ移動し夜間駐機に入る見通し（確率95%）です！",
       "todayOutlook": {
-        "title": "本日のこの後のフライト見通し＆夜の展開（76P確定枠ベース）",
-        "currentFlightNote": "現在、NH679便（東京(羽田) ➔ 広島、15:30着予定）を運航中",
+        "title": "本日のこの後のフライト見通し＆夜の展開",
+        "currentFlightNote": "現在、NH680便（広島 ➔ 東京(羽田)、17:40着予定）を運航中",
         "turnaround": {
-          "flightNo": "NH680 (予測)",
-          "route": "広島 ➔ 東京(羽田)",
-          "time": "16:15発 - 17:40着",
-          "probability": 90,
-          "desc": "広島到着後、ODPT公式76P確定便のNH680(16:15発-17:40着)で羽田へ折り返します。"
+          "flightNo": "NH39 (予測)",
+          "route": "東京(羽田) ➔ 大阪(伊丹)",
+          "time": "19:00発 - 20:20着",
+          "probability": 95,
+          "desc": "東京(羽田)から76P確定便のNH39へ接続し、大阪(伊丹)で夜間駐機に入ります。"
         },
         "nightScenarios": [
           {
+            "label": "大阪(伊丹)ナイトステイ",
+            "prob": 95,
+            "summary": "東京(羽田)到着後、NH39(19:00発 76P確定)で大阪(伊丹)へ向かい夜間駐機（超本命）",
+            "detail": "明朝は大阪(伊丹)始発便からスタートします。"
+          },
+          {
             "label": "東京(羽田)ナイトステイ",
-            "prob": 60,
-            "summary": "NH680(17:40着)で羽田帰還後、そのまま羽田で夜間駐機（最有力）",
+            "prob": 5,
+            "summary": "東京(羽田)空港での夜間駐機（例外待機）",
             "detail": "明朝は東京(羽田)始発便からスタートします。"
-          },
-          {
-            "label": "広島ナイトステイ",
-            "prob": 25,
-            "summary": "羽田帰還後、19:40発(NH685: 76P確定)で広島ナイトステイ（明朝初便NH672は🔒763単独確定）",
-            "detail": "明朝は広島始発便からスタートします。"
-          },
-          {
-            "label": "長崎ナイトステイ",
-            "prob": 15,
-            "summary": "羽田帰還後、19:15発(NH669: 76P確定)で長崎ナイトステイ（明朝初便NH662）",
-            "detail": "明朝は長崎始発便からスタートします。"
           }
         ],
-        "notice": "💡 公共交通オープンデータ(ODPT)の当日76P確定枠と他機体消去法に基づき、夜のナイトステイ便（羽田泊・広島泊NH685・長崎泊NH669）を抽出しています。"
+        "notice": "💡 ODPT公式76P確定情報と他機体消去法により特定しています。"
       },
       "nightStayProbabilities": [
         {
+          "airport": "大阪(伊丹)",
+          "code": "ITM",
+          "probability": 95,
+          "note": "東京(羽田)到着後、NH39(19:00発 76P確定)で大阪(伊丹)へ向かい夜間駐機（超本命）"
+        },
+        {
           "airport": "東京(羽田)",
           "code": "HND",
-          "probability": 60,
-          "note": "NH680(17:40着)で羽田帰還後、そのまま羽田で夜間駐機（最有力）"
-        },
-        {
-          "airport": "広島",
-          "code": "HIJ",
-          "probability": 25,
-          "note": "羽田帰還後、19:40発(NH685: 76P確定)で広島ナイトステイ（明朝初便NH672は🔒763単独確定）"
-        },
-        {
-          "airport": "長崎",
-          "code": "NGS",
-          "probability": 15,
-          "note": "羽田帰還後、19:15発(NH669: 76P確定)で長崎ナイトステイ（明朝初便NH662）"
+          "probability": 5,
+          "note": "東京(羽田)空港での夜間駐機（例外待機）"
         }
       ],
       "plans": [
@@ -398,74 +380,35 @@
           "planId": "today-plan-a",
           "planName": "プランA",
           "rank": "本命 ◎",
-          "probability": 60,
-          "title": "【今夜羽田ステイ】広島 ➔ 羽田(NH680・泊)",
-          "routeSummary": "広島 ➔ 羽田(泊)",
-          "description": "折返しNH680便(16:15発 ➔ 17:40着)で羽田到着後、夜の追加運航を行わずに羽田で夜間駐機・機材整備に入る最有力パターン（明朝は羽田始発）",
+          "probability": 95,
+          "title": "【今夜大阪(伊丹)ステイ】東京(羽田) ➔ 大阪(伊丹)(NH39・泊)",
+          "routeSummary": "東京(羽田) ➔ 大阪(伊丹)(泊)",
+          "description": "東京(羽田)到着後、76P確定枠のNH39便(19:00発 ➔ 20:20着)で大阪(伊丹)へ移動し、そのまま夜間駐機に入るシナリオ",
           "flights": [
             {
-              "step": "① 折返し復路",
-              "time": "16:15発 - 17:40着",
-              "flightNo": "NH680 (予測)",
-              "route": "広島 ➔ 東京(羽田)",
-              "tag": "76P確定・羽田帰還"
-            },
-            {
-              "step": "② 夜間駐機",
-              "time": "17:40以降",
-              "flightNo": "ステイ便なし",
-              "route": "東京(羽田) そのまま夜間駐機",
-              "tag": "🌙 羽田ナイトステイ (確率60%)"
+              "step": "① 夜最終便",
+              "time": "19:00発 - 20:20着",
+              "flightNo": "NH39 (予測)",
+              "route": "東京(羽田) ➔ 大阪(伊丹)",
+              "tag": "🌙76P確定・大阪(伊丹)泊"
             }
           ]
         },
         {
           "planId": "today-plan-b",
           "planName": "プランB",
-          "rank": "有力 ◯",
-          "probability": 25,
-          "title": "【今夜広島ステイ】広島 ➔ 羽田(NH680) ➔ 広島(NH685・泊)",
-          "routeSummary": "広島 ➔ 羽田 ➔ 広島(泊)",
-          "description": "羽田帰還後、夜19:40発の広島行き最終便（NH685: 76P確定）に充当されて広島でナイトステイするシナリオ（明朝の広島発NH672は🔒763単独確定枠）",
+          "rank": "注意 △",
+          "probability": 5,
+          "title": "【東京(羽田)夜間駐機(泊)】",
+          "routeSummary": "東京(羽田) そのまま夜間駐機(泊)",
+          "description": "東京(羽田)でそのまま夜間駐機に入る例外パターン",
           "flights": [
             {
-              "step": "① 折返し復路",
-              "time": "16:15発 - 17:40着",
-              "flightNo": "NH680 (予測)",
-              "route": "広島 ➔ 東京(羽田)",
-              "tag": "76P確定・羽田帰還"
-            },
-            {
-              "step": "② 夜最終便",
-              "time": "19:40発 - 21:10着",
-              "flightNo": "NH685 (予測)",
-              "route": "東京(羽田) ➔ 広島",
-              "tag": "🌙 広島ナイトステイ (76P確定)"
-            }
-          ]
-        },
-        {
-          "planId": "today-plan-c",
-          "planName": "プランC",
-          "rank": "対抗 ▲",
-          "probability": 15,
-          "title": "【今夜長崎ステイ】広島 ➔ 羽田(NH680) ➔ 長崎(NH669・泊)",
-          "routeSummary": "広島 ➔ 羽田 ➔ 長崎(泊)",
-          "description": "羽田帰還後、夜19:15発の長崎行き最終便（NH669: 76P確定）に充当されて長崎でナイトステイするシナリオ",
-          "flights": [
-            {
-              "step": "① 折返し復路",
-              "time": "16:15発 - 17:40着",
-              "flightNo": "NH680 (予測)",
-              "route": "広島 ➔ 東京(羽田)",
-              "tag": "76P確定・羽田帰還"
-            },
-            {
-              "step": "② 夜最終便",
-              "time": "19:15発 - 21:15着",
-              "flightNo": "NH669 (予測)",
-              "route": "東京(羽田) ➔ 長崎",
-              "tag": "🌙 長崎ナイトステイ (76P確定)"
+              "step": "① 夜間駐機",
+              "time": "17:40以降",
+              "flightNo": "ステイ便なし",
+              "route": "東京(羽田) そのまま夜間駐機",
+              "tag": "🌙東京(羽田)ステイ"
             }
           ]
         }
@@ -580,7 +523,14 @@
             "route": "大阪(伊丹) ➔ 東京(羽田)",
             "time": "14:30発 - 15:40着"
           },
-          "actual": null
+          "actual": {
+            "flightNo": "NH680",
+            "route": "広島 ➔ 東京(羽田)",
+            "time": "16:15発 - 17:40着",
+            "status": "飛行中 ✈️",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#5",
@@ -642,10 +592,19 @@
           "isPredicted": false
         },
         {
-          "flightNo": "NH680 (予測)",
+          "flightNo": "NH680",
           "route": "広島 ➔ 東京(羽田)",
           "time": "16:15発 - 17:40着",
-          "status": "🔄 76P確定・折返し復路 (確率90%)",
+          "status": "飛行中 ✈️",
+          "isLanded": false,
+          "isLive": true,
+          "isPredicted": false
+        },
+        {
+          "flightNo": "NH39 (予測)",
+          "route": "東京(羽田) ➔ 大阪(伊丹)",
+          "time": "19:00発 - 20:20着",
+          "status": "🌙 76P確定・大阪(伊丹)ステイ予測 (確率95%)",
           "isLanded": false,
           "isLive": false,
           "isPredicted": true
@@ -664,7 +623,7 @@
       "statusLabel": "明日（夕方時点の3大シナリオ予測：19〜21時頃に初便確定）",
       "expectedStart": "今夜の最終便（19〜21時頃）で確定",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "⏳ 折返し「NH680便（16:15発 ➔ 17:40羽田着 / 76P確定）」で羽田帰還後、そのまま羽田泊（60%）か、夜の76P確定便（NH685 広島行き 25% / NH669 長崎行き 15%）へ再出発するかの分岐となります。",
+      "pendingNightStayNote": "🔒 東京(羽田)到着後、76P確定便「NH39（19:00発 ➔ 大阪(伊丹) 20:20着）」で大阪(伊丹)へ移動し夜間駐機に入る見通し（確率95%）です！",
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
@@ -672,7 +631,7 @@
           "planId": "plan-a",
           "planName": "プランA (東京(羽田)泊)",
           "stayCode": "HND",
-          "stayProbWeight": 60,
+          "stayProbWeight": 5,
           "rank": "本命 ◎",
           "title": "【今夜羽田泊の場合・本命】朝イチ福岡往復 ➔ 昼松山往復 ➔ 長崎ステイ(763確定枠)",
           "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 松山 ➔ 羽田 ➔ 長崎(泊)",
@@ -735,13 +694,13 @@
               "is767Strict": false
             }
           ],
-          "probability": 32
+          "probability": 5
         },
         {
           "planId": "plan-b",
           "planName": "プランB (東京(羽田)泊)",
           "stayCode": "HND",
-          "stayProbWeight": 60,
+          "stayProbWeight": 5,
           "rank": "有力 ◯",
           "title": "【今夜羽田泊の場合・有力】朝イチ長崎往復 ➔ 昼広島往復 ➔ 夕方伊丹",
           "routeSummary": "羽田 ➔ 長崎 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 伊丹 ➔ 羽田(泊)",
@@ -804,114 +763,7 @@
               "is767Strict": false
             }
           ],
-          "probability": 28
-        },
-        {
-          "planId": "plan-c",
-          "planName": "プランC (広島泊)",
-          "stayCode": "HIJ",
-          "stayProbWeight": 25,
-          "rank": "対抗 ▲",
-          "title": "【今夜広島泊の場合・対抗】広島始発(NH672: 🔒763単独確定) ➔ 羽田 ➔ 福岡往復",
-          "routeSummary": "広島 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 松山 ➔ 羽田",
-          "airports": [
-            "広島",
-            "東京(羽田)",
-            "福岡",
-            "松山"
-          ],
-          "description": "今夜広島空港で夜間駐機（NH685便充当・確率25%）した場合の確定シナリオ。明朝はODPT公式で「🔒763単独確定枠」に指定されている広島始発(NH672便 07:35発 ➔ 羽田08:55着)で羽田へ戻り、午前福岡線(NH245)へ接続します。",
-          "flights": [
-            {
-              "step": "① 広島始発",
-              "time": "07:35発 - 08:55着",
-              "flightNo": "NH672",
-              "route": "広島 ➔ 東京(羽田)",
-              "tag": "🔒763単独確定・広島始発",
-              "model": "763",
-              "is767Confirmed": true,
-              "is767Strict": true
-            },
-            {
-              "step": "② 午前便",
-              "time": "10:30発 - 12:35着",
-              "flightNo": "NH249",
-              "route": "東京(羽田) ➔ 福岡",
-              "tag": "福岡往路(763)",
-              "model": "789/763",
-              "is767Confirmed": true,
-              "is767Strict": false
-            },
-            {
-              "step": "③ 昼復路",
-              "time": "13:25発 - 15:05着",
-              "flightNo": "NH254",
-              "route": "福岡 ➔ 東京(羽田)",
-              "tag": "福岡復路(763)",
-              "model": "789/763",
-              "is767Confirmed": true,
-              "is767Strict": false
-            },
-            {
-              "step": "④ 夕方便",
-              "time": "16:40発 - 18:10着",
-              "flightNo": "NH596",
-              "route": "松山 ➔ 東京(羽田)",
-              "tag": "夕方復路(763)",
-              "model": "788/763",
-              "is767Confirmed": true,
-              "is767Strict": false
-            }
-          ],
-          "probability": 25
-        },
-        {
-          "planId": "plan-d",
-          "planName": "プランD (長崎泊)",
-          "stayCode": "NGS",
-          "stayProbWeight": 15,
-          "rank": "注意 △",
-          "title": "【今夜長崎泊の場合・注意】長崎始発(NH662) ➔ 羽田 ➔ 各地",
-          "routeSummary": "長崎 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 広島",
-          "airports": [
-            "長崎",
-            "東京(羽田)",
-            "大阪(伊丹)"
-          ],
-          "description": "今夜長崎空港で夜間駐機（NH669便充当・確率15%）した場合のシナリオ。明朝は長崎始発(NH662便 08:25発 ➔ 羽田10:00着)で羽田へ戻り、各幹線へ接続します。",
-          "flights": [
-            {
-              "step": "① 長崎始発",
-              "time": "08:25発 - 10:00着",
-              "flightNo": "NH662",
-              "route": "長崎 ➔ 東京(羽田)",
-              "tag": "長崎始発・羽田帰還",
-              "model": "788/763",
-              "is767Confirmed": true,
-              "is767Strict": false
-            },
-            {
-              "step": "② 午前便",
-              "time": "11:00発 - 12:10着",
-              "flightNo": "NH21",
-              "route": "東京(羽田) ➔ 大阪(伊丹)",
-              "tag": "伊丹往路(763)",
-              "model": "788/763",
-              "is767Confirmed": true,
-              "is767Strict": false
-            },
-            {
-              "step": "③ 昼復路",
-              "time": "13:00発 - 14:10着",
-              "flightNo": "NH26",
-              "route": "大阪(伊丹) ➔ 東京(羽田)",
-              "tag": "昼復路(763)",
-              "model": "788/763",
-              "is767Confirmed": true,
-              "is767Strict": false
-            }
-          ],
-          "probability": 15
+          "probability": 5
         }
       ],
       "flights": [
@@ -1425,7 +1277,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 515,
+    "totalFleetFlights": 519,
     "fleetCount": 15
   }
 }
