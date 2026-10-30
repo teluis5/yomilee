@@ -278,15 +278,15 @@ const pageSchema = {
 							{todayData.todayComparison.map((row, idx) => {
 								const fmt = (item) => {
 									if (!item) return null;
-									const rt = item.route.replace(/東京\(羽田\)/g, '羽田').replace(/大阪\(伊丹\)/g, '伊丹').replace(/札幌\(新千歳\)/g, '新千歳').replace(/ ➔ /g, '➔');
-									const tm = item.time.replace(/発 - /g, '-').replace(/着/g, '');
-									return { no: item.flightNo, rt, tm };
+									const rt = item.route ? item.route.replace(/東京\(羽田\)/g, '羽田').replace(/大阪\(伊丹\)/g, '伊丹').replace(/札幌\(新千歳\)/g, '新千歳').replace(/ ➔ /g, '➔') : '';
+									const tm = item.time ? item.time.replace(/発 - /g, '-').replace(/着/g, '') : '';
+									return { no: item.flightNo || '', rt, tm };
 								};
 								const pa = fmt(row.planA);
 								const pb = fmt(row.planB);
 								const pc = fmt(row.planC);
 								const act = fmt(row.actual);
-								const cleanStatus = row.actual ? row.actual.status.replace(/ ✈️/g, '').replace(/ \(.*\)/g, '') : '運航前';
+								const cleanStatus = (row.actual && row.actual.status) ? row.actual.status.replace(/ ✈️/g, '').replace(/ \(.*\)/g, '') : '運航前';
 								return (
 									<tr class={act ? '' : 'row-muted'}>
 										<td class="col-num">#{idx + 1}</td>

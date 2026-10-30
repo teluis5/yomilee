@@ -2464,7 +2464,7 @@ export async function generateWeeklyPrediction() {
             flightNo: act.flightNo,
             route: act.route,
             time: `${act.depTime}発 - ${act.arrTime}着`,
-            status: act.statusJa,
+            status: act.statusJa || act.status || '運航前',
             isLanded: act.isLanded,
             isLive: act.isLive
           } : null
