@@ -317,8 +317,8 @@
       "planName": "プランA",
       "rank": "本命 ◎",
       "probability": 35,
-      "title": "【羽田泊スジ①・763単独確定枠】朝イチ長崎往復 ➔ 昼広島往復 ➔ 羽田帰還(泊)",
-      "routeSummary": "羽田 ➔ 長崎 ➔ 羽田 ➔ 広島 ➔ 羽田(泊)",
+      "title": "【今夜長崎泊の場合】朝イチ長崎往復 ➔ 昼広島往復 ➔ 羽田帰還(泊)",
+      "routeSummary": "羽田 ➔ 長崎 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 長崎(泊)",
       "airports": [
         "東京(羽田)",
         "長崎",
@@ -374,9 +374,18 @@
           "is767Strict": false,
           "orig": "HIJ",
           "dest": "HND"
+        },
+        {
+          "step": "④ 夜最終",
+          "time": "19:15発 - 21:15着",
+          "flightNo": "NH669",
+          "route": "東京(羽田) ➔ 長崎",
+          "tag": "🌙長崎ナイトステイ(泊)",
+          "orig": "HND",
+          "dest": "NGS"
         }
       ],
-      "stayCode": "HND"
+      "stayCode": "NGS"
     },
     {
       "planId": "plan-b",

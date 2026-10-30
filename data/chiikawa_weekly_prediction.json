@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年10月30日 23:00",
-  "updatedAtIso": "2026-10-30T14:00:27.725Z",
+  "updatedAt": "2026年10月30日 23:44",
+  "updatedAtIso": "2026-10-30T14:45:14.821Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
@@ -462,7 +462,11 @@
         },
         {
           "step": "#5",
-          "planA": null,
+          "planA": {
+            "flightNo": "NH669",
+            "route": "東京(羽田) ➔ 長崎",
+            "time": "19:15発 - 21:15着"
+          },
           "planB": {
             "flightNo": "NH669",
             "route": "東京(羽田) ➔ 長崎",
@@ -1283,7 +1287,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 536,
+    "totalFleetFlights": 537,
     "fleetCount": 15
   }
 }

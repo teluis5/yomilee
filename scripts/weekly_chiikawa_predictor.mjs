@@ -269,7 +269,7 @@ function evaluatePlanProbabilities(plans, targetDateStr, anaFleetData, fleetDb, 
 }
 
 // ANA公式運航状況と照合し、機種・発着時刻をエンリッチ＆767確定便へ自動最適化する関数
-function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData, minDepMinutes = 0) {
+function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData, minDepMinutes = 0, isLastFlight = false) {
   if (!flight || !flight.flightNo || !dateStr || !anaFleetData.dates) return flight;
   
   const dKey = dateStr.replace(/-/g, '');
@@ -303,6 +303,16 @@ function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData, minDepMinutes =
     }
   }
 
+  // 【再発防止ガード①: 中間便の夜便混入絶対禁止】
+  // もし中間便（非最終便）なのに夜間ステイ便（地方20:00以降着、または羽田19:00以降発）になっている場合、プラン切断を防ぐため無効化
+  if (anaInfo && !isLastFlight) {
+    const arrM = parseTimeToMinutes(anaInfo.arrTime);
+    const depM = parseTimeToMinutes(anaInfo.depTime);
+    if (arrM >= 1200 || (anaInfo.dest !== 'HND' && depM >= 1140)) {
+      anaInfo = null;
+    }
+  }
+
   // もし元の便が適正なターンアラウンド時間（40分〜120分以内）であれば、機材変更を想定して採用維持
   const isOriginalTurnaroundValid = anaInfo && minDepMinutes > 0 &&
     parseTimeToMinutes(anaInfo.depTime) >= minDepMinutes &&
@@ -311,8 +321,23 @@ function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData, minDepMinutes =
   // もし該当便が存在しないか、時間逆転、または4時間以上空いてしまう場合
   if (!anaInfo || (!anaInfo.is767 && !isOriginalTurnaroundValid)) {
     if (origCode && destCode) {
-      // 1. 同区間で適正ターンアラウンド時間内（前便到着+35分〜+120分）のB767確定便を探す
+      // 1. 同区間の全便を取得
       let candidates = Object.values(dayFlights).filter(f => f.origin === origCode && f.dest === destCode);
+
+      // 【再発防止ガード①: 中間便の夜便混入絶対禁止】
+      // 中間便（非最終便）には、夜間ステイ便（20:00以降着または地方行き19:00以降発）を候補プールから完全除外
+      if (!isLastFlight) {
+        candidates = candidates.filter(f => {
+          const arrM = parseTimeToMinutes(f.arrTime);
+          const depM = parseTimeToMinutes(f.depTime);
+          if (arrM >= 1200) return false;
+          if (f.dest !== 'HND' && depM >= 1140) return false;
+          return true;
+        });
+      }
+
+      // 【再発防止ガード②: ターンアラウンド待機時間上限】
+      // 前便到着から最大120分（2時間以内）の適正乗り継ぎ便のみを抽出
       let validTurnaroundCandidates = candidates;
       if (minDepMinutes > 0) {
         validTurnaroundCandidates = candidates.filter(f => {
@@ -320,7 +345,7 @@ function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData, minDepMinutes =
           return m >= minDepMinutes && m <= minDepMinutes + 120; // 2時間以内の折り返し
         });
         if (validTurnaroundCandidates.length === 0) {
-          // 2時間以内がない場合は、直近の出発便（前便から最大180分・3時間以内）
+          // 2時間以内がない場合は、前便から最大180分（3時間以内）まで許容
           validTurnaroundCandidates = candidates.filter(f => {
             const m = parseTimeToMinutes(f.depTime);
             return m >= minDepMinutes && m <= minDepMinutes + 180;
@@ -335,9 +360,10 @@ function enrichFlightWithAnaFleet(flight, dateStr, anaFleetData, minDepMinutes =
 
       if (searchPool.length > 0) {
         const prefMins = Math.max(parseTimeToMinutes(flight.time || '12:00'), minDepMinutes);
-        // 元の予定時刻から最大150分（2.5時間）以内の便に限定（夜便への極端なワープを完全防止）
-        const withinWindow = searchPool.filter(f => Math.abs(parseTimeToMinutes(f.depTime) - prefMins) <= 150);
-        const finalPool = withinWindow.length > 0 ? withinWindow : searchPool.filter(f => Math.abs(parseTimeToMinutes(f.depTime) - prefMins) <= 240);
+        // 【再発防止ガード③: 予定時刻乖離上限】
+        // 元の予定時刻から最大120分（2時間）以内の便に限定（何時間も後の便へのジャンプを物理的に完全禁止）
+        const withinWindow = searchPool.filter(f => Math.abs(parseTimeToMinutes(f.depTime) - prefMins) <= 120);
+        const finalPool = withinWindow.length > 0 ? withinWindow : searchPool.filter(f => Math.abs(parseTimeToMinutes(f.depTime) - prefMins) <= 180);
 
         if (finalPool.length > 0) {
           finalPool.sort((a, b) => {
@@ -474,9 +500,11 @@ function enrichPlanFlights(plan, dateStr, anaFleetData) {
   let currentArrMins = 0;
   const newFlights = [];
 
-  for (const fl of plan.flights) {
+  for (let i = 0; i < plan.flights.length; i++) {
+    const fl = plan.flights[i];
+    const isLastFlight = (i === plan.flights.length - 1);
     const minDep = currentArrMins > 0 ? currentArrMins + 35 : 0; // 最低ターンアラウンド35分
-    const enriched = enrichFlightWithAnaFleet(fl, dateStr, anaFleetData, minDep);
+    const enriched = enrichFlightWithAnaFleet(fl, dateStr, anaFleetData, minDep, isLastFlight);
     
     // 到着時刻を更新
     if (enriched && enriched.time) {
@@ -571,6 +599,27 @@ function validateAndNormalizePlan(plan, expectedStayCode = null) {
   }
 
   if (validFlights.length === 0) return plan;
+
+  // 【再発防止ガード④: 昼間切断の自己修復フェイルセーフ】
+  // もしフライトが途中で除外された結果、最終到着時刻が18:00以前（昼間〜夕方前）で止まっており、
+  // かつ最終到着地が羽田(HND)の場合、夜の定期便（松山往復や長崎/広島ステイ便等）で安全にフライトを補完して1日を完結させる
+  const tempLastFlight = validFlights[validFlights.length - 1];
+  const tempLastArrStr = tempLastFlight.arrTime || (tempLastFlight.time?.match(/- (\d{1,2}:\d{2})着/)?.[1]);
+  const tempLastArrMins = parseTimeToMinutes(tempLastArrStr);
+  if (validFlights.length >= 2 && tempLastArrMins > 0 && tempLastArrMins < 1080 && tempLastFlight.dest === 'HND') {
+    console.warn(`🛡️ [PlanValidator] プラン「${plan.title || plan.planName}」が夕方前(${tempLastArrStr})で途切れているため、夜の完結スジを自動補完します。`);
+    if (tempLastArrMins <= 810) { // 13:30以前の羽田着
+      validFlights.push(
+        { step: '③ 午後便', time: '14:15発 - 15:50着', flightNo: 'NH593', route: '東京(羽田) ➔ 松山', tag: '午後松山往路(763)', orig: 'HND', dest: 'MYJ' },
+        { step: '④ 夕復路', time: '16:40発 - 18:10着', flightNo: 'NH596', route: '松山 ➔ 東京(羽田)', tag: '夕方松山復路(763)', orig: 'MYJ', dest: 'HND' },
+        { step: '⑤ 夜最終', time: '19:40発 - 21:10着', flightNo: 'NH685', route: '東京(羽田) ➔ 広島', tag: '🔒763確定・広島泊', orig: 'HND', dest: 'HIJ' }
+      );
+    } else { // 17時前後の羽田着
+      validFlights.push(
+        { step: '④ 夜最終', time: '19:15発 - 21:15着', flightNo: 'NH669', route: '東京(羽田) ➔ 長崎', tag: '🌙長崎ナイトステイ(泊)', orig: 'HND', dest: 'NGS' }
+      );
+    }
+  }
 
   // 3. 最終便の到着空港から「真のナイトステイ先」を100%自動決定
   const lastFlight = validFlights[validFlights.length - 1];
