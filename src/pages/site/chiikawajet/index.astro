@@ -78,82 +78,15 @@ const pageSchema = {
 			</div>
 		</div>
 
-		<!-- ① 本日の運行スケジュール（昨晩時点の予想3プラン vs 実際の比較） -->
+		<!-- ① 本日のフライト実績と今日のこのあとの予想 -->
 		{todayData && (
 			<section class="dash-section">
 				<div class="sec-head">
-					<h2 class="sec-title">本日のフライト：昨晩時点の予想 vs 実際（{todayData.dateJa}）</h2>
+					<h2 class="sec-title">本日のフライト実績と今日のこのあとの予想（{todayData.dateJa}）</h2>
+					<span class="sec-tag tag-today">当日速報</span>
 				</div>
 
-				{todayData.todayComparison && todayData.todayComparison.length > 0 ? (
-					<div class="simple-table-wrap">
-						<table class="simple-comp-table">
-							<thead>
-								<tr>
-									<th>便</th>
-									<th>予想 {todayData.todayPlanHeaders?.[0]?.name || 'プランA'} ({todayData.todayPlanHeaders?.[0]?.prob ?? 50}%)</th>
-									<th>予想 {todayData.todayPlanHeaders?.[1]?.name || 'プランB'} ({todayData.todayPlanHeaders?.[1]?.prob ?? 30}%)</th>
-									<th>予想 {todayData.todayPlanHeaders?.[2]?.name || 'プランC'} ({todayData.todayPlanHeaders?.[2]?.prob ?? 20}%)</th>
-									<th>実際</th>
-								</tr>
-							</thead>
-							<tbody>
-								{todayData.todayComparison.map((row, idx) => {
-									const fmt = (item) => {
-										if (!item) return null;
-										const rt = item.route.replace(/東京\(羽田\)/g, '羽田').replace(/大阪\(伊丹\)/g, '伊丹').replace(/札幌\(新千歳\)/g, '新千歳').replace(/ ➔ /g, '➔');
-										const tm = item.time.replace(/発 - /g, '-').replace(/着/g, '');
-										return { no: item.flightNo, rt, tm };
-									};
-									const pa = fmt(row.planA);
-									const pb = fmt(row.planB);
-									const pc = fmt(row.planC);
-									const act = fmt(row.actual);
-									const cleanStatus = row.actual ? row.actual.status.replace(/ ✈️/g, '').replace(/ \(.*\)/g, '') : '運航前';
-									return (
-										<tr class={act ? '' : 'row-muted'}>
-											<td class="col-num">#{idx + 1}</td>
-											<td>
-												{pa ? (
-													<>
-														<div><span class="fn-text">{pa.no}</span> {pa.rt}</div>
-														<div class="tm-text">{pa.tm}</div>
-													</>
-												) : '—'}
-											</td>
-											<td>
-												{pb ? (
-													<>
-														<div><span class="fn-text">{pb.no}</span> {pb.rt}</div>
-														<div class="tm-text">{pb.tm}</div>
-													</>
-												) : '—'}
-											</td>
-											<td>
-												{pc ? (
-													<>
-														<div><span class="fn-text">{pc.no}</span> {pc.rt}</div>
-														<div class="tm-text">{pc.tm}</div>
-													</>
-												) : '—'}
-											</td>
-											<td class="col-act">
-												{act ? (
-													<>
-														<div><span class="fn-text">{act.no}</span> {act.rt}</div>
-														<div class="tm-text">{act.tm} ({cleanStatus})</div>
-													</>
-												) : (
-													<span class="tm-text">運航前</span>
-												)}
-											</td>
-										</tr>
-									);
-								})}
-							</tbody>
-						</table>
-					</div>
-				) : (
+				{todayData.flights && todayData.flights.length > 0 && (
 					<div class="flight-list">
 						{todayData.flights.map((f) => (
 							<div class={`flight-row ${f.isPredicted ? 'is-predicted' : ''}`}>
@@ -171,14 +104,47 @@ const pageSchema = {
 						))}
 					</div>
 				)}
+
+				{todayData.plans && todayData.plans.length > 0 && (
+					<div style="margin-top: 1rem;">
+						<div style="font-size: 0.85rem; font-weight: 700; color: #475569; margin-bottom: 0.5rem;">
+							▼ 今日のこのあとの展開・夜の駐機シナリオ予想
+						</div>
+						<div class="plans-stack">
+							{todayData.plans.map((plan, idx) => (
+								<details class="plan-box" open={idx === 0}>
+									<summary class="plan-head">
+										<div class="ph-left">
+											<span class={`plan-badge p-${idx}`}>{plan.planName}</span>
+											<span class="plan-prob">{plan.probability}%</span>
+											<span class="plan-flow">{plan.title}</span>
+										</div>
+										<span class="ph-toggle">内訳 ▾</span>
+									</summary>
+									<div class="plan-body">
+										<p style="font-size: 0.8rem; color: #475569; margin: 0.35rem 0 0.5rem;">{plan.description}</p>
+										{plan.flights && plan.flights.map((f) => (
+											<div class="plan-fl-row">
+												<span class="pf-step">{f.step}</span>
+												<span class="pf-time">{f.time}</span>
+												<span class="pf-no">{f.flightNo}</span>
+												<span class="pf-route">{f.route} {f.tag ? `[${f.tag}]` : ''}</span>
+											</div>
+										))}
+									</div>
+								</details>
+							))}
+						</div>
+					</div>
+				)}
 			</section>
 		)}
 
-		<!-- ② 明日の運行予想（プランA〜C・合計100%） -->
+		<!-- ② 明日の予定 -->
 		{tomorrowData && (
 			<section class="dash-section">
 				<div class="sec-head">
-					<h2 class="sec-title">明日のフライト予想（{tomorrowData.dateJa}）</h2>
+					<h2 class="sec-title">明日の予定（{tomorrowData.dateJa}）</h2>
 					<span class="sec-sub-note">客観推定確率（ANA公式76P枠・実績連動）</span>
 				</div>
 
@@ -218,11 +184,11 @@ const pageSchema = {
 			</section>
 		)}
 
-		<!-- ③ 明後日以降の週間確率予報 -->
+		<!-- ③ 明日以降の予定（週間ルート予想） -->
 		{forecastDays.length > 0 && (
 			<section class="dash-section">
 				<div class="sec-head">
-					<h2 class="sec-title">週間ルート予想（明後日以降）</h2>
+					<h2 class="sec-title">明日以降の予定（週間ルート予想）</h2>
 					<span class="sec-sub-note">タップで上位候補プランA〜Eを表示</span>
 				</div>
 
@@ -254,12 +220,120 @@ const pageSchema = {
 			</section>
 		)}
 
+		<!-- ④ 本日のフライト：昨晩時点の予想 vs 実際 -->
+		{todayData && todayData.todayComparison && todayData.todayComparison.length > 0 && (
+			<section class="dash-section">
+				<div class="sec-head">
+					<h2 class="sec-title">本日のフライト：昨晩時点の予想 vs 実際（{todayData.dateJa}）</h2>
+					<span class="sec-sub-note">前夜時点のAI予測精度検証</span>
+				</div>
+
+				<div class="simple-table-wrap">
+					<table class="simple-comp-table">
+						<thead>
+							<tr>
+								<th>便</th>
+								<th>予想 {todayData.todayPlanHeaders?.[0]?.name || 'プランA'} ({todayData.todayPlanHeaders?.[0]?.prob ?? 50}%)</th>
+								<th>予想 {todayData.todayPlanHeaders?.[1]?.name || 'プランB'} ({todayData.todayPlanHeaders?.[1]?.prob ?? 30}%)</th>
+								<th>予想 {todayData.todayPlanHeaders?.[2]?.name || 'プランC'} ({todayData.todayPlanHeaders?.[2]?.prob ?? 20}%)</th>
+								<th>実際</th>
+							</tr>
+						</thead>
+						<tbody>
+							{todayData.todayComparison.map((row, idx) => {
+								const fmt = (item) => {
+									if (!item) return null;
+									const rt = item.route.replace(/東京\(羽田\)/g, '羽田').replace(/大阪\(伊丹\)/g, '伊丹').replace(/札幌\(新千歳\)/g, '新千歳').replace(/ ➔ /g, '➔');
+									const tm = item.time.replace(/発 - /g, '-').replace(/着/g, '');
+									return { no: item.flightNo, rt, tm };
+								};
+								const pa = fmt(row.planA);
+								const pb = fmt(row.planB);
+								const pc = fmt(row.planC);
+								const act = fmt(row.actual);
+								const cleanStatus = row.actual ? row.actual.status.replace(/ ✈️/g, '').replace(/ \(.*\)/g, '') : '運航前';
+								return (
+									<tr class={act ? '' : 'row-muted'}>
+										<td class="col-num">#{idx + 1}</td>
+										<td>
+											{pa ? (
+												<>
+													<div><span class="fn-text">{pa.no}</span> {pa.rt}</div>
+													<div class="tm-text">{pa.tm}</div>
+												</>
+											) : '—'}
+										</td>
+										<td>
+											{pb ? (
+												<>
+													<div><span class="fn-text">{pb.no}</span> {pb.rt}</div>
+													<div class="tm-text">{pb.tm}</div>
+												</>
+											) : '—'}
+										</td>
+										<td>
+											{pc ? (
+												<>
+													<div><span class="fn-text">{pc.no}</span> {pc.rt}</div>
+													<div class="tm-text">{pc.tm}</div>
+												</>
+											) : '—'}
+										</td>
+										<td class="col-act">
+											{act ? (
+												<>
+													<div><span class="fn-text">{act.no}</span> {act.rt}</div>
+													<div class="tm-text">{act.tm} ({cleanStatus})</div>
+												</>
+											) : (
+												<span class="tm-text">運航前</span>
+											)}
+										</td>
+									</tr>
+								);
+							})}
+						</tbody>
+					</table>
+				</div>
+			</section>
+		)}
+
 		<Ad position="bottom" />
 
-		<!-- ④ 過去の的中実績（1日通し答え合わせ） -->
+		<!-- ⑤ その他（過去の的中実績・検証） -->
 		<section class="dash-section">
 			<div class="sec-head">
-				<h2 class="sec-title">過去の予想と実績（1日通し検証）</h2>
+				<h2 class="sec-title">その他（過去の的中実績・検証）</h2>
+				<div class="acc-pills">
+					<span class="acc-pill">1日的中率 <b>{accuracyStats.dailyFullHitRate}%</b></span>
+					<span class="acc-pill">初便的中率 <b>{accuracyStats.firstFlightHitRate}%</b></span>
+				</div>
+			</div>
+
+			<div class="past-stack">
+				{pastPredictions.slice(0, 3).map((p) => (
+					<div class="past-card">
+						<div class="pc-head">
+							<span class="pc-date">{p.date}</span>
+							<span class="pc-route">{p.actual.replace('実運航: ', '')}</span>
+							<span class="pc-badge">{p.hitLabel}</span>
+						</div>
+						{p.flights && (
+							<div class="pc-flights">
+								{p.flights.map((f) => (
+									<div class={`pcf-chip ${f.isHit ? 'hit' : 'miss'}`}>
+										<span class="pcf-no">{f.flightNo}</span>
+										<span class="pcf-rt">{f.route}</span>
+										{f.time && <span style="color: #64748b; font-size: 0.72rem;">({f.time.replace(/発 - /g, '-').replace(/着/g, '')})</span>}
+										<span class="pcf-res">{f.isHit ? '◯' : '△'}</span>
+									</div>
+								))}
+							</div>
+						)}
+					</div>
+				))}
+			</div>
+		</section>
 				<div class="acc-pills">
 					<span class="acc-pill">1日的中率 <b>{accuracyStats.dailyFullHitRate}%</b></span>
 					<span class="acc-pill">初便的中率 <b>{accuracyStats.firstFlightHitRate}%</b></span>
