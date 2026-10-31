@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年10月31日 14:00",
-  "updatedAtIso": "2026-10-31T05:00:25.470Z",
+  "updatedAt": "2026年10月31日 15:00",
+  "updatedAtIso": "2026-10-31T06:00:26.173Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "大阪(伊丹) ➔ 東京(羽田) へ飛行中",
+    "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "東京(羽田) (95%) / 広島 (4%) / 東京(羽田) (1%) [今夜の駐機確率]",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
@@ -337,7 +337,7 @@
       "isWeekend": true,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降予測）",
-      "currentAirport": "大阪(伊丹) ➔ 東京(羽田) へ飛行中",
+      "currentAirport": "東京(羽田)",
       "nightStay": "東京(羽田) (95%) / 広島 (4%) / 東京(羽田) (1%) [今夜の駐機確率]",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "🔒 現在NH26便を運航中。東京(羽田)到着後、76P確定枠の「NH681便」および「NH682便（広島 17:20発 ➔ 東京(羽田) 18:45着）」へ連続充当され、今夜は東京(羽田)で夜間駐機に入る見通し（確率95%）です！",
@@ -553,9 +553,9 @@
             "flightNo": "NH26",
             "route": "大阪(伊丹) ➔ 東京(羽田)",
             "time": "13:00発 - 14:10着",
-            "status": "飛行中 ✈️",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (14:11)",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -631,9 +631,9 @@
           "flightNo": "NH26",
           "route": "大阪(伊丹) ➔ 東京(羽田)",
           "time": "13:00発 - 14:10着",
-          "status": "飛行中 ✈️",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (14:11)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -928,7 +928,7 @@
       "statusType": "forecast",
       "statusLabel": "週間ルート＆タイムテーブル予測（前日連鎖・ODPT曜日ダイヤ）",
       "topRoute": "【前夜羽田泊連鎖】朝イチ長崎往復 ➔ 昼広島往復 ➔ 羽田帰還(泊)",
-      "topProbability": 47,
+      "topProbability": 46,
       "routes": [
         {
           "route": "羽田 ➔ 伊丹 / 伊丹 ➔ 羽田",
@@ -991,7 +991,7 @@
           "planId": "plan-a",
           "planName": "プランA (東京(羽田)泊)",
           "rank": "本命 ◎",
-          "probability": 47,
+          "probability": 46,
           "stayCode": "HND",
           "title": "【前夜羽田泊連鎖】朝イチ長崎往復 ➔ 昼広島往復 ➔ 羽田帰還(泊)",
           "description": "前夜の羽田夜間駐機から連鎖。朝一の長崎往復(NH661/NH664: 12:55着)から、羽田フリート競合シミュレーションで最適適合する昼広島便(NH679/NH680: 17:40着)へ接続し、羽田夜間駐機に入る王道スジ。",
@@ -1733,7 +1733,7 @@
           "planId": "plan-b",
           "planName": "プランB (広島泊)",
           "rank": "有力 ◯",
-          "probability": 26,
+          "probability": 27,
           "stayCode": "HIJ",
           "title": "【前夜長崎泊連鎖】長崎始発(NH662) ➔ 羽田 ➔ 伊丹往復 ➔ 広島ステイ(763確定枠)",
           "description": "前夜の長崎ナイトステイから連鎖。長崎始発(NH662便 08:25発 ➔ 羽田10:00着)で羽田帰還後、他機材の到着状況（10:00着）に基づき11:00発の伊丹往復(NH21/NH26: 14:10着)へ接続、夜は公式763確定枠の広島便(NH685)で広島ステイへ入るスジ。",
@@ -2802,7 +2802,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 578,
+    "totalFleetFlights": 584,
     "fleetCount": 15
   }
 }
