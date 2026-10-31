@@ -11,7 +11,6 @@ interface Props {
 	authorTitle?: string;
 	authorBio?: string;
 	authorAvatar?: string;
-	showPartner?: boolean;
 }
 
 const siteConsts = consts as Record<string, any>;
@@ -127,6 +126,9 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 		</div>
 	)}
 
+	<!-- ブログ固有カスタムウィジェット用スロット（各メディアで独自拡張可能） -->
+	<slot name="sidebar-custom" />
+
 	<!-- サイドバー手動広告スロット（PC追従・最下部） -->
 	<Ad position="sidebar" />
 </aside>
@@ -234,57 +236,6 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 		line-height: 1.6;
 		margin: 0;
 		text-align: left;
-	}
-
-	.partner-divider {
-		height: 1px;
-		background: var(--border-color, #e2e8f0);
-		margin: 1.1rem 0;
-	}
-
-	.partner-card {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-	}
-
-	.partner-avatar {
-		width: 48px;
-		height: 48px;
-		border-radius: 50%;
-		object-fit: cover;
-		flex-shrink: 0;
-		border: 2px solid #fce7f3;
-	}
-
-	.partner-body {
-		flex: 1;
-		min-width: 0;
-	}
-
-	.partner-name {
-		font-size: 0.92rem;
-		font-weight: 700;
-		color: var(--text-main, #1e293b);
-		display: flex;
-		align-items: center;
-		gap: 0.4rem;
-	}
-
-	.partner-badge {
-		font-size: 0.7rem;
-		color: #be185d;
-		background: #fce7f3;
-		padding: 0.1rem 0.4rem;
-		border-radius: 4px;
-		font-weight: 600;
-	}
-
-	.partner-text {
-		font-size: 0.8rem;
-		color: var(--text-light, #64748b);
-		margin: 0.15rem 0 0 0;
-		line-height: 1.4;
 	}
 
 	/* カテゴリ一覧 */
