@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年10月31日 20:00",
-  "updatedAtIso": "2026-10-31T11:00:40.986Z",
+  "updatedAt": "2026年10月31日 22:00",
+  "updatedAtIso": "2026-10-31T13:01:32.593Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (東京(羽田) ➔ 長崎)",
+    "currentLocation": "長崎",
     "currentLocationCode": "NGS",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "長崎 (確定)",
     "nightStayCode": "NGS",
     "isNightStayConfirmed": true,
@@ -520,7 +520,7 @@
       "isWeekend": true,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "飛行中 (東京(羽田) ➔ 長崎)",
+      "currentAirport": "長崎",
       "nightStay": "長崎 (確定)",
       "isNightStayConfirmed": true,
       "pendingNightStayNote": "",
@@ -953,9 +953,9 @@
             "flightNo": "NH669",
             "route": "東京(羽田) ➔ 長崎",
             "time": "19:15発 - 21:15着",
-            "status": "到着予定 (19:54)",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (21:37)",
+            "isLanded": true,
+            "isLive": false
           }
         }
       ],
@@ -1009,9 +1009,9 @@
           "flightNo": "NH669",
           "route": "東京(羽田) ➔ 長崎",
           "time": "19:15発 - 21:15着",
-          "status": "到着予定 (19:54)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (21:37)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         }
       ]
@@ -3570,14 +3570,14 @@
       "code": "NGS",
       "name": "長崎空港",
       "note": "朝一便（NH661/NH664）および夜間ステイ便（NH669/NH662）で高頻度投入。",
-      "prob": 64,
+      "prob": 65,
       "level": "A (高確率)"
     },
     {
       "code": "HIJ",
       "name": "広島空港",
       "note": "昼往復便（NH679/NH680）および夜間ステイ便（NH685/NH672）の主要拠点。",
-      "prob": 49,
+      "prob": 50,
       "level": "B (中確率)"
     },
     {
@@ -3666,7 +3666,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 341,
+    "totalFleetFlights": 343,
     "fleetCount": 11
   }
 }
