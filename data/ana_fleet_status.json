@@ -22122,6 +22122,36 @@
       }
     },
     "20261031": {
+      "NH1897": {
+        "flightNo": "NH1897",
+        "rawFlightNo": "ANA 1897",
+        "model": "Q84",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "origin": "AOJ",
+        "dest": "CTS",
+        "depTime": "11:00",
+        "arrTime": "11:55",
+        "actDepTime": "10:54",
+        "actArrTime": "11:42",
+        "status": "Departed"
+      },
+      "NH1899": {
+        "flightNo": "NH1899",
+        "rawFlightNo": "ANA 1899",
+        "model": "Q84",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "origin": "AOJ",
+        "dest": "CTS",
+        "depTime": "16:30",
+        "arrTime": "17:25",
+        "actDepTime": "16:30",
+        "actArrTime": "17:25",
+        "status": "EstimatedDeparture"
+      },
       "NH1892": {
         "flightNo": "NH1892",
         "rawFlightNo": "ANA 1892",
@@ -22165,36 +22195,6 @@
         "arrTime": "18:30",
         "actDepTime": "17:30",
         "actArrTime": "18:30",
-        "status": "EstimatedDeparture"
-      },
-      "NH1897": {
-        "flightNo": "NH1897",
-        "rawFlightNo": "ANA 1897",
-        "model": "Q84",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "origin": "AOJ",
-        "dest": "CTS",
-        "depTime": "11:00",
-        "arrTime": "11:55",
-        "actDepTime": "11:00",
-        "actArrTime": "11:55",
-        "status": "EstimatedDeparture"
-      },
-      "NH1899": {
-        "flightNo": "NH1899",
-        "rawFlightNo": "ANA 1899",
-        "model": "Q84",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "origin": "AOJ",
-        "dest": "CTS",
-        "depTime": "16:30",
-        "arrTime": "17:25",
-        "actDepTime": "16:30",
-        "actArrTime": "17:25",
         "status": "EstimatedDeparture"
       },
       "NH1852": {
@@ -22254,8 +22254,8 @@
         "depTime": "10:00",
         "arrTime": "11:05",
         "actDepTime": "10:20",
-        "actArrTime": "11:06",
-        "status": "InAir"
+        "actArrTime": "11:14",
+        "status": "Departed"
       },
       "NH1833": {
         "flightNo": "NH1833",
@@ -22300,7 +22300,7 @@
         "arrTime": "10:45",
         "actDepTime": "10:14",
         "actArrTime": "11:17",
-        "status": "InAir"
+        "status": "Departed"
       },
       "NH406": {
         "flightNo": "NH406",
@@ -22403,9 +22403,9 @@
         "dest": "AOJ",
         "depTime": "11:40",
         "arrTime": "12:35",
-        "actDepTime": "11:40",
+        "actDepTime": "11:48",
         "actArrTime": "12:35",
-        "status": "EstimatedDeparture"
+        "status": "Departed"
       },
       "NH1900": {
         "flightNo": "NH1900",
@@ -22434,8 +22434,8 @@
         "depTime": "11:30",
         "arrTime": "12:40",
         "actDepTime": "11:30",
-        "actArrTime": "12:40",
-        "status": "EstimatedDeparture"
+        "actArrTime": "12:35",
+        "status": "InAir"
       },
       "NH1834": {
         "flightNo": "NH1834",
@@ -22539,8 +22539,8 @@
         "depTime": "09:30",
         "arrTime": "11:10",
         "actDepTime": "09:30",
-        "actArrTime": "11:07",
-        "status": "InAir"
+        "actArrTime": "11:11",
+        "status": "Departed"
       },
       "NH56": {
         "flightNo": "NH56",
@@ -22584,8 +22584,8 @@
         "depTime": "10:40",
         "arrTime": "12:20",
         "actDepTime": "10:50",
-        "actArrTime": "12:25",
-        "status": "Departed"
+        "actArrTime": "12:27",
+        "status": "InAir"
       },
       "NH58": {
         "flightNo": "NH58",
@@ -22598,9 +22598,9 @@
         "dest": "HND",
         "depTime": "11:30",
         "arrTime": "13:10",
-        "actDepTime": "11:30",
+        "actDepTime": "11:35",
         "actArrTime": "13:10",
-        "status": "EstimatedDeparture"
+        "status": "InAir"
       },
       "NH60": {
         "flightNo": "NH60",
@@ -22613,8 +22613,23 @@
         "dest": "HND",
         "depTime": "12:00",
         "arrTime": "13:40",
-        "actDepTime": "12:10",
-        "actArrTime": "13:50",
+        "actDepTime": "12:15",
+        "actArrTime": "13:55",
+        "status": "EstimatedDeparture"
+      },
+      "NH70": {
+        "flightNo": "NH70",
+        "rawFlightNo": "ANA 70",
+        "model": "78K",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "origin": "CTS",
+        "dest": "HND",
+        "depTime": "16:30",
+        "arrTime": "18:15",
+        "actDepTime": "16:30",
+        "actArrTime": "18:15",
         "status": "EstimatedDeparture"
       },
       "NH62": {
@@ -22628,8 +22643,8 @@
         "dest": "HND",
         "depTime": "12:30",
         "arrTime": "14:10",
-        "actDepTime": "12:30",
-        "actArrTime": "14:10",
+        "actDepTime": "12:35",
+        "actArrTime": "14:15",
         "status": "EstimatedDeparture"
       },
       "NH1402": {
@@ -22705,21 +22720,6 @@
         "arrTime": "17:25",
         "actDepTime": "15:45",
         "actArrTime": "17:25",
-        "status": "EstimatedDeparture"
-      },
-      "NH70": {
-        "flightNo": "NH70",
-        "rawFlightNo": "ANA 70",
-        "model": "78K",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "origin": "CTS",
-        "dest": "HND",
-        "depTime": "16:30",
-        "arrTime": "18:15",
-        "actDepTime": "16:30",
-        "actArrTime": "18:15",
         "status": "EstimatedDeparture"
       },
       "NH1106": {
@@ -22853,9 +22853,9 @@
         "dest": "ITM",
         "depTime": "11:10",
         "arrTime": "13:10",
-        "actDepTime": "11:10",
-        "actArrTime": "13:10",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:12",
+        "actArrTime": "13:06",
+        "status": "InAir"
       },
       "NH1090": {
         "flightNo": "NH1090",
@@ -22974,8 +22974,8 @@
         "depTime": "10:05",
         "arrTime": "11:55",
         "actDepTime": "09:59",
-        "actArrTime": "11:45",
-        "status": "InAir"
+        "actArrTime": "11:47",
+        "status": "Departed"
       },
       "NH710": {
         "flightNo": "NH710",
@@ -22988,9 +22988,9 @@
         "dest": "NGO",
         "depTime": "11:10",
         "arrTime": "13:00",
-        "actDepTime": "11:10",
-        "actArrTime": "13:00",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:14",
+        "actArrTime": "13:05",
+        "status": "InAir"
       },
       "NH712": {
         "flightNo": "NH712",
@@ -23124,8 +23124,8 @@
         "depTime": "10:40",
         "arrTime": "13:00",
         "actDepTime": "10:55",
-        "actArrTime": "13:15",
-        "status": "EstimatedDeparture"
+        "actArrTime": "12:59",
+        "status": "InAir"
       },
       "NH420": {
         "flightNo": "NH420",
@@ -23153,9 +23153,9 @@
         "dest": "ITM",
         "depTime": "11:00",
         "arrTime": "12:10",
-        "actDepTime": "11:15",
-        "actArrTime": "12:25",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:23",
+        "actArrTime": "12:34",
+        "status": "InAir"
       },
       "NH1190": {
         "flightNo": "NH1190",
@@ -23232,21 +23232,6 @@
         "actArrTime": "",
         "status": "Cancelled"
       },
-      "NH401": {
-        "flightNo": "NH401",
-        "rawFlightNo": "ANA 401",
-        "model": "32P",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "origin": "HND",
-        "dest": "AXT",
-        "depTime": "07:45",
-        "arrTime": "08:50",
-        "actDepTime": "07:46",
-        "actArrTime": "09:37",
-        "status": "Departed"
-      },
       "NH1076": {
         "flightNo": "NH1076",
         "rawFlightNo": "ANA 1076",
@@ -23259,8 +23244,8 @@
         "depTime": "09:45",
         "arrTime": "11:25",
         "actDepTime": "09:55",
-        "actArrTime": "11:23",
-        "status": "InAir"
+        "actArrTime": "11:35",
+        "status": "Departed"
       },
       "NH246": {
         "flightNo": "NH246",
@@ -23274,8 +23259,8 @@
         "depTime": "10:15",
         "arrTime": "11:55",
         "actDepTime": "10:17",
-        "actArrTime": "11:49",
-        "status": "InAir"
+        "actArrTime": "11:52",
+        "status": "Departed"
       },
       "NH248": {
         "flightNo": "NH248",
@@ -23318,8 +23303,8 @@
         "dest": "HND",
         "depTime": "12:15",
         "arrTime": "13:55",
-        "actDepTime": "12:45",
-        "actArrTime": "14:25",
+        "actDepTime": "13:05",
+        "actArrTime": "14:45",
         "status": "EstimatedDeparture"
       },
       "NH254": {
@@ -23513,9 +23498,9 @@
         "dest": "KMQ",
         "depTime": "11:00",
         "arrTime": "12:25",
-        "actDepTime": "11:00",
+        "actDepTime": "11:03",
         "actArrTime": "12:25",
-        "status": "EstimatedDeparture"
+        "status": "InAir"
       },
       "NH1238": {
         "flightNo": "NH1238",
@@ -23589,8 +23574,8 @@
         "depTime": "09:50",
         "arrTime": "11:45",
         "actDepTime": "09:52",
-        "actArrTime": "11:22",
-        "status": "InAir"
+        "actArrTime": "11:41",
+        "status": "Departed"
       },
       "NH1207": {
         "flightNo": "NH1207",
@@ -23603,8 +23588,8 @@
         "dest": "OKA",
         "depTime": "11:35",
         "arrTime": "13:30",
-        "actDepTime": "11:35",
-        "actArrTime": "13:30",
+        "actDepTime": "11:55",
+        "actArrTime": "13:50",
         "status": "EstimatedDeparture"
       },
       "NH1209": {
@@ -23739,8 +23724,8 @@
         "depTime": "10:30",
         "arrTime": "11:50",
         "actDepTime": "10:31",
-        "actArrTime": "11:46",
-        "status": "InAir"
+        "actArrTime": "11:48",
+        "status": "Departed"
       },
       "NH678": {
         "flightNo": "NH678",
@@ -23753,8 +23738,8 @@
         "dest": "HND",
         "depTime": "12:35",
         "arrTime": "13:55",
-        "actDepTime": "12:35",
-        "actArrTime": "13:55",
+        "actDepTime": "12:40",
+        "actArrTime": "14:00",
         "status": "EstimatedDeparture"
       },
       "NH680": {
@@ -23922,6 +23907,21 @@
         "actArrTime": "19:35",
         "status": "EstimatedDeparture"
       },
+      "NH401": {
+        "flightNo": "NH401",
+        "rawFlightNo": "ANA 401",
+        "model": "32P",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "origin": "HND",
+        "dest": "AXT",
+        "depTime": "07:45",
+        "arrTime": "08:50",
+        "actDepTime": "07:46",
+        "actArrTime": "09:37",
+        "status": "Departed"
+      },
       "NH403": {
         "flightNo": "NH403",
         "rawFlightNo": "ANA 403",
@@ -23934,8 +23934,8 @@
         "depTime": "10:15",
         "arrTime": "11:20",
         "actDepTime": "10:17",
-        "actArrTime": "11:18",
-        "status": "InAir"
+        "actArrTime": "11:21",
+        "status": "Departed"
       },
       "NH405": {
         "flightNo": "NH405",
@@ -24084,8 +24084,8 @@
         "depTime": "09:30",
         "arrTime": "11:05",
         "actDepTime": "10:04",
-        "actArrTime": "11:20",
-        "status": "InAir"
+        "actArrTime": "11:23",
+        "status": "Departed"
       },
       "NH59": {
         "flightNo": "NH59",
@@ -24099,8 +24099,8 @@
         "depTime": "10:00",
         "arrTime": "11:35",
         "actDepTime": "10:16",
-        "actArrTime": "11:35",
-        "status": "InAir"
+        "actArrTime": "11:47",
+        "status": "Departed"
       },
       "NH1403": {
         "flightNo": "NH1403",
@@ -24113,9 +24113,9 @@
         "dest": "CTS",
         "depTime": "10:50",
         "arrTime": "12:30",
-        "actDepTime": "11:00",
-        "actArrTime": "12:40",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:13",
+        "actArrTime": "12:47",
+        "status": "InAir"
       },
       "NH61": {
         "flightNo": "NH61",
@@ -24128,8 +24128,8 @@
         "dest": "CTS",
         "depTime": "11:00",
         "arrTime": "12:40",
-        "actDepTime": "12:30",
-        "actArrTime": "14:10",
+        "actDepTime": "12:45",
+        "actArrTime": "14:25",
         "status": "EstimatedDeparture"
       },
       "NH63": {
@@ -24384,8 +24384,8 @@
         "depTime": "08:30",
         "arrTime": "10:30",
         "actDepTime": "09:27",
-        "actArrTime": "11:20",
-        "status": "InAir"
+        "actArrTime": "11:24",
+        "status": "Departed"
       },
       "NH245": {
         "flightNo": "NH245",
@@ -24399,8 +24399,8 @@
         "depTime": "08:55",
         "arrTime": "10:55",
         "actDepTime": "09:03",
-        "actArrTime": "10:57",
-        "status": "InAir"
+        "actArrTime": "11:02",
+        "status": "Departed"
       },
       "NH247": {
         "flightNo": "NH247",
@@ -24414,7 +24414,7 @@
         "depTime": "09:30",
         "arrTime": "11:30",
         "actDepTime": "10:23",
-        "actArrTime": "12:18",
+        "actArrTime": "12:17",
         "status": "InAir"
       },
       "NH249": {
@@ -24429,7 +24429,7 @@
         "depTime": "10:30",
         "arrTime": "12:35",
         "actDepTime": "10:33",
-        "actArrTime": "12:28",
+        "actArrTime": "12:29",
         "status": "InAir"
       },
       "NH251": {
@@ -24443,9 +24443,9 @@
         "dest": "FUK",
         "depTime": "11:25",
         "arrTime": "13:25",
-        "actDepTime": "11:25",
-        "actArrTime": "13:25",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:32",
+        "actArrTime": "13:23",
+        "status": "InAir"
       },
       "NH253": {
         "flightNo": "NH253",
@@ -24612,21 +24612,6 @@
         "actArrTime": "21:40",
         "status": "EstimatedDeparture"
       },
-      "NH681": {
-        "flightNo": "NH681",
-        "rawFlightNo": "ANA 681",
-        "model": "76P",
-        "is767": true,
-        "is76P": true,
-        "is767Strict": true,
-        "origin": "HND",
-        "dest": "HIJ",
-        "depTime": "15:00",
-        "arrTime": "16:30",
-        "actDepTime": "15:00",
-        "actArrTime": "16:30",
-        "status": "EstimatedDeparture"
-      },
       "NH1891": {
         "flightNo": "NH1891",
         "rawFlightNo": "ANA 1891",
@@ -24715,7 +24700,7 @@
         "arrTime": "10:50",
         "actDepTime": "10:03",
         "actArrTime": "11:17",
-        "status": "InAir"
+        "status": "Departed"
       },
       "NH677": {
         "flightNo": "NH677",
@@ -24729,7 +24714,7 @@
         "depTime": "10:25",
         "arrTime": "11:55",
         "actDepTime": "10:36",
-        "actArrTime": "12:05",
+        "actArrTime": "11:56",
         "status": "InAir"
       },
       "NH679": {
@@ -24745,6 +24730,21 @@
         "arrTime": "15:30",
         "actDepTime": "14:00",
         "actArrTime": "15:30",
+        "status": "EstimatedDeparture"
+      },
+      "NH681": {
+        "flightNo": "NH681",
+        "rawFlightNo": "ANA 681",
+        "model": "76P",
+        "is767": true,
+        "is76P": true,
+        "is767Strict": true,
+        "origin": "HND",
+        "dest": "HIJ",
+        "depTime": "15:00",
+        "arrTime": "16:30",
+        "actDepTime": "15:00",
+        "actArrTime": "16:30",
         "status": "EstimatedDeparture"
       },
       "NH683": {
@@ -24789,8 +24789,8 @@
         "depTime": "09:45",
         "arrTime": "11:05",
         "actDepTime": "09:53",
-        "actArrTime": "11:05",
-        "status": "InAir"
+        "actArrTime": "11:09",
+        "status": "Departed"
       },
       "NH555": {
         "flightNo": "NH555",
@@ -24864,8 +24864,8 @@
         "depTime": "09:05",
         "arrTime": "11:10",
         "actDepTime": "09:04",
-        "actArrTime": "11:10",
-        "status": "InAir"
+        "actArrTime": "11:16",
+        "status": "Departed"
       },
       "NH453": {
         "flightNo": "NH453",
@@ -24924,8 +24924,8 @@
         "depTime": "08:10",
         "arrTime": "11:30",
         "actDepTime": "08:28",
-        "actArrTime": "11:44",
-        "status": "InAir"
+        "actArrTime": "11:47",
+        "status": "Departed"
       },
       "NH91": {
         "flightNo": "NH91",
@@ -24938,9 +24938,9 @@
         "dest": "ISG",
         "depTime": "11:40",
         "arrTime": "15:00",
-        "actDepTime": "11:40",
+        "actDepTime": "11:50",
         "actArrTime": "15:00",
-        "status": "EstimatedDeparture"
+        "status": "Departed"
       },
       "NH985": {
         "flightNo": "NH985",
@@ -25014,8 +25014,8 @@
         "depTime": "10:00",
         "arrTime": "11:10",
         "actDepTime": "10:29",
-        "actArrTime": "11:37",
-        "status": "InAir"
+        "actArrTime": "11:39",
+        "status": "Departed"
       },
       "NH21": {
         "flightNo": "NH21",
@@ -25028,9 +25028,9 @@
         "dest": "ITM",
         "depTime": "11:00",
         "arrTime": "12:10",
-        "actDepTime": "11:00",
-        "actArrTime": "12:10",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:11",
+        "actArrTime": "12:12",
+        "status": "InAir"
       },
       "NH23": {
         "flightNo": "NH23",
@@ -25208,9 +25208,9 @@
         "dest": "KCZ",
         "depTime": "11:10",
         "arrTime": "12:40",
-        "actDepTime": "11:10",
-        "actArrTime": "12:40",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:23",
+        "actArrTime": "12:45",
+        "status": "InAir"
       },
       "NH565": {
         "flightNo": "NH565",
@@ -25359,8 +25359,8 @@
         "depTime": "10:40",
         "arrTime": "12:30",
         "actDepTime": "10:42",
-        "actArrTime": "12:30",
-        "status": "Departed"
+        "actArrTime": "12:32",
+        "status": "InAir"
       },
       "NH609": {
         "flightNo": "NH609",
@@ -25494,8 +25494,8 @@
         "depTime": "09:45",
         "arrTime": "10:45",
         "actDepTime": "10:11",
-        "actArrTime": "11:15",
-        "status": "InAir"
+        "actArrTime": "11:18",
+        "status": "Departed"
       },
       "NH759": {
         "flightNo": "NH759",
@@ -25539,8 +25539,8 @@
         "depTime": "09:25",
         "arrTime": "11:20",
         "actDepTime": "09:43",
-        "actArrTime": "11:35",
-        "status": "InAir"
+        "actArrTime": "11:33",
+        "status": "Departed"
       },
       "NH623": {
         "flightNo": "NH623",
@@ -25553,8 +25553,8 @@
         "dest": "KOJ",
         "depTime": "11:35",
         "arrTime": "13:30",
-        "actDepTime": "11:35",
-        "actArrTime": "13:30",
+        "actDepTime": "11:55",
+        "actArrTime": "13:50",
         "status": "EstimatedDeparture"
       },
       "NH625": {
@@ -25613,9 +25613,9 @@
         "dest": "KUH",
         "depTime": "11:30",
         "arrTime": "13:05",
-        "actDepTime": "11:30",
+        "actDepTime": "11:39",
         "actArrTime": "13:05",
-        "status": "EstimatedDeparture"
+        "status": "Departed"
       },
       "NH375": {
         "flightNo": "NH375",
@@ -25644,8 +25644,8 @@
         "depTime": "07:50",
         "arrTime": "11:05",
         "actDepTime": "07:49",
-        "actArrTime": "10:56",
-        "status": "InAir"
+        "actArrTime": "11:03",
+        "status": "Departed"
       },
       "NH87": {
         "flightNo": "NH87",
@@ -25689,8 +25689,8 @@
         "depTime": "09:10",
         "arrTime": "10:45",
         "actDepTime": "09:40",
-        "actArrTime": "11:11",
-        "status": "InAir"
+        "actArrTime": "11:23",
+        "status": "Departed"
       },
       "NH589": {
         "flightNo": "NH589",
@@ -25793,8 +25793,8 @@
         "dest": "NGS",
         "depTime": "10:55",
         "arrTime": "12:55",
-        "actDepTime": "11:05",
-        "actArrTime": "13:05",
+        "actDepTime": "13:20",
+        "actArrTime": "15:20",
         "status": "EstimatedDeparture"
       },
       "NH1083": {
@@ -25868,9 +25868,9 @@
         "dest": "OIT",
         "depTime": "11:00",
         "arrTime": "12:45",
-        "actDepTime": "11:25",
-        "actArrTime": "13:10",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:45",
+        "actArrTime": "13:25",
+        "status": "Departed"
       },
       "NH797": {
         "flightNo": "NH797",
@@ -25959,8 +25959,8 @@
         "depTime": "08:20",
         "arrTime": "11:15",
         "actDepTime": "08:30",
-        "actArrTime": "11:10",
-        "status": "InAir"
+        "actArrTime": "11:14",
+        "status": "Departed"
       },
       "NH995": {
         "flightNo": "NH995",
@@ -25974,7 +25974,7 @@
         "depTime": "09:15",
         "arrTime": "12:05",
         "actDepTime": "09:20",
-        "actArrTime": "12:03",
+        "actArrTime": "12:00",
         "status": "InAir"
       },
       "NH469": {
@@ -25989,8 +25989,8 @@
         "depTime": "10:30",
         "arrTime": "13:25",
         "actDepTime": "10:39",
-        "actArrTime": "13:25",
-        "status": "Departed"
+        "actArrTime": "13:15",
+        "status": "InAir"
       },
       "NH471": {
         "flightNo": "NH471",
@@ -26003,9 +26003,9 @@
         "dest": "OKA",
         "depTime": "11:15",
         "arrTime": "14:10",
-        "actDepTime": "11:15",
-        "actArrTime": "14:10",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:33",
+        "actArrTime": "14:13",
+        "status": "InAir"
       },
       "NH473": {
         "flightNo": "NH473",
@@ -26139,8 +26139,8 @@
         "depTime": "10:00",
         "arrTime": "11:20",
         "actDepTime": "10:19",
-        "actArrTime": "11:43",
-        "status": "InAir"
+        "actArrTime": "11:35",
+        "status": "Departed"
       },
       "NH655": {
         "flightNo": "NH655",
@@ -26213,8 +26213,8 @@
         "dest": "ONJ",
         "depTime": "12:40",
         "arrTime": "13:50",
-        "actDepTime": "12:40",
-        "actArrTime": "13:50",
+        "actDepTime": "13:00",
+        "actArrTime": "14:10",
         "status": "EstimatedDeparture"
       },
       "NH723": {
@@ -26230,6 +26230,21 @@
         "arrTime": "17:55",
         "actDepTime": "16:40",
         "actArrTime": "17:55",
+        "status": "EstimatedDeparture"
+      },
+      "NH458": {
+        "flightNo": "NH458",
+        "rawFlightNo": "ANA 458",
+        "model": "738",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "origin": "HSG",
+        "dest": "HND",
+        "depTime": "19:20",
+        "arrTime": "20:55",
+        "actDepTime": "19:20",
+        "actArrTime": "20:55",
         "status": "EstimatedDeparture"
       },
       "NH377": {
@@ -26274,7 +26289,7 @@
         "depTime": "10:25",
         "arrTime": "11:25",
         "actDepTime": "10:54",
-        "actArrTime": "11:45",
+        "actArrTime": "11:55",
         "status": "Departed"
       },
       "NH1071": {
@@ -26349,8 +26364,8 @@
         "depTime": "09:25",
         "arrTime": "10:50",
         "actDepTime": "09:47",
-        "actArrTime": "11:07",
-        "status": "InAir"
+        "actArrTime": "11:11",
+        "status": "Departed"
       },
       "NH535": {
         "flightNo": "NH535",
@@ -26363,9 +26378,9 @@
         "dest": "TAK",
         "depTime": "11:30",
         "arrTime": "12:55",
-        "actDepTime": "11:30",
-        "actArrTime": "12:55",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:29",
+        "actArrTime": "12:47",
+        "status": "InAir"
       },
       "NH997": {
         "flightNo": "NH997",
@@ -26424,8 +26439,8 @@
         "depTime": "10:05",
         "arrTime": "11:05",
         "actDepTime": "10:16",
-        "actArrTime": "11:09",
-        "status": "InAir"
+        "actArrTime": "11:07",
+        "status": "Departed"
       },
       "NH319": {
         "flightNo": "NH319",
@@ -26484,8 +26499,8 @@
         "depTime": "09:10",
         "arrTime": "10:30",
         "actDepTime": "10:31",
-        "actArrTime": "11:45",
-        "status": "InAir"
+        "actArrTime": "11:42",
+        "status": "Departed"
       },
       "NH295": {
         "flightNo": "NH295",
@@ -26498,8 +26513,8 @@
         "dest": "TTJ",
         "depTime": "13:00",
         "arrTime": "14:20",
-        "actDepTime": "13:00",
-        "actArrTime": "14:20",
+        "actDepTime": "13:15",
+        "actArrTime": "14:35",
         "status": "EstimatedDeparture"
       },
       "NH297": {
@@ -26544,7 +26559,7 @@
         "depTime": "10:15",
         "arrTime": "11:55",
         "actDepTime": "10:24",
-        "actArrTime": "12:13",
+        "actArrTime": "12:10",
         "status": "InAir"
       },
       "NH697": {
@@ -26619,8 +26634,8 @@
         "depTime": "10:40",
         "arrTime": "12:30",
         "actDepTime": "10:50",
-        "actArrTime": "12:30",
-        "status": "Departed"
+        "actArrTime": "12:37",
+        "status": "InAir"
       },
       "NH381": {
         "flightNo": "NH381",
@@ -26665,7 +26680,7 @@
         "arrTime": "13:15",
         "actDepTime": "11:50",
         "actArrTime": "13:15",
-        "status": "EstimatedDeparture"
+        "status": "Departed"
       },
       "NH385": {
         "flightNo": "NH385",
@@ -26739,8 +26754,8 @@
         "depTime": "10:00",
         "arrTime": "11:35",
         "actDepTime": "10:05",
-        "actArrTime": "11:30",
-        "status": "InAir"
+        "actArrTime": "11:33",
+        "status": "Departed"
       },
       "NH982": {
         "flightNo": "NH982",
@@ -26770,21 +26785,6 @@
         "arrTime": "17:35",
         "actDepTime": "15:55",
         "actArrTime": "17:35",
-        "status": "EstimatedDeparture"
-      },
-      "NH458": {
-        "flightNo": "NH458",
-        "rawFlightNo": "ANA 458",
-        "model": "738",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "origin": "HSG",
-        "dest": "HND",
-        "depTime": "19:20",
-        "arrTime": "20:55",
-        "actDepTime": "19:20",
-        "actArrTime": "20:55",
         "status": "EstimatedDeparture"
       },
       "NH1851": {
@@ -26843,8 +26843,8 @@
         "dest": "HND",
         "depTime": "12:20",
         "arrTime": "14:55",
-        "actDepTime": "12:20",
-        "actArrTime": "14:55",
+        "actDepTime": "12:45",
+        "actArrTime": "15:20",
         "status": "EstimatedDeparture"
       },
       "NH92": {
@@ -26904,7 +26904,7 @@
         "depTime": "10:10",
         "arrTime": "11:15",
         "actDepTime": "10:00",
-        "actArrTime": "10:53",
+        "actArrTime": "11:00",
         "status": "Departed"
       },
       "NH1768": {
@@ -26918,9 +26918,9 @@
         "dest": "OKA",
         "depTime": "11:15",
         "arrTime": "12:15",
-        "actDepTime": "11:30",
-        "actArrTime": "12:30",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:32",
+        "actArrTime": "12:20",
+        "status": "InAir"
       },
       "NH1770": {
         "flightNo": "NH1770",
@@ -27039,8 +27039,8 @@
         "depTime": "10:20",
         "arrTime": "12:10",
         "actDepTime": "10:27",
-        "actArrTime": "11:54",
-        "status": "InAir"
+        "actArrTime": "11:56",
+        "status": "Departed"
       },
       "NH1089": {
         "flightNo": "NH1089",
@@ -27117,21 +27117,6 @@
         "actArrTime": "20:50",
         "status": "EstimatedDeparture"
       },
-      "NH32": {
-        "flightNo": "NH32",
-        "rawFlightNo": "ANA 32",
-        "model": "78G",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "origin": "ITM",
-        "dest": "HND",
-        "depTime": "15:40",
-        "arrTime": "16:55",
-        "actDepTime": "15:40",
-        "actArrTime": "16:55",
-        "status": "EstimatedDeparture"
-      },
       "NH421": {
         "flightNo": "NH421",
         "rawFlightNo": "ANA 421",
@@ -27174,7 +27159,7 @@
         "depTime": "10:45",
         "arrTime": "12:00",
         "actDepTime": "10:46",
-        "actArrTime": "12:00",
+        "actArrTime": "11:53",
         "status": "Departed"
       },
       "NH425": {
@@ -27294,8 +27279,8 @@
         "depTime": "10:00",
         "arrTime": "11:10",
         "actDepTime": "10:05",
-        "actArrTime": "11:11",
-        "status": "InAir"
+        "actArrTime": "11:17",
+        "status": "Departed"
       },
       "NH22": {
         "flightNo": "NH22",
@@ -27308,9 +27293,9 @@
         "dest": "HND",
         "depTime": "11:00",
         "arrTime": "12:10",
-        "actDepTime": "11:10",
-        "actArrTime": "12:20",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:12",
+        "actArrTime": "12:06",
+        "status": "InAir"
       },
       "NH24": {
         "flightNo": "NH24",
@@ -27355,6 +27340,21 @@
         "arrTime": "15:40",
         "actDepTime": "14:30",
         "actArrTime": "15:40",
+        "status": "EstimatedDeparture"
+      },
+      "NH32": {
+        "flightNo": "NH32",
+        "rawFlightNo": "ANA 32",
+        "model": "78G",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "origin": "ITM",
+        "dest": "HND",
+        "depTime": "15:40",
+        "arrTime": "16:55",
+        "actDepTime": "15:40",
+        "actArrTime": "16:55",
         "status": "EstimatedDeparture"
       },
       "NH34": {
@@ -27548,9 +27548,9 @@
         "dest": "KMI",
         "depTime": "11:45",
         "arrTime": "12:50",
-        "actDepTime": "11:45",
+        "actDepTime": "11:43",
         "actArrTime": "12:50",
-        "status": "EstimatedDeparture"
+        "status": "Departed"
       },
       "NH507": {
         "flightNo": "NH507",
@@ -27625,7 +27625,7 @@
         "arrTime": "10:55",
         "actDepTime": "10:13",
         "actArrTime": "11:29",
-        "status": "InAir"
+        "status": "Departed"
       },
       "NH1625": {
         "flightNo": "NH1625",
@@ -27639,8 +27639,8 @@
         "depTime": "10:40",
         "arrTime": "12:00",
         "actDepTime": "10:39",
-        "actArrTime": "11:55",
-        "status": "InAir"
+        "actArrTime": "11:53",
+        "status": "Departed"
       },
       "NH1627": {
         "flightNo": "NH1627",
@@ -27729,8 +27729,8 @@
         "depTime": "11:00",
         "arrTime": "12:25",
         "actDepTime": "11:00",
-        "actArrTime": "12:25",
-        "status": "EstimatedDeparture"
+        "actArrTime": "12:17",
+        "status": "InAir"
       },
       "NH547": {
         "flightNo": "NH547",
@@ -27819,8 +27819,8 @@
         "depTime": "10:30",
         "arrTime": "11:25",
         "actDepTime": "10:27",
-        "actArrTime": "11:06",
-        "status": "InAir"
+        "actArrTime": "11:18",
+        "status": "Departed"
       },
       "NH1641": {
         "flightNo": "NH1641",
@@ -27894,8 +27894,8 @@
         "depTime": "09:45",
         "arrTime": "11:10",
         "actDepTime": "09:51",
-        "actArrTime": "11:10",
-        "status": "InAir"
+        "actArrTime": "11:11",
+        "status": "Departed"
       },
       "NH783": {
         "flightNo": "NH783",
@@ -27999,8 +27999,8 @@
         "depTime": "09:45",
         "arrTime": "12:00",
         "actDepTime": "09:48",
-        "actArrTime": "11:49",
-        "status": "InAir"
+        "actArrTime": "11:53",
+        "status": "Departed"
       },
       "NH765": {
         "flightNo": "NH765",
@@ -28013,8 +28013,8 @@
         "dest": "OKA",
         "depTime": "12:00",
         "arrTime": "14:15",
-        "actDepTime": "12:25",
-        "actArrTime": "14:40",
+        "actDepTime": "12:35",
+        "actArrTime": "14:50",
         "status": "EstimatedDeparture"
       },
       "NH1273": {
@@ -28089,8 +28089,8 @@
         "depTime": "10:00",
         "arrTime": "11:15",
         "actDepTime": "10:09",
-        "actArrTime": "11:15",
-        "status": "InAir"
+        "actArrTime": "11:21",
+        "status": "Departed"
       },
       "NH735": {
         "flightNo": "NH735",
@@ -28104,8 +28104,8 @@
         "depTime": "11:40",
         "arrTime": "13:00",
         "actDepTime": "11:40",
-        "actArrTime": "13:00",
-        "status": "EstimatedDeparture"
+        "actArrTime": "12:48",
+        "status": "InAir"
       },
       "NH737": {
         "flightNo": "NH737",
@@ -28148,9 +28148,9 @@
         "dest": "HND",
         "depTime": "11:25",
         "arrTime": "12:55",
-        "actDepTime": "11:25",
-        "actArrTime": "12:55",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:28",
+        "actArrTime": "12:46",
+        "status": "InAir"
       },
       "NH728": {
         "flightNo": "NH728",
@@ -28194,8 +28194,8 @@
         "depTime": "10:25",
         "arrTime": "11:40",
         "actDepTime": "10:32",
-        "actArrTime": "11:42",
-        "status": "InAir"
+        "actArrTime": "11:48",
+        "status": "Departed"
       },
       "NH566": {
         "flightNo": "NH566",
@@ -28208,8 +28208,8 @@
         "dest": "HND",
         "depTime": "13:20",
         "arrTime": "14:35",
-        "actDepTime": "13:20",
-        "actArrTime": "14:35",
+        "actDepTime": "13:30",
+        "actArrTime": "14:45",
         "status": "EstimatedDeparture"
       },
       "NH568": {
@@ -28283,9 +28283,9 @@
         "dest": "ITM",
         "depTime": "11:15",
         "arrTime": "12:00",
-        "actDepTime": "11:15",
-        "actArrTime": "12:00",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:13",
+        "actArrTime": "11:55",
+        "status": "Departed"
       },
       "NH1608": {
         "flightNo": "NH1608",
@@ -28374,7 +28374,7 @@
         "depTime": "09:45",
         "arrTime": "10:50",
         "actDepTime": "09:45",
-        "actArrTime": "10:53",
+        "actArrTime": "11:01",
         "status": "Departed"
       },
       "NH992": {
@@ -28422,21 +28422,6 @@
         "actArrTime": "09:38",
         "status": "Departed"
       },
-      "NH502": {
-        "flightNo": "NH502",
-        "rawFlightNo": "ANA 502",
-        "model": "738",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "origin": "KMI",
-        "dest": "ITM",
-        "depTime": "07:35",
-        "arrTime": "08:40",
-        "actDepTime": "07:39",
-        "actArrTime": "08:35",
-        "status": "Departed"
-      },
       "NH608": {
         "flightNo": "NH608",
         "rawFlightNo": "ANA 608",
@@ -28449,7 +28434,7 @@
         "depTime": "10:25",
         "arrTime": "11:55",
         "actDepTime": "10:31",
-        "actArrTime": "11:56",
+        "actArrTime": "11:58",
         "status": "InAir"
       },
       "NH612": {
@@ -28497,6 +28482,21 @@
         "actArrTime": "22:00",
         "status": "EstimatedDeparture"
       },
+      "NH502": {
+        "flightNo": "NH502",
+        "rawFlightNo": "ANA 502",
+        "model": "738",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "origin": "KMI",
+        "dest": "ITM",
+        "depTime": "07:35",
+        "arrTime": "08:40",
+        "actDepTime": "07:39",
+        "actArrTime": "08:35",
+        "status": "Departed"
+      },
       "NH504": {
         "flightNo": "NH504",
         "rawFlightNo": "ANA 504",
@@ -28523,9 +28523,9 @@
         "dest": "ITM",
         "depTime": "11:20",
         "arrTime": "12:25",
-        "actDepTime": "11:25",
-        "actArrTime": "12:30",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:28",
+        "actArrTime": "12:23",
+        "status": "InAir"
       },
       "NH508": {
         "flightNo": "NH508",
@@ -28598,9 +28598,9 @@
         "dest": "HND",
         "depTime": "10:50",
         "arrTime": "12:25",
-        "actDepTime": "10:50",
-        "actArrTime": "12:25",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:05",
+        "actArrTime": "12:29",
+        "status": "InAir"
       },
       "NH646": {
         "flightNo": "NH646",
@@ -29033,9 +29033,9 @@
         "dest": "NGO",
         "depTime": "11:10",
         "arrTime": "12:30",
-        "actDepTime": "11:10",
-        "actArrTime": "12:30",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:05",
+        "actArrTime": "12:22",
+        "status": "InAir"
       },
       "NH742": {
         "flightNo": "NH742",
@@ -29153,9 +29153,9 @@
         "dest": "OKA",
         "depTime": "11:40",
         "arrTime": "12:40",
-        "actDepTime": "11:40",
-        "actArrTime": "12:40",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:37",
+        "actArrTime": "12:22",
+        "status": "InAir"
       },
       "NH1726": {
         "flightNo": "NH1726",
@@ -29243,8 +29243,8 @@
         "dest": "HND",
         "depTime": "11:35",
         "arrTime": "12:55",
-        "actDepTime": "12:00",
-        "actArrTime": "13:20",
+        "actDepTime": "12:05",
+        "actArrTime": "13:25",
         "status": "EstimatedDeparture"
       },
       "NH592": {
@@ -29333,9 +29333,9 @@
         "dest": "ITM",
         "depTime": "11:55",
         "arrTime": "12:45",
-        "actDepTime": "11:55",
+        "actDepTime": "11:53",
         "actArrTime": "12:45",
-        "status": "EstimatedDeparture"
+        "status": "Departed"
       },
       "NH1642": {
         "flightNo": "NH1642",
@@ -29408,9 +29408,9 @@
         "dest": "OKA",
         "depTime": "10:35",
         "arrTime": "12:35",
-        "actDepTime": "11:15",
-        "actArrTime": "13:15",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:23",
+        "actArrTime": "13:03",
+        "status": "InAir"
       },
       "NH701": {
         "flightNo": "NH701",
@@ -29514,8 +29514,8 @@
         "depTime": "11:00",
         "arrTime": "14:00",
         "actDepTime": "11:00",
-        "actArrTime": "14:00",
-        "status": "EstimatedDeparture"
+        "actArrTime": "13:47",
+        "status": "InAir"
       },
       "NH351": {
         "flightNo": "NH351",
@@ -29543,9 +29543,9 @@
         "dest": "MMY",
         "depTime": "11:25",
         "arrTime": "14:15",
-        "actDepTime": "11:25",
-        "actArrTime": "14:15",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:27",
+        "actArrTime": "13:59",
+        "status": "InAir"
       },
       "NH371": {
         "flightNo": "NH371",
@@ -29663,9 +29663,9 @@
         "dest": "SDJ",
         "depTime": "11:55",
         "arrTime": "13:05",
-        "actDepTime": "11:55",
+        "actDepTime": "11:54",
         "actArrTime": "13:05",
-        "status": "EstimatedDeparture"
+        "status": "Departed"
       },
       "NH662": {
         "flightNo": "NH662",
@@ -29693,8 +29693,23 @@
         "dest": "HND",
         "depTime": "11:20",
         "arrTime": "12:55",
-        "actDepTime": "11:20",
-        "actArrTime": "12:55",
+        "actDepTime": "11:19",
+        "actArrTime": "12:49",
+        "status": "InAir"
+      },
+      "NH788": {
+        "flightNo": "NH788",
+        "rawFlightNo": "ANA 788",
+        "model": "Q84",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "origin": "NGS",
+        "dest": "ITM",
+        "depTime": "17:20",
+        "arrTime": "18:40",
+        "actDepTime": "17:20",
+        "actArrTime": "18:40",
         "status": "EstimatedDeparture"
       },
       "NH666": {
@@ -29708,8 +29723,8 @@
         "dest": "HND",
         "depTime": "13:45",
         "arrTime": "15:20",
-        "actDepTime": "13:45",
-        "actArrTime": "15:20",
+        "actDepTime": "16:00",
+        "actArrTime": "17:35",
         "status": "EstimatedDeparture"
       },
       "NH1084": {
@@ -29768,9 +29783,9 @@
         "dest": "ITM",
         "depTime": "11:40",
         "arrTime": "12:55",
-        "actDepTime": "11:40",
-        "actArrTime": "12:55",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:48",
+        "actArrTime": "12:58",
+        "status": "InAir"
       },
       "NH786": {
         "flightNo": "NH786",
@@ -29785,21 +29800,6 @@
         "arrTime": "16:20",
         "actDepTime": "15:05",
         "actArrTime": "16:20",
-        "status": "EstimatedDeparture"
-      },
-      "NH788": {
-        "flightNo": "NH788",
-        "rawFlightNo": "ANA 788",
-        "model": "Q84",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "origin": "NGS",
-        "dest": "ITM",
-        "depTime": "17:20",
-        "arrTime": "18:40",
-        "actDepTime": "17:20",
-        "actArrTime": "18:40",
         "status": "EstimatedDeparture"
       },
       "NH372": {
@@ -29904,8 +29904,8 @@
         "depTime": "10:20",
         "arrTime": "11:45",
         "actDepTime": "10:31",
-        "actArrTime": "11:48",
-        "status": "InAir"
+        "actArrTime": "11:56",
+        "status": "Departed"
       },
       "NH796": {
         "flightNo": "NH796",
@@ -29979,8 +29979,8 @@
         "depTime": "10:50",
         "arrTime": "12:25",
         "actDepTime": "10:49",
-        "actArrTime": "12:25",
-        "status": "Departed"
+        "actArrTime": "12:32",
+        "status": "InAir"
       },
       "NH1206": {
         "flightNo": "NH1206",
@@ -30117,19 +30117,19 @@
         "actArrTime": "12:37",
         "status": "InAir"
       },
-      "NH1096": {
-        "flightNo": "NH1096",
-        "rawFlightNo": "ANA 1096",
-        "model": "722",
+      "NH476": {
+        "flightNo": "NH476",
+        "rawFlightNo": "ANA 476",
+        "model": "78G",
         "is767": false,
         "is76P": false,
         "is767Strict": false,
         "origin": "OKA",
         "dest": "HND",
-        "depTime": "20:00",
-        "arrTime": "22:15",
-        "actDepTime": "20:00",
-        "actArrTime": "22:15",
+        "depTime": "19:10",
+        "arrTime": "21:25",
+        "actDepTime": "19:10",
+        "actArrTime": "21:25",
         "status": "EstimatedDeparture"
       },
       "NH462": {
@@ -30143,9 +30143,9 @@
         "dest": "HND",
         "depTime": "11:35",
         "arrTime": "13:55",
-        "actDepTime": "11:45",
+        "actDepTime": "11:51",
         "actArrTime": "14:05",
-        "status": "EstimatedDeparture"
+        "status": "Departed"
       },
       "NH464": {
         "flightNo": "NH464",
@@ -30158,8 +30158,8 @@
         "dest": "HND",
         "depTime": "12:05",
         "arrTime": "14:25",
-        "actDepTime": "12:05",
-        "actArrTime": "14:25",
+        "actDepTime": "12:15",
+        "actArrTime": "14:35",
         "status": "EstimatedDeparture"
       },
       "NH996": {
@@ -30237,19 +30237,19 @@
         "actArrTime": "20:50",
         "status": "EstimatedDeparture"
       },
-      "NH476": {
-        "flightNo": "NH476",
-        "rawFlightNo": "ANA 476",
-        "model": "78G",
+      "NH1096": {
+        "flightNo": "NH1096",
+        "rawFlightNo": "ANA 1096",
+        "model": "722",
         "is767": false,
         "is76P": false,
         "is767Strict": false,
         "origin": "OKA",
         "dest": "HND",
-        "depTime": "19:10",
-        "arrTime": "21:25",
-        "actDepTime": "19:10",
-        "actArrTime": "21:25",
+        "depTime": "20:00",
+        "arrTime": "22:15",
+        "actDepTime": "20:00",
+        "actArrTime": "22:15",
         "status": "EstimatedDeparture"
       },
       "NH1098": {
@@ -30398,9 +30398,9 @@
         "dest": "ITM",
         "depTime": "11:20",
         "arrTime": "13:15",
-        "actDepTime": "11:20",
-        "actArrTime": "13:15",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:26",
+        "actArrTime": "13:18",
+        "status": "InAir"
       },
       "NH764": {
         "flightNo": "NH764",
@@ -30578,9 +30578,9 @@
         "dest": "NGO",
         "depTime": "11:45",
         "arrTime": "13:45",
-        "actDepTime": "11:45",
+        "actDepTime": "11:44",
         "actArrTime": "13:45",
-        "status": "EstimatedDeparture"
+        "status": "Departed"
       },
       "NH306": {
         "flightNo": "NH306",
@@ -30653,8 +30653,8 @@
         "dest": "CTS",
         "depTime": "12:00",
         "arrTime": "13:50",
-        "actDepTime": "12:00",
-        "actArrTime": "13:50",
+        "actDepTime": "12:15",
+        "actArrTime": "14:05",
         "status": "EstimatedDeparture"
       },
       "NH652": {
@@ -30743,9 +30743,9 @@
         "dest": "HND",
         "depTime": "10:45",
         "arrTime": "12:00",
-        "actDepTime": "11:15",
-        "actArrTime": "12:30",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:13",
+        "actArrTime": "12:25",
+        "status": "InAir"
       },
       "NH722": {
         "flightNo": "NH722",
@@ -30834,7 +30834,7 @@
         "depTime": "09:45",
         "arrTime": "11:10",
         "actDepTime": "10:42",
-        "actArrTime": "12:04",
+        "actArrTime": "12:00",
         "status": "InAir"
       },
       "NH736": {
@@ -30894,8 +30894,8 @@
         "depTime": "09:55",
         "arrTime": "11:20",
         "actDepTime": "09:58",
-        "actArrTime": "11:14",
-        "status": "InAir"
+        "actArrTime": "11:15",
+        "status": "Departed"
       },
       "NH370": {
         "flightNo": "NH370",
@@ -30983,8 +30983,8 @@
         "dest": "HND",
         "depTime": "12:05",
         "arrTime": "13:10",
-        "actDepTime": "12:25",
-        "actArrTime": "13:30",
+        "actDepTime": "12:30",
+        "actArrTime": "13:35",
         "status": "EstimatedDeparture"
       },
       "NH1072": {
@@ -31118,8 +31118,8 @@
         "dest": "OKA",
         "depTime": "11:40",
         "arrTime": "13:50",
-        "actDepTime": "11:50",
-        "actArrTime": "14:00",
+        "actDepTime": "12:00",
+        "actArrTime": "14:10",
         "status": "EstimatedDeparture"
       },
       "NH1181": {
@@ -31163,9 +31163,9 @@
         "dest": "HND",
         "depTime": "11:45",
         "arrTime": "12:50",
-        "actDepTime": "11:45",
-        "actArrTime": "12:50",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:42",
+        "actArrTime": "12:46",
+        "status": "InAir"
       },
       "NH322": {
         "flightNo": "NH322",
@@ -31403,9 +31403,9 @@
         "dest": "HND",
         "depTime": "11:05",
         "arrTime": "12:25",
-        "actDepTime": "11:25",
-        "actArrTime": "12:45",
-        "status": "EstimatedDeparture"
+        "actDepTime": "11:20",
+        "actArrTime": "12:30",
+        "status": "InAir"
       },
       "NH1088": {
         "flightNo": "NH1088",
@@ -72122,6 +72122,6 @@
       }
     }
   },
-  "updatedAt": "2026-10-31T02:00:25.837Z",
+  "updatedAt": "2026-10-31T03:00:34.940Z",
   "source": "ODPT (Public Transportation Open Data Center) API v4"
 }
