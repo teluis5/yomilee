@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年11月1日 12:00",
-  "updatedAtIso": "2026-11-01T03:00:37.560Z",
+  "updatedAt": "2026年11月1日 13:00",
+  "updatedAtIso": "2026-11-01T04:00:29.988Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (東京(羽田) ➔ 大阪(伊丹))",
+    "currentLocation": "大阪(伊丹)",
     "currentLocationCode": "ITM",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "広島(86%) / 東京(羽田)(5%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
@@ -599,7 +599,7 @@
       "isWeekend": true,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "飛行中 (東京(羽田) ➔ 大阪(伊丹))",
+      "currentAirport": "大阪(伊丹)",
       "nightStay": "広島(86%) / 東京(羽田)(5%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH21 (東京(羽田) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 86% / 東京(羽田) 5% / 神戸 5% / 名古屋(中部) 5% と推定されます。",
@@ -651,7 +651,7 @@
               "dest": "ITM",
               "route": "東京(羽田) ➔ 大阪(伊丹)",
               "time": "11:00発 - 12:10着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -716,7 +716,7 @@
               "dest": "ITM",
               "route": "東京(羽田) ➔ 大阪(伊丹)",
               "time": "11:00発 - 12:10着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -772,7 +772,7 @@
               "dest": "ITM",
               "route": "東京(羽田) ➔ 大阪(伊丹)",
               "time": "11:00発 - 12:10着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -867,9 +867,9 @@
             "flightNo": "NH21",
             "route": "東京(羽田) ➔ 大阪(伊丹)",
             "time": "11:00発 - 12:10着",
-            "status": "到着予定 (12:19)",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (12:17)",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -975,9 +975,9 @@
           "flightNo": "NH21",
           "route": "東京(羽田) ➔ 大阪(伊丹)",
           "time": "11:00発 - 12:10着",
-          "status": "到着予定 (12:19)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (12:17)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -3670,7 +3670,7 @@
       "code": "HKD",
       "name": "函館空港",
       "note": "羽田-函館線（NH553/NH554等）でB767投入実績あり。",
-      "prob": 13,
+      "prob": 14,
       "level": "D (機会あり)"
     },
     {
@@ -3703,7 +3703,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 353,
+    "totalFleetFlights": 354,
     "fleetCount": 11
   }
 }
