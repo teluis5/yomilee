@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年11月1日 13:00",
-  "updatedAtIso": "2026-11-01T04:00:29.988Z",
+  "updatedAt": "2026年11月1日 14:00",
+  "updatedAtIso": "2026-11-01T05:00:32.752Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "大阪(伊丹)",
-    "currentLocationCode": "ITM",
-    "isAirborne": false,
+    "currentLocation": "飛行中 (大阪(伊丹) ➔ 東京(羽田))",
+    "currentLocationCode": "HND",
+    "isAirborne": true,
     "nightStay": "広島(86%) / 東京(羽田)(5%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
@@ -599,11 +599,11 @@
       "isWeekend": true,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "大阪(伊丹)",
+      "currentAirport": "飛行中 (大阪(伊丹) ➔ 東京(羽田))",
       "nightStay": "広島(86%) / 東京(羽田)(5%)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH21 (東京(羽田) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 86% / 東京(羽田) 5% / 神戸 5% / 名古屋(中部) 5% と推定されます。",
-      "todayOutlook": "現在 NH21 (東京(羽田) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 86% / 東京(羽田) 5% / 神戸 5% / 名古屋(中部) 5% と推定されます。",
+      "pendingNightStayNote": "現在 NH26 (大阪(伊丹) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 86% / 東京(羽田) 5% / 神戸 5% / 名古屋(中部) 5% と推定されます。",
+      "todayOutlook": "現在 NH26 (大阪(伊丹) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 86% / 東京(羽田) 5% / 神戸 5% / 名古屋(中部) 5% と推定されます。",
       "nightStayProbabilities": [
         {
           "airport": "広島",
@@ -660,7 +660,7 @@
               "dest": "HND",
               "route": "大阪(伊丹) ➔ 東京(羽田)",
               "time": "13:00発 - 14:10着",
-              "tag": "予想接続(76P)",
+              "tag": "飛行中",
               "step": "③ 第3便"
             },
             {
@@ -725,7 +725,7 @@
               "dest": "HND",
               "route": "大阪(伊丹) ➔ 東京(羽田)",
               "time": "13:00発 - 14:10着",
-              "tag": "予想接続(76P)",
+              "tag": "飛行中",
               "step": "③ 第3便"
             },
             {
@@ -781,7 +781,7 @@
               "dest": "HND",
               "route": "大阪(伊丹) ➔ 東京(羽田)",
               "time": "13:00発 - 14:10着",
-              "tag": "予想接続(76P)",
+              "tag": "飛行中",
               "step": "③ 第3便"
             },
             {
@@ -890,12 +890,12 @@
             "time": "13:45発 - 15:20着"
           },
           "actual": {
-            "flightNo": "NH26 (予想)",
+            "flightNo": "NH26",
             "route": "大阪(伊丹) ➔ 東京(羽田)",
             "time": "13:00発 - 14:10着",
-            "status": "折返し確定予想 (76P枠)",
+            "status": "到着予定 (14:22)",
             "isLanded": false,
-            "isLive": false
+            "isLive": true
           }
         },
         {
@@ -982,16 +982,12 @@
         },
         {
           "flightNo": "NH26",
-          "origCode": "ITM",
-          "destCode": "HND",
           "route": "大阪(伊丹) ➔ 東京(羽田)",
-          "depTime": "13:00",
-          "arrTime": "14:10",
-          "time": "13:00発 - 14:10着 (予想)",
-          "status": "折返し確定予想 (76P枠)",
+          "time": "13:00発 - 14:10着",
+          "status": "到着予定 (14:22)",
           "isLanded": false,
-          "isLive": false,
-          "isPredicted": true
+          "isLive": true,
+          "isPredicted": false
         },
         {
           "flightNo": "NH681",
@@ -1044,7 +1040,7 @@
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
       "expectedStart": "広島発 (NH672)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH21 (東京(羽田) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 86% / 東京(羽田) 5% / 神戸 5% / 名古屋(中部) 5% と推定されます。",
+      "pendingNightStayNote": "現在 NH26 (大阪(伊丹) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 86% / 東京(羽田) 5% / 神戸 5% / 名古屋(中部) 5% と推定されます。",
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
@@ -3628,7 +3624,7 @@
       "code": "FUK",
       "name": "福岡空港",
       "note": "羽田幹線（NH245/NH250/NH265/NH270等）で連日高頻度運航。",
-      "prob": 41,
+      "prob": 40,
       "level": "B (中確率)"
     },
     {
@@ -3703,7 +3699,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 354,
+    "totalFleetFlights": 356,
     "fleetCount": 11
   }
 }
