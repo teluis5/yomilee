@@ -58322,9 +58322,9 @@
         "dest": "CTS",
         "depTime": "06:30",
         "arrTime": "08:00",
-        "actDepTime": "06:30",
-        "actArrTime": "08:00",
-        "status": "EstimatedDeparture"
+        "actDepTime": "06:34",
+        "actArrTime": "07:52",
+        "status": "InAir"
       },
       "NH51": {
         "flightNo": "NH51",
@@ -58664,9 +58664,9 @@
         "dest": "FUK",
         "depTime": "06:20",
         "arrTime": "08:20",
-        "actDepTime": "06:20",
-        "actArrTime": "08:20",
-        "status": "EstimatedDeparture"
+        "actDepTime": "06:19",
+        "actArrTime": "08:16",
+        "status": "InAir"
       },
       "NH1075": {
         "flightNo": "NH1075",
@@ -59420,9 +59420,9 @@
         "dest": "ITM",
         "depTime": "06:20",
         "arrTime": "07:30",
-        "actDepTime": "06:20",
-        "actArrTime": "07:30",
-        "status": "EstimatedDeparture"
+        "actDepTime": "06:18",
+        "actArrTime": "07:20",
+        "status": "InAir"
       },
       "NH13": {
         "flightNo": "NH13",
@@ -60104,8 +60104,8 @@
         "dest": "KOJ",
         "depTime": "06:35",
         "arrTime": "08:30",
-        "actDepTime": "06:35",
-        "actArrTime": "08:30",
+        "actDepTime": "07:10",
+        "actArrTime": "09:05",
         "status": "EstimatedDeparture"
       },
       "NH621": {
@@ -60608,9 +60608,9 @@
         "dest": "OKA",
         "depTime": "06:25",
         "arrTime": "09:15",
-        "actDepTime": "06:25",
-        "actArrTime": "09:15",
-        "status": "EstimatedDeparture"
+        "actDepTime": "06:23",
+        "actArrTime": "09:14",
+        "status": "InAir"
       },
       "NH993": {
         "flightNo": "NH993",
@@ -60626,9 +60626,9 @@
         "dest": "OKA",
         "depTime": "06:40",
         "arrTime": "09:25",
-        "actDepTime": "06:40",
-        "actArrTime": "09:25",
-        "status": "EstimatedDeparture"
+        "actDepTime": "06:41",
+        "actArrTime": "09:16",
+        "status": "InAir"
       },
       "NH463": {
         "flightNo": "NH463",
@@ -61418,8 +61418,8 @@
         "dest": "UKB",
         "depTime": "06:40",
         "arrTime": "08:00",
-        "actDepTime": "06:40",
-        "actArrTime": "08:00",
+        "actDepTime": "06:50",
+        "actArrTime": "08:10",
         "status": "EstimatedDeparture"
       },
       "NH415": {
@@ -61472,9 +61472,9 @@
         "dest": "YGJ",
         "depTime": "06:50",
         "arrTime": "08:15",
-        "actDepTime": "06:50",
+        "actDepTime": "06:49",
         "actArrTime": "08:15",
-        "status": "EstimatedDeparture"
+        "status": "Departed"
       },
       "NH383": {
         "flightNo": "NH383",
@@ -61580,9 +61580,9 @@
         "dest": "HND",
         "depTime": "06:50",
         "arrTime": "08:25",
-        "actDepTime": "06:50",
+        "actDepTime": "06:45",
         "actArrTime": "08:25",
-        "status": "EstimatedDeparture"
+        "status": "Departed"
       },
       "NH454": {
         "flightNo": "NH454",
@@ -63560,9 +63560,9 @@
         "dest": "HND",
         "depTime": "06:45",
         "arrTime": "07:55",
-        "actDepTime": "06:45",
+        "actDepTime": "06:48",
         "actArrTime": "07:55",
-        "status": "EstimatedDeparture"
+        "status": "Departed"
       },
       "NH94": {
         "flightNo": "NH94",
@@ -64291,16 +64291,16 @@
         "is767": false,
         "is76P": false,
         "is767Strict": false,
-        "isCancelled": false,
+        "isCancelled": true,
         "depGate": null,
         "arrGate": null,
         "origin": "KOJ",
         "dest": "ITM",
         "depTime": "09:00",
         "arrTime": "10:15",
-        "actDepTime": "09:00",
-        "actArrTime": "10:15",
-        "status": "EstimatedDeparture"
+        "actDepTime": "",
+        "actArrTime": "",
+        "status": "Cancelled"
       },
       "NH546": {
         "flightNo": "NH546",
@@ -66759,7 +66759,7 @@
         "is767Strict": false,
         "isCancelled": false,
         "depGate": null,
-        "arrGate": "1,2,3",
+        "arrGate": "4,5,6",
         "origin": "SYO",
         "dest": "HND",
         "depTime": "12:05",
@@ -108678,6 +108678,6 @@
       }
     }
   },
-  "updatedAt": "2026-11-02T21:00:26.018Z",
+  "updatedAt": "2026-11-02T22:00:26.504Z",
   "source": "ODPT (Public Transportation Open Data Center) API v4"
 }
