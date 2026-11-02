@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-02T10:00:35.605Z",
-  "updatedAtJst": "2026/11/2 19:00:35",
+  "updatedAt": "2026-11-02T11:00:38.892Z",
+  "updatedAtJst": "2026/11/2 20:00:38",
   "totalJets": 5,
   "jets": [
     {
@@ -17,9 +17,11 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "熊本 (KMJ) ➔ 東京(羽田) (HND)",
-      "currentFlight": {
+      "flightState": "着陸済み 🔵",
+      "currentLocation": "東京(羽田) (HND)",
+      "currentFlight": null,
+      "nextFlight": null,
+      "lastLandedFlight": {
         "id": "4265cfbd",
         "flightNo": "NH648",
         "origin": "KMJ",
@@ -30,12 +32,10 @@
         "arrTimeJst": "2026-11-02 19:50",
         "timeRange": "18:34 - 19:50",
         "dateJst": "2026-11-02",
-        "status": "Estimated 19:50",
-        "isLive": true,
+        "status": "Landed 19:50",
+        "isLive": false,
         "isToday": true
       },
-      "nextFlight": null,
-      "lastLandedFlight": null,
       "nightStay": "東京(羽田) (HND)",
       "domesticPrediction": {
         "nextCandidates": [],
@@ -54,8 +54,8 @@
           "arrTimeJst": "2026-11-02 19:50",
           "timeRange": "18:34 - 19:50",
           "dateJst": "2026-11-02",
-          "status": "Estimated 19:50",
-          "isLive": true,
+          "status": "Landed 19:50",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -131,8 +131,8 @@
           "arrTimeJst": "2026-11-02 19:50",
           "timeRange": "18:34 - 19:50",
           "dateJst": "2026-11-02",
-          "status": "Estimated 19:50",
-          "isLive": true,
+          "status": "Landed 19:50",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -211,7 +211,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-02T10:00:32.816Z"
+      "updatedAt": "2026-11-02T11:00:37.023Z"
     },
     {
       "id": "pikachu-nh",
@@ -358,7 +358,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-02T10:00:33.273Z"
+      "updatedAt": "2026-11-02T11:00:37.463Z"
     },
     {
       "id": "eevee-nh",
@@ -384,10 +384,10 @@
         "destination": "HND",
         "destinationName": "東京(羽田) (HND)",
         "depTimeJst": "2026-11-02 17:55",
-        "arrTimeJst": "2026-11-03 04:22",
-        "timeRange": "17:55 - 04:22",
+        "arrTimeJst": "2026-11-03 04:23",
+        "timeRange": "17:55 - 04:23",
         "dateJst": "2026-11-02",
-        "status": "Estimated 04:22",
+        "status": "Estimated 04:23",
         "isLive": true,
         "isToday": true
       },
@@ -405,10 +405,10 @@
           "destination": "HND",
           "destinationName": "東京(羽田) (HND)",
           "depTimeJst": "2026-11-02 17:55",
-          "arrTimeJst": "2026-11-03 04:22",
-          "timeRange": "17:55 - 04:22",
+          "arrTimeJst": "2026-11-03 04:23",
+          "timeRange": "17:55 - 04:23",
           "dateJst": "2026-11-02",
-          "status": "Estimated 04:22",
+          "status": "Estimated 04:23",
           "isLive": true,
           "isToday": true
         }
@@ -422,10 +422,10 @@
           "destination": "HND",
           "destinationName": "東京(羽田) (HND)",
           "depTimeJst": "2026-11-02 17:55",
-          "arrTimeJst": "2026-11-03 04:22",
-          "timeRange": "17:55 - 04:22",
+          "arrTimeJst": "2026-11-03 04:23",
+          "timeRange": "17:55 - 04:23",
           "dateJst": "2026-11-02",
-          "status": "Estimated 04:22",
+          "status": "Estimated 04:23",
           "isLive": true,
           "isToday": true
         },
@@ -505,7 +505,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-02T10:00:33.736Z"
+      "updatedAt": "2026-11-02T11:00:37.936Z"
     },
     {
       "id": "pokemon-green",
@@ -521,9 +521,11 @@
       "routesSummary": "羽田/成田 ➔ シアトル / 欧州 / 北米 / アジア幹線",
       "color": "#22c55e",
       "serviceStart": "2026-09-18",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "シアトル (SEA) ➔ 東京(羽田) (HND)",
-      "currentFlight": {
+      "flightState": "着陸済み 🔵",
+      "currentLocation": "東京(羽田) (HND)",
+      "currentFlight": null,
+      "nextFlight": null,
+      "lastLandedFlight": {
         "id": "4264b7fe",
         "flightNo": "NH117",
         "origin": "SEA",
@@ -531,15 +533,13 @@
         "destination": "HND",
         "destinationName": "東京(羽田) (HND)",
         "depTimeJst": "2026-11-02 09:13",
-        "arrTimeJst": "2026-11-02 19:19",
-        "timeRange": "09:13 - 19:19",
+        "arrTimeJst": "2026-11-02 19:18",
+        "timeRange": "09:13 - 19:18",
         "dateJst": "2026-11-02",
-        "status": "Estimated 19:19",
-        "isLive": true,
+        "status": "Landed 19:18",
+        "isLive": false,
         "isToday": true
       },
-      "nextFlight": null,
-      "lastLandedFlight": null,
       "nightStay": "東京(羽田) (HND)",
       "domesticPrediction": null,
       "todayFlightsCount": 1,
@@ -552,11 +552,11 @@
           "destination": "HND",
           "destinationName": "東京(羽田) (HND)",
           "depTimeJst": "2026-11-02 09:13",
-          "arrTimeJst": "2026-11-02 19:19",
-          "timeRange": "09:13 - 19:19",
+          "arrTimeJst": "2026-11-02 19:18",
+          "timeRange": "09:13 - 19:18",
           "dateJst": "2026-11-02",
-          "status": "Estimated 19:19",
-          "isLive": true,
+          "status": "Landed 19:18",
+          "isLive": false,
           "isToday": true
         }
       ],
@@ -569,11 +569,11 @@
           "destination": "HND",
           "destinationName": "東京(羽田) (HND)",
           "depTimeJst": "2026-11-02 09:13",
-          "arrTimeJst": "2026-11-02 19:19",
-          "timeRange": "09:13 - 19:19",
+          "arrTimeJst": "2026-11-02 19:18",
+          "timeRange": "09:13 - 19:18",
           "dateJst": "2026-11-02",
-          "status": "Estimated 19:19",
-          "isLive": true,
+          "status": "Landed 19:18",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -652,7 +652,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-02T10:00:34.656Z"
+      "updatedAt": "2026-11-02T11:00:38.407Z"
     },
     {
       "id": "pikachu-legacy",
@@ -678,10 +678,10 @@
         "destination": "HND",
         "destinationName": "東京(羽田) (HND)",
         "depTimeJst": "2026-11-02 09:34",
-        "arrTimeJst": "2026-11-02 21:16",
-        "timeRange": "09:34 - 21:16",
+        "arrTimeJst": "2026-11-02 21:24",
+        "timeRange": "09:34 - 21:24",
         "dateJst": "2026-11-02",
-        "status": "Estimated 21:16",
+        "status": "Delayed 21:24",
         "isLive": true,
         "isToday": true
       },
@@ -699,10 +699,10 @@
           "destination": "HND",
           "destinationName": "東京(羽田) (HND)",
           "depTimeJst": "2026-11-02 09:34",
-          "arrTimeJst": "2026-11-02 21:16",
-          "timeRange": "09:34 - 21:16",
+          "arrTimeJst": "2026-11-02 21:24",
+          "timeRange": "09:34 - 21:24",
           "dateJst": "2026-11-02",
-          "status": "Estimated 21:16",
+          "status": "Delayed 21:24",
           "isLive": true,
           "isToday": true
         }
@@ -716,10 +716,10 @@
           "destination": "HND",
           "destinationName": "東京(羽田) (HND)",
           "depTimeJst": "2026-11-02 09:34",
-          "arrTimeJst": "2026-11-02 21:16",
-          "timeRange": "09:34 - 21:16",
+          "arrTimeJst": "2026-11-02 21:24",
+          "timeRange": "09:34 - 21:24",
           "dateJst": "2026-11-02",
-          "status": "Estimated 21:16",
+          "status": "Delayed 21:24",
           "isLive": true,
           "isToday": true
         },
@@ -799,7 +799,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-02T10:00:35.602Z"
+      "updatedAt": "2026-11-02T11:00:38.889Z"
     }
   ]
 }
