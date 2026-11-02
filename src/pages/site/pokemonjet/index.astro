@@ -1,0 +1,596 @@
+---
+import Layout from '../../../layouts/BlogPost.astro';
+import Ad from '../../../components/Ad.astro';
+import pokemonData from '../../../data/pokemon_jet_status.json';
+
+const title = "ANA ポケモンジェット 現在地・運航状況＆フライト情報【ピカチュウ・イーブイ・赤・緑】";
+const description = "ANAの特別塗装機「ポケモンジェット（赤・緑・ピカチュウジェットNH・イーブイジェットNH）」のリアルタイム現在地、本日のフライト運航状況、ステイ先を毎日自動更新。";
+
+const updatedAtJst = pokemonData.updatedAtJst || "更新中";
+const jets = pokemonData.jets || [];
+
+const domesticJets = jets.filter((j) => j.type === 'domestic');
+const intlJets = jets.filter((j) => j.type === 'international');
+
+const pageSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'WebPage',
+	name: title,
+	description: description,
+	url: 'https://yomileeblog.com/site/pokemonjet/',
+	dateModified: pokemonData.updatedAt
+};
+---
+
+<Layout
+	title={title}
+	description={description}
+	pubDate={new Date('2026-11-02')}
+	updatedDate={new Date(pokemonData.updatedAt || Date.now())}
+>
+	<script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
+
+	<div class="pokemon-dashboard google-anno-skip">
+		<!-- ヒーローヘッダー -->
+		<div class="hero-banner">
+			<div class="hero-tag">⚡ ANA × そらとぶピカチュウプロジェクト ＆ ポケモン30周年</div>
+			<h1 class="hero-title">ANA ポケモンジェット運航状況・現在地トラッカー</h1>
+			<p class="hero-subtitle">
+				ピカチュウジェットNH、イーブイジェットNH、国内線ポケモンジェット赤・緑など、全特別塗装機のフライト動向をリアルタイム追跡！
+			</p>
+			<div class="update-meta">
+				<span class="live-pill">● LIVE TRACKING</span>
+				<span>最終データ同期: <b>{updatedAtJst}</b></span>
+			</div>
+		</div>
+
+		<!-- 国内線注目枠（ポケモンジェット 赤） -->
+		<div class="section-title-wrap">
+			<span class="sec-badge domestic">🗾 国内線特別枠</span>
+			<h2>ポケモンジェット 赤 (JA819A) リアルタイム運航状況</h2>
+			<p class="sec-sub">羽田〜福岡・新千歳・伊丹・松山・宮古など、日本全国を毎日飛び回る一番会いやすいポケモン機材！</p>
+		</div>
+
+		{domesticJets.map((jet) => (
+			<div class="jet-card featured-red">
+				<div class="jet-card-header">
+					<div class="jet-title-group">
+						<span class="jet-badge red-badge">{jet.badge}</span>
+						<h3 class="jet-name">{jet.name} <span class="reg-tag">【{jet.reg}】</span></h3>
+						<span class="aircraft-type">{jet.aircraftType}</span>
+					</div>
+					<div class="status-indicator">
+						<span class={`status-chip ${jet.flightState.includes('飛行中') ? 'live' : 'standby'}`}>
+							{jet.flightState}
+						</span>
+					</div>
+				</div>
+
+				<div class="jet-main-grid">
+					<div class="info-box">
+						<span class="box-label">現在地 / 飛行区間</span>
+						<div class="box-value highlight">{jet.currentLocation}</div>
+						{jet.currentFlight && (
+							<div class="sub-detail">
+								運航便: <b>{jet.currentFlight.flightNo}</b> ({jet.currentFlight.timeRange}) [{jet.currentFlight.status}]
+							</div>
+						)}
+					</div>
+
+					<div class="info-box">
+						<span class="box-label">今夜のステイ先予測</span>
+						<div class="box-value">{jet.nightStay}</div>
+						<div class="sub-detail text-muted">※機材繰りにより変更となる場合があります</div>
+					</div>
+				</div>
+
+				{jet.domesticPrediction && jet.domesticPrediction.nextCandidates && jet.domesticPrediction.nextCandidates.length > 0 && (
+					<div class="next-prediction-box">
+						<div class="pred-header">
+							<span class="pred-icon">🎯</span>
+							<span class="pred-title">機材ダイヤ突合による有力次便予測 (ANA公式 78P枠)</span>
+						</div>
+						<div class="cand-list">
+							{jet.domesticPrediction.nextCandidates.map((c) => (
+								<div class="cand-row">
+									<span class="cand-fno">{c.flightNo}</span>
+									<span class="cand-route">{c.route}</span>
+									<span class="cand-time">{c.depTime}発 ➔ {c.arrTime}着</span>
+									<span class="cand-prob">{c.probability}</span>
+								</div>
+							))}
+						</div>
+					</div>
+				)}
+
+				<!-- 本日のフライト履歴 -->
+				<div class="flights-section">
+					<h4 class="flights-title">📋 本日のフライト実績・スケジュール ({jet.todayFlights.length}便)</h4>
+					{jet.todayFlights.length > 0 ? (
+						<div class="table-wrap">
+							<table class="flight-table">
+								<thead>
+									<tr>
+										<th>便名</th>
+										<th>出発地</th>
+										<th>到着地</th>
+										<th>予定時刻</th>
+										<th>ステータス</th>
+									</tr>
+								</thead>
+								<tbody>
+									{jet.todayFlights.map((fl) => (
+										<tr>
+											<td><b>{fl.flightNo}</b></td>
+											<td>{fl.originName}</td>
+											<td>{fl.destinationName}</td>
+											<td>{fl.timeRange}</td>
+											<td><span class={`status-tag ${fl.status.includes('Landed') ? 'tag-landed' : 'tag-active'}`}>{fl.status}</span></td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					) : (
+						<p class="no-flight-msg">本日の運航便は現在準備中または調整中です。</p>
+					)}
+				</div>
+			</div>
+		))}
+
+		<Ad />
+
+		<!-- 国際線フリート（ピカチュウ・イーブイ・緑） -->
+		<div class="section-title-wrap" style="margin-top: 40px;">
+			<span class="sec-badge intl">🌏 国際線フリート</span>
+			<h2>国際線ポケモンジェット（ピカチュウ・イーブイ・緑）</h2>
+			<p class="sec-sub">ハワイ、アメリカ本土、欧州、アジアへ羽ばたく世界規模の特別塗装機群！</p>
+		</div>
+
+		<div class="intl-jets-grid">
+			{intlJets.map((jet) => (
+				<div class="intl-card">
+					<div class="intl-header">
+						<div>
+							<span class="intl-pill" style={`background-color: ${jet.color};`}>{jet.badge}</span>
+							<h3 class="intl-name">{jet.name}</h3>
+							<span class="intl-reg">{jet.reg} ({jet.modelCode})</span>
+						</div>
+						<span class={`status-chip-sm ${jet.flightState.includes('飛行中') ? 'live' : 'standby'}`}>
+							{jet.flightState}
+						</span>
+					</div>
+
+					<p class="intl-theme">{jet.theme}</p>
+
+					<div class="intl-loc-box">
+						<span class="loc-lbl">現在地 / 直近便:</span>
+						<span class="loc-val">{jet.currentLocation}</span>
+					</div>
+
+					<div class="intl-flights">
+						<span class="fls-lbl">直近の運航フライト:</span>
+						{jet.recentFlights && jet.recentFlights.slice(0, 3).map((f) => (
+							<div class="intl-fl-row">
+								<span class="fl-code">{f.flightNo}</span>
+								<span class="fl-route">{f.origin} ➔ {f.destination}</span>
+								<span class="fl-status">{f.status}</span>
+							</div>
+						))}
+					</div>
+				</div>
+			))}
+		</div>
+
+		<!-- ポケモンジェット搭乗・撮影ガイド＆FAQ -->
+		<div class="guide-box">
+			<h3 class="guide-title">💡 ポケモンジェットに会うための攻略ポイント</h3>
+			<div class="guide-content">
+				<div class="guide-item">
+					<h4>1. 固定ダイヤ（運航スケジュール）はある？</h4>
+					<p>ANAのポケモンジェットは特定のダイヤに固定されておらず、日々ANAの機材繰りによって投入路線が決まります。搭乗が保証されるわけではないため、直前の機番チェックが必須です。</p>
+				</div>
+				<div class="guide-item">
+					<h4>2. いつ機番が確定する？</h4>
+					<p>国内線（ポケモン赤 JA819A）は前日夜〜当日早朝の機材繰りで確定します。国際線（JA894A / JA784A）は長距離を飛ぶため、前日〜当日のフライト状況で次便を高確率で追跡できます。</p>
+				</div>
+				<div class="guide-item">
+					<h4>3. ちいかわジェットとの違いは？</h4>
+					<p>ちいかわジェット（JA609A）はB767-300ERですが、ポケモン赤は最新のB787-8（ワイドボディ・大型画面搭載機）。より長距離の幹線（福岡・札幌・那覇等）に多く投入される特徴があります。</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- 関連リンク -->
+		<div class="bottom-nav">
+			<a href="/site/chiikawajet/" class="nav-btn chiikawa-btn">✈️ ちいかわジェット（JA609A）運航状況はこちら ➔</a>
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.pokemon-dashboard {
+		max-width: 960px;
+		margin: 0 auto;
+		padding: 10px 16px 40px;
+		font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+		color: #1e293b;
+	}
+
+	.hero-banner {
+		background: linear-gradient(135deg, #1e3a8a 0%, #0284c7 50%, #38bdf8 100%);
+		color: #ffffff;
+		border-radius: 20px;
+		padding: 30px 24px;
+		margin-bottom: 30px;
+		box-shadow: 0 10px 25px rgba(2, 132, 199, 0.25);
+	}
+	.hero-tag {
+		display: inline-block;
+		background: rgba(255, 255, 255, 0.2);
+		backdrop-filter: blur(10px);
+		padding: 4px 12px;
+		border-radius: 20px;
+		font-size: 0.85rem;
+		font-weight: 700;
+		margin-bottom: 12px;
+	}
+	.hero-title {
+		font-size: 1.8rem;
+		font-weight: 800;
+		line-height: 1.3;
+		margin: 0 0 10px 0;
+	}
+	.hero-subtitle {
+		font-size: 0.95rem;
+		opacity: 0.92;
+		margin: 0 0 16px 0;
+		line-height: 1.5;
+	}
+	.update-meta {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		font-size: 0.85rem;
+	}
+	.live-pill {
+		background: #ef4444;
+		color: #ffffff;
+		font-weight: 800;
+		padding: 3px 10px;
+		border-radius: 12px;
+		font-size: 0.75rem;
+		letter-spacing: 0.5px;
+		animation: pulse 2s infinite;
+	}
+
+	@keyframes pulse {
+		0%, 100% { opacity: 1; }
+		50% { opacity: 0.7; }
+	}
+
+	.section-title-wrap {
+		margin-bottom: 18px;
+	}
+	.sec-badge {
+		display: inline-block;
+		font-size: 0.75rem;
+		font-weight: 800;
+		padding: 3px 10px;
+		border-radius: 8px;
+		margin-bottom: 6px;
+	}
+	.sec-badge.domestic { background: #fee2e2; color: #b91c1c; }
+	.sec-badge.intl { background: #e0e7ff; color: #4338ca; }
+	.section-title-wrap h2 {
+		font-size: 1.4rem;
+		font-weight: 800;
+		margin: 0 0 4px 0;
+		color: #0f172a;
+	}
+	.sec-sub {
+		font-size: 0.88rem;
+		color: #64748b;
+		margin: 0;
+	}
+
+	/* 特集カード（国内線 赤） */
+	.featured-red {
+		background: #ffffff;
+		border: 2px solid #fca5a5;
+		border-radius: 18px;
+		padding: 22px;
+		box-shadow: 0 6px 20px rgba(239, 68, 68, 0.08);
+		margin-bottom: 30px;
+	}
+	.jet-card-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		border-bottom: 1px dashed #e2e8f0;
+		padding-bottom: 14px;
+		margin-bottom: 16px;
+	}
+	.red-badge {
+		background: #ef4444;
+		color: #ffffff;
+		font-size: 0.75rem;
+		font-weight: 800;
+		padding: 3px 8px;
+		border-radius: 6px;
+		display: inline-block;
+		margin-bottom: 4px;
+	}
+	.jet-name {
+		font-size: 1.4rem;
+		font-weight: 800;
+		margin: 2px 0 4px 0;
+		color: #0f172a;
+	}
+	.reg-tag {
+		font-size: 1rem;
+		color: #dc2626;
+		font-weight: 800;
+	}
+	.aircraft-type {
+		font-size: 0.85rem;
+		color: #64748b;
+	}
+	.status-chip {
+		display: inline-block;
+		font-size: 0.85rem;
+		font-weight: 800;
+		padding: 6px 14px;
+		border-radius: 20px;
+	}
+	.status-chip.live { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+	.status-chip.standby { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
+
+	.jet-main-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 14px;
+		margin-bottom: 18px;
+	}
+	@media (max-width: 640px) {
+		.jet-main-grid { grid-template-columns: 1fr; }
+	}
+	.info-box {
+		background: #f8fafc;
+		border: 1px solid #e2e8f0;
+		border-radius: 12px;
+		padding: 14px 16px;
+	}
+	.box-label {
+		display: block;
+		font-size: 0.8rem;
+		font-weight: 700;
+		color: #64748b;
+		margin-bottom: 4px;
+	}
+	.box-value {
+		font-size: 1.15rem;
+		font-weight: 800;
+		color: #0f172a;
+	}
+	.box-value.highlight {
+		color: #0284c7;
+	}
+	.sub-detail {
+		font-size: 0.82rem;
+		color: #334155;
+		margin-top: 4px;
+	}
+	.text-muted { color: #94a3b8; }
+
+	/* 次便予測ボックス */
+	.next-prediction-box {
+		background: #fffbeb;
+		border: 1.5px dashed #f59e0b;
+		border-radius: 12px;
+		padding: 14px 18px;
+		margin-bottom: 18px;
+	}
+	.pred-header {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 0.92rem;
+		font-weight: 800;
+		color: #b45309;
+		margin-bottom: 10px;
+	}
+	.cand-list {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.cand-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		background: #ffffff;
+		border: 1px solid #fef3c7;
+		border-radius: 8px;
+		padding: 8px 12px;
+		font-size: 0.88rem;
+		font-weight: 700;
+	}
+	@media (max-width: 600px) {
+		.cand-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+	}
+	.cand-fno { color: #0284c7; min-width: 80px; }
+	.cand-route { color: #0f172a; }
+	.cand-time { color: #475569; font-size: 0.82rem; }
+	.cand-prob { color: #d97706; font-size: 0.82rem; }
+
+	/* フライト表 */
+	.flights-section {
+		margin-top: 10px;
+	}
+	.flights-title {
+		font-size: 0.95rem;
+		font-weight: 800;
+		color: #1e293b;
+		margin: 0 0 10px 0;
+	}
+	.table-wrap {
+		overflow-x: auto;
+	}
+	.flight-table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.85rem;
+		text-align: left;
+	}
+	.flight-table th {
+		background: #f1f5f9;
+		color: #475569;
+		padding: 8px 12px;
+		font-weight: 700;
+		border-bottom: 2px solid #e2e8f0;
+	}
+	.flight-table td {
+		padding: 10px 12px;
+		border-bottom: 1px solid #f1f5f9;
+		color: #1e293b;
+	}
+	.status-tag {
+		display: inline-block;
+		font-size: 0.75rem;
+		font-weight: 700;
+		padding: 2px 8px;
+		border-radius: 6px;
+	}
+	.tag-landed { background: #e2e8f0; color: #475569; }
+	.tag-active { background: #dbeafe; color: #0284c7; }
+
+	/* 国際線グリッド */
+	.intl-jets-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 16px;
+		margin-bottom: 30px;
+	}
+	.intl-card {
+		background: #ffffff;
+		border: 1px solid #e2e8f0;
+		border-radius: 14px;
+		padding: 18px;
+		box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+	}
+	.intl-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		margin-bottom: 8px;
+	}
+	.intl-pill {
+		color: #ffffff;
+		font-size: 0.72rem;
+		font-weight: 800;
+		padding: 2px 8px;
+		border-radius: 6px;
+		display: inline-block;
+		margin-bottom: 4px;
+	}
+	.intl-name {
+		font-size: 1.15rem;
+		font-weight: 800;
+		margin: 2px 0;
+		color: #0f172a;
+	}
+	.intl-reg {
+		font-size: 0.82rem;
+		color: #64748b;
+		font-weight: 700;
+	}
+	.status-chip-sm {
+		font-size: 0.75rem;
+		font-weight: 700;
+		padding: 4px 10px;
+		border-radius: 14px;
+	}
+	.status-chip-sm.live { background: #dcfce7; color: #15803d; }
+	.status-chip-sm.standby { background: #f1f5f9; color: #475569; }
+	.intl-theme {
+		font-size: 0.82rem;
+		color: #475569;
+		margin: 6px 0 12px 0;
+		line-height: 1.4;
+	}
+	.intl-loc-box {
+		background: #f8fafc;
+		border-radius: 8px;
+		padding: 8px 10px;
+		font-size: 0.85rem;
+		margin-bottom: 10px;
+	}
+	.loc-lbl { color: #64748b; font-size: 0.75rem; display: block; }
+	.loc-val { font-weight: 800; color: #0284c7; }
+	.intl-flights {
+		font-size: 0.8rem;
+	}
+	.fls-lbl { color: #64748b; font-weight: 700; display: block; margin-bottom: 4px; }
+	.intl-fl-row {
+		display: flex;
+		justify-content: space-between;
+		padding: 4px 0;
+		border-bottom: 1px dashed #f1f5f9;
+		color: #334155;
+	}
+	.fl-code { font-weight: 800; color: #0284c7; }
+
+	/* ガイド＆FAQ */
+	.guide-box {
+		background: #f8fafc;
+		border: 1px solid #cbd5e1;
+		border-radius: 16px;
+		padding: 22px;
+		margin-bottom: 30px;
+	}
+	.guide-title {
+		font-size: 1.15rem;
+		font-weight: 800;
+		color: #0f172a;
+		margin: 0 0 16px 0;
+	}
+	.guide-content {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+	.guide-item h4 {
+		font-size: 0.95rem;
+		font-weight: 800;
+		color: #1e293b;
+		margin: 0 0 4px 0;
+	}
+	.guide-item p {
+		font-size: 0.88rem;
+		color: #475569;
+		margin: 0;
+		line-height: 1.5;
+	}
+
+	.bottom-nav {
+		text-align: center;
+		margin-top: 20px;
+	}
+	.nav-btn {
+		display: inline-block;
+		background: #0284c7;
+		color: #ffffff;
+		text-decoration: none;
+		font-weight: 800;
+		padding: 12px 28px;
+		border-radius: 30px;
+		font-size: 0.95rem;
+		box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+		transition: all 0.2s ease;
+	}
+	.nav-btn:hover {
+		background: #0369a1;
+		transform: translateY(-2px);
+	}
+</style>
