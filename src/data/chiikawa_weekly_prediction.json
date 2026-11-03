@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年11月3日 18:00",
-  "updatedAtIso": "2026-11-03T09:00:28.071Z",
+  "updatedAt": "2026年11月3日 19:00",
+  "updatedAtIso": "2026-11-03T10:00:28.222Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (札幌(新千歳) ➔ 大阪(伊丹))",
+    "currentLocation": "大阪(伊丹)",
     "currentLocationCode": "ITM",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "東京(羽田)(92%) / 札幌(新千歳)(8%)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
@@ -717,7 +717,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "飛行中 (札幌(新千歳) ➔ 大阪(伊丹))",
+      "currentAirport": "大阪(伊丹)",
       "nightStay": "東京(羽田)(92%) / 札幌(新千歳)(8%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH778 (札幌(新千歳) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 92% / 札幌(新千歳) 8% と推定されます。",
@@ -777,7 +777,7 @@
               "dest": "ITM",
               "route": "札幌(新千歳) ➔ 大阪(伊丹)",
               "time": "16:15発 - 18:15着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "④ 第4便"
             },
             {
@@ -833,7 +833,7 @@
               "dest": "ITM",
               "route": "札幌(新千歳) ➔ 大阪(伊丹)",
               "time": "16:15発 - 18:15着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "④ 第4便"
             },
             {
@@ -962,9 +962,9 @@
             "flightNo": "NH778",
             "route": "札幌(新千歳) ➔ 大阪(伊丹)",
             "time": "16:15発 - 18:15着",
-            "status": "到着予定 (18:16)",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (18:13)",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -1018,9 +1018,9 @@
           "flightNo": "NH778",
           "route": "札幌(新千歳) ➔ 大阪(伊丹)",
           "time": "16:15発 - 18:15着",
-          "status": "到着予定 (18:16)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (18:13)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -3491,20 +3491,20 @@
       "code": "ITM",
       "name": "大阪(伊丹)",
       "note": "羽田シャトル便（NH18/NH21/NH23/NH39等）と新千歳直行便が乗り入れ。",
-      "prob": 73,
-      "level": "A (高確率)"
-    },
-    {
-      "code": "NGS",
-      "name": "長崎空港",
-      "note": "朝一便（NH661/NH664）および夜間ステイ便（NH669/NH662）で高頻度投入。",
-      "prob": 58,
+      "prob": 72,
       "level": "A (高確率)"
     },
     {
       "code": "NGO",
       "name": "名古屋(中部)",
       "note": "新千歳便（NH703/NH712等）や羽田便の夜間ステイ拠点。",
+      "prob": 58,
+      "level": "A (高確率)"
+    },
+    {
+      "code": "NGS",
+      "name": "長崎空港",
+      "note": "朝一便（NH661/NH664）および夜間ステイ便（NH669/NH662）で高頻度投入。",
       "prob": 57,
       "level": "A (高確率)"
     },
@@ -3512,7 +3512,7 @@
       "code": "HIJ",
       "name": "広島空港",
       "note": "昼往復便（NH679/NH680）および夜間ステイ便（NH685/NH672）の主要拠点。",
-      "prob": 48,
+      "prob": 47,
       "level": "B (中確率)"
     },
     {
@@ -3526,21 +3526,21 @@
       "code": "OKA",
       "name": "沖縄(那覇)",
       "note": "羽田・伊丹・中部から飛来する大型幹線。",
-      "prob": 30,
+      "prob": 31,
       "level": "C (注目)"
     },
     {
       "code": "KOJ",
       "name": "鹿児島空港",
       "note": "早朝羽田発（NH619/NH622）や夕方往復（NH627/NH630）の定番路線。",
-      "prob": 27,
+      "prob": 26,
       "level": "C (注目)"
     },
     {
       "code": "MYJ",
       "name": "松山空港",
       "note": "午後便（NH593/NH596）や夕方便での投入実績多数。",
-      "prob": 27,
+      "prob": 26,
       "level": "C (注目)"
     },
     {
@@ -3594,7 +3594,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 416,
+    "totalFleetFlights": 418,
     "fleetCount": 11
   }
 }
