@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026年11月3日 13:00",
-  "updatedAtIso": "2026-11-03T04:00:44.966Z",
+  "updatedAt": "2026年11月3日 14:00",
+  "updatedAtIso": "2026-11-03T05:00:29.049Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "札幌(新千歳)",
-    "currentLocationCode": "CTS",
+    "currentLocation": "名古屋(中部)",
+    "currentLocationCode": "NGO",
     "isAirborne": false,
     "nightStay": "東京(羽田)(92%) / 札幌(新千歳)(8%)",
     "nightStayCode": "HND",
@@ -717,7 +717,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "札幌(新千歳)",
+      "currentAirport": "名古屋(中部)",
       "nightStay": "東京(羽田)(92%) / 札幌(新千歳)(8%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH710 (札幌(新千歳) ➔ 名古屋(中部)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 92% / 札幌(新千歳) 8% と推定されます。",
@@ -759,7 +759,7 @@
               "dest": "NGO",
               "route": "札幌(新千歳) ➔ 名古屋(中部)",
               "time": "11:10発 - 13:00着",
-              "tag": "本日確定枠",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -815,7 +815,7 @@
               "dest": "NGO",
               "route": "札幌(新千歳) ➔ 名古屋(中部)",
               "time": "11:10発 - 13:00着",
-              "tag": "本日確定枠",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -910,8 +910,8 @@
             "flightNo": "NH710",
             "route": "札幌(新千歳) ➔ 名古屋(中部)",
             "time": "11:10発 - 13:00着",
-            "status": "遅延 (13:16予定)",
-            "isLanded": false,
+            "status": "着陸済 (13:17)",
+            "isLanded": true,
             "isLive": false
           }
         },
@@ -1000,8 +1000,8 @@
           "flightNo": "NH710",
           "route": "札幌(新千歳) ➔ 名古屋(中部)",
           "time": "11:10発 - 13:00着",
-          "status": "遅延 (13:16予定)",
-          "isLanded": false,
+          "status": "着陸済 (13:17)",
+          "isLanded": true,
           "isLive": false,
           "isPredicted": false
         },
