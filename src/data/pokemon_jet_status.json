@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-03T03:00:35.579Z",
-  "updatedAtJst": "2026/11/3 12:00:35",
+  "updatedAt": "2026-11-03T04:00:34.981Z",
+  "updatedAtJst": "2026/11/3 13:00:34",
   "totalJets": 5,
   "jets": [
     {
@@ -27,23 +27,23 @@
         "destination": "HND",
         "destinationName": "東京(羽田) (HND)",
         "depTimeJst": "2026-11-03 11:57",
-        "arrTimeJst": "2026-11-03 13:18",
-        "timeRange": "11:57 - 13:18",
+        "arrTimeJst": "2026-11-03 13:06",
+        "timeRange": "11:57 - 13:06",
         "dateJst": "2026-11-03",
-        "status": "Estimated 13:18",
+        "status": "Estimated 13:06",
         "isLive": true,
         "isToday": true
       },
       "nextFlight": {
-        "flightNo": "NH593",
+        "flightNo": "NH625",
         "origin": "HND",
         "originName": "東京(羽田) (HND)",
-        "destination": "松山 (MYJ)",
-        "destinationName": "松山 (MYJ)",
-        "depTimeJst": "14:15",
-        "arrTimeJst": "15:50",
-        "timeRange": "14:15 - 15:50",
-        "status": "予測枠 (★★★★★ (最有力・55分ターン))",
+        "destination": "鹿児島 (KOJ)",
+        "destinationName": "鹿児島 (KOJ)",
+        "depTimeJst": "13:50",
+        "arrTimeJst": "15:45",
+        "timeRange": "13:50 - 15:45",
+        "status": "予測枠 (★★★☆☆)",
         "isPredicted": true
       },
       "lastLandedFlight": null,
@@ -51,12 +51,21 @@
       "domesticPrediction": {
         "nextCandidates": [
           {
+            "flightNo": "NH625",
+            "route": "東京(羽田) (HND) ➔ 鹿児島 (KOJ)",
+            "depTime": "13:50",
+            "arrTime": "15:45",
+            "model": "78P",
+            "turnAroundMin": 44,
+            "probability": "★★★☆☆"
+          },
+          {
             "flightNo": "NH593",
             "route": "東京(羽田) (HND) ➔ 松山 (MYJ)",
             "depTime": "14:15",
             "arrTime": "15:50",
             "model": "78P",
-            "turnAroundMin": 57,
+            "turnAroundMin": 69,
             "probability": "★★★★★ (最有力・55分ターン)"
           },
           {
@@ -65,16 +74,7 @@
             "depTime": "15:00",
             "arrTime": "16:30",
             "model": "78P",
-            "turnAroundMin": 102,
-            "probability": "★★★☆☆"
-          },
-          {
-            "flightNo": "NH645",
-            "route": "東京(羽田) (HND) ➔ 熊本 (KMJ)",
-            "depTime": "15:30",
-            "arrTime": "17:25",
-            "model": "78P",
-            "turnAroundMin": 132,
+            "turnAroundMin": 114,
             "probability": "★★★☆☆"
           }
         ],
@@ -90,10 +90,10 @@
           "destination": "HND",
           "destinationName": "東京(羽田) (HND)",
           "depTimeJst": "2026-11-03 11:57",
-          "arrTimeJst": "2026-11-03 13:18",
-          "timeRange": "11:57 - 13:18",
+          "arrTimeJst": "2026-11-03 13:06",
+          "timeRange": "11:57 - 13:06",
           "dateJst": "2026-11-03",
-          "status": "Estimated 13:18",
+          "status": "Estimated 13:06",
           "isLive": true,
           "isToday": true
         },
@@ -122,10 +122,10 @@
           "destination": "HND",
           "destinationName": "東京(羽田) (HND)",
           "depTimeJst": "2026-11-03 11:57",
-          "arrTimeJst": "2026-11-03 13:18",
-          "timeRange": "11:57 - 13:18",
+          "arrTimeJst": "2026-11-03 13:06",
+          "timeRange": "11:57 - 13:06",
           "dateJst": "2026-11-03",
-          "status": "Estimated 13:18",
+          "status": "Estimated 13:06",
           "isLive": true,
           "isToday": true
         },
@@ -205,7 +205,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-03T03:00:33.668Z"
+      "updatedAt": "2026-11-03T04:00:33.229Z"
     },
     {
       "id": "pikachu-nh",
@@ -336,7 +336,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-03T03:00:34.246Z"
+      "updatedAt": "2026-11-03T04:00:33.674Z"
     },
     {
       "id": "eevee-nh",
@@ -467,7 +467,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-03T03:00:34.716Z"
+      "updatedAt": "2026-11-03T04:00:34.118Z"
     },
     {
       "id": "pokemon-green",
@@ -493,10 +493,10 @@
         "destination": "SIN",
         "destinationName": "シンガポール (SIN)",
         "depTimeJst": "2026-11-03 11:16",
-        "arrTimeJst": "2026-11-03 18:19",
-        "timeRange": "11:16 - 18:19",
+        "arrTimeJst": "2026-11-03 17:57",
+        "timeRange": "11:16 - 17:57",
         "dateJst": "2026-11-03",
-        "status": "Estimated 17:19",
+        "status": "Estimated 16:57",
         "isLive": true,
         "isToday": true
       },
@@ -514,10 +514,10 @@
           "destination": "SIN",
           "destinationName": "シンガポール (SIN)",
           "depTimeJst": "2026-11-03 11:16",
-          "arrTimeJst": "2026-11-03 18:19",
-          "timeRange": "11:16 - 18:19",
+          "arrTimeJst": "2026-11-03 17:57",
+          "timeRange": "11:16 - 17:57",
           "dateJst": "2026-11-03",
-          "status": "Estimated 17:19",
+          "status": "Estimated 16:57",
           "isLive": true,
           "isToday": true
         }
@@ -531,10 +531,10 @@
           "destination": "SIN",
           "destinationName": "シンガポール (SIN)",
           "depTimeJst": "2026-11-03 11:16",
-          "arrTimeJst": "2026-11-03 18:19",
-          "timeRange": "11:16 - 18:19",
+          "arrTimeJst": "2026-11-03 17:57",
+          "timeRange": "11:16 - 17:57",
           "dateJst": "2026-11-03",
-          "status": "Estimated 17:19",
+          "status": "Estimated 16:57",
           "isLive": true,
           "isToday": true
         },
@@ -614,7 +614,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-03T03:00:35.153Z"
+      "updatedAt": "2026-11-03T04:00:34.542Z"
     },
     {
       "id": "pikachu-legacy",
@@ -640,10 +640,10 @@
         "destination": "MUC",
         "destinationName": "MUC",
         "depTimeJst": "2026-11-02 23:48",
-        "arrTimeJst": "2026-11-03 13:38",
-        "timeRange": "23:48 - 13:38",
+        "arrTimeJst": "2026-11-03 13:39",
+        "timeRange": "23:48 - 13:39",
         "dateJst": "2026-11-02",
-        "status": "Estimated 05:38",
+        "status": "Estimated 05:39",
         "isLive": true,
         "isToday": false
       },
@@ -662,10 +662,10 @@
           "destination": "MUC",
           "destinationName": "MUC",
           "depTimeJst": "2026-11-02 23:48",
-          "arrTimeJst": "2026-11-03 13:38",
-          "timeRange": "23:48 - 13:38",
+          "arrTimeJst": "2026-11-03 13:39",
+          "timeRange": "23:48 - 13:39",
           "dateJst": "2026-11-02",
-          "status": "Estimated 05:38",
+          "status": "Estimated 05:39",
           "isLive": true,
           "isToday": false
         },
@@ -745,7 +745,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-03T03:00:35.577Z"
+      "updatedAt": "2026-11-03T04:00:34.976Z"
     }
   ]
 }
