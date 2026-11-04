@@ -507,19 +507,22 @@ function evaluateHndTurnaroundScore(arrMins, candidateDepFlight, dayFlights, pre
   if (turnaround < 35) return 0.05;
 
   // 1. ターンアラウンド時間の自然さ（50〜80分が国内線B767の黄金ゾーン）
+  // ※ハードな足切りはせず、なるべく理想的な時間から探しつつ長めの待機（機材繰り・予備待機）もソフトに候補へ残す
   let factor = 1.0;
-  if (turnaround >= 48 && turnaround <= 80) {
-    factor = 1.35;
+  if (turnaround >= 48 && turnaround <= 85) {
+    factor = 1.4; // 黄金ゾーン（最も頻出する通常ターン）
   } else if (turnaround >= 40 && turnaround < 48) {
-    factor = 1.1;
+    factor = 1.15;
   } else if (turnaround >= 35 && turnaround < 40) {
-    factor = 0.55; // 物理的下限ギリギリ
-  } else if (turnaround > 80 && turnaround <= 115) {
-    factor = 1.05;
-  } else if (turnaround > 115 && turnaround <= 165) {
-    factor = 0.78;
+    factor = 0.7; // 物理的下限ギリギリ
+  } else if (turnaround > 85 && turnaround <= 120) {
+    factor = 1.1; // やや余裕あり
+  } else if (turnaround > 120 && turnaround <= 180) {
+    factor = 0.85; // 2〜3時間待機（長距離便接続や夕方便調整で頻出）
+  } else if (turnaround > 180 && turnaround <= 240) {
+    factor = 0.62; // 3〜4時間待機（予備機待機・機材繰り調整）
   } else {
-    factor = 0.45;
+    factor = 0.35; // 4時間超の駐機
   }
 
   // 2. ODPT 767単独確定枠ボーナス
@@ -594,8 +597,19 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
   const startSchedArrMin = parseTimeToMinutes(odptLast?.arrTime || lastToday.arrTime) ?? 950;
   const startActArrMin = parseTimeToMinutes(odptLast?.actArrTime || lastToday.arrTime || odptLast?.arrTime) ?? startSchedArrMin;
 
-  // すでに夜20:00以降着の便、または19:00以降に地方空港へ到着する最終便ならナイトステイ確定
-  if (startActArrMin >= 1200 || (startAirport !== 'HND' && startActArrMin >= 1130)) {
+  // 当該空港から物理的に出発可能な後続767便（未割当）を厳密に検索
+  // ※安易に時刻だけでナイトステイと決めつけず、本当に後続・折り返し767便がないことを確認する
+  const immediateNext767 = Object.values(dayFlights).filter(df => {
+    if (df.origin !== startAirport || df.isCancelled) return false;
+    if (alreadyFlownSet.has(df.flightNo)) return false;
+    if (assignedOtherMap.has(df.flightNo)) return false;
+    const depM = parseTimeToMinutes(df.actDepTime || df.depTime);
+    const minTurn = startAirport === 'HND' ? 35 : 30;
+    return depM !== null && depM >= startActArrMin + minTurn && (df.is767 || transitions[startFn]?.[df.flightNo] > 0);
+  });
+
+  // 深夜23:00以降着、または後続の767便がダイヤ上に1便も存在しないことを確認できた場合のみナイトステイ確定
+  if (startActArrMin >= 1380 || (startActArrMin >= 1050 && immediateNext767.length === 0)) {
     const stayName = AIRPORT_NAMES[startAirport] || startAirport;
     return {
       isNightStayConfirmed: true,
@@ -612,8 +626,8 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
   const completedPaths = []; // { remFlights: [...], finalStayCode, weight, reason }
 
   function dfs(curAirport, curArrMin, curSchedArrMin, curFn, pathFlights, pathWeight, depth) {
-    // 終端判定1: 地方空港に18:50以降着（地方ナイトステイ完了）
-    if (curAirport !== 'HND' && curArrMin >= 1130) {
+    // 終端判定: 深さ上限または深夜23:00以降の運用限界
+    if (depth >= 5 || curArrMin >= 1380) {
       completedPaths.push({
         remFlights: [...pathFlights],
         finalStayCode: curAirport,
@@ -622,24 +636,14 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
       return;
     }
 
-    // 終端判定2: 深さ上限または深夜22:30以降
-    if (depth >= 4 || curArrMin >= 1350) {
-      completedPaths.push({
-        remFlights: [...pathFlights],
-        finalStayCode: curAirport,
-        weight: pathWeight
-      });
-      return;
-    }
-
-    // 羽田に夕方16:45以降に到着している場合、「このまま羽田で運航終了（羽田ナイトステイ）」という選択肢も評価
-    if (curAirport === 'HND' && curArrMin >= 1005) {
+    // 羽田に夕方17:00以降に到着している場合、「このまま羽田で運航終了（羽田ナイトステイ）」という選択肢も評価
+    if (curAirport === 'HND' && curArrMin >= 1020) {
       const outTrans = transitions[curFn] || {};
       const totalOutCount = Object.values(outTrans).reduce((a, b) => a + b, 0);
-      let hndStopFactor = 0.25;
-      if (curArrMin >= 1170) hndStopFactor = 2.2;       // 19:30以降羽田着ならほぼ羽田泊
-      else if (curArrMin >= 1110) hndStopFactor = 0.55; // 18:30〜19:30羽田着
-      else if (curArrMin >= 1040 && totalOutCount <= 4) hndStopFactor = 0.75; // 17:20〜18:30羽田着
+      let hndStopFactor = 0.35;
+      if (curArrMin >= 1200) hndStopFactor = 2.4;       // 20:00以降羽田着なら羽田泊の公算大
+      else if (curArrMin >= 1110) hndStopFactor = 0.65; // 18:30〜20:00羽田着
+      else if (curArrMin >= 1020 && totalOutCount <= 4) hndStopFactor = 0.5; // 17:00〜18:30羽田着
 
       completedPaths.push({
         remFlights: [...pathFlights],
@@ -648,9 +652,9 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
       });
     }
 
-    // 次便候補を当日ODPTダイヤから検索
+    // 次便候補を当日ODPTダイヤから検索（なるべく理想折り返しから探すが、機材繰りによる長め待機もソフトに許容）
     const minTurn = curAirport === 'HND' ? 35 : 30;
-    const maxTurn = curAirport === 'HND' ? 180 : 135;
+    const maxTurn = curAirport === 'HND' ? 240 : 180;
 
     let candidates = Object.values(dayFlights).filter(df => {
       if (df.origin !== curAirport || df.isCancelled) return false;
@@ -893,7 +897,126 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
 }
 
 // ============================================================================
-// 6. マルコフ・ビームサーチ経路生成エンジン (P3: C3, S3, S4, S7, S8, M7 対応)
+// 6. フリート全体最適化＆他B767機材スジパズル整合度ソルバー (New)
+// ============================================================================
+/**
+ * 対象日の全B767枠（76P確定枠＋候補枠）に対して、他機体（全11〜13機）のスジが綺麗にパズルとして成立するか
+ * フリート全体の一括ペアリングシミュレーションを行い、ちいかわジェット候補プランの全体整合度スコアを算出する。
+ * 
+ * @param {Array} candidateFlights - ちいかわジェットに割り当てを検討しているフライト配列
+ * @param {Array} allDayFlights - 対象日の全フライト一覧 (ODPT)
+ * @param {Object} learnedModel - 学習済みモデル (transitions, routeFreq 等)
+ * @returns {Object} { fleetScore, strictCoverageRate, otherLinesCount, summary }
+ */
+function evaluateFleetWideConsistency(candidateFlights, allDayFlights, learnedModel) {
+  const transitions = learnedModel?.transitions || {};
+  const candFlightNos = new Set((candidateFlights || []).map(f => f.flightNo));
+
+  // 1. 対象日の767対象フライト（確定枠優先）を抽出（ちいかわ割当分は除外）
+  const b767Pool = (allDayFlights || []).filter(f => {
+    if (f.isCancelled) return false;
+    if (candFlightNos.has(f.flightNo)) return false;
+    return f.is767 || f.is767Strict;
+  });
+
+  const strictPool = b767Pool.filter(f => f.is767Strict);
+
+  // 2. 朝の始発便（地方泊からの戻り便 + 羽田早朝発便）を機材起点として特定
+  const morningRoots = b767Pool.filter(df => {
+    const depM = parseTimeToMinutes(df.depTime);
+    if (depM === null) return false;
+    if (df.origin !== 'HND') {
+      return depM <= 600; // 地方空港 10:00以前発
+    }
+    return depM <= 540; // 羽田 09:00以前発
+  }).sort((a, b) => (parseTimeToMinutes(a.depTime) ?? 0) - (parseTimeToMinutes(b.depTime) ?? 0));
+
+  // 3. 各始発便から他機体のスジを一筆書きでシミュレート（貪欲マッチング）
+  const usedFlightNos = new Set();
+  const simulatedFleetLines = [];
+
+  for (const root of morningRoots) {
+    if (usedFlightNos.has(root.flightNo)) continue;
+
+    const line = [root];
+    usedFlightNos.add(root.flightNo);
+
+    let curF = root;
+    let safety = 0;
+
+    while (safety < 7) {
+      safety++;
+      const curArrM = parseTimeToMinutes(curF.arrTime);
+      if (curArrM === null) break;
+
+      const minTurn = curF.dest === 'HND' ? 35 : 30;
+      const maxTurn = curF.dest === 'HND' ? 240 : 150;
+
+      // 次便候補を検索
+      const nextCands = b767Pool.filter(nxt => {
+        if (nxt.origin !== curF.dest) return false;
+        if (usedFlightNos.has(nxt.flightNo)) return false;
+        const depM = parseTimeToMinutes(nxt.depTime);
+        return depM !== null && depM >= curArrM + minTurn && depM <= curArrM + maxTurn;
+      });
+
+      if (nextCands.length === 0) {
+        break; // このスジはここで完了
+      }
+
+      // 767単独確定枠（is767Strict）を最優先で回収して他機体スジを形成
+      nextCands.sort((a, b) => {
+        const trA = transitions[curF.flightNo]?.[a.flightNo] || 0;
+        const trB = transitions[curF.flightNo]?.[b.flightNo] || 0;
+        const strictWeightA = a.is767Strict ? 10.0 : 1.0;
+        const strictWeightB = b.is767Strict ? 10.0 : 1.0;
+        const scoreA = strictWeightA + trA * 0.5;
+        const scoreB = strictWeightB + trB * 0.5;
+        return scoreB - scoreA;
+      });
+
+      const bestNext = nextCands[0];
+      line.push(bestNext);
+      usedFlightNos.add(bestNext.flightNo);
+      curF = bestNext;
+
+      const arrM = parseTimeToMinutes(curF.arrTime) ?? 0;
+      if (arrM >= 1350 || (curF.dest !== 'HND' && arrM >= 1110)) {
+        const hasMore = b767Pool.some(f => f.origin === curF.dest && !usedFlightNos.has(f.flightNo) && (parseTimeToMinutes(f.depTime) ?? 0) >= arrM + 30);
+        if (!hasMore) break;
+      }
+    }
+
+    simulatedFleetLines.push(line);
+  }
+
+  // 4. 全体整合性のスコアリング
+  const coveredStrict = strictPool.filter(f => usedFlightNos.has(f.flightNo)).length;
+  const totalStrict = strictPool.length;
+  const strictCoverageRate = totalStrict > 0 ? (coveredStrict / totalStrict) : 1.0;
+  const completeLines = simulatedFleetLines.filter(line => line.length >= 2);
+
+  const is100Percent = strictCoverageRate >= 1.0;
+  let fleetScore = 1.0;
+  if (is100Percent) {
+    fleetScore = 2.0; // 確定枠100%完全整合ボーナス
+  } else if (strictCoverageRate >= 0.85) {
+    fleetScore = 0.5;
+  } else {
+    fleetScore = 0.05;
+  }
+
+  return {
+    fleetScore,
+    is100Percent,
+    strictCoverageRate: Math.round(strictCoverageRate * 100),
+    otherLinesCount: completeLines.length,
+    summary: `他機体${completeLines.length}機スジ整合（76P確定枠カバー率${Math.round(strictCoverageRate * 100)}%）`
+  };
+}
+
+// ============================================================================
+// 7. マルコフ・ビームサーチ経路生成エンジン (P3: C3, S3, S4, S7, S8, M7 対応)
 // ============================================================================
 function getStepLabel(idx, total, depMin, arrMin, destCode) {
   const num = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧'][idx] || `#${idx + 1}`;
@@ -991,28 +1114,32 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
     }
 
     // 初便のスコア計算
+    // ※ちいかわジェット単体の過去傾向（運用期間が短いため）に過剰依存せず、
+    //   ANAの全767-300ER（76P）公式ダイヤ・投入枠をフラットに評価して全路線を公平に網羅する
     const scoredMorning = morningFlights.map(df => {
-      const histCount = stayHistMap[df.flightNo] || 0;
       const depM = parseTimeToMinutes(df.depTime) ?? 500;
-      let score = (histCount > 0 ? (2.5 + histCount * 1.4) : 0.85);
-      if (df.is767Strict) score *= 1.35;
-      else if (df.is767) score *= 1.1;
-      else if (startAirport !== 'HND' && df.dest === 'HND' && depM <= 540) score *= 1.15; // 地方泊からの朝一番羽田帰還便は高優先度
-      else score *= 0.35;
+      // 76P確定枠・候補枠を最優先評価
+      let score = df.is767Strict ? 3.5 : (df.is767 ? 2.8 : 0.85);
+
+      if (startAirport !== 'HND' && df.dest === 'HND' && depM <= 540) {
+        score *= 1.25; // 地方泊からの朝一番羽田帰還便は高優先度
+      } else if (!df.is767) {
+        score *= 0.35;
+      }
 
       // 羽田泊の場合、地方ステイ機が羽田に戻る前（06:30〜08:55発）の早朝枠にボーナス
       if (startAirport === 'HND') {
-        if (depM <= 535) score *= 1.4;
-        else if (depM >= 780) score *= 0.45;
+        if (depM <= 535) score *= 1.3;
+        else if (depM >= 780) score *= 0.55;
       }
 
       // 前日と同じ初便の連続投入はローテーション分散によりやや減衰
       if (prevFirstFlightNo && df.flightNo === prevFirstFlightNo && startAirport === 'HND') {
-        score *= 0.82;
+        score *= 0.85;
       }
 
       return { df, score };
-    }).sort((a, b) => b.score - a.score).slice(0, startAirport === 'HND' ? 4 : 2);
+    }).sort((a, b) => b.score - a.score).slice(0, startAirport === 'HND' ? 12 : 4);
 
     const morningScoreSum = scoredMorning.reduce((s, x) => s + x.score, 0) || 1;
 
@@ -1032,35 +1159,37 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
 
       const finishedForThisMorning = [];
 
-      for (let step = 1; step < 6; step++) {
+      // 時間主導のビームサーチ（便数制限ではなく、夜の駐機・ステイ到着時刻に達するまで時間を進める）
+      for (let step = 1; step < 8; step++) {
         const nextBeam = [];
 
         for (const state of beam) {
           const { curAirport, curArrMin, curFn, flights, score } = state;
 
-          // 終端条件: 地方空港に18:50以降着（地方ナイトステイ）
-          if (curAirport !== 'HND' && curArrMin >= 1130) {
-            finishedForThisMorning.push(state);
-            continue;
-          }
-          // 終端条件: 羽田に20:00以降着（羽田ナイトステイ）
-          if (curAirport === 'HND' && curArrMin >= 1200) {
+          // 終端条件: 深夜帯（23:00以降着。空港門限・深夜運用限界）
+          if (curArrMin >= 1380) {
             finishedForThisMorning.push(state);
             continue;
           }
 
-          // 羽田に17:15〜20:00着で4便以上飛んでいる場合、「ここで羽田ステイ終了」も候補に入れる
-          if (curAirport === 'HND' && curArrMin >= 1035 && flights.length >= 4) {
+          // 夕方〜夜の羽田着（17:00以降着）: 便数に関わらず「ここで羽田ステイ終了」の選択肢を分岐保存しつつ、
+          // まだ夜の地方ステイ便（広島・鹿児島・福岡等）への後続便があるか必ず並行探索する
+          if (curAirport === 'HND' && curArrMin >= 1020) {
             const outTrans = transitions[curFn] || {};
             const hasStrongEveningOut = Object.values(outTrans).reduce((a, b) => a + b, 0) >= 5;
+            let hndEveningStopFactor = curArrMin >= 1200 ? 1.4 : (curArrMin >= 1110 ? 0.95 : 0.55);
+            if (hasStrongEveningOut) hndEveningStopFactor *= 0.6;
             finishedForThisMorning.push({
               ...state,
-              score: score * (hasStrongEveningOut ? 0.42 : 0.95)
+              score: score * hndEveningStopFactor
             });
           }
 
-          const minTurn = curAirport === 'HND' ? 40 : 35;
-          const maxTurn = curAirport === 'HND' ? 195 : 120;
+          // ターンアラウンド時間のソフト制約（なるべく理想時間から探すが、機材繰りによる長め待機もソフトに残す）
+          // 物理的最小限界（客の降機・清掃・給油・搭乗）：羽田35分、地方30分
+          const minTurn = curAirport === 'HND' ? 35 : 30;
+          // 上限はハード足切りを撤廃し、緩やかな上限（羽田270分/4.5時間、地方180分/3時間）
+          const maxTurn = curAirport === 'HND' ? 270 : 180;
 
           let nextCands = effectiveFlights.filter(df => {
             if (df.origin !== curAirport) return false;
@@ -1069,12 +1198,13 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
             const arrM = parseTimeToMinutes(df.arrTime);
             if (depM === null || arrM === null) return false;
             if (depM < curArrMin + minTurn || depM > curArrMin + maxTurn) return false;
-            // もし昼間（18:00以前）に地方空港へ行く便なら、その地方空港から当日中に折り返す便または20時以降着のステイ便でなければならない
-            if (df.dest !== 'HND' && arrM < 1130) {
+
+            // もし昼間（18:30以前）に地方空港へ行く便なら、その地方空港から当日中に戻る便があるか確認（取り残され防止）
+            if (df.dest !== 'HND' && arrM < 1110) {
               const hasReturnFromDest = effectiveFlights.some(ret => {
                 if (ret.origin !== df.dest) return false;
                 const rDep = parseTimeToMinutes(ret.depTime);
-                return rDep !== null && rDep >= arrM + 30 && rDep <= arrM + 135;
+                return rDep !== null && rDep >= arrM + 30;
               });
               if (!hasReturnFromDest) return false;
             }
@@ -1088,7 +1218,8 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
           }
 
           if (nextCands.length === 0) {
-            if (flights.length >= 3 && (curAirport === 'HND' || curArrMin >= 1080)) {
+            // 後続便がない場合、夕方以降（17:00以降着）または2便以上飛んでいれば完了スジとして採用
+            if (curArrMin >= 1020 || flights.length >= 2) {
               finishedForThisMorning.push(state);
             }
             continue;
@@ -1096,26 +1227,38 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
 
           const scoredNext = nextCands.map(df => {
             const transCount = transitions[curFn]?.[df.flightNo] || 0;
-            const rFreq = routeFreq[`${df.origin}-${df.dest}`] || 1;
-            let edgeScore = transCount > 0 ? (2.2 + transCount * 1.3) : (0.35 + Math.min(0.8, rFreq * 0.04));
+            // 76P確定枠・候補枠をフラットに評価（ちいかわ固有実績に過剰依存しない）
+            let edgeScore = df.is767Strict ? 2.6 : (df.is767 ? 2.0 : 0.6);
+
+            // 過去遷移実績があればわずかなタイブレーク加点（最大+0.4）
+            if (transCount > 0) {
+              edgeScore += Math.min(transCount * 0.08, 0.4);
+            }
+
+            const depM = parseTimeToMinutes(df.depTime) ?? (curArrMin + 50);
+            const turn = depM - curArrMin;
 
             if (curAirport === 'HND') {
+              // 羽田空港でのターンアラウンド評価（なるべく45〜85分から探すが、長め待機もソフトに評価）
               edgeScore *= evaluateHndTurnaroundScore(curArrMin, df, dayFlightsMap, null);
               // 2晩連続で同一の地方空港にナイトステイする反復ループを適度に抑制（機材ローテーション分散）
               const arrM = parseTimeToMinutes(df.arrTime) ?? 0;
-              if (startAirport !== 'HND' && df.dest === startAirport && arrM >= 1130) {
+              if (startAirport !== 'HND' && df.dest === startAirport && arrM >= 1110) {
                 edgeScore *= 0.48;
               }
             } else {
-              const depM = parseTimeToMinutes(df.depTime) ?? (curArrMin + 50);
-              const turn = depM - curArrMin;
-              if (turn >= 35 && turn <= 75) edgeScore *= 1.45;
+              // 地方空港のソフトターンアラウンド評価
+              if (turn >= 35 && turn <= 65) edgeScore *= 1.45; // 地方の黄金ターン
+              else if (turn >= 30 && turn < 35) edgeScore *= 0.9;
+              else if (turn > 65 && turn <= 120) edgeScore *= 1.05;
+              else edgeScore *= 0.65; // 長め待機
+
               if (df.is767Strict) edgeScore *= 1.25;
               else if (!df.is767) edgeScore *= 0.35;
             }
 
             return { df, edgeScore };
-          }).sort((a, b) => b.edgeScore - a.edgeScore).slice(0, 4);
+          }).sort((a, b) => b.edgeScore - a.edgeScore).slice(0, 8);
 
           const edgeSum = scoredNext.reduce((s, x) => s + x.edgeScore, 0) || 1;
           for (const nx of scoredNext) {
@@ -1137,7 +1280,8 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
       }
 
       for (const rem of beam) {
-        if (rem.flights.length >= 3) {
+        // 夕方以降（17:00以降着）または2便以上飛んでいるスジは完了候補として採用
+        if (rem.curArrMin >= 1020 || rem.flights.length >= 2) {
           finishedForThisMorning.push(rem);
         }
       }
@@ -1158,18 +1302,29 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
 
   if (candidateCompletePlans.length === 0) return [];
 
+  // フリート全体最適化: ちいかわが担当した際に、他B767機材（全11〜13機）のスジが綺麗にパズルとして成立するか検証・再スコアリング
+  for (const plan of candidateCompletePlans) {
+    const consistency = evaluateFleetWideConsistency(plan.rawFlights, effectiveFlights, learnedModel);
+    plan.fleetConsistency = consistency;
+    plan.weight *= consistency.fleetScore;
+  }
+
+  // ⚠️ ユーザー必須条件: 「他機体スジ整合（76P確定枠カバー率100%）」を必須条件として足切りフィルタ
+  const perfect100Plans = candidateCompletePlans.filter(p => p.fleetConsistency?.is100Percent);
+  const eligiblePlans = perfect100Plans.length > 0 ? perfect100Plans : candidateCompletePlans;
+
   // 多様性を確保しながら上位3プラン（プランA / B / C）を選出：
   // 優先順位①: priorStays に含まれる各出発空港（上位3空港まで）の最高スコアプランを1つずつ選出
   // 優先順位②: まだ選ばれていない「異なる初便（firstFn）」を持つ最高スコアプランを選出（羽田泊のNH661/NH619/NH245や中部泊のNH703/NH86を確実に網羅）
   // 優先順位③: 初便が1種類のみの場合は、中盤の経由空港（midAirport）が異なるプランを選出
-  candidateCompletePlans.sort((a, b) => b.weight - a.weight);
+  eligiblePlans.sort((a, b) => b.weight - a.weight);
 
   const selectedRaw = [];
   const usedSignatures = new Set();
 
   // ① 各宿泊空港ごとの代表プランを確保
   for (const stay of validPriors.slice(0, 3)) {
-    const match = candidateCompletePlans.find(p => p.startAirport === stay.code);
+    const match = eligiblePlans.find(p => p.startAirport === stay.code);
     if (match) {
       const sig = match.rawFlights.map(f => f.flightNo).join('>');
       if (!usedSignatures.has(sig)) {
@@ -1180,7 +1335,7 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
   }
 
   // ② 異なる初便（firstFn）を持つプランを優先補充
-  for (const cand of candidateCompletePlans) {
+  for (const cand of eligiblePlans) {
     if (selectedRaw.length >= 3) break;
     const sig = cand.rawFlights.map(f => f.flightNo).join('>');
     if (usedSignatures.has(sig)) continue;
@@ -1192,29 +1347,19 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
   }
 
   // ③ 中盤の経由空港（midAirport）が異なるプランを優先補充
-  for (const cand of candidateCompletePlans) {
+  for (const cand of eligiblePlans) {
     if (selectedRaw.length >= 3) break;
     const sig = cand.rawFlights.map(f => f.flightNo).join('>');
     if (usedSignatures.has(sig)) continue;
-    if (!selectedRaw.some(s => s.midAirport === cand.midAirport)) {
+    const mid = cand.midAirport;
+    if (!selectedRaw.some(s => s.midAirport === mid)) {
       selectedRaw.push(cand);
       usedSignatures.add(sig);
     }
   }
 
-  // ④ それでも3プラン未満の場合は、最初の4便が完全一致しないプランを優先して補充
-  for (const cand of candidateCompletePlans) {
-    if (selectedRaw.length >= 3) break;
-    const sig = cand.rawFlights.map(f => f.flightNo).join('>');
-    if (usedSignatures.has(sig)) continue;
-    const prefix4 = cand.rawFlights.slice(0, 4).map(f => f.flightNo).join('>');
-    if (!selectedRaw.some(s => s.rawFlights.slice(0, 4).map(f => f.flightNo).join('>') === prefix4)) {
-      selectedRaw.push(cand);
-      usedSignatures.add(sig);
-    }
-  }
-
-  for (const cand of candidateCompletePlans) {
+  // ④ それでも3プラン未満の場合は残りの候補から補充
+  for (const cand of eligiblePlans) {
     if (selectedRaw.length >= 3) break;
     const sig = cand.rawFlights.map(f => f.flightNo).join('>');
     if (!usedSignatures.has(sig)) {
@@ -1276,8 +1421,9 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
     const endShort = shortAirportName(item.endAirport);
     const firstFn = formattedFlights[0]?.flightNo || '';
 
+    const fleetNote = item.fleetConsistency?.summary ? ` [フリート整合: ${item.fleetConsistency.summary}]` : '';
     const title = `【前夜${startShort}泊(${firstFn}始発)】${routeSummary}`;
-    const description = `前夜${AIRPORT_NAMES[item.startAirport] || item.startAirport}駐機シナリオから連動。朝一${firstFn}(${formattedFlights[0]?.time})で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全${formattedFlights.length}便を運航して夜に${endShort}泊となる予測スジ。`;
+    const description = `前夜${AIRPORT_NAMES[item.startAirport] || item.startAirport}駐機シナリオから連動。朝一${firstFn}(${formattedFlights[0]?.time})で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全${formattedFlights.length}便を運航して夜に${endShort}泊となる予測スジ。${fleetNote}`;
 
     const uniqueAirports = [...new Set(stops.map(c => AIRPORT_NAMES[c] || c))];
 
@@ -1292,6 +1438,7 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
       routeSummary,
       airports: uniqueAirports,
       description,
+      fleetConsistency: item.fleetConsistency || null,
       flights: formattedFlights
     };
   });
