@@ -161,6 +161,50 @@ function normalizeFlightNo(raw) {
 }
 
 /**
+ * ODPTの model 表記から、当該フライトにおける B767 (763/76P) のレギュラー（主担当）度を判定し、
+ * 機材優先度係数を返す。
+ *
+ * 【優先度設計】
+ * - 3.5: B767 単独確定枠 (model === '763' || model === '76P' || is767Strict)
+ *        ➔ 広島、長崎、新千歳、伊丹など、ANA公式ダイヤでB767専任の中核枠。
+ * - 1.8: B767 主力・中小型機併記枠 (model が '763/...' で始まるもの: 763/73H, 763/321)
+ *        ➔ B767がファーストチョイスで、需要調整で中小型化される頻出枠。
+ * - 0.38: 他機種主力・代走枠 (model が '788/...', '789/...', '772/...' 等で始まるもの: 788/763, 789/763)
+ *        ➔ 本来はB787-8やB787-9がレギュラーであり、B767は突発整備や一時的な代走枠にすぎない。
+ * - 0.1: 非767枠 (ODPTで767表記が一切ない枠)
+ */
+function getAircraftModelPriority(df) {
+  if (!df) return 0.1;
+  const model = String(df.model || '').trim();
+
+  // 単独確定枠
+  if (df.is767Strict || model === '763' || model === '76P') {
+    return 3.5;
+  }
+
+  // 767を含まない枠
+  if (!df.is767 && !model.includes('763') && !model.includes('76P')) {
+    return 0.1;
+  }
+
+  const parts = model.split('/');
+  const primaryModel = parts[0]?.trim();
+
+  // 763が先頭（主担当機材）
+  if (primaryModel === '763' || primaryModel === '76P') {
+    return 1.8;
+  }
+
+  // B787 / B777 など大型・中型機が先頭（767は代走・突発枠）
+  if (primaryModel.startsWith('78') || primaryModel.startsWith('77')) {
+    return 0.38;
+  }
+
+  // その他共用枠
+  return 0.6;
+}
+
+/**
  * 最大剰余法（Hamilton method）により、重み配列を合計100の整数パーセント配列に正規化する。
  */
 function normalizeTo100Percent(items, weightKey = 'weight', minPct = 1) {
@@ -525,11 +569,21 @@ function evaluateHndTurnaroundScore(arrMins, candidateDepFlight, dayFlights, pre
     factor = 0.35; // 4時間超の駐機
   }
 
-  // 2. ODPT 767単独確定枠ボーナス
-  if (candidateDepFlight.is767Strict) {
-    factor *= 1.25;
-  } else if (!candidateDepFlight.is767) {
-    factor *= 0.25;
+  // 2. 機材モデル（レギュラー確定枠 vs 763主力枠 vs 他機種レギュラー代走枠）の優先度反映
+  const modelPrio = getAircraftModelPriority(candidateDepFlight);
+  if (modelPrio >= 3.0) {
+    factor *= 1.35; // 763単独確定枠ボーナス
+  } else if (modelPrio >= 1.5) {
+    factor *= 1.15; // 763主力枠ボーナス
+  } else if (modelPrio <= 0.4) {
+    // 他機種（B787/B777等）レギュラーの代走・突発枠は大幅減衰
+    factor *= 0.4;
+    // さらに羽田で120分（2時間）を超える長期待機の場合、稼働機が代走枠で長時間駐機する蓋然性は極めて低いため抑制
+    if (turnaround > 120) {
+      factor *= 0.48;
+    }
+  } else {
+    factor *= 0.7;
   }
 
   // 3. 同時刻帯に羽田へ到着する他767便との競合評価
@@ -1032,7 +1086,7 @@ function getStepLabel(idx, total, depMin, arrMin, destCode) {
  * 1日完結の運航スジ（プランA / プランB / プランC）をビームサーチで動的生成する。
  * ハードコードされたテンプレートや架空便注入は一切行わない。
  */
-function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, learnedModel, prevFirstFlightNo = null) {
+function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, learnedModel, prevFirstFlightNo = null, prevVisitedDestSet = null) {
   const dayFlightsMap = getDayFlightsWithDowFallback(targetDateStr, anaFleetData);
   const dayFlights = Object.values(dayFlightsMap).filter(f => !f.isCancelled);
 
@@ -1118,12 +1172,13 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
     //   ANAの全767-300ER（76P）公式ダイヤ・投入枠をフラットに評価して全路線を公平に網羅する
     const scoredMorning = morningFlights.map(df => {
       const depM = parseTimeToMinutes(df.depTime) ?? 500;
-      // 76P確定枠・候補枠を最優先評価
-      let score = df.is767Strict ? 3.5 : (df.is767 ? 2.8 : 0.85);
+      // レギュラー機材判定（確定枠 3.5 / 主力枠 1.8 / 代走枠 0.38）
+      const modelPrio = getAircraftModelPriority(df);
+      let score = modelPrio;
 
       if (startAirport !== 'HND' && df.dest === 'HND' && depM <= 540) {
-        score *= 1.25; // 地方泊からの朝一番羽田帰還便は高優先度
-      } else if (!df.is767) {
+        score *= 1.35; // 地方泊からの朝一番羽田帰還便は高優先度
+      } else if (modelPrio <= 0.4) {
         score *= 0.35;
       }
 
@@ -1227,12 +1282,20 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
 
           const scoredNext = nextCands.map(df => {
             const transCount = transitions[curFn]?.[df.flightNo] || 0;
-            // 76P確定枠・候補枠をフラットに評価（ちいかわ固有実績に過剰依存しない）
-            let edgeScore = df.is767Strict ? 2.6 : (df.is767 ? 2.0 : 0.6);
+            // レギュラー機材判定（確定枠 3.5 / 主力枠 1.8 / 代走枠 0.38 / 非767 0.1）
+            const modelPrio = getAircraftModelPriority(df);
+            let edgeScore = modelPrio;
 
             // 過去遷移実績があればわずかなタイブレーク加点（最大+0.4）
             if (transCount > 0) {
               edgeScore += Math.min(transCount * 0.08, 0.4);
+            }
+
+            // ⚠️ 非レギュラー（代走枠）の連続投入抑制：
+            // もし前日（または当日すでに）訪問済みの地方空港への便で、かつ代走枠（modelPrio <= 0.4）の場合、
+            // 2日連続で同じ代走枠へ入る確率は運用上極めて低いため大幅減衰
+            if (prevVisitedDestSet && prevVisitedDestSet.has(df.dest) && modelPrio <= 0.4) {
+              edgeScore *= 0.25;
             }
 
             const depM = parseTimeToMinutes(df.depTime) ?? (curArrMin + 50);
@@ -1253,8 +1316,8 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
               else if (turn > 65 && turn <= 120) edgeScore *= 1.05;
               else edgeScore *= 0.65; // 長め待機
 
-              if (df.is767Strict) edgeScore *= 1.25;
-              else if (!df.is767) edgeScore *= 0.35;
+              if (modelPrio >= 3.0) edgeScore *= 1.35; // 確定枠ボーナス
+              else if (modelPrio <= 0.4) edgeScore *= 0.4; // 地方での代走枠折り返しも抑制
             }
 
             return { df, edgeScore };
@@ -1384,7 +1447,10 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
       const stepLabel = getStepLabel(fIdx, item.rawFlights.length, depM, arrM, df.dest);
       const isLast = fIdx === item.rawFlights.length - 1;
 
-      let tag = df.is767Strict ? '🔒763確定枠' : (df.is767 ? '763候補枠' : '機材変更候補');
+      const modelPrio = getAircraftModelPriority(df);
+      let tag = df.is767Strict
+        ? '🔒763確定枠'
+        : (modelPrio >= 1.5 ? '763主力枠' : (df.is767 ? '763代走候補' : '機材変更候補'));
       if (fIdx === 0 && df.origin !== 'HND') {
         tag = `🔒${shortAirportName(df.origin)}始発・羽田帰還`;
       } else if (isLast) {
@@ -2026,12 +2092,14 @@ export async function generateWeeklyPrediction() {
   // 明日（Day 1）のプラン生成：今夜の宿泊地確率分布 nightStayProbabilities を事前分布としてビームサーチ
   const tomorrowDateStr = weeklyDays[1].dateStr;
   const todayFirstFn = todayFlights.length > 0 ? normalizeFlightNo(todayFlights[0].flightNo) : null;
+  const todayVisitedDests = new Set(todayFlights.map(f => f.destCode || f.dest).filter(Boolean));
   const tomorrowPlans = generateDayPlansViaBeamSearch(
     nightStayProbabilities,
     tomorrowDateStr,
     anaFleetData,
     learnedModel,
-    todayFirstFn
+    todayFirstFn,
+    todayVisitedDests
   );
 
   // 明日の最新予測を明日のスナップショットとして保存（明日になった後は上書きされない）
@@ -2169,12 +2237,17 @@ export async function generateWeeklyPrediction() {
       const dKey = day.dateStr.replace(/-/g, '');
       const dayScheduleFlights = Object.values(anaFleetData?.dates?.[dKey] || {});
 
+      const prevVisitedDests = tomorrowPlans[0]
+        ? new Set(tomorrowPlans[0].flights.map(f => f.dest).filter(Boolean))
+        : null;
+
       const dayPlans = generateDayPlansViaBeamSearch(
         runningPriors,
         day.dateStr,
         anaFleetData,
         learnedModel,
-        prevDayFirstFn
+        prevDayFirstFn,
+        prevVisitedDests
       );
 
       if (dayPlans.length > 0) {
