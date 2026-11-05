@@ -45,6 +45,73 @@ const targetSlot = slot || POSITION_SLOTS[position] || '4644769398';
   </div>
 )}
 
+{position === 'bottom' && (
+  <script is:inline define:vars={{ client, targetSlot }}>
+    (() => {
+      if (window.__adsense_h2_injected__) return;
+      window.__adsense_h2_injected__ = true;
+
+      const initH2Ads = () => {
+        const prose = document.querySelector('.prose');
+        if (!prose) return;
+
+        // 目次、関連記事、シェアボタン、サイドバー等を除外した純粋な本文のH2を取得
+        const allH2 = Array.from(prose.querySelectorAll('h2')).filter(h2 => {
+          return !h2.closest('#toc-wrapper') &&
+                 !h2.closest('.related-posts') &&
+                 !h2.closest('.share-buttons') &&
+                 !h2.closest('.sidebar');
+        });
+
+        if (allH2.length < 2) return;
+
+        // 挿入対象のH2インデックス（2番目: index 1、3番目: index 2）
+        const targetIndices = [];
+        if (allH2.length >= 2) targetIndices.push(1);
+        if (allH2.length >= 3) targetIndices.push(2);
+
+        // 後ろから挿入してDOMインデックスのずれを防止
+        targetIndices.reverse().forEach(idx => {
+          const targetH2 = allH2[idx];
+          if (!targetH2 || !targetH2.parentNode) return;
+
+          // 直前にすでに広告が存在する場合はスキップ
+          const prevEl = targetH2.previousElementSibling;
+          if (prevEl && prevEl.classList.contains('adsense-wrapper')) return;
+
+          const adWrapper = document.createElement('div');
+          adWrapper.className = 'adsense-wrapper ad-pos-in-article';
+          adWrapper.innerHTML = `
+            <div class="adsense-label">スポンサーリンク</div>
+            <div class="adsense-body">
+              <ins class="adsbygoogle"
+                   style="display:block; text-align:center;"
+                   data-ad-client="${client}"
+                   data-ad-slot="${targetSlot}"
+                   data-ad-format="auto"
+                   data-full-width-responsive="true"></ins>
+            </div>
+          `;
+
+          targetH2.parentNode.insertBefore(adWrapper, targetH2);
+
+          try {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          } catch (e) {
+            console.debug('[AdSense] in-article push notice:', e);
+          }
+        });
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initH2Ads);
+      } else {
+        initH2Ads();
+      }
+    })();
+  </script>
+)}
+
 <style>
   .adsense-wrapper {
     margin: 2rem auto;
@@ -58,6 +125,13 @@ const targetSlot = slot || POSITION_SLOTS[position] || '4644769398';
   .ad-pos-home-top {
     margin: 1.5rem auto 2rem auto;
     max-width: 960px;
+  }
+  .ad-pos-in-article {
+    margin: 2.5rem auto 2.5rem auto;
+    padding: 1.25rem 0;
+    max-width: 100%;
+    border-top: 1px dashed var(--border-color, #e2e8f0);
+    border-bottom: 1px dashed var(--border-color, #e2e8f0);
   }
   .ad-pos-bottom {
     margin: 2.5rem auto 2rem auto;
