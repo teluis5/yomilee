@@ -46,7 +46,7 @@ const targetSlot = slot || POSITION_SLOTS[position] || '4644769398';
 )}
 
 {position === 'bottom' && (
-  <script is:inline define:vars={{ client, targetSlot }}>
+  <script is:inline>
     (() => {
       if (window.__adsense_h2_injected__) return;
       window.__adsense_h2_injected__ = true;
@@ -70,6 +70,9 @@ const targetSlot = slot || POSITION_SLOTS[position] || '4644769398';
         if (allH2.length >= 2) targetIndices.push(1);
         if (allH2.length >= 3) targetIndices.push(2);
 
+        const clientId = 'ca-pub-8011635154814608';
+        const slotId = '4644769398';
+
         // 後ろから挿入してDOMインデックスのずれを防止
         targetIndices.reverse().forEach(idx => {
           const targetH2 = allH2[idx];
@@ -86,8 +89,8 @@ const targetSlot = slot || POSITION_SLOTS[position] || '4644769398';
             <div class="adsense-body">
               <ins class="adsbygoogle"
                    style="display:block; text-align:center;"
-                   data-ad-client="${client}"
-                   data-ad-slot="${targetSlot}"
+                   data-ad-client="${clientId}"
+                   data-ad-slot="${slotId}"
                    data-ad-format="auto"
                    data-full-width-responsive="true"></ins>
             </div>
