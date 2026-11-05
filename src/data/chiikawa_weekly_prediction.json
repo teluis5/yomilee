@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月5日 12:48",
-  "updatedAtIso": "2026-11-05T03:48:40.138Z",
+  "updatedAt": "2026年11月5日 14:03",
+  "updatedAtIso": "2026-11-05T05:03:57.734Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
@@ -8,34 +8,29 @@
     "currentLocation": "飛行中 (札幌(新千歳) ➔ 東京(羽田))",
     "currentLocationCode": "HND",
     "isAirborne": true,
-    "nightStay": "広島(77%) / 東京(羽田)(18%)",
-    "nightStayCode": "HIJ",
+    "nightStay": "東京(羽田)(90%) / 名古屋(中部)(10%)",
+    "nightStayCode": "HND",
     "isNightStayConfirmed": false,
     "nightStayProbabilities": [
       {
-        "airport": "広島",
-        "code": "HIJ",
-        "probability": 77
-      },
-      {
         "airport": "東京(羽田)",
         "code": "HND",
-        "probability": 18
+        "probability": 90
       },
       {
         "airport": "名古屋(中部)",
         "code": "NGO",
-        "probability": 5
+        "probability": 10
       }
     ]
   },
   "accuracyStats": {
-    "dailyFullHitRate": 63.9,
-    "firstFlightHitRate": 84.6,
+    "dailyFullHitRate": 58.3,
+    "firstFlightHitRate": 76.9,
     "totalEvaluatedDays": 13,
     "perfectDays": 5,
     "totalFlightsEvaluated": 72,
-    "totalFlightsHit": 46,
+    "totalFlightsHit": 42,
     "streakHits": 4,
     "evaluationPeriod": "2026-10-23 〜 2026-11-04 (実データ検証)"
   },
@@ -772,9 +767,9 @@
       "dateStr": "2026-10-23",
       "date": "10月23日(金)",
       "type": "1日通しダイヤ (全5便)",
-      "hitLabel": "📊 5便中4便的中 (80%)",
-      "hitRate": "80%",
-      "predicted": "プランA: 中部 ➔ 新千歳 ➔ 中部 ➔ 新千歳 ➔ 伊丹 ➔ 羽田(泊)",
+      "hitLabel": "📊 5便中0便的中 (0%)",
+      "hitRate": "0%",
+      "predicted": "プランA: 中部 ➔ 那覇 ➔ 羽田 ➔ 鹿児島 ➔ 羽田(泊)",
       "actual": "実運航: 中部 ➔ 新千歳 ➔ 中部 ➔ 新千歳 ➔ 伊丹 ➔ 羽田(泊)",
       "flights": [
         {
@@ -782,8 +777,8 @@
           "flightNo": "NH703",
           "route": "中部 ➔ 新千歳",
           "time": "08:40発 - 10:25着",
-          "isHit": true,
-          "hitLabel": "🎯 的中"
+          "isHit": false,
+          "hitLabel": "△ プラン外分岐"
         },
         {
           "step": "② 第2便",
@@ -798,31 +793,31 @@
           "flightNo": "NH707",
           "route": "中部 ➔ 新千歳",
           "time": "13:45発 - 15:25着",
-          "isHit": true,
-          "hitLabel": "🎯 的中"
+          "isHit": false,
+          "hitLabel": "△ プラン外分岐"
         },
         {
           "step": "④ 第4便",
           "flightNo": "NH778",
           "route": "新千歳 ➔ 伊丹",
           "time": "16:15発 - 18:10着",
-          "isHit": true,
-          "hitLabel": "🎯 的中"
+          "isHit": false,
+          "hitLabel": "△ プラン外分岐"
         },
         {
           "step": "⑤ 夜最終便",
           "flightNo": "NH38",
           "route": "伊丹 ➔ 羽田",
           "time": "19:00発 - 20:15着",
-          "isHit": true,
-          "hitLabel": "🎯 的中"
+          "isHit": false,
+          "hitLabel": "△ プラン外分岐"
         }
       ],
-      "dayHitFlights": 4,
+      "dayHitFlights": 0,
       "dayTotalFlights": 5,
       "isPerfect": false,
-      "isFirstHit": true,
-      "reason": "初便NH703から4便が予測シナリオに合致（一部区間は当日の機材繰りにより別スジへ分岐）"
+      "isFirstHit": false,
+      "reason": "初便NH703から0便が予測シナリオに合致（一部区間は当日の機材繰りにより別スジへ分岐）"
     }
   ],
   "weeklySchedule": [
@@ -835,99 +830,29 @@
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
       "currentAirport": "飛行中 (札幌(新千歳) ➔ 東京(羽田))",
-      "nightStay": "広島(77%) / 東京(羽田)(18%)",
+      "nightStay": "東京(羽田)(90%) / 名古屋(中部)(10%)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH62 (札幌(新千歳) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 77% / 東京(羽田) 18% / 名古屋(中部) 5% と推定されます。",
-      "todayOutlook": "現在 NH62 (札幌(新千歳) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 77% / 東京(羽田) 18% / 名古屋(中部) 5% と推定されます。",
+      "pendingNightStayNote": "現在 NH62 (札幌(新千歳) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 90% / 名古屋(中部) 10% と推定されます。",
+      "todayOutlook": "現在 NH62 (札幌(新千歳) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 90% / 名古屋(中部) 10% と推定されます。",
       "nightStayProbabilities": [
-        {
-          "airport": "広島",
-          "code": "HIJ",
-          "probability": 77
-        },
         {
           "airport": "東京(羽田)",
           "code": "HND",
-          "probability": 18
+          "probability": 90
         },
         {
           "airport": "名古屋(中部)",
           "code": "NGO",
-          "probability": 5
+          "probability": 10
         }
       ],
       "plans": [
         {
           "planId": "today-plan-a",
-          "planName": "プランA (広島泊)",
-          "stayCode": "HIJ",
-          "rank": "本命 ◎",
-          "probability": 80,
-          "title": "【今夜広島泊シナリオ】広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
-          "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
-          "flights": [
-            {
-              "flightNo": "NH672",
-              "orig": "HIJ",
-              "dest": "HND",
-              "route": "広島 ➔ 東京(羽田)",
-              "time": "07:35発 - 08:55着",
-              "tag": "運航完了",
-              "step": "① 第1便"
-            },
-            {
-              "flightNo": "NH59",
-              "orig": "HND",
-              "dest": "CTS",
-              "route": "東京(羽田) ➔ 札幌(新千歳)",
-              "time": "10:00発 - 11:35着",
-              "tag": "運航完了",
-              "step": "② 第2便"
-            },
-            {
-              "flightNo": "NH62",
-              "orig": "CTS",
-              "dest": "HND",
-              "route": "札幌(新千歳) ➔ 東京(羽田)",
-              "time": "12:30発 - 14:10着",
-              "tag": "飛行中",
-              "step": "③ 第3便"
-            },
-            {
-              "flightNo": "NH681",
-              "orig": "HND",
-              "dest": "HIJ",
-              "route": "東京(羽田) ➔ 広島",
-              "time": "15:00発 - 16:30着",
-              "tag": "予想接続(76P)",
-              "step": "④ 第4便"
-            },
-            {
-              "flightNo": "NH682",
-              "orig": "HIJ",
-              "dest": "HND",
-              "route": "広島 ➔ 東京(羽田)",
-              "time": "17:20発 - 18:45着",
-              "tag": "予想接続(76P)",
-              "step": "⑤ 第5便"
-            },
-            {
-              "flightNo": "NH685",
-              "orig": "HND",
-              "dest": "HIJ",
-              "route": "東京(羽田) ➔ 広島",
-              "time": "19:40発 - 21:10着",
-              "tag": "🌙広島泊候補",
-              "step": "⑥ 第6便"
-            }
-          ]
-        },
-        {
-          "planId": "today-plan-b",
-          "planName": "プランB (羽田泊)",
+          "planName": "プランA (羽田泊)",
           "stayCode": "HND",
-          "rank": "有力 ◯",
-          "probability": 10,
+          "rank": "本命 ◎",
+          "probability": 90,
           "title": "【今夜羽田泊シナリオ】広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 新千歳 ➔ 羽田(泊)",
           "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 新千歳 ➔ 羽田(泊)",
           "flights": [
@@ -979,13 +904,13 @@
           ]
         },
         {
-          "planId": "today-plan-c",
-          "planName": "プランC (羽田泊)",
-          "stayCode": "HND",
-          "rank": "対抗 ▲",
+          "planId": "today-plan-b",
+          "planName": "プランB (中部泊)",
+          "stayCode": "NGO",
+          "rank": "有力 ◯",
           "probability": 10,
-          "title": "【今夜羽田泊シナリオ】広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
-          "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
+          "title": "【今夜中部泊シナリオ】広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 新千歳 ➔ 中部(泊)",
+          "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 新千歳 ➔ 中部(泊)",
           "flights": [
             {
               "flightNo": "NH672",
@@ -1015,21 +940,21 @@
               "step": "③ 第3便"
             },
             {
-              "flightNo": "NH265",
+              "flightNo": "NH69",
               "orig": "HND",
-              "dest": "FUK",
-              "route": "東京(羽田) ➔ 福岡",
-              "time": "17:05発 - 19:05着",
+              "dest": "CTS",
+              "route": "東京(羽田) ➔ 札幌(新千歳)",
+              "time": "15:00発 - 16:35着",
               "tag": "予想接続(76P)",
               "step": "④ 第4便"
             },
             {
-              "flightNo": "NH270",
-              "orig": "FUK",
-              "dest": "HND",
-              "route": "福岡 ➔ 東京(羽田)",
-              "time": "19:55発 - 21:35着",
-              "tag": "🌙羽田泊候補",
+              "flightNo": "NH712",
+              "orig": "CTS",
+              "dest": "NGO",
+              "route": "札幌(新千歳) ➔ 名古屋(中部)",
+              "time": "18:35発 - 20:25着",
+              "tag": "🌙中部泊候補",
               "step": "⑤ 第5便"
             }
           ]
@@ -1123,7 +1048,7 @@
             "flightNo": "NH62",
             "route": "札幌(新千歳) ➔ 東京(羽田)",
             "time": "12:30発 - 14:10着",
-            "status": "到着予定 (12:34)",
+            "status": "到着予定 (14:13)",
             "isLanded": false,
             "isLive": true
           }
@@ -1146,9 +1071,9 @@
             "time": "16:40発 - 18:35着"
           },
           "actual": {
-            "flightNo": "NH681 (予想)",
-            "route": "東京(羽田) ➔ 広島",
-            "time": "15:00発 - 16:30着",
+            "flightNo": "NH69 (予想)",
+            "route": "東京(羽田) ➔ 札幌(新千歳)",
+            "time": "15:00発 - 16:35着",
             "status": "折返し確定予想 (76P枠)",
             "isLanded": false,
             "isLive": false
@@ -1168,24 +1093,10 @@
             "time": "19:20発 - 21:00着"
           },
           "actual": {
-            "flightNo": "NH682 (予想)",
-            "route": "広島 ➔ 東京(羽田)",
-            "time": "17:20発 - 18:45着",
-            "status": "折返し確定予想 (76P枠)",
-            "isLanded": false,
-            "isLive": false
-          }
-        },
-        {
-          "step": "#6",
-          "planA": null,
-          "planB": null,
-          "planC": null,
-          "actual": {
-            "flightNo": "NH685 (予想)",
-            "route": "東京(羽田) ➔ 広島",
-            "time": "19:40発 - 21:10着",
-            "status": "本命予想 (77%・広島ステイ候補)",
+            "flightNo": "NH74 (予想)",
+            "route": "札幌(新千歳) ➔ 東京(羽田)",
+            "time": "17:30発 - 19:10着",
+            "status": "本命予想 (90%・羽田帰還候補)",
             "isLanded": false,
             "isLive": false
           }
@@ -1214,46 +1125,33 @@
           "flightNo": "NH62",
           "route": "札幌(新千歳) ➔ 東京(羽田)",
           "time": "12:30発 - 14:10着",
-          "status": "到着予定 (12:34)",
+          "status": "到着予定 (14:13)",
           "isLanded": false,
           "isLive": true,
           "isPredicted": false
         },
         {
-          "flightNo": "NH681",
+          "flightNo": "NH69",
           "origCode": "HND",
-          "destCode": "HIJ",
-          "route": "東京(羽田) ➔ 広島",
+          "destCode": "CTS",
+          "route": "東京(羽田) ➔ 札幌(新千歳)",
           "depTime": "15:00",
-          "arrTime": "16:30",
-          "time": "15:00発 - 16:30着 (予想)",
+          "arrTime": "16:35",
+          "time": "15:00発 - 16:35着 (予想)",
           "status": "折返し確定予想 (76P枠)",
           "isLanded": false,
           "isLive": false,
           "isPredicted": true
         },
         {
-          "flightNo": "NH682",
-          "origCode": "HIJ",
+          "flightNo": "NH74",
+          "origCode": "CTS",
           "destCode": "HND",
-          "route": "広島 ➔ 東京(羽田)",
-          "depTime": "17:20",
-          "arrTime": "18:45",
-          "time": "17:20発 - 18:45着 (予想)",
-          "status": "折返し確定予想 (76P枠)",
-          "isLanded": false,
-          "isLive": false,
-          "isPredicted": true
-        },
-        {
-          "flightNo": "NH685",
-          "origCode": "HND",
-          "destCode": "HIJ",
-          "route": "東京(羽田) ➔ 広島",
-          "depTime": "19:40",
-          "arrTime": "21:10",
-          "time": "19:40発 - 21:10着 (予想)",
-          "status": "本命予想 (77%・広島ステイ候補)",
+          "route": "札幌(新千歳) ➔ 東京(羽田)",
+          "depTime": "17:30",
+          "arrTime": "19:10",
+          "time": "17:30発 - 19:10着 (予想)",
+          "status": "本命予想 (90%・羽田帰還候補)",
           "isLanded": false,
           "isLive": false,
           "isPredicted": true
@@ -1268,115 +1166,19 @@
       "isWeekend": false,
       "statusType": "tomorrow",
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
-      "expectedStart": "広島発 (NH672)",
+      "expectedStart": "羽田発 (NH661)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH62 (札幌(新千歳) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 77% / 東京(羽田) 18% / 名古屋(中部) 5% と推定されます。",
+      "pendingNightStayNote": "現在 NH62 (札幌(新千歳) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 90% / 名古屋(中部) 10% と推定されます。",
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
         {
           "planId": "plan-a",
-          "planName": "プランA (広島泊始発)",
-          "stayCode": "HND",
-          "startAirportCode": "HIJ",
-          "rank": "本命 ◎",
-          "probability": 80,
-          "title": "【前夜広島泊(NH672始発)】広島 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 鹿児島 ➔ 羽田(泊)",
-          "routeSummary": "広島 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 鹿児島 ➔ 羽田(泊)",
-          "airports": [
-            "広島",
-            "東京(羽田)",
-            "大阪(伊丹)",
-            "鹿児島"
-          ],
-          "description": "前夜広島駐機シナリオから連動。朝一NH672(07:35発 - 08:55着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全5便を運航して夜に羽田泊となる予測スジ。 [フリート整合: 他機体10機スジ整合（76P確定枠カバー率100%）]",
-          "fleetConsistency": {
-            "fleetScore": 2,
-            "is100Percent": true,
-            "strictCoverageRate": 100,
-            "otherLinesCount": 10,
-            "summary": "他機体10機スジ整合（76P確定枠カバー率100%）"
-          },
-          "flights": [
-            {
-              "step": "① 朝一便",
-              "time": "07:35発 - 08:55着",
-              "depTime": "07:35",
-              "arrTime": "08:55",
-              "flightNo": "NH672",
-              "orig": "HIJ",
-              "dest": "HND",
-              "route": "広島 ➔ 東京(羽田)",
-              "model": "763",
-              "is767Confirmed": true,
-              "is767Strict": true,
-              "tag": "🔒広島始発・羽田帰還"
-            },
-            {
-              "step": "② 午後便",
-              "time": "12:30発 - 13:40着",
-              "depTime": "12:30",
-              "arrTime": "13:40",
-              "flightNo": "NH23",
-              "orig": "HND",
-              "dest": "ITM",
-              "route": "東京(羽田) ➔ 大阪(伊丹)",
-              "model": "763/321",
-              "is767Confirmed": true,
-              "is767Strict": false,
-              "tag": "763主力枠"
-            },
-            {
-              "step": "③ 午後便",
-              "time": "14:30発 - 15:40着",
-              "depTime": "14:30",
-              "arrTime": "15:40",
-              "flightNo": "NH28",
-              "orig": "ITM",
-              "dest": "HND",
-              "route": "大阪(伊丹) ➔ 東京(羽田)",
-              "model": "763/73H",
-              "is767Confirmed": true,
-              "is767Strict": false,
-              "tag": "763主力枠"
-            },
-            {
-              "step": "④ 夕方便",
-              "time": "16:40発 - 18:35着",
-              "depTime": "16:40",
-              "arrTime": "18:35",
-              "flightNo": "NH627",
-              "orig": "HND",
-              "dest": "KOJ",
-              "route": "東京(羽田) ➔ 鹿児島",
-              "model": "763/73H",
-              "is767Confirmed": true,
-              "is767Strict": false,
-              "tag": "763主力枠"
-            },
-            {
-              "step": "⑤ 夜最終",
-              "time": "19:20発 - 21:00着",
-              "depTime": "19:20",
-              "arrTime": "21:00",
-              "flightNo": "NH630",
-              "orig": "KOJ",
-              "dest": "HND",
-              "route": "鹿児島 ➔ 東京(羽田)",
-              "model": "763/73H",
-              "is767Confirmed": true,
-              "is767Strict": false,
-              "tag": "🌙羽田帰還(泊)"
-            }
-          ]
-        },
-        {
-          "planId": "plan-b",
-          "planName": "プランB (羽田泊始発)",
+          "planName": "プランA (羽田泊始発)",
           "stayCode": "HND",
           "startAirportCode": "HND",
-          "rank": "有力 ◯",
-          "probability": 10,
+          "rank": "本命 ◎",
+          "probability": 56,
           "title": "【前夜羽田泊(NH661始発)】羽田 ➔ 長崎 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
           "routeSummary": "羽田 ➔ 長崎 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
           "airports": [
@@ -1452,12 +1254,121 @@
           ]
         },
         {
+          "planId": "plan-b",
+          "planName": "プランB (羽田泊始発)",
+          "stayCode": "HND",
+          "startAirportCode": "HND",
+          "rank": "有力 ◯",
+          "probability": 27,
+          "title": "【前夜羽田泊(NH619始発)】羽田 ➔ 鹿児島 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 鹿児島 ➔ 羽田(泊)",
+          "routeSummary": "羽田 ➔ 鹿児島 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 鹿児島 ➔ 羽田(泊)",
+          "airports": [
+            "東京(羽田)",
+            "鹿児島",
+            "大阪(伊丹)"
+          ],
+          "description": "前夜東京(羽田)駐機シナリオから連動。朝一NH619(06:35発 - 08:30着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全6便を運航して夜に羽田泊となる予測スジ。 [フリート整合: 他機体10機スジ整合（76P確定枠カバー率100%）]",
+          "fleetConsistency": {
+            "fleetScore": 2,
+            "is100Percent": true,
+            "strictCoverageRate": 100,
+            "otherLinesCount": 10,
+            "summary": "他機体10機スジ整合（76P確定枠カバー率100%）"
+          },
+          "flights": [
+            {
+              "step": "① 朝一便",
+              "time": "06:35発 - 08:30着",
+              "depTime": "06:35",
+              "arrTime": "08:30",
+              "flightNo": "NH619",
+              "orig": "HND",
+              "dest": "KOJ",
+              "route": "東京(羽田) ➔ 鹿児島",
+              "model": "763/321",
+              "is767Confirmed": true,
+              "is767Strict": false,
+              "tag": "763主力枠"
+            },
+            {
+              "step": "② 午前便",
+              "time": "09:15発 - 10:55着",
+              "depTime": "09:15",
+              "arrTime": "10:55",
+              "flightNo": "NH622",
+              "orig": "KOJ",
+              "dest": "HND",
+              "route": "鹿児島 ➔ 東京(羽田)",
+              "model": "763/321",
+              "is767Confirmed": true,
+              "is767Strict": false,
+              "tag": "763主力枠"
+            },
+            {
+              "step": "③ 午後便",
+              "time": "12:30発 - 13:40着",
+              "depTime": "12:30",
+              "arrTime": "13:40",
+              "flightNo": "NH23",
+              "orig": "HND",
+              "dest": "ITM",
+              "route": "東京(羽田) ➔ 大阪(伊丹)",
+              "model": "763/321",
+              "is767Confirmed": true,
+              "is767Strict": false,
+              "tag": "763主力枠"
+            },
+            {
+              "step": "④ 午後便",
+              "time": "14:30発 - 15:40着",
+              "depTime": "14:30",
+              "arrTime": "15:40",
+              "flightNo": "NH28",
+              "orig": "ITM",
+              "dest": "HND",
+              "route": "大阪(伊丹) ➔ 東京(羽田)",
+              "model": "763/73H",
+              "is767Confirmed": true,
+              "is767Strict": false,
+              "tag": "763主力枠"
+            },
+            {
+              "step": "⑤ 夕方便",
+              "time": "16:40発 - 18:35着",
+              "depTime": "16:40",
+              "arrTime": "18:35",
+              "flightNo": "NH627",
+              "orig": "HND",
+              "dest": "KOJ",
+              "route": "東京(羽田) ➔ 鹿児島",
+              "model": "763/73H",
+              "is767Confirmed": true,
+              "is767Strict": false,
+              "tag": "763主力枠"
+            },
+            {
+              "step": "⑥ 夜最終",
+              "time": "19:20発 - 21:00着",
+              "depTime": "19:20",
+              "arrTime": "21:00",
+              "flightNo": "NH630",
+              "orig": "KOJ",
+              "dest": "HND",
+              "route": "鹿児島 ➔ 東京(羽田)",
+              "model": "763/73H",
+              "is767Confirmed": true,
+              "is767Strict": false,
+              "tag": "🌙羽田帰還(泊)"
+            }
+          ]
+        },
+        {
           "planId": "plan-c",
           "planName": "プランC (中部泊始発)",
           "stayCode": "HND",
           "startAirportCode": "NGO",
           "rank": "対抗 ▲",
-          "probability": 10,
+          "probability": 17,
           "title": "【前夜中部泊(NH703始発)】中部 ➔ 新千歳 ➔ 中部 ➔ 新千歳 ➔ 伊丹 ➔ 羽田(泊)",
           "routeSummary": "中部 ➔ 新千歳 ➔ 中部 ➔ 新千歳 ➔ 伊丹 ➔ 羽田(泊)",
           "airports": [
@@ -1550,38 +1461,31 @@
       ],
       "flights": [
         {
-          "flightNo": "NH672",
-          "route": "広島 ➔ 東京(羽田)",
-          "time": "07:35発 - 08:55着",
-          "confidence": "80%",
-          "reason": "今夜の最有力駐機先(広島)からの朝一始発便"
+          "flightNo": "NH661",
+          "route": "東京(羽田) ➔ 長崎",
+          "time": "08:30発 - 10:30着",
+          "confidence": "56%",
+          "reason": "今夜の最有力駐機先(羽田)からの朝一始発便"
         },
         {
-          "flightNo": "NH23",
-          "route": "東京(羽田) ➔ 大阪(伊丹)",
-          "time": "12:30発 - 13:40着",
-          "confidence": "80%",
+          "flightNo": "NH664",
+          "route": "長崎 ➔ 東京(羽田)",
+          "time": "11:20発 - 12:55着",
+          "confidence": "56%",
           "reason": "マルコフ遷移・ODPTダイヤ連動便"
         },
         {
-          "flightNo": "NH28",
-          "route": "大阪(伊丹) ➔ 東京(羽田)",
-          "time": "14:30発 - 15:40着",
-          "confidence": "80%",
+          "flightNo": "NH261",
+          "route": "東京(羽田) ➔ 福岡",
+          "time": "15:45発 - 17:45着",
+          "confidence": "56%",
           "reason": "マルコフ遷移・ODPTダイヤ連動便"
         },
         {
-          "flightNo": "NH627",
-          "route": "東京(羽田) ➔ 鹿児島",
-          "time": "16:40発 - 18:35着",
-          "confidence": "80%",
-          "reason": "マルコフ遷移・ODPTダイヤ連動便"
-        },
-        {
-          "flightNo": "NH630",
-          "route": "鹿児島 ➔ 東京(羽田)",
-          "time": "19:20発 - 21:00着",
-          "confidence": "80%",
+          "flightNo": "NH266",
+          "route": "福岡 ➔ 東京(羽田)",
+          "time": "18:30発 - 20:10着",
+          "confidence": "56%",
           "reason": "マルコフ遷移・ODPTダイヤ連動便"
         }
       ]
@@ -1595,13 +1499,13 @@
       "statusType": "forecast",
       "statusLabel": "週間ルート＆タイムテーブル予測（前日宿泊地確率連鎖・ビームサーチ）",
       "topRoute": "【前夜羽田泊(NH661始発)】羽田 ➔ 長崎 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
-      "topProbability": 51,
+      "topProbability": 47,
       "routes": [
         {
           "route": "東京(羽田) ⇔ 長崎",
           "destCode": "NGS",
           "isInterCity": false,
-          "probability": 28,
+          "probability": 27,
           "candidateFlights": "NH661 / NH664 / NH663 / NH667",
           "note": "羽田発着B767幹線スジ",
           "star": "★★★★★",
@@ -1612,7 +1516,7 @@
           "route": "東京(羽田) ⇔ 福岡",
           "destCode": "FUK",
           "isInterCity": false,
-          "probability": 19,
+          "probability": 20,
           "candidateFlights": "NH1077 / NH1078 / NH250 / NH254",
           "note": "羽田発着B767幹線スジ",
           "star": "★★★★☆",
@@ -1660,7 +1564,7 @@
           "stayCode": "NGO",
           "startAirportCode": "HND",
           "rank": "本命 ◎",
-          "probability": 51,
+          "probability": 47,
           "title": "【前夜羽田泊(NH661始発)】羽田 ➔ 長崎 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
           "routeSummary": "羽田 ➔ 長崎 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
           "airports": [
@@ -1757,7 +1661,7 @@
           "stayCode": "HND",
           "startAirportCode": "HND",
           "rank": "有力 ◯",
-          "probability": 26,
+          "probability": 28,
           "title": "【前夜羽田泊(NH1077始発)】羽田 ➔ 福岡 ➔ 新千歳 ➔ 福岡 ➔ 羽田(泊)",
           "routeSummary": "羽田 ➔ 福岡 ➔ 新千歳 ➔ 福岡 ➔ 羽田(泊)",
           "airports": [
@@ -1838,7 +1742,7 @@
           "stayCode": "NGO",
           "startAirportCode": "HND",
           "rank": "対抗 ▲",
-          "probability": 23,
+          "probability": 25,
           "title": "【前夜羽田泊(NH27始発)】羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
           "routeSummary": "羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
           "airports": [
@@ -1983,7 +1887,7 @@
       "statusType": "forecast",
       "statusLabel": "週間ルート＆タイムテーブル予測（前日宿泊地確率連鎖・ビームサーチ）",
       "topRoute": "【前夜中部泊(NH703始発)】中部 ➔ 新千歳 ➔ 中部 ➔ 新千歳 ➔ 伊丹 ➔ 羽田(泊)",
-      "topProbability": 42,
+      "topProbability": 41,
       "routes": [
         {
           "route": "名古屋(中部) ⇔ 沖縄(那覇)",
@@ -2048,7 +1952,7 @@
           "stayCode": "HND",
           "startAirportCode": "NGO",
           "rank": "本命 ◎",
-          "probability": 42,
+          "probability": 41,
           "title": "【前夜中部泊(NH703始発)】中部 ➔ 新千歳 ➔ 中部 ➔ 新千歳 ➔ 伊丹 ➔ 羽田(泊)",
           "routeSummary": "中部 ➔ 新千歳 ➔ 中部 ➔ 新千歳 ➔ 伊丹 ➔ 羽田(泊)",
           "airports": [
@@ -2144,7 +2048,7 @@
           "stayCode": "NGO",
           "startAirportCode": "NGO",
           "rank": "有力 ◯",
-          "probability": 42,
+          "probability": 41,
           "title": "【前夜中部泊(NH303始発)】中部 ➔ 那覇 ➔ 中部 ➔ 那覇 ➔ 中部(泊)",
           "routeSummary": "中部 ➔ 那覇 ➔ 中部 ➔ 那覇 ➔ 中部(泊)",
           "airports": [
@@ -2224,7 +2128,7 @@
           "stayCode": "HND",
           "startAirportCode": "HND",
           "rank": "対抗 ▲",
-          "probability": 16,
+          "probability": 18,
           "title": "【前夜羽田泊(NH619始発)】羽田 ➔ 鹿児島 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 神戸 ➔ 羽田(泊)",
           "routeSummary": "羽田 ➔ 鹿児島 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 神戸 ➔ 羽田(泊)",
           "airports": [
@@ -2412,13 +2316,13 @@
       "statusType": "forecast",
       "statusLabel": "週間ルート＆タイムテーブル予測（前日宿泊地確率連鎖・ビームサーチ）",
       "topRoute": "【前夜中部泊(NH303始発)】中部 ➔ 那覇 ➔ 中部 ➔ 那覇 ➔ 中部(泊)",
-      "topProbability": 64,
+      "topProbability": 62,
       "routes": [
         {
           "route": "名古屋(中部) ⇔ 沖縄(那覇)",
           "destCode": "NGO",
           "isInterCity": true,
-          "probability": 43,
+          "probability": 42,
           "candidateFlights": "NH303 / NH304 / NH309 / NH308",
           "note": "地方間直行B767スジ",
           "star": "★★★★☆",
@@ -2426,22 +2330,22 @@
           "planName": "プランA"
         },
         {
-          "route": "東京(羽田) ⇔ 福岡",
-          "destCode": "FUK",
+          "route": "東京(羽田) ⇔ 長崎",
+          "destCode": "NGS",
           "isInterCity": false,
-          "probability": 18,
-          "candidateFlights": "NH1077 / NH1078 / NH245 / NH249",
+          "probability": 19,
+          "candidateFlights": "NH661 / NH664 / NH663 / NH667",
           "note": "羽田発着B767幹線スジ",
           "star": "★★★★☆",
           "rank": "有力 ◯",
           "planName": "プランB"
         },
         {
-          "route": "東京(羽田) ⇔ 長崎",
-          "destCode": "NGS",
+          "route": "東京(羽田) ⇔ 福岡",
+          "destCode": "FUK",
           "isInterCity": false,
           "probability": 18,
-          "candidateFlights": "NH661 / NH664 / NH663 / NH667",
+          "candidateFlights": "NH1077 / NH1078 / NH245 / NH249",
           "note": "羽田発着B767幹線スジ",
           "star": "★★★★☆",
           "rank": "有力 ◯",
@@ -2459,14 +2363,14 @@
           "planName": "プランD"
         },
         {
-          "route": "東京(羽田) ⇔ 札幌(新千歳)",
+          "route": "札幌(新千歳) ⇔ 名古屋(中部)",
           "destCode": "CTS",
-          "isInterCity": false,
+          "isInterCity": true,
           "probability": 9,
-          "candidateFlights": "NH81 / NH62 / NH74 / NH84",
-          "note": "羽田発着B767幹線スジ",
-          "star": "★★☆☆☆",
-          "rank": "可能性あり △",
+          "candidateFlights": "NH712 / NH710 / NH703 / NH707",
+          "note": "地方間直行B767スジ",
+          "star": "★★★★☆",
+          "rank": "地方直行 ✈️",
           "planName": "プランE"
         }
       ],
@@ -2477,7 +2381,7 @@
           "stayCode": "NGO",
           "startAirportCode": "NGO",
           "rank": "本命 ◎",
-          "probability": 64,
+          "probability": 62,
           "title": "【前夜中部泊(NH303始発)】中部 ➔ 那覇 ➔ 中部 ➔ 那覇 ➔ 中部(泊)",
           "routeSummary": "中部 ➔ 那覇 ➔ 中部 ➔ 那覇 ➔ 中部(泊)",
           "airports": [
@@ -2557,7 +2461,7 @@
           "stayCode": "NGO",
           "startAirportCode": "HND",
           "rank": "有力 ◯",
-          "probability": 22,
+          "probability": 24,
           "title": "【前夜羽田泊(NH661始発)】羽田 ➔ 長崎 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
           "routeSummary": "羽田 ➔ 長崎 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
           "airports": [
@@ -3666,7 +3570,7 @@
       "code": "NGS",
       "name": "長崎空港",
       "note": "朝一便（NH661/NH664）および夜間ステイ便（NH669/NH662）で高頻度投入。",
-      "prob": 54,
+      "prob": 53,
       "level": "B (中確率)"
     },
     {
@@ -3701,7 +3605,7 @@
       "code": "KOJ",
       "name": "鹿児島空港",
       "note": "早朝羽田発（NH619/NH622）や夕方往復（NH627/NH630）の定番路線。",
-      "prob": 25,
+      "prob": 24,
       "level": "C (注目)"
     },
     {
@@ -3755,7 +3659,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 460,
+    "totalFleetFlights": 461,
     "fleetCount": 11
   }
 }
