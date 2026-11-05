@@ -26,9 +26,16 @@ const POSITION_SLOTS: Record<string, string> = {
 };
 
 const targetSlot = slot || POSITION_SLOTS[position] || '4644769398';
+
+// AdSense 有効化判定
+// - yomilee (yomileeblog.com): 合格済み・表示ON
+// - teluis (teluis.com): 未合格のため表示完全OFF
+const currentHost = (Astro.site?.hostname || '').toLowerCase();
+const isTeluisMain = currentHost === 'teluis.com';
+const isAdEnabled = !isTeluisMain;
 ---
 
-{targetSlot && (
+{isAdEnabled && targetSlot && (
   <div class={`adsense-wrapper ad-pos-${position}`}>
     <div class="adsense-label">広告</div>
     <div class="adsense-body">
@@ -45,7 +52,7 @@ const targetSlot = slot || POSITION_SLOTS[position] || '4644769398';
   </div>
 )}
 
-{position === 'bottom' && (
+{isAdEnabled && position === 'bottom' && (
   <script is:inline>
     (() => {
       if (window.__adsense_h2_injected__) return;
@@ -84,9 +91,17 @@ const targetSlot = slot || POSITION_SLOTS[position] || '4644769398';
 
           const adWrapper = document.createElement('div');
           adWrapper.className = 'adsense-wrapper ad-pos-in-article';
+          adWrapper.style.backgroundColor = '#f8fafc';
+          adWrapper.style.border = '1px solid #e2e8f0';
+          adWrapper.style.borderRadius = '8px';
+          adWrapper.style.padding = '1rem 0.75rem 1.25rem';
+          adWrapper.style.margin = '2.5rem auto';
+          adWrapper.style.textAlign = 'center';
+          adWrapper.style.boxSizing = 'border-box';
+
           adWrapper.innerHTML = `
-            <div class="adsense-label">広告</div>
-            <div class="adsense-body">
+            <div class="adsense-label" style="display:block; width:100%; text-align:center; font-size:0.75rem; color:#64748b; font-weight:600; letter-spacing:0.1em; margin-bottom:0.6rem;">広告</div>
+            <div class="adsense-body" style="width:100%; margin:0 auto; text-align:center;">
               <ins class="adsbygoogle"
                    style="display:block; text-align:center;"
                    data-ad-client="${clientId}"
@@ -115,7 +130,7 @@ const targetSlot = slot || POSITION_SLOTS[position] || '4644769398';
   </script>
 )}
 
-<style>
+<style is:global>
   .adsense-wrapper {
     margin: 2.25rem auto;
     text-align: center;
@@ -153,10 +168,13 @@ const targetSlot = slot || POSITION_SLOTS[position] || '4644769398';
     padding: 1rem 0.75rem 1.25rem;
   }
   .adsense-label {
+    display: block;
+    width: 100%;
     font-size: 0.75rem;
     color: #64748b;
-    letter-spacing: 0.08em;
-    margin-bottom: 0.5rem;
+    letter-spacing: 0.1em;
+    line-height: 1;
+    margin: 0 auto 0.6rem auto;
     text-align: center;
     font-weight: 600;
   }
