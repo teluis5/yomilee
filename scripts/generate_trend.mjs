@@ -491,9 +491,12 @@ function generateSingleFallbackArticle(topic, dateInfo, categories) {
 
   const description = `いまネットや検索で大注目の「${displayTitle}」について、等身大エディター目線で徹底分析！スペックや一次情報の丸写しではなく、メリット・デメリット・ファンの本音を分かりやすく総括します。`;
 
+  const safeTitle = title.replace(/"/g, '「');
+  const safeDescription = description.replace(/"/g, '「');
+
   let mdx = `---
-title: "${title}"
-description: "${description}"
+title: ${JSON.stringify(safeTitle)}
+description: ${JSON.stringify(safeDescription)}
 pubDate: "${dateInfo.dateStr}"
 categories: ${JSON.stringify(categories)}
 heroImage: "./hero.jpg"
