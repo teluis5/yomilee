@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-07T04:02:02.996Z",
-  "updatedAtJst": "2026/11/7 13:02:02",
+  "updatedAt": "2026-11-07T05:02:18.380Z",
+  "updatedAtJst": "2026/11/7 14:02:18",
   "totalJets": 5,
   "jets": [
     {
@@ -17,23 +17,9 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "長崎 (NGS) ➔ 東京(羽田) (HND)",
-      "currentFlight": {
-        "id": "42779c14",
-        "flightNo": "NH664",
-        "origin": "NGS",
-        "originName": "長崎 (NGS)",
-        "destination": "HND",
-        "destinationName": "東京(羽田) (HND)",
-        "depTimeJst": "2026-11-07 11:33",
-        "arrTimeJst": "2026-11-07 12:57",
-        "timeRange": "11:33 - 12:57",
-        "dateJst": "2026-11-07",
-        "status": "Landed 12:57",
-        "isLive": true,
-        "isToday": true
-      },
+      "flightState": "着陸済み 🔵",
+      "currentLocation": "東京(羽田) (HND)",
+      "currentFlight": null,
       "nextFlight": {
         "flightNo": "NH625",
         "origin": "HND",
@@ -46,7 +32,21 @@
         "status": "予測枠 (★★★★★ (最有力・55分ターン))",
         "isPredicted": true
       },
-      "lastLandedFlight": null,
+      "lastLandedFlight": {
+        "id": "42779c14",
+        "flightNo": "NH664",
+        "origin": "NGS",
+        "originName": "長崎 (NGS)",
+        "destination": "HND",
+        "destinationName": "東京(羽田) (HND)",
+        "depTimeJst": "2026-11-07 11:33",
+        "arrTimeJst": "2026-11-07 12:57",
+        "timeRange": "11:33 - 12:57",
+        "dateJst": "2026-11-07",
+        "status": "Landed 12:57",
+        "isLive": false,
+        "isToday": true
+      },
       "nightStay": "東京(羽田) (HND)",
       "domesticPrediction": {
         "nextCandidates": [
@@ -94,7 +94,7 @@
           "timeRange": "11:33 - 12:57",
           "dateJst": "2026-11-07",
           "status": "Landed 12:57",
-          "isLive": true,
+          "isLive": false,
           "isToday": true
         },
         {
@@ -126,7 +126,7 @@
           "timeRange": "11:33 - 12:57",
           "dateJst": "2026-11-07",
           "status": "Landed 12:57",
-          "isLive": true,
+          "isLive": false,
           "isToday": true
         },
         {
@@ -205,7 +205,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T04:02:01.200Z"
+      "updatedAt": "2026-11-07T05:02:16.675Z"
     },
     {
       "id": "pikachu-nh",
@@ -352,7 +352,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T04:02:01.636Z"
+      "updatedAt": "2026-11-07T05:02:17.113Z"
     },
     {
       "id": "eevee-nh",
@@ -378,10 +378,10 @@
         "destination": "NRT",
         "destinationName": "東京(成田) (NRT)",
         "depTimeJst": "2026-11-07 02:09",
-        "arrTimeJst": "2026-11-07 14:47",
-        "timeRange": "02:09 - 14:47",
+        "arrTimeJst": "2026-11-07 14:51",
+        "timeRange": "02:09 - 14:51",
         "dateJst": "2026-11-07",
-        "status": "Estimated 14:47",
+        "status": "Estimated 14:51",
         "isLive": true,
         "isToday": true
       },
@@ -399,10 +399,10 @@
           "destination": "NRT",
           "destinationName": "東京(成田) (NRT)",
           "depTimeJst": "2026-11-07 02:09",
-          "arrTimeJst": "2026-11-07 14:47",
-          "timeRange": "02:09 - 14:47",
+          "arrTimeJst": "2026-11-07 14:51",
+          "timeRange": "02:09 - 14:51",
           "dateJst": "2026-11-07",
-          "status": "Estimated 14:47",
+          "status": "Estimated 14:51",
           "isLive": true,
           "isToday": true
         }
@@ -416,10 +416,10 @@
           "destination": "NRT",
           "destinationName": "東京(成田) (NRT)",
           "depTimeJst": "2026-11-07 02:09",
-          "arrTimeJst": "2026-11-07 14:47",
-          "timeRange": "02:09 - 14:47",
+          "arrTimeJst": "2026-11-07 14:51",
+          "timeRange": "02:09 - 14:51",
           "dateJst": "2026-11-07",
-          "status": "Estimated 14:47",
+          "status": "Estimated 14:51",
           "isLive": true,
           "isToday": true
         },
@@ -499,7 +499,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T04:02:02.117Z"
+      "updatedAt": "2026-11-07T05:02:17.539Z"
     },
     {
       "id": "pokemon-green",
@@ -630,7 +630,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T04:02:02.557Z"
+      "updatedAt": "2026-11-07T05:02:17.969Z"
     },
     {
       "id": "pikachu-legacy",
@@ -656,10 +656,10 @@
         "destination": "HND",
         "destinationName": "東京(羽田) (HND)",
         "depTimeJst": "2026-11-07 03:04",
-        "arrTimeJst": "2026-11-07 15:54",
-        "timeRange": "03:04 - 15:54",
+        "arrTimeJst": "2026-11-07 15:56",
+        "timeRange": "03:04 - 15:56",
         "dateJst": "2026-11-07",
-        "status": "Estimated 15:54",
+        "status": "Estimated 15:56",
         "isLive": true,
         "isToday": true
       },
@@ -677,10 +677,10 @@
           "destination": "HND",
           "destinationName": "東京(羽田) (HND)",
           "depTimeJst": "2026-11-07 03:04",
-          "arrTimeJst": "2026-11-07 15:54",
-          "timeRange": "03:04 - 15:54",
+          "arrTimeJst": "2026-11-07 15:56",
+          "timeRange": "03:04 - 15:56",
           "dateJst": "2026-11-07",
-          "status": "Estimated 15:54",
+          "status": "Estimated 15:56",
           "isLive": true,
           "isToday": true
         }
@@ -694,10 +694,10 @@
           "destination": "HND",
           "destinationName": "東京(羽田) (HND)",
           "depTimeJst": "2026-11-07 03:04",
-          "arrTimeJst": "2026-11-07 15:54",
-          "timeRange": "03:04 - 15:54",
+          "arrTimeJst": "2026-11-07 15:56",
+          "timeRange": "03:04 - 15:56",
           "dateJst": "2026-11-07",
-          "status": "Estimated 15:54",
+          "status": "Estimated 15:56",
           "isLive": true,
           "isToday": true
         },
@@ -777,7 +777,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T04:02:02.995Z"
+      "updatedAt": "2026-11-07T05:02:18.379Z"
     }
   ]
 }
