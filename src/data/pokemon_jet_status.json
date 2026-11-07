@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-07T12:02:05.835Z",
-  "updatedAtJst": "2026/11/7 21:02:05",
+  "updatedAt": "2026-11-07T13:01:58.321Z",
+  "updatedAtJst": "2026/11/7 22:01:58",
   "totalJets": 5,
   "jets": [
     {
@@ -17,9 +17,11 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "東京(羽田) (HND) ➔ 長崎 (NGS)",
-      "currentFlight": {
+      "flightState": "着陸済み 🔵",
+      "currentLocation": "長崎 (NGS)",
+      "currentFlight": null,
+      "nextFlight": null,
+      "lastLandedFlight": {
         "id": "42786b04",
         "flightNo": "NH669",
         "origin": "HND",
@@ -27,15 +29,13 @@
         "destination": "NGS",
         "destinationName": "長崎 (NGS)",
         "depTimeJst": "2026-11-07 19:43",
-        "arrTimeJst": "2026-11-07 21:16",
-        "timeRange": "19:43 - 21:16",
+        "arrTimeJst": "2026-11-07 21:17",
+        "timeRange": "19:43 - 21:17",
         "dateJst": "2026-11-07",
-        "status": "Estimated 21:16",
-        "isLive": true,
+        "status": "Landed 21:17",
+        "isLive": false,
         "isToday": true
       },
-      "nextFlight": null,
-      "lastLandedFlight": null,
       "nightStay": "長崎 (NGS)",
       "domesticPrediction": {
         "nextCandidates": [],
@@ -51,11 +51,11 @@
           "destination": "NGS",
           "destinationName": "長崎 (NGS)",
           "depTimeJst": "2026-11-07 19:43",
-          "arrTimeJst": "2026-11-07 21:16",
-          "timeRange": "19:43 - 21:16",
+          "arrTimeJst": "2026-11-07 21:17",
+          "timeRange": "19:43 - 21:17",
           "dateJst": "2026-11-07",
-          "status": "Estimated 21:16",
-          "isLive": true,
+          "status": "Landed 21:17",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -128,11 +128,11 @@
           "destination": "NGS",
           "destinationName": "長崎 (NGS)",
           "depTimeJst": "2026-11-07 19:43",
-          "arrTimeJst": "2026-11-07 21:16",
-          "timeRange": "19:43 - 21:16",
+          "arrTimeJst": "2026-11-07 21:17",
+          "timeRange": "19:43 - 21:17",
           "dateJst": "2026-11-07",
-          "status": "Estimated 21:16",
-          "isLive": true,
+          "status": "Landed 21:17",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -211,7 +211,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T12:02:03.546Z"
+      "updatedAt": "2026-11-07T13:01:56.318Z"
     },
     {
       "id": "pikachu-nh",
@@ -237,10 +237,10 @@
         "destination": "CGK",
         "destinationName": "CGK",
         "depTimeJst": "2026-11-07 18:28",
-        "arrTimeJst": "2026-11-08 01:35",
-        "timeRange": "18:28 - 01:35",
+        "arrTimeJst": "2026-11-08 01:37",
+        "timeRange": "18:28 - 01:37",
         "dateJst": "2026-11-07",
-        "status": "Estimated 23:35",
+        "status": "Estimated 23:37",
         "isLive": true,
         "isToday": true
       },
@@ -258,10 +258,10 @@
           "destination": "CGK",
           "destinationName": "CGK",
           "depTimeJst": "2026-11-07 18:28",
-          "arrTimeJst": "2026-11-08 01:35",
-          "timeRange": "18:28 - 01:35",
+          "arrTimeJst": "2026-11-08 01:37",
+          "timeRange": "18:28 - 01:37",
           "dateJst": "2026-11-07",
-          "status": "Estimated 23:35",
+          "status": "Estimated 23:37",
           "isLive": true,
           "isToday": true
         },
@@ -290,10 +290,10 @@
           "destination": "CGK",
           "destinationName": "CGK",
           "depTimeJst": "2026-11-07 18:28",
-          "arrTimeJst": "2026-11-08 01:35",
-          "timeRange": "18:28 - 01:35",
+          "arrTimeJst": "2026-11-08 01:37",
+          "timeRange": "18:28 - 01:37",
           "dateJst": "2026-11-07",
-          "status": "Estimated 23:35",
+          "status": "Estimated 23:37",
           "isLive": true,
           "isToday": true
         },
@@ -373,7 +373,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T12:02:04.104Z"
+      "updatedAt": "2026-11-07T13:01:56.798Z"
     },
     {
       "id": "eevee-nh",
@@ -535,7 +535,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T12:02:04.724Z"
+      "updatedAt": "2026-11-07T13:01:57.266Z"
     },
     {
       "id": "pokemon-green",
@@ -666,7 +666,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T12:02:05.215Z"
+      "updatedAt": "2026-11-07T13:01:57.727Z"
     },
     {
       "id": "pikachu-legacy",
@@ -828,7 +828,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T12:02:05.834Z"
+      "updatedAt": "2026-11-07T13:01:58.320Z"
     }
   ]
 }
