@@ -6,8 +6,8 @@ updatedDate: "2026-11-07"
 heroImage: "./hero.jpg"
 categories: ["ちいかわ", "旅行"]
 ---
-import ProblemBox from '../../../components/ProblemBox.astro';
-import ConclusionBox from '../../../components/ConclusionBox.astro';
+import ProblemBox from '../../components/ProblemBox.astro';
+import ConclusionBox from '../../components/ConclusionBox.astro';
 
 <ProblemBox>
 - 今日（11月7日）のちいかわジェットはどの路線・空港を飛んでいる？
@@ -23,34 +23,20 @@ ANAのボーイング767-300ER型機で運航されている、大人気の特�
 
 朝7時の初回予想から、昼12時の補正、18時の再補正、22時のナイトステイ確定まで、最新ダイヤを随時反映しています。
 
-<div style="background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); border-radius: 10px; padding: 1.25rem; margin: 1.5rem 0; color: #ffffff; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);">
-  <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
-    <span style="background: #f59e0b; color: #000; font-size: 0.75rem; font-weight: 800; padding: 0.2rem 0.6rem; border-radius: 9999px;">🎯 初便的中率 96.0% (25戦24勝)</span>
-    <span style="font-size: 0.8rem; color: #94a3b8;">プランA〜C確率＆時刻順ダイヤ対応</span>
-  </div>
-  <p style="margin: 0 0 0.5rem 0; font-weight: bold; font-size: 1.05rem; color: #67e8f9;">
-    📊 ちいかわジェット週間運行予測＆AI的中率スコアボード公開中！
-  </p>
-  <p style="margin: 0; color: #e2e8f0; font-size: 0.88rem; line-height: 1.6;">
-    「明日はどのルートで飛ぶ？（プランA・B・C）」「自分の空港に来る時間は？」をワンタップで絞り込める<b>プラン別・時刻順タイムラインUI</b>と、過去の答え合わせ実績を専用ダッシュボードで無料公開中！<br />
-    👉 <a href="/site/chiikawajet/" style="color: #fef08a; font-weight: bold; text-decoration: underline;">ちいかわジェット週間運行予測ダッシュボード（ヨミトク専用ツール）を見る</a>
-  </p>
-</div>
-
 {/* CHIIKAWA_DAILY_BADGE_START */}
-<div style="background: #fffbeb; border: 2px solid #fde68a; border-radius: 8px; padding: 1.2rem; margin-bottom: 1.5rem;">
+<div style="background: #f0f9ff; border: 2px solid #bae6fd; border-radius: 8px; padding: 1.2rem; margin-bottom: 1.5rem;">
   <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
-    <span style="background: #d97706; color: #ffffff; font-weight: bold; font-size: 0.85rem; padding: 0.25rem 0.6rem; border-radius: 4px;">
-      ● 18:00 夕方補正
+    <span style="background: #0284c7; color: #ffffff; font-weight: bold; font-size: 0.85rem; padding: 0.25rem 0.6rem; border-radius: 4px;">
+      ● 07:00 朝刊予測公開
     </span>
-    <span style="font-size: 0.85rem; color: #64748b;">自動更新時刻: 2026年11月7日 18:01</span>
+    <span style="font-size: 0.85rem; color: #64748b;">自動更新時刻: 2026年11月7日 10:00</span>
   </div>
   <p style="margin: 0 0 0.5rem 0; font-weight: bold; color: #1e293b; font-size: 1.05rem;">
-    📍 現在のちいかわジェット（JA609A）: <b>札幌(新千歳)から大阪(伊丹)へ飛行中</b>
+    📍 現在のちいかわジェット（JA609A）: <b>名古屋(中部)から札幌(新千歳)へ飛行中</b>
   </p>
   <p style="margin: 0; color: #475569; font-size: 0.9rem; line-height: 1.6;">
-    午後の運航状況と夜の最終便動向から、明日の運行予測を再度補正しました。<br />
-    今夜のナイトステイ（夜間駐機先）見通し: <b>未確定（18:15大阪(伊丹)着後、夕方便で羽田へ折返し見込み / 19〜21時頃に確定）</b>
+    本日の運航計画と明日のフライト予測を公開しました。<br />
+    今夜のナイトステイ（夜間駐機先）見通し: <b>未確定（10:25札幌(新千歳)着後、夕方便で羽田へ折返し見込み / 19〜21時頃に確定）</b>
   </p>
 </div>
 {/* CHIIKAWA_DAILY_BADGE_END */}
@@ -60,11 +46,8 @@ ANAのボーイング767-300ER型機で運航されている、大人気の特�
 
 | 便名 | 区間（出発 ➔ 到着） | 定刻ダイヤ | 現在のステータス |
 | :--- | :--- | :--- | :--- |
-| <b>NH703</b> | 名古屋(中部) ➔ 札幌(新千歳) | 08:40発 - 10:25着 | <b>✅ 着陸済 (10:10)</b> |
-| <b>NH710</b> | 札幌(新千歳) ➔ 名古屋(中部) | 11:10発 - 13:00着 | <b>✅ 着陸済 (13:03)</b> |
-| <b>NH707</b> | 名古屋(中部) ➔ 札幌(新千歳) | 13:50発 - 15:30着 | <b>✅ 着陸済 (15:22)</b> |
-| <b>NH778</b> | 札幌(新千歳) ➔ 大阪(伊丹) | 16:15発 - 18:15着 | <b>✈️ 飛行中 ✈️</b> |
-| <b>NH36 (予測)</b> | 大阪(伊丹) ➔ 東京(羽田) | 17:00発 - 18:15着 | <b>🔄 折返し復路予測 (確率85%)</b> |
+| <b>NH703</b> | 名古屋(中部) ➔ 札幌(新千歳) | 08:40発 - 10:25着 | <b>✈️ 飛行中 ✈️</b> |
+| <b>NH72 (予測)</b> | 札幌(新千歳) ➔ 東京(羽田) | 17:00発 - 18:40着 | <b>🔄 折返し復路予測 (確率85%)</b> |
 | <b>最終便 (未発表)</b> | 羽田そのまま駐機 または 19時台地方最終便 | 19:15発 - 21:15頃着 | <b>🌙 19〜21時頃に確定</b> |
 
 <div style="background: #ffffff; border: 2px solid #0284c7; border-radius: 8px; padding: 1.15rem; margin-top: 1.25rem;">
@@ -86,10 +69,10 @@ ANAのボーイング767-300ER型機で運航されている、大人気の特�
 
 <div style="background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%); border: 2px solid #38bdf8; border-radius: 8px; padding: 1rem 1.25rem; margin-bottom: 1.25rem;">
   <p style="margin: 0 0 0.4rem 0; font-weight: bold; color: #0369a1; font-size: 0.95rem;">
-    ⚡ 今夜の夜間駐機状況「未確定（18:15大阪(伊丹)着後、夕方便で羽田へ折返し見込み / 19〜21時頃に確定）」に基づく3大運航ルート予測
+    ⚡ 今夜の夜間駐機状況「未確定（10:25札幌(新千歳)着後、夕方便で羽田へ折返し見込み / 19〜21時頃に確定）」に基づく3大運航ルート予測
   </p>
   <p style="margin: 0; color: #334155; font-size: 0.88rem; line-height: 1.6;">
-    ANA保有B767-300ER同型機（全15機・計988便）の独自蓄積データから算出した、明日の<b>1日通し運航シナリオ（プランA・プランB・プランC）</b>です。
+    ANA保有B767-300ER同型機（全15機・計961便）の独自蓄積データから算出した、明日の<b>1日通し運航シナリオ（プランA・プランB・プランC）</b>です。
   </p>
 </div>
 
@@ -115,12 +98,12 @@ ANAのボーイング767-300ER型機で運航されている、大人気の特�
 | <b>④ 午後便</b> | <b>15:15発 - 16:45着</b> | <b>NH595</b> | 東京(羽田) ➔ 松山 | 午後往路 |
 | <b>⑤ 夜最終</b> | <b>17:35発 - 19:05着</b> | <b>NH598</b> | 松山 ➔ 東京(羽田) | 🌙羽田帰還 |
 
-#### 📌 プランC（対抗 ▲｜確率 20%）：【今夜大阪(伊丹)で夜間駐機する場合】大阪(伊丹)始発 ➔ 福岡・新千歳ルート
-<p style="margin: 0.2rem 0 0.6rem 0; font-size: 0.88rem; color: #475569;"><b>1日のルート</b>: <code>大阪(伊丹) ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳(泊)</code></p>
+#### 📌 プランC（対抗 ▲｜確率 20%）：【今夜札幌(新千歳)で夜間駐機する場合】札幌(新千歳)始発 ➔ 福岡・新千歳ルート
+<p style="margin: 0.2rem 0 0.6rem 0; font-size: 0.88rem; color: #475569;"><b>1日のルート</b>: <code>札幌(新千歳) ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳(泊)</code></p>
 
 | 順序 | 予定時刻（出発 ➔ 到着） | 予測便名 | 就航区間 | 備考 |
 | :--- | :--- | :--- | :--- | :--- |
-| <b>① 朝一便</b> | <b>07:05発 - 08:15着</b> | <b>NH14</b> | 大阪(伊丹) ➔ 東京(羽田) | 大阪(伊丹)ステイ時始発 |
+| <b>① 朝一便</b> | <b>07:30発 - 09:10着</b> | <b>NH50</b> | 札幌(新千歳) ➔ 東京(羽田) | 札幌(新千歳)ステイ時始発 |
 | <b>② 午前便</b> | <b>10:30発 - 12:30着</b> | <b>NH251</b> | 東京(羽田) ➔ 福岡 | 午前往路 |
 | <b>③ 午後便</b> | <b>13:10発 - 14:50着</b> | <b>NH256</b> | 福岡 ➔ 東京(羽田) | 昼復路 |
 | <b>④ 夜最終</b> | <b>18:00発 - 19:35着</b> | <b>NH75</b> | 東京(羽田) ➔ 札幌(新千歳) | 🌙夜間駐機 |
@@ -135,8 +118,6 @@ ANAのボーイング767-300ER型機で運航されている、大人気の特�
 
 - **22:00 夜最終確定**: 本日の全便運航終了。名古屋(中部)での夜間駐機を確認し、明日の始発便予測を最終確定
 - **07:00 朝刊予測公開**: 本日の運航計画（1便）と明日の始発便予測（未確定（10:25札幌(新千歳)着後、夕方便で羽田へ折返し見込み / 19〜21時頃に確定）発）を公開
-- **12:00 昼補正**: 午前便の消化状況（着陸済: 3便）を確認、午後の運航見通しを補正
-- **18:00 夕方補正**: 夕方便の着陸を確認、今夜のナイトステイ先（未確定（18:15大阪(伊丹)着後、夕方便で羽田へ折返し見込み / 19〜21時頃に確定））から明日の予測ダイヤを再計算・補正
 {/* CHIIKAWA_UPDATE_TIMELINE_END */}
 
 ## 🔍 ちいかわジェット（JA609A）を狙い撃ちする3つの鉄則
