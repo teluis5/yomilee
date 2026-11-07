@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-07T05:02:18.380Z",
-  "updatedAtJst": "2026/11/7 14:02:18",
+  "updatedAt": "2026-11-07T08:00:45.044Z",
+  "updatedAtJst": "2026/11/7 17:00:45",
   "totalJets": 5,
   "jets": [
     {
@@ -18,70 +18,67 @@
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
       "flightState": "着陸済み 🔵",
-      "currentLocation": "東京(羽田) (HND)",
+      "currentLocation": "松山 (MYJ)",
       "currentFlight": null,
       "nextFlight": {
-        "flightNo": "NH625",
-        "origin": "HND",
-        "originName": "東京(羽田) (HND)",
-        "destination": "鹿児島 (KOJ)",
-        "destinationName": "鹿児島 (KOJ)",
-        "depTimeJst": "13:50",
-        "arrTimeJst": "15:45",
-        "timeRange": "13:50 - 15:45",
+        "flightNo": "NH596",
+        "origin": "MYJ",
+        "originName": "松山 (MYJ)",
+        "destination": "東京(羽田) (HND)",
+        "destinationName": "東京(羽田) (HND)",
+        "depTimeJst": "16:40",
+        "arrTimeJst": "18:10",
+        "timeRange": "16:40 - 18:10",
         "status": "予測枠 (★★★★★ (最有力・55分ターン))",
         "isPredicted": true
       },
       "lastLandedFlight": {
-        "id": "42779c14",
-        "flightNo": "NH664",
-        "origin": "NGS",
-        "originName": "長崎 (NGS)",
-        "destination": "HND",
-        "destinationName": "東京(羽田) (HND)",
-        "depTimeJst": "2026-11-07 11:33",
-        "arrTimeJst": "2026-11-07 12:57",
-        "timeRange": "11:33 - 12:57",
+        "id": "4277e871",
+        "flightNo": "NH593",
+        "origin": "HND",
+        "originName": "東京(羽田) (HND)",
+        "destination": "MYJ",
+        "destinationName": "松山 (MYJ)",
+        "depTimeJst": "2026-11-07 14:37",
+        "arrTimeJst": "2026-11-07 15:43",
+        "timeRange": "14:37 - 15:43",
         "dateJst": "2026-11-07",
-        "status": "Landed 12:57",
+        "status": "Landed 15:43",
         "isLive": false,
         "isToday": true
       },
-      "nightStay": "東京(羽田) (HND)",
+      "nightStay": "松山 (MYJ)",
       "domesticPrediction": {
         "nextCandidates": [
           {
-            "flightNo": "NH625",
-            "route": "東京(羽田) (HND) ➔ 鹿児島 (KOJ)",
-            "depTime": "13:50",
-            "arrTime": "15:45",
+            "flightNo": "NH596",
+            "route": "松山 (MYJ) ➔ 東京(羽田) (HND)",
+            "depTime": "16:40",
+            "arrTime": "18:10",
             "model": "78P",
-            "turnAroundMin": 53,
+            "turnAroundMin": 57,
             "probability": "★★★★★ (最有力・55分ターン)"
-          },
-          {
-            "flightNo": "NH593",
-            "route": "東京(羽田) (HND) ➔ 松山 (MYJ)",
-            "depTime": "14:15",
-            "arrTime": "15:50",
-            "model": "78P",
-            "turnAroundMin": 78,
-            "probability": "★★★☆☆"
-          },
-          {
-            "flightNo": "NH681",
-            "route": "東京(羽田) (HND) ➔ 広島 (HIJ)",
-            "depTime": "15:00",
-            "arrTime": "16:30",
-            "model": "78P",
-            "turnAroundMin": 123,
-            "probability": "★★★☆☆"
           }
         ],
         "predictedNightStay": "東京(羽田) (HND)"
       },
-      "todayFlightsCount": 2,
+      "todayFlightsCount": 3,
       "todayFlights": [
+        {
+          "id": "4277e871",
+          "flightNo": "NH593",
+          "origin": "HND",
+          "originName": "東京(羽田) (HND)",
+          "destination": "MYJ",
+          "destinationName": "松山 (MYJ)",
+          "depTimeJst": "2026-11-07 14:37",
+          "arrTimeJst": "2026-11-07 15:43",
+          "timeRange": "14:37 - 15:43",
+          "dateJst": "2026-11-07",
+          "status": "Landed 15:43",
+          "isLive": false,
+          "isToday": true
+        },
         {
           "id": "42779c14",
           "flightNo": "NH664",
@@ -114,6 +111,21 @@
         }
       ],
       "recentFlights": [
+        {
+          "id": "4277e871",
+          "flightNo": "NH593",
+          "origin": "HND",
+          "originName": "東京(羽田) (HND)",
+          "destination": "MYJ",
+          "destinationName": "松山 (MYJ)",
+          "depTimeJst": "2026-11-07 14:37",
+          "arrTimeJst": "2026-11-07 15:43",
+          "timeRange": "14:37 - 15:43",
+          "dateJst": "2026-11-07",
+          "status": "Landed 15:43",
+          "isLive": false,
+          "isToday": true
+        },
         {
           "id": "42779c14",
           "flightNo": "NH664",
@@ -188,24 +200,9 @@
           "status": "Landed 17:20",
           "isLive": false,
           "isToday": false
-        },
-        {
-          "id": "4273f53e",
-          "flightNo": "NH589",
-          "origin": "HND",
-          "originName": "東京(羽田) (HND)",
-          "destination": "MYJ",
-          "destinationName": "松山 (MYJ)",
-          "depTimeJst": "2026-11-06 13:26",
-          "arrTimeJst": "2026-11-06 14:48",
-          "timeRange": "13:26 - 14:48",
-          "dateJst": "2026-11-06",
-          "status": "Landed 14:48",
-          "isLive": false,
-          "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T05:02:16.675Z"
+      "updatedAt": "2026-11-07T08:00:43.228Z"
     },
     {
       "id": "pikachu-nh",
@@ -352,7 +349,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T05:02:17.113Z"
+      "updatedAt": "2026-11-07T08:00:43.677Z"
     },
     {
       "id": "eevee-nh",
@@ -368,9 +365,11 @@
       "routesSummary": "羽田/成田 ➔ サンフランシスコ / シカゴ / ロンドン / ニューヨーク",
       "color": "#d97706",
       "serviceStart": "2023-08-31",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "シカゴ (ORD) ➔ 東京(成田) (NRT)",
-      "currentFlight": {
+      "flightState": "着陸済み 🔵",
+      "currentLocation": "東京(成田) (NRT)",
+      "currentFlight": null,
+      "nextFlight": null,
+      "lastLandedFlight": {
         "id": "42757f6e",
         "flightNo": "NH11",
         "origin": "ORD",
@@ -378,15 +377,13 @@
         "destination": "NRT",
         "destinationName": "東京(成田) (NRT)",
         "depTimeJst": "2026-11-07 02:09",
-        "arrTimeJst": "2026-11-07 14:51",
-        "timeRange": "02:09 - 14:51",
+        "arrTimeJst": "2026-11-07 14:48",
+        "timeRange": "02:09 - 14:48",
         "dateJst": "2026-11-07",
-        "status": "Estimated 14:51",
-        "isLive": true,
+        "status": "Landed 14:48",
+        "isLive": false,
         "isToday": true
       },
-      "nextFlight": null,
-      "lastLandedFlight": null,
       "nightStay": "東京(成田) (NRT)",
       "domesticPrediction": null,
       "todayFlightsCount": 1,
@@ -399,11 +396,11 @@
           "destination": "NRT",
           "destinationName": "東京(成田) (NRT)",
           "depTimeJst": "2026-11-07 02:09",
-          "arrTimeJst": "2026-11-07 14:51",
-          "timeRange": "02:09 - 14:51",
+          "arrTimeJst": "2026-11-07 14:48",
+          "timeRange": "02:09 - 14:48",
           "dateJst": "2026-11-07",
-          "status": "Estimated 14:51",
-          "isLive": true,
+          "status": "Landed 14:48",
+          "isLive": false,
           "isToday": true
         }
       ],
@@ -416,11 +413,11 @@
           "destination": "NRT",
           "destinationName": "東京(成田) (NRT)",
           "depTimeJst": "2026-11-07 02:09",
-          "arrTimeJst": "2026-11-07 14:51",
-          "timeRange": "02:09 - 14:51",
+          "arrTimeJst": "2026-11-07 14:48",
+          "timeRange": "02:09 - 14:48",
           "dateJst": "2026-11-07",
-          "status": "Estimated 14:51",
-          "isLive": true,
+          "status": "Landed 14:48",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -499,7 +496,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T05:02:17.539Z"
+      "updatedAt": "2026-11-07T08:00:44.138Z"
     },
     {
       "id": "pokemon-green",
@@ -630,7 +627,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T05:02:17.969Z"
+      "updatedAt": "2026-11-07T08:00:44.579Z"
     },
     {
       "id": "pikachu-legacy",
@@ -647,28 +644,43 @@
       "color": "#f59e0b",
       "serviceStart": "2023-06-04",
       "flightState": "飛行中 🟢",
-      "currentLocation": "パリ(シャルルドゴール) (CDG) ➔ 東京(羽田) (HND)",
+      "currentLocation": "東京(羽田) (HND) ➔ フランクフルト (FRA)",
       "currentFlight": {
-        "id": "4276260e",
-        "flightNo": "NH216",
-        "origin": "CDG",
-        "originName": "パリ(シャルルドゴール) (CDG)",
-        "destination": "HND",
-        "destinationName": "東京(羽田) (HND)",
-        "depTimeJst": "2026-11-07 03:04",
-        "arrTimeJst": "2026-11-07 15:56",
-        "timeRange": "03:04 - 15:56",
+        "id": "JA872A-1794059700",
+        "flightNo": "NH203",
+        "origin": "HND",
+        "originName": "東京(羽田) (HND)",
+        "destination": "FRA",
+        "destinationName": "フランクフルト (FRA)",
+        "depTimeJst": "2026-11-07 22:55",
+        "arrTimeJst": "2026-11-08 13:30",
+        "timeRange": "22:55 - 13:30",
         "dateJst": "2026-11-07",
-        "status": "Estimated 15:56",
-        "isLive": true,
+        "status": "Estimated dep 22:55",
+        "isLive": false,
         "isToday": true
       },
       "nextFlight": null,
       "lastLandedFlight": null,
-      "nightStay": "東京(羽田) (HND)",
+      "nightStay": "フランクフルト (FRA)",
       "domesticPrediction": null,
-      "todayFlightsCount": 1,
+      "todayFlightsCount": 2,
       "todayFlights": [
+        {
+          "id": "JA872A-1794059700",
+          "flightNo": "NH203",
+          "origin": "HND",
+          "originName": "東京(羽田) (HND)",
+          "destination": "FRA",
+          "destinationName": "フランクフルト (FRA)",
+          "depTimeJst": "2026-11-07 22:55",
+          "arrTimeJst": "2026-11-08 13:30",
+          "timeRange": "22:55 - 13:30",
+          "dateJst": "2026-11-07",
+          "status": "Estimated dep 22:55",
+          "isLive": false,
+          "isToday": true
+        },
         {
           "id": "4276260e",
           "flightNo": "NH216",
@@ -677,16 +689,31 @@
           "destination": "HND",
           "destinationName": "東京(羽田) (HND)",
           "depTimeJst": "2026-11-07 03:04",
-          "arrTimeJst": "2026-11-07 15:56",
-          "timeRange": "03:04 - 15:56",
+          "arrTimeJst": "2026-11-07 15:43",
+          "timeRange": "03:04 - 15:43",
           "dateJst": "2026-11-07",
-          "status": "Estimated 15:56",
-          "isLive": true,
+          "status": "Landed 15:43",
+          "isLive": false,
           "isToday": true
         }
       ],
       "recentFlights": [
         {
+          "id": "JA872A-1794059700",
+          "flightNo": "NH203",
+          "origin": "HND",
+          "originName": "東京(羽田) (HND)",
+          "destination": "FRA",
+          "destinationName": "フランクフルト (FRA)",
+          "depTimeJst": "2026-11-07 22:55",
+          "arrTimeJst": "2026-11-08 13:30",
+          "timeRange": "22:55 - 13:30",
+          "dateJst": "2026-11-07",
+          "status": "Estimated dep 22:55",
+          "isLive": false,
+          "isToday": true
+        },
+        {
           "id": "4276260e",
           "flightNo": "NH216",
           "origin": "CDG",
@@ -694,11 +721,11 @@
           "destination": "HND",
           "destinationName": "東京(羽田) (HND)",
           "depTimeJst": "2026-11-07 03:04",
-          "arrTimeJst": "2026-11-07 15:56",
-          "timeRange": "03:04 - 15:56",
+          "arrTimeJst": "2026-11-07 15:43",
+          "timeRange": "03:04 - 15:43",
           "dateJst": "2026-11-07",
-          "status": "Estimated 15:56",
-          "isLive": true,
+          "status": "Landed 15:43",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -760,24 +787,9 @@
           "status": "Landed 06:50",
           "isLive": false,
           "isToday": false
-        },
-        {
-          "id": "426697b5",
-          "flightNo": "NH217",
-          "origin": "HND",
-          "originName": "東京(羽田) (HND)",
-          "destination": "MUC",
-          "destinationName": "MUC",
-          "depTimeJst": "2026-11-02 23:48",
-          "arrTimeJst": "2026-11-03 13:38",
-          "timeRange": "23:48 - 13:38",
-          "dateJst": "2026-11-02",
-          "status": "Landed 05:38",
-          "isLive": false,
-          "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T05:02:18.379Z"
+      "updatedAt": "2026-11-07T08:00:45.043Z"
     }
   ]
 }
