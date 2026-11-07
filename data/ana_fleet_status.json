@@ -116260,6 +116260,24 @@
         "actArrTime": "09:40",
         "status": "EstimatedDeparture"
       },
+      "NH529": {
+        "flightNo": "NH529",
+        "rawFlightNo": "ANA 529",
+        "model": "Q84",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "isCancelled": false,
+        "depGate": null,
+        "arrGate": null,
+        "origin": "ITM",
+        "dest": "KMJ",
+        "depTime": "19:35",
+        "arrTime": "20:55",
+        "actDepTime": "19:35",
+        "actArrTime": "20:55",
+        "status": "EstimatedDeparture"
+      },
       "NH605": {
         "flightNo": "NH605",
         "rawFlightNo": "ANA 605",
@@ -117538,24 +117556,6 @@
         "actArrTime": "17:35",
         "status": "EstimatedDeparture"
       },
-      "NH529": {
-        "flightNo": "NH529",
-        "rawFlightNo": "ANA 529",
-        "model": "Q84",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "isCancelled": false,
-        "depGate": null,
-        "arrGate": null,
-        "origin": "ITM",
-        "dest": "KMJ",
-        "depTime": "19:35",
-        "arrTime": "20:55",
-        "actDepTime": "19:35",
-        "actArrTime": "20:55",
-        "status": "EstimatedDeparture"
-      },
       "NH531": {
         "flightNo": "NH531",
         "rawFlightNo": "ANA 531",
@@ -118699,7 +118699,7 @@
         "is767Strict": true,
         "isCancelled": false,
         "depGate": null,
-        "arrGate": "4,5,6",
+        "arrGate": "1,2,3",
         "origin": "ITM",
         "dest": "HND",
         "depTime": "08:00",
@@ -118717,7 +118717,7 @@
         "is767Strict": false,
         "isCancelled": false,
         "depGate": null,
-        "arrGate": "1,2,3",
+        "arrGate": "4,5,6",
         "origin": "ITM",
         "dest": "HND",
         "depTime": "09:00",
@@ -121264,6 +121264,24 @@
         "actArrTime": "19:25",
         "status": "EstimatedDeparture"
       },
+      "NH361": {
+        "flightNo": "NH361",
+        "rawFlightNo": "ANA 361",
+        "model": "Q84",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "isCancelled": false,
+        "depGate": "105",
+        "arrGate": null,
+        "origin": "NGO",
+        "dest": "SDJ",
+        "depTime": "08:15",
+        "arrTime": "09:25",
+        "actDepTime": "08:15",
+        "actArrTime": "09:25",
+        "status": "EstimatedDeparture"
+      },
       "NH447": {
         "flightNo": "NH447",
         "rawFlightNo": "ANA 447",
@@ -121316,24 +121334,6 @@
         "arrTime": "08:25",
         "actDepTime": "07:25",
         "actArrTime": "08:25",
-        "status": "EstimatedDeparture"
-      },
-      "NH361": {
-        "flightNo": "NH361",
-        "rawFlightNo": "ANA 361",
-        "model": "Q84",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "isCancelled": false,
-        "depGate": "105",
-        "arrGate": null,
-        "origin": "NGO",
-        "dest": "SDJ",
-        "depTime": "08:15",
-        "arrTime": "09:25",
-        "actDepTime": "08:15",
-        "actArrTime": "09:25",
         "status": "EstimatedDeparture"
       },
       "NH363": {
@@ -123091,7 +123091,7 @@
         "is767Strict": false,
         "isCancelled": false,
         "depGate": null,
-        "arrGate": "1,2,3",
+        "arrGate": "4,5,6",
         "origin": "SYO",
         "dest": "HND",
         "depTime": "08:50",
@@ -165061,6 +165061,6 @@
       }
     }
   },
-  "updatedAt": "2026-11-07T18:00:15.811Z",
+  "updatedAt": "2026-11-07T19:00:15.643Z",
   "source": "ODPT (Public Transportation Open Data Center) API v4"
 }
