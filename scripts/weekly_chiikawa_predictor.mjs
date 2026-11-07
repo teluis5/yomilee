@@ -550,23 +550,21 @@ function evaluateHndTurnaroundScore(arrMins, candidateDepFlight, dayFlights, pre
   const turnaround = depM - arrMins;
   if (turnaround < 35) return 0.05;
 
-  // 1. ターンアラウンド時間の自然さ（50〜80分が国内線B767の黄金ゾーン）
-  // ※ハードな足切りはせず、なるべく理想的な時間から探しつつ長めの待機（機材繰り・予備待機）もソフトに候補へ残す
+  // 1. ターンアラウンド時間の自然さ（45〜85分が国内線B767の黄金ゾーン）
+  // ※日中（11:00〜16:00）に羽田で2時間以上アイドリング待機するスジは不自然なため厳格に減衰
   let factor = 1.0;
-  if (turnaround >= 48 && turnaround <= 85) {
-    factor = 1.4; // 黄金ゾーン（最も頻出する通常ターン）
-  } else if (turnaround >= 40 && turnaround < 48) {
-    factor = 1.15;
-  } else if (turnaround >= 35 && turnaround < 40) {
-    factor = 0.7; // 物理的下限ギリギリ
-  } else if (turnaround > 85 && turnaround <= 120) {
-    factor = 1.1; // やや余裕あり
-  } else if (turnaround > 120 && turnaround <= 180) {
-    factor = 0.85; // 2〜3時間待機（長距離便接続や夕方便調整で頻出）
-  } else if (turnaround > 180 && turnaround <= 240) {
-    factor = 0.62; // 3〜4時間待機（予備機待機・機材繰り調整）
+  if (turnaround >= 45 && turnaround <= 85) {
+    factor = 1.5; // 黄金ゾーン（最も頻出する通常ターン）
+  } else if (turnaround >= 35 && turnaround < 45) {
+    factor = 1.0;
+  } else if (turnaround > 85 && turnaround <= 115) {
+    factor = 0.9; // やや余裕あり
+  } else if (turnaround > 115 && turnaround <= 140) {
+    factor = 0.4; // 2時間超待機（他に自然な折り返し便があれば大きく劣後）
+  } else if (turnaround > 140 && turnaround <= 180) {
+    factor = 0.15; // 2時間半〜3時間待機（日中稼働機としては極めて不自然なため大幅減衰）
   } else {
-    factor = 0.35; // 4時間超の駐機
+    factor = 0.05; // 3時間超の駐機（夕方以降のステイ便待機を除き原則選外）
   }
 
   // 2. 機材モデル（レギュラー確定枠 vs 763主力枠 vs 他機種レギュラー代走枠）の優先度反映
@@ -576,12 +574,8 @@ function evaluateHndTurnaroundScore(arrMins, candidateDepFlight, dayFlights, pre
   } else if (modelPrio >= 1.5) {
     factor *= 1.15; // 763主力枠ボーナス
   } else if (modelPrio <= 0.4) {
-    // 他機種（B787/B777等）レギュラーの代走・突発枠は大幅減衰
-    factor *= 0.4;
-    // さらに羽田で120分（2時間）を超える長期待機の場合、稼働機が代走枠で長時間駐機する蓋然性は極めて低いため抑制
-    if (turnaround > 120) {
-      factor *= 0.48;
-    }
+    // 他機種（B787/B777等）レギュラーの代走・突発枠は通常減衰
+    factor *= 0.45;
   } else {
     factor *= 0.7;
   }
@@ -657,9 +651,14 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
     if (df.origin !== startAirport || df.isCancelled) return false;
     if (alreadyFlownSet.has(df.flightNo)) return false;
     if (assignedOtherMap.has(df.flightNo)) return false;
+
+    // ⚠️ 当日公式ダイヤで別機種確定（78Pや738等への変更）の便は即座に完全除外
+    const is76 = Boolean(df.is767 || df.is76P || String(df.model || '').includes('76'));
+    if (!is76) return false;
+
     const depM = parseTimeToMinutes(df.actDepTime || df.depTime);
     const minTurn = startAirport === 'HND' ? 35 : 30;
-    return depM !== null && depM >= startActArrMin + minTurn && (df.is767 || transitions[startFn]?.[df.flightNo] > 0);
+    return depM !== null && depM >= startActArrMin + minTurn;
   });
 
   // 深夜23:00以降着、または後続の767便がダイヤ上に1便も存在しないことを確認できた場合のみナイトステイ確定
@@ -716,6 +715,10 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
       if (pathFlights.some(pf => pf.flightNo === df.flightNo)) return false;
       if (assignedOtherMap.has(df.flightNo)) return false;
 
+      // ⚠️ 重大修正: 当日公式ダイヤで別機種確定（78P, 772, 738, 321等）の便は即座に完全除外！
+      const is76 = Boolean(df.is767 || df.is76P || String(df.model || '').includes('76'));
+      if (!is76) return false;
+
       const schedDepM = parseTimeToMinutes(df.depTime);
       const actDepM = parseTimeToMinutes(df.actDepTime || df.depTime);
       if (schedDepM === null) return false;
@@ -729,7 +732,7 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
     });
 
     // 76P確定便があれば76P便に絞る（ただしマルコフ遷移実績がある便は残す）
-    const b767Cands = candidates.filter(df => df.is767 || (transitions[curFn]?.[df.flightNo] > 0));
+    const b767Cands = candidates.filter(df => df.is767 || df.is76P || String(df.model || '').includes('76'));
     if (b767Cands.length > 0) {
       candidates = b767Cands;
     } else {
@@ -1266,8 +1269,11 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
             return true;
           });
 
-          // 767候補またはマルコフ遷移実績のある便を優先
-          const b767Next = nextCands.filter(df => df.is767 || (transitions[curFn]?.[df.flightNo] > 0));
+          // 767候補またはマルコフ遷移実績のある便を優先（非767確定便は除外）
+          const b767Next = nextCands.filter(df => {
+            const is76 = Boolean(df.is767 || df.is76P || String(df.model || '').includes('76'));
+            return is76 || (df.is767 !== false && transitions[curFn]?.[df.flightNo] > 0);
+          });
           if (b767Next.length > 0) {
             nextCands = b767Next;
           }
@@ -1283,12 +1289,19 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
           const scoredNext = nextCands.map(df => {
             const transCount = transitions[curFn]?.[df.flightNo] || 0;
             // レギュラー機材判定（確定枠 3.5 / 主力枠 1.8 / 代走枠 0.38 / 非767 0.1）
-            const modelPrio = getAircraftModelPriority(df);
+            let modelPrio = getAircraftModelPriority(df);
+
+            // 💡 過去の同一機材遷移実績（実データ検証）がある便は、共用枠（788/763等）であっても
+            // 実際にB767が充当される確立されたスジであるため優先度を正当に評価
+            if (transCount > 0 && modelPrio < 1.0) {
+              modelPrio = 1.25 + Math.min(transCount * 0.15, 0.6);
+            }
+
             let edgeScore = modelPrio;
 
-            // 過去遷移実績があればわずかなタイブレーク加点（最大+0.4）
+            // 過去遷移実績があれば実績回数に応じたブースト
             if (transCount > 0) {
-              edgeScore += Math.min(transCount * 0.08, 0.4);
+              edgeScore *= (1.0 + Math.min(transCount * 0.25, 1.2));
             }
 
             // ⚠️ 非レギュラー（代走枠）の連続投入抑制：

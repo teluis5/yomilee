@@ -76,7 +76,6 @@ const sortedCategories = Array.from(categoryPostsMap.entries())
 					>
 						<Icon name="heroicons:folder" class="icon-inline tab-icon" />
 						<span class="tab-label">{cat.name}</span>
-						<span class="tab-count">{cat.count}</span>
 					</button>
 				))}
 			</div>
@@ -174,7 +173,7 @@ const sortedCategories = Array.from(categoryPostsMap.entries())
 
 				<div class="category-more-wrapper">
 					<a href={`/category/${cat.name}/`} class="category-more-link">
-						「{cat.name}」の記事一覧へ（全{cat.count}件） &raquo;
+						「{cat.name}」の記事一覧へ &raquo;
 					</a>
 				</div>
 			</div>
@@ -251,20 +250,6 @@ const sortedCategories = Array.from(categoryPostsMap.entries())
 	.tab-icon {
 		width: 1.1em;
 		height: 1.1em;
-	}
-
-	.tab-count {
-		font-size: 0.75rem;
-		background: #e2e8f0;
-		color: #475569;
-		border-radius: 10px;
-		padding: 0.1rem 0.45rem;
-		font-weight: normal;
-		margin-left: 0.15rem;
-	}
-	.tab-btn.is-active .tab-count {
-		background: #e0f2fe;
-		color: #0369a1;
 	}
 
 	/* パネル切り替え */

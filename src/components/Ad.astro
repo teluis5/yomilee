@@ -1,22 +1,22 @@
 ---
-// Google AdSense 広告表示用コンポーネント (共通UIマスター)
-// 指定された位置（ホーム上部、記事下、サイドバー、ブログカードなど）に整ったレイアウトで広告を配置します。
+// Google AdSense & 楽天・Amazon ハイブリッド広告表示コンポーネント (共通UIマスター)
+// 指定された位置（ホーム上部、記事内H2前、記事下、サイドバーなど）に、
+// AdSense・楽天アフィリエイト・Amazonアソシエイトを適切に混ぜて配信・収益化します。
 interface Props {
   slot?: string;
   position?: 'home-top' | 'bottom' | 'sidebar' | 'blog-card' | 'custom';
   client?: string;
+  type?: 'mixed' | 'adsense' | 'rakuten' | 'amazon';
 }
 
 const {
   slot,
   position = 'custom',
-  client = 'ca-pub-8011635154814608'
+  client = 'ca-pub-8011635154814608',
+  type = 'mixed'
 } = Astro.props;
 
 // ユーザー指定スロットIDマッピング
-// - ホーム上部: 5945449170 (ディスプレイ)
-// - 記事内: 4644769398 (記事下・サイドバー等)
-// - ブログカード広告: 2398575230 (関連記事等)
 const POSITION_SLOTS: Record<string, string> = {
   'home-top': '5945449170',
   'bottom': '4644769398',
@@ -27,15 +27,107 @@ const POSITION_SLOTS: Record<string, string> = {
 
 const targetSlot = slot || POSITION_SLOTS[position] || '4644769398';
 
+// アフィリエイトID
+const AMAZON_TAG = 'teluis-22';
+const RAKUTEN_ID = '52513ff1.59ebf487.52513ff2.71d0e9e4';
+
+// クリエイティブ定義
+const AFFILIATE_DATA = {
+  amazon: [
+    {
+      title: 'Amazon 毎日更新 タイムセール祭り',
+      desc: '人気ガジェット・家電・日用品が特別価格！数量限定セール開催中',
+      btnText: 'タイムセール会場を見る',
+      url: `https://www.amazon.co.jp/gp/goldbox?tag=${AMAZON_TAG}`,
+      badge: 'Amazon',
+      badgeColor: '#ff9900',
+      btnBg: '#f59e0b',
+    },
+    {
+      title: 'Amazon 総合売れ筋ランキング',
+      desc: 'リアルタイムで更新！いま最も売れている人気アイテムをチェック',
+      btnText: '売れ筋ランキングを見る',
+      url: `https://www.amazon.co.jp/ranking?tag=${AMAZON_TAG}`,
+      badge: 'Amazon',
+      badgeColor: '#ff9900',
+      btnBg: '#f59e0b',
+    },
+    {
+      title: 'Amazonプライム 30日間無料体験',
+      desc: '最短翌日配送・Prime Video見放題！まずは無料でお試し',
+      btnText: '30日間無料で体験する',
+      url: `https://www.amazon.co.jp/tryprimefree?tag=${AMAZON_TAG}`,
+      badge: 'Amazon',
+      badgeColor: '#ff9900',
+      btnBg: '#f59e0b',
+    },
+  ],
+  rakuten: [
+    {
+      title: '楽天市場 お買い物マラソン＆スーパーSALE',
+      desc: 'ポイント最大46倍！ショップ買いまわりでお得にポイント獲得',
+      btnText: 'ポイント還元セールを見る',
+      url: `https://hb.afl.rakuten.co.jp/hgc/${RAKUTEN_ID}/?pc=https%3A%2F%2Fevent.rakuten.co.jp%2Fcampaign%2Fpoint-up%2Fmarathon%2F&m=https%3A%2F%2Fevent.rakuten.co.jp%2Fcampaign%2Fpoint-up%2Fmarathon%2F`,
+      badge: '楽天市場',
+      badgeColor: '#bf0000',
+      btnBg: '#bf0000',
+    },
+    {
+      title: '楽天市場 リアルタイム総合ランキング',
+      desc: '家電・日用品・トレンド商品まで、今みんなが買っている注目商品',
+      btnText: '人気ランキングをチェック',
+      url: `https://hb.afl.rakuten.co.jp/hgc/${RAKUTEN_ID}/?pc=https%3A%2F%2Franking.rakuten.co.jp%2F&m=https%3A%2F%2Franking.rakuten.co.jp%2F`,
+      badge: '楽天市場',
+      badgeColor: '#bf0000',
+      btnBg: '#bf0000',
+    },
+    {
+      title: '楽天ふるさと納税 人気の返礼品特集',
+      desc: 'ポイント還元でお得に税金控除！グルメ・日用品・旅行クーポン多数',
+      btnText: 'ふるさと納税特集へ',
+      url: `https://hb.afl.rakuten.co.jp/hgc/${RAKUTEN_ID}/?pc=https%3A%2F%2Fevent.rakuten.co.jp%2Ffurusato%2F&m=https%3A%2F%2Fevent.rakuten.co.jp%2Ffurusato%2F`,
+      badge: '楽天市場',
+      badgeColor: '#bf0000',
+      btnBg: '#bf0000',
+    },
+  ],
+};
+
 // AdSense 有効化判定
-// - yomilee (yomileeblog.com): 合格済み・表示ON
-// - teluis (teluis.com): 未合格のため表示完全OFF
 const currentHost = (Astro.site?.hostname || '').toLowerCase();
 const isTeluisMain = currentHost === 'teluis.com';
 const isAdEnabled = !isTeluisMain;
+
+// 静的レンダリング時の広告タイプの決定
+let renderType: 'adsense' | 'rakuten' | 'amazon' = 'adsense';
+if (type === 'rakuten') {
+  renderType = 'rakuten';
+} else if (type === 'amazon') {
+  renderType = 'amazon';
+} else if (type === 'adsense') {
+  renderType = isAdEnabled ? 'adsense' : 'rakuten';
+} else {
+  // mixed の場合: position やドメインに応じてバランスよく分配
+  if (!isAdEnabled) {
+    // teluis等（AdSense未合格ドメイン）は楽天・Amazonを配置別に振り分け
+    if (position === 'bottom') renderType = 'amazon';
+    else if (position === 'sidebar') renderType = 'amazon';
+    else renderType = 'rakuten';
+  } else {
+    // AdSense合格ドメイン
+    if (position === 'bottom') renderType = 'amazon'; // 記事下は高CVRのAmazon
+    else renderType = 'adsense'; // ホーム上部・サイドバー等はAdSense
+  }
+}
+
+// 選択されたアフィリエイトクリエイティブ
+const selectedAffiliate = renderType === 'amazon' 
+  ? AFFILIATE_DATA.amazon[0] 
+  : AFFILIATE_DATA.rakuten[0];
 ---
 
-{isAdEnabled && targetSlot && (
+<!-- 1. AdSense 表示 -->
+{renderType === 'adsense' && targetSlot && (
   <div class={`adsense-wrapper ad-pos-${position}`}>
     <div class="adsense-label">広告</div>
     <div class="adsense-body">
@@ -52,8 +144,35 @@ const isAdEnabled = !isTeluisMain;
   </div>
 )}
 
-{isAdEnabled && position === 'bottom' && (
-  <script is:inline>
+<!-- 2. 楽天またはAmazonアフィリエイト表示 -->
+{(renderType === 'rakuten' || renderType === 'amazon') && selectedAffiliate && (
+  <div class={`adsense-wrapper ad-pos-${position}`}>
+    <div class="affiliate-banner-card">
+      <div class="aff-badge-wrap">
+        <span class="aff-badge" style={`background-color: ${selectedAffiliate.badgeColor};`}>
+          {selectedAffiliate.badge}
+        </span>
+        <span class="aff-pr-label">PR</span>
+      </div>
+      <div class="aff-content">
+        <div class="aff-title">{selectedAffiliate.title}</div>
+        <div class="aff-desc">{selectedAffiliate.desc}</div>
+      </div>
+      <div class="aff-action">
+        <a href={selectedAffiliate.url} target="_blank" rel="sponsored noopener noreferrer" class="aff-btn" style={`background-color: ${selectedAffiliate.btnBg};`}>
+          <span>{selectedAffiliate.btnText}</span>
+          <svg class="aff-arrow" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+            <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+)}
+
+<!-- 3. 記事内H2前 動的挿入スクリプト（AdSense + 楽天 + Amazonを交互・分散挿入） -->
+{position === 'bottom' && (
+  <script is:inline define:vars={{ isAdEnabled, client, slotId: targetSlot }}>
     (() => {
       if (window.__adsense_h2_injected__) return;
       window.__adsense_h2_injected__ = true;
@@ -77,11 +196,51 @@ const isAdEnabled = !isTeluisMain;
         if (allH2.length >= 2) targetIndices.push(1);
         if (allH2.length >= 3) targetIndices.push(2);
 
-        const clientId = 'ca-pub-8011635154814608';
-        const slotId = '4644769398';
+        // クリエイティブ一覧（クライアント動的用）
+        const amazonAds = [
+          {
+            title: 'Amazon 毎日更新 タイムセール祭り',
+            desc: '人気ガジェット・家電・日用品が特別価格！数量限定セール開催中',
+            btnText: 'タイムセール会場を見る',
+            url: 'https://www.amazon.co.jp/gp/goldbox?tag=teluis-22',
+            badge: 'Amazon',
+            badgeColor: '#ff9900',
+            btnBg: '#f59e0b',
+          },
+          {
+            title: 'Amazon 総合売れ筋ランキング',
+            desc: 'リアルタイムで更新！いま最も売れている人気アイテムをチェック',
+            btnText: '売れ筋ランキングを見る',
+            url: 'https://www.amazon.co.jp/ranking?tag=teluis-22',
+            badge: 'Amazon',
+            badgeColor: '#ff9900',
+            btnBg: '#f59e0b',
+          }
+        ];
+
+        const rakutenAds = [
+          {
+            title: '楽天市場 お買い物マラソン＆スーパーSALE',
+            desc: 'ポイント最大46倍！ショップ買いまわりでお得にポイント獲得',
+            btnText: 'ポイント還元セールを見る',
+            url: 'https://hb.afl.rakuten.co.jp/hgc/52513ff1.59ebf487.52513ff2.71d0e9e4/?pc=https%3A%2F%2Fevent.rakuten.co.jp%2Fcampaign%2Fpoint-up%2Fmarathon%2F&m=https%3A%2F%2Fevent.rakuten.co.jp%2Fcampaign%2Fpoint-up%2Fmarathon%2F',
+            badge: '楽天市場',
+            badgeColor: '#bf0000',
+            btnBg: '#bf0000',
+          },
+          {
+            title: '楽天市場 リアルタイム総合ランキング',
+            desc: '家電・日用品・トレンド商品まで、今みんなが買っている注目商品',
+            btnText: '人気ランキングをチェック',
+            url: 'https://hb.afl.rakuten.co.jp/hgc/52513ff1.59ebf487.52513ff2.71d0e9e4/?pc=https%3A%2F%2Franking.rakuten.co.jp%2F&m=https%3A%2F%2Franking.rakuten.co.jp%2F',
+            badge: '楽天市場',
+            badgeColor: '#bf0000',
+            btnBg: '#bf0000',
+          }
+        ];
 
         // 後ろから挿入してDOMインデックスのずれを防止
-        targetIndices.reverse().forEach(idx => {
+        targetIndices.reverse().forEach((idx) => {
           const targetH2 = allH2[idx];
           if (!targetH2 || !targetH2.parentNode) return;
 
@@ -91,32 +250,60 @@ const isAdEnabled = !isTeluisMain;
 
           const adWrapper = document.createElement('div');
           adWrapper.className = 'adsense-wrapper ad-pos-in-article';
-          adWrapper.style.backgroundColor = '#f8fafc';
-          adWrapper.style.border = '1px solid #e2e8f0';
-          adWrapper.style.borderRadius = '8px';
-          adWrapper.style.padding = '1rem 0.75rem 1.25rem';
-          adWrapper.style.margin = '2.5rem auto';
+          adWrapper.style.margin = '2rem auto';
+          adWrapper.style.maxWidth = '728px';
           adWrapper.style.textAlign = 'center';
           adWrapper.style.boxSizing = 'border-box';
 
-          adWrapper.innerHTML = `
-            <div class="adsense-label" style="display:block; width:100%; text-align:center; font-size:0.75rem; color:#64748b; font-weight:600; letter-spacing:0.1em; margin-bottom:0.6rem;">広告</div>
-            <div class="adsense-body" style="width:100%; margin:0 auto; text-align:center;">
-              <ins class="adsbygoogle"
-                   style="display:block; text-align:center;"
-                   data-ad-client="${clientId}"
-                   data-ad-slot="${slotId}"
-                   data-ad-format="auto"
-                   data-full-width-responsive="true"></ins>
-            </div>
-          `;
+          const isFirstH2Ad = idx === 1;
 
-          targetH2.parentNode.insertBefore(adWrapper, targetH2);
+          if (isFirstH2Ad && isAdEnabled) {
+            // 1つ目のH2前: Google AdSense（AdSense有効時）
+            adWrapper.innerHTML = `
+              <div class="adsense-label" style="display:block; width:100%; text-align:center; font-size:0.7rem; color:#94a3b8; font-weight:500; letter-spacing:0.08em; margin-bottom:0.35rem;">広告</div>
+              <div class="adsense-body" style="width:100%; margin:0 auto; text-align:center;">
+                <ins class="adsbygoogle"
+                     style="display:block; text-align:center;"
+                     data-ad-client="${client}"
+                     data-ad-slot="${slotId}"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+              </div>
+            `;
+            targetH2.parentNode.insertBefore(adWrapper, targetH2);
 
-          try {
-            (window.adsbygoogle = window.adsbygoogle || []).push({});
-          } catch (e) {
-            console.debug('[AdSense] in-article push notice:', e);
+            try {
+              (window.adsbygoogle = window.adsbygoogle || []).push({});
+            } catch (e) {
+              console.debug('[AdSense] in-article push notice:', e);
+            }
+          } else {
+            // 2つ目のH2前（またはAdSense未合格ドメインの1つ目）: 楽天またはAmazonアフィリエイト
+            const adData = (idx % 2 === 0) 
+              ? amazonAds[Math.floor(Math.random() * amazonAds.length)]
+              : rakutenAds[Math.floor(Math.random() * rakutenAds.length)];
+
+            adWrapper.innerHTML = `
+              <div class="affiliate-banner-card">
+                <div class="aff-badge-wrap">
+                  <span class="aff-badge" style="background-color: ${adData.badgeColor};">${adData.badge}</span>
+                  <span class="aff-pr-label">PR</span>
+                </div>
+                <div class="aff-content">
+                  <div class="aff-title">${adData.title}</div>
+                  <div class="aff-desc">${adData.desc}</div>
+                </div>
+                <div class="aff-action">
+                  <a href="${adData.url}" target="_blank" rel="sponsored noopener noreferrer" class="aff-btn" style="background-color: ${adData.btnBg};">
+                    <span>${adData.btnText}</span>
+                    <svg class="aff-arrow" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                      <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            `;
+            targetH2.parentNode.insertBefore(adWrapper, targetH2);
           }
         });
       };
@@ -132,51 +319,53 @@ const isAdEnabled = !isTeluisMain;
 
 <style is:global>
   .adsense-wrapper {
-    margin: 2.25rem auto;
+    margin: 2rem auto;
     text-align: center;
     max-width: 100%;
     overflow: hidden;
-    background-color: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 0.85rem 0.75rem 1rem 0.75rem;
+    background-color: transparent;
+    border: none;
+    padding: 0;
     box-sizing: border-box;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
   }
   .adsense-wrapper:has(ins[data-ad-status="unfilled"]) {
     display: none !important;
   }
   .ad-pos-home-top {
-    margin: 1.5rem auto 2rem auto;
-    max-width: 960px;
+    margin: 1.25rem auto 1.75rem auto;
+    max-width: 728px;
   }
   .ad-pos-in-article {
-    margin: 2.5rem auto;
-    padding: 1rem 0.75rem 1.25rem;
+    margin: 2rem auto;
+    max-width: 728px;
+    padding: 0;
   }
   .ad-pos-bottom {
-    margin: 2.5rem auto 2rem auto;
-    padding: 1rem 0.75rem 1.25rem;
+    margin: 2rem auto 1.5rem auto;
+    max-width: 728px;
+    padding: 0;
   }
   .ad-pos-sidebar {
     margin: 1.5rem auto 0 auto;
+    max-width: 300px;
     width: 100%;
-    padding: 0.75rem 0.5rem;
+    padding: 0;
   }
   .ad-pos-blog-card {
-    margin: 2.5rem auto 1.5rem auto;
-    padding: 1rem 0.75rem 1.25rem;
+    margin: 2rem auto 1.5rem auto;
+    max-width: 728px;
+    padding: 0;
   }
   .adsense-label {
     display: block;
     width: 100%;
-    font-size: 0.75rem;
-    color: #64748b;
-    letter-spacing: 0.1em;
+    font-size: 0.7rem;
+    color: #94a3b8;
+    letter-spacing: 0.08em;
     line-height: 1;
-    margin: 0 auto 0.6rem auto;
+    margin: 0 auto 0.35rem auto;
     text-align: center;
-    font-weight: 600;
+    font-weight: 500;
   }
   .adsense-body {
     width: 100%;
@@ -184,5 +373,159 @@ const isAdEnabled = !isTeluisMain;
     text-align: center;
     background: transparent;
     overflow: hidden;
+  }
+
+  /* 楽天・Amazon アフィリエイトバナーカード */
+  .affiliate-banner-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 1.15rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    text-align: left;
+    box-sizing: border-box;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+  .affiliate-banner-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: #cbd5e1;
+  }
+  .aff-badge-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+  }
+  .aff-badge {
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+  .aff-pr-label {
+    font-size: 0.65rem;
+    color: #94a3b8;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .aff-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .aff-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.2rem;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .aff-desc {
+    font-size: 0.78rem;
+    color: #64748b;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .aff-action {
+    flex-shrink: 0;
+  }
+  .aff-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.55rem 1rem;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: 0.82rem;
+    font-weight: 700;
+    border-radius: 6px;
+    white-space: nowrap;
+    transition: opacity 0.2s ease, transform 0.15s ease;
+  }
+  .aff-btn:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+  .aff-arrow {
+    transition: transform 0.2s ease;
+  }
+  .aff-btn:hover .aff-arrow {
+    transform: translateX(2px);
+  }
+
+  /* サイドバーまたはスマホでの縦並び最適化 */
+  @media (max-width: 640px) {
+    .affiliate-banner-card {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.65rem;
+      padding: 0.85rem 1rem;
+    }
+    .aff-badge-wrap {
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .aff-title {
+      white-space: normal;
+      font-size: 0.92rem;
+    }
+    .aff-desc {
+      white-space: normal;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+    .aff-btn {
+      width: 100%;
+      justify-content: center;
+      padding: 0.65rem 1rem;
+      box-sizing: border-box;
+    }
+  }
+
+  .ad-pos-sidebar .affiliate-banner-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+    padding: 0.85rem 0.9rem;
+  }
+  .ad-pos-sidebar .aff-badge-wrap {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .ad-pos-sidebar .aff-title {
+    white-space: normal;
+    font-size: 0.88rem;
+  }
+  .ad-pos-sidebar .aff-desc {
+    white-space: normal;
+    font-size: 0.75rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  .ad-pos-sidebar .aff-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
+    box-sizing: border-box;
   }
 </style>
