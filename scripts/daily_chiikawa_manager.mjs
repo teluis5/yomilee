@@ -25,18 +25,21 @@ function performAutoPush(updatedAt) {
       execSync('git pull origin main --rebase --autostash', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
     } catch {}
 
-    execSync('git add data/chiikawa_weekly_prediction.json src/data/chiikawa_weekly_prediction.json data/ana_fleet_status.json src/data/ana_fleet_status.json data/daily_predictions_snapshot.json scripts/ src/pages/site/chiikawajet/ src/assets/images/chiikawajet_ogp.png public/brand/chiikawajet_ogp.png', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+    execSync('git add data/chiikawa_weekly_prediction.json src/data/chiikawa_weekly_prediction.json data/ana_fleet_status.json src/data/ana_fleet_status.json data/daily_predictions_snapshot.json scripts/ src/pages/site/chiikawajet/ src/assets/images/chiikawajet_ogp.png public/brand/chiikawajet_ogp.png src/content/blog/*chiikawa-jet-schedule', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
     if (fs.existsSync(path.join(YOMILEE_ROOT, 'data', 'evaluation_log.jsonl'))) {
       execSync('git add data/evaluation_log.jsonl', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
     }
 
     const commitMsg = `feat(yomilee): update Chiikawa Jet weekly prediction dashboard (${updatedAt})`;
     console.log(`📝 コミット実行: "${commitMsg}"`);
-    execSync(`git commit -m "${commitMsg}"`, { cwd: YOMILEE_ROOT, stdio: 'inherit' });
-
-    console.log('🚀 リモート (origin main) へプッシュ中...');
-    execSync('git push origin main', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
-    console.log('🎉 yomilee のGitプッシュが完了しました！GitHub Pagesの自動デプロイが開始されます。');
+    try {
+      execSync(`git commit -m "${commitMsg}"`, { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+      console.log('🚀 リモート (origin main) へプッシュ中...');
+      execSync('git push origin main', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+      console.log('🎉 yomilee のGitプッシュが完了しました！GitHub Pagesの自動デプロイが開始されます。');
+    } catch (err) {
+      console.log('ℹ️ yomilee: コミット対象の変更がないか、すでに最新です。');
+    }
   } catch (e) {
     console.error('❌ Git操作エラー:', e.message);
   }
