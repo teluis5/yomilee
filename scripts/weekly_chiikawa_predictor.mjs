@@ -1089,7 +1089,7 @@ function getStepLabel(idx, total, depMin, arrMin, destCode) {
  * 1日完結の運航スジ（プランA / プランB / プランC）をビームサーチで動的生成する。
  * ハードコードされたテンプレートや架空便注入は一切行わない。
  */
-function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, learnedModel, prevFirstFlightNo = null, prevVisitedDestSet = null) {
+function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, learnedModel, prevFirstFlightNo = null, prevVisitedDestSet = null, prevArrivalFlight = null) {
   const dayFlightsMap = getDayFlightsWithDowFallback(targetDateStr, anaFleetData);
   const dayFlights = Object.values(dayFlightsMap).filter(f => !f.isCancelled);
 
@@ -1179,7 +1179,16 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
       const modelPrio = getAircraftModelPriority(df);
       let score = modelPrio;
 
-      if (startAirport !== 'HND' && df.dest === 'HND' && depM <= 540) {
+      // 前夜到着便との往復ペアリング（ANA 767地方ステイ折返し率 88.3%の実データ相関）
+      // 地方空港で同型機が複数泊まる場合（例: NGOにCTS便とOKA便が同時ステイ等）、
+      // 「前夜飛んできた空港への折返し便（例: CTS -> NGO -> CTS、HND -> NGS -> HND等）」を最優先
+      if (startAirport !== 'HND' && prevArrivalFlight && prevArrivalFlight.orig) {
+        if (df.dest === prevArrivalFlight.orig) {
+          score *= 3.5; // 前夜飛んできた空港への折返し便に特大ボーナス！
+        } else {
+          score *= 0.6; // 前夜と無関係な別路線は相対的に減衰
+        }
+      } else if (startAirport !== 'HND' && df.dest === 'HND' && depM <= 540) {
         score *= 1.35; // 地方泊からの朝一番羽田帰還便は高優先度
       } else if (modelPrio <= 0.4) {
         score *= 0.35;
@@ -1617,7 +1626,12 @@ function computeRealAccuracyAndHistory(fleetDb, todayStr, anaFleetData, snapshot
 
     const priorStays = [{ code: prevNightStayCode, probability: 100 }];
     const prevFirstFn = (prevActual && prevActual.length > 0) ? prevActual[0].normFn : null;
-    const predictedPlans = generateDayPlansViaBeamSearch(priorStays, d, anaFleetData, oosModel, prevFirstFn);
+    const prevArrivalFlight = (prevActual && prevActual.length > 0) ? {
+      orig: prevActual[prevActual.length - 1].orig || prevActual[prevActual.length - 1].origin,
+      dest: prevActual[prevActual.length - 1].dest || prevActual[prevActual.length - 1].destination,
+      flightNo: prevActual[prevActual.length - 1].flightNo
+    } : null;
+    const predictedPlans = generateDayPlansViaBeamSearch(priorStays, d, anaFleetData, oosModel, prevFirstFn, null, prevArrivalFlight);
 
     // 予測された全プラン（プランA〜C）に含まれる便名セットと初便セット
     const predictedFirstFns = new Set(predictedPlans.map(p => normalizeFlightNo(p.flights?.[0]?.flightNo)).filter(Boolean));
@@ -2076,12 +2090,19 @@ export async function generateWeeklyPrediction() {
   if (!existingTodaySnap || isLegacyCorruptedTodaySnap) {
     const oosModelForToday = buildLearnedModel(fleetDb, todayStr); // todayStr未満の履歴のみ使用
     const prevFirstFn = (yesterdayFlights && yesterdayFlights.length > 0) ? yesterdayFlights[0].normFn : null;
+    const prevArrivalFlight = (yesterdayFlights && yesterdayFlights.length > 0) ? {
+      orig: yesterdayFlights[yesterdayFlights.length - 1].orig || yesterdayFlights[yesterdayFlights.length - 1].origin,
+      dest: yesterdayFlights[yesterdayFlights.length - 1].dest || yesterdayFlights[yesterdayFlights.length - 1].destination,
+      flightNo: yesterdayFlights[yesterdayFlights.length - 1].flightNo
+    } : null;
     snapshots[todayStr] = generateDayPlansViaBeamSearch(
       [{ code: lastNightActualStay, probability: 100 }],
       todayStr,
       anaFleetData,
       oosModelForToday,
-      prevFirstFn
+      prevFirstFn,
+      null,
+      prevArrivalFlight
     );
   }
 
@@ -2106,13 +2127,20 @@ export async function generateWeeklyPrediction() {
   const tomorrowDateStr = weeklyDays[1].dateStr;
   const todayFirstFn = todayFlights.length > 0 ? normalizeFlightNo(todayFlights[0].flightNo) : null;
   const todayVisitedDests = new Set(todayFlights.map(f => f.destCode || f.dest).filter(Boolean));
+  const lastTodayFlight = todayFlights.length > 0 ? todayFlights[todayFlights.length - 1] : null;
+  const tomorrowArrivalFlight = lastTodayFlight ? {
+    orig: lastTodayFlight.origCode || lastTodayFlight.origin,
+    dest: lastTodayFlight.destCode || lastTodayFlight.dest,
+    flightNo: lastTodayFlight.flightNo
+  } : null;
   const tomorrowPlans = generateDayPlansViaBeamSearch(
     nightStayProbabilities,
     tomorrowDateStr,
     anaFleetData,
     learnedModel,
     todayFirstFn,
-    todayVisitedDests
+    todayVisitedDests,
+    tomorrowArrivalFlight
   );
 
   // 明日の最新予測を明日のスナップショットとして保存（明日になった後は上書きされない）
@@ -2254,13 +2282,22 @@ export async function generateWeeklyPrediction() {
         ? new Set(tomorrowPlans[0].flights.map(f => f.dest).filter(Boolean))
         : null;
 
+      const prevPlanForDay = (day.dayIndex === 2) ? tomorrowPlans[0] : weeklySchedule[weeklySchedule.length - 1]?.plans?.[0];
+      const prevPlanLastFlight = prevPlanForDay?.flights?.[prevPlanForDay.flights.length - 1];
+      const rollingArrivalFlight = prevPlanLastFlight ? {
+        orig: prevPlanLastFlight.orig || prevPlanLastFlight.origin,
+        dest: prevPlanLastFlight.dest || prevPlanLastFlight.destination,
+        flightNo: prevPlanLastFlight.flightNo
+      } : null;
+
       const dayPlans = generateDayPlansViaBeamSearch(
         runningPriors,
         day.dateStr,
         anaFleetData,
         learnedModel,
         prevDayFirstFn,
-        prevVisitedDests
+        prevVisitedDests,
+        rollingArrivalFlight
       );
 
       if (dayPlans.length > 0) {
