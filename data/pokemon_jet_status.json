@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-07T10:01:48.152Z",
-  "updatedAtJst": "2026/11/7 19:01:48",
+  "updatedAt": "2026-11-07T11:01:57.704Z",
+  "updatedAtJst": "2026/11/7 20:01:57",
   "totalJets": 5,
   "jets": [
     {
@@ -17,71 +17,47 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "着陸済み 🔵",
-      "currentLocation": "東京(羽田) (HND)",
-      "currentFlight": null,
-      "nextFlight": {
-        "flightNo": "NH77",
+      "flightState": "飛行中 🟢",
+      "currentLocation": "東京(羽田) (HND) ➔ 長崎 (NGS)",
+      "currentFlight": {
+        "id": "42786b04",
+        "flightNo": "NH669",
         "origin": "HND",
         "originName": "東京(羽田) (HND)",
-        "destination": "札幌(新千歳) (CTS)",
-        "destinationName": "札幌(新千歳) (CTS)",
-        "depTimeJst": "19:00",
-        "arrTimeJst": "20:35",
-        "timeRange": "19:00 - 20:35",
-        "status": "予測枠 (★★★★★ (最有力・55分ターン))",
-        "isPredicted": true
-      },
-      "lastLandedFlight": {
-        "id": "42782bab",
-        "flightNo": "NH596",
-        "origin": "MYJ",
-        "originName": "松山 (MYJ)",
-        "destination": "HND",
-        "destinationName": "東京(羽田) (HND)",
-        "depTimeJst": "2026-11-07 17:06",
-        "arrTimeJst": "2026-11-07 18:15",
-        "timeRange": "17:06 - 18:15",
+        "destination": "NGS",
+        "destinationName": "長崎 (NGS)",
+        "depTimeJst": "2026-11-07 19:43",
+        "arrTimeJst": "2026-11-07 21:19",
+        "timeRange": "19:43 - 21:19",
         "dateJst": "2026-11-07",
-        "status": "Landed 18:15",
-        "isLive": false,
+        "status": "Estimated 21:19",
+        "isLive": true,
         "isToday": true
       },
-      "nightStay": "東京(羽田) (HND)",
+      "nextFlight": null,
+      "lastLandedFlight": null,
+      "nightStay": "長崎 (NGS)",
       "domesticPrediction": {
-        "nextCandidates": [
-          {
-            "flightNo": "NH77",
-            "route": "東京(羽田) (HND) ➔ 札幌(新千歳) (CTS)",
-            "depTime": "19:00",
-            "arrTime": "20:35",
-            "model": "78P",
-            "turnAroundMin": 45,
-            "probability": "★★★★★ (最有力・55分ターン)"
-          },
-          {
-            "flightNo": "NH39",
-            "route": "東京(羽田) (HND) ➔ 大阪(伊丹) (ITM)",
-            "depTime": "19:00",
-            "arrTime": "20:20",
-            "model": "78P",
-            "turnAroundMin": 45,
-            "probability": "★★★★★ (最有力・55分ターン)"
-          },
-          {
-            "flightNo": "NH271",
-            "route": "東京(羽田) (HND) ➔ 福岡 (FUK)",
-            "depTime": "19:15",
-            "arrTime": "21:20",
-            "model": "78P",
-            "turnAroundMin": 60,
-            "probability": "★★★★★ (最有力・55分ターン)"
-          }
-        ],
+        "nextCandidates": [],
         "predictedNightStay": "東京(羽田) (HND)"
       },
-      "todayFlightsCount": 4,
+      "todayFlightsCount": 5,
       "todayFlights": [
+        {
+          "id": "42786b04",
+          "flightNo": "NH669",
+          "origin": "HND",
+          "originName": "東京(羽田) (HND)",
+          "destination": "NGS",
+          "destinationName": "長崎 (NGS)",
+          "depTimeJst": "2026-11-07 19:43",
+          "arrTimeJst": "2026-11-07 21:19",
+          "timeRange": "19:43 - 21:19",
+          "dateJst": "2026-11-07",
+          "status": "Estimated 21:19",
+          "isLive": true,
+          "isToday": true
+        },
         {
           "id": "42782bab",
           "flightNo": "NH596",
@@ -144,6 +120,21 @@
         }
       ],
       "recentFlights": [
+        {
+          "id": "42786b04",
+          "flightNo": "NH669",
+          "origin": "HND",
+          "originName": "東京(羽田) (HND)",
+          "destination": "NGS",
+          "destinationName": "長崎 (NGS)",
+          "depTimeJst": "2026-11-07 19:43",
+          "arrTimeJst": "2026-11-07 21:19",
+          "timeRange": "19:43 - 21:19",
+          "dateJst": "2026-11-07",
+          "status": "Estimated 21:19",
+          "isLive": true,
+          "isToday": true
+        },
         {
           "id": "42782bab",
           "flightNo": "NH596",
@@ -218,24 +209,9 @@
           "status": "Landed 22:18",
           "isLive": false,
           "isToday": false
-        },
-        {
-          "id": "42749a39",
-          "flightNo": "NH265",
-          "origin": "HND",
-          "originName": "東京(羽田) (HND)",
-          "destination": "FUK",
-          "destinationName": "福岡 (FUK)",
-          "depTimeJst": "2026-11-06 18:29",
-          "arrTimeJst": "2026-11-06 20:00",
-          "timeRange": "18:29 - 20:00",
-          "dateJst": "2026-11-06",
-          "status": "Landed 20:00",
-          "isLive": false,
-          "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T10:01:46.353Z"
+      "updatedAt": "2026-11-07T11:01:55.890Z"
     },
     {
       "id": "pikachu-nh",
@@ -261,10 +237,10 @@
         "destination": "CGK",
         "destinationName": "CGK",
         "depTimeJst": "2026-11-07 18:28",
-        "arrTimeJst": "2026-11-08 01:37",
-        "timeRange": "18:28 - 01:37",
+        "arrTimeJst": "2026-11-08 01:43",
+        "timeRange": "18:28 - 01:43",
         "dateJst": "2026-11-07",
-        "status": "Estimated 23:37",
+        "status": "Estimated 23:43",
         "isLive": true,
         "isToday": true
       },
@@ -282,10 +258,10 @@
           "destination": "CGK",
           "destinationName": "CGK",
           "depTimeJst": "2026-11-07 18:28",
-          "arrTimeJst": "2026-11-08 01:37",
-          "timeRange": "18:28 - 01:37",
+          "arrTimeJst": "2026-11-08 01:43",
+          "timeRange": "18:28 - 01:43",
           "dateJst": "2026-11-07",
-          "status": "Estimated 23:37",
+          "status": "Estimated 23:43",
           "isLive": true,
           "isToday": true
         },
@@ -314,10 +290,10 @@
           "destination": "CGK",
           "destinationName": "CGK",
           "depTimeJst": "2026-11-07 18:28",
-          "arrTimeJst": "2026-11-08 01:37",
-          "timeRange": "18:28 - 01:37",
+          "arrTimeJst": "2026-11-08 01:43",
+          "timeRange": "18:28 - 01:43",
           "dateJst": "2026-11-07",
-          "status": "Estimated 23:37",
+          "status": "Estimated 23:43",
           "isLive": true,
           "isToday": true
         },
@@ -397,7 +373,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T10:01:46.786Z"
+      "updatedAt": "2026-11-07T11:01:56.360Z"
     },
     {
       "id": "eevee-nh",
@@ -559,7 +535,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T10:01:47.257Z"
+      "updatedAt": "2026-11-07T11:01:56.836Z"
     },
     {
       "id": "pokemon-green",
@@ -690,7 +666,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T10:01:47.692Z"
+      "updatedAt": "2026-11-07T11:01:57.266Z"
     },
     {
       "id": "pikachu-legacy",
@@ -852,7 +828,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-07T10:01:48.152Z"
+      "updatedAt": "2026-11-07T11:01:57.703Z"
     }
   ]
 }
