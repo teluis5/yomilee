@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年11月7日 15:00",
-  "updatedAtIso": "2026-11-07T06:00:38.830Z",
+  "updatedAt": "2026年11月7日 16:00",
+  "updatedAtIso": "2026-11-07T07:00:37.018Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (名古屋(中部) ➔ 札幌(新千歳))",
+    "currentLocation": "札幌(新千歳)",
     "currentLocationCode": "CTS",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "東京(羽田) (100%)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
@@ -146,9 +146,9 @@
       "dateStr": "2026-11-04",
       "date": "11月4日(水)",
       "type": "1日通しダイヤ (全5便)",
-      "hitLabel": "🎯 プランA 完全的中 (5/5便)",
+      "hitLabel": "🎯 プランB 完全的中 (5/5便)",
       "hitRate": "100%",
-      "predicted": "プランA: 羽田 ➔ 松山 ➔ 羽田 ➔ 宮古 ➔ 羽田 ➔ 広島(泊)",
+      "predicted": "プランB: 羽田 ➔ 松山 ➔ 羽田 ➔ 宮古 ➔ 羽田 ➔ 広島(泊)",
       "actual": "実運航: 羽田 ➔ 松山 ➔ 羽田 ➔ 宮古 ➔ 羽田 ➔ 広島(泊)",
       "flights": [
         {
@@ -936,7 +936,7 @@
       "isWeekend": true,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "飛行中 (名古屋(中部) ➔ 札幌(新千歳))",
+      "currentAirport": "札幌(新千歳)",
       "nightStay": "東京(羽田) (100%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH707 (名古屋(中部) ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
@@ -954,7 +954,7 @@
           "planName": "プランA (羽田泊)",
           "stayCode": "HND",
           "rank": "本命 ◎",
-          "probability": 90,
+          "probability": 100,
           "title": "【今夜羽田泊シナリオ】中部 ➔ 新千歳 ➔ 中部 ➔ 新千歳 ➔ 伊丹 ➔ 羽田(泊)",
           "routeSummary": "中部 ➔ 新千歳 ➔ 中部 ➔ 新千歳 ➔ 伊丹 ➔ 羽田(泊)",
           "flights": [
@@ -982,7 +982,7 @@
               "dest": "CTS",
               "route": "名古屋(中部) ➔ 札幌(新千歳)",
               "time": "13:50発 - 15:30着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "③ 第3便"
             },
             {
@@ -1002,53 +1002,6 @@
               "time": "19:00発 - 20:10着",
               "tag": "🌙羽田泊候補",
               "step": "⑤ 第5便"
-            }
-          ]
-        },
-        {
-          "planId": "today-plan-b",
-          "planName": "プランB (羽田泊)",
-          "stayCode": "HND",
-          "rank": "有力 ◯",
-          "probability": 10,
-          "title": "【今夜羽田泊シナリオ】中部 ➔ 新千歳 ➔ 中部 ➔ 新千歳 ➔ 羽田(泊)",
-          "routeSummary": "中部 ➔ 新千歳 ➔ 中部 ➔ 新千歳 ➔ 羽田(泊)",
-          "flights": [
-            {
-              "flightNo": "NH703",
-              "orig": "NGO",
-              "dest": "CTS",
-              "route": "名古屋(中部) ➔ 札幌(新千歳)",
-              "time": "08:40発 - 10:25着",
-              "tag": "運航完了",
-              "step": "① 第1便"
-            },
-            {
-              "flightNo": "NH710",
-              "orig": "CTS",
-              "dest": "NGO",
-              "route": "札幌(新千歳) ➔ 名古屋(中部)",
-              "time": "11:10発 - 13:00着",
-              "tag": "運航完了",
-              "step": "② 第2便"
-            },
-            {
-              "flightNo": "NH707",
-              "orig": "NGO",
-              "dest": "CTS",
-              "route": "名古屋(中部) ➔ 札幌(新千歳)",
-              "time": "13:50発 - 15:30着",
-              "tag": "飛行中",
-              "step": "③ 第3便"
-            },
-            {
-              "flightNo": "NH74",
-              "orig": "CTS",
-              "dest": "HND",
-              "route": "札幌(新千歳) ➔ 東京(羽田)",
-              "time": "17:30発 - 19:10着",
-              "tag": "🌙羽田泊候補",
-              "step": "④ 第4便"
             }
           ]
         }
@@ -1141,9 +1094,9 @@
             "flightNo": "NH707",
             "route": "名古屋(中部) ➔ 札幌(新千歳)",
             "time": "13:50発 - 15:30着",
-            "status": "到着予定 (15:25)",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (15:22)",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -1218,9 +1171,9 @@
           "flightNo": "NH707",
           "route": "名古屋(中部) ➔ 札幌(新千歳)",
           "time": "13:50発 - 15:30着",
-          "status": "到着予定 (15:25)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (15:22)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -3693,21 +3646,21 @@
       "code": "NGO",
       "name": "名古屋(中部)",
       "note": "新千歳便（NH703/NH712等）や羽田便の夜間ステイ拠点。",
-      "prob": 61,
+      "prob": 60,
       "level": "A (高確率)"
     },
     {
       "code": "NGS",
       "name": "長崎空港",
       "note": "朝一便（NH661/NH664）および夜間ステイ便（NH669/NH662）で高頻度投入。",
-      "prob": 48,
+      "prob": 47,
       "level": "B (中確率)"
     },
     {
       "code": "HIJ",
       "name": "広島空港",
       "note": "昼往復便（NH679/NH680）および夜間ステイ便（NH685/NH672）の主要拠点。",
-      "prob": 42,
+      "prob": 41,
       "level": "B (中確率)"
     },
     {
@@ -3735,7 +3688,7 @@
       "code": "KOJ",
       "name": "鹿児島空港",
       "note": "早朝羽田発（NH619/NH622）や夕方往復（NH627/NH630）の定番路線。",
-      "prob": 23,
+      "prob": 22,
       "level": "C (注目)"
     },
     {
@@ -3789,7 +3742,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 512,
+    "totalFleetFlights": 515,
     "fleetCount": 11
   }
 }
