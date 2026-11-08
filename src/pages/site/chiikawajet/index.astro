@@ -38,6 +38,19 @@ const pageSchema = {
 	<script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
 
 	<div class="chiikawa-dashboard google-anno-skip">
+		<!-- ✈️ 特別塗装機 統合ポータル ナビゲーションタブ -->
+		<nav class="portal-tab-nav">
+			<a href="/site/chiikawajet/" class="portal-tab-btn active">
+				<span class="tab-icon">✈️</span>
+				<span class="tab-label">ちいかわジェット (JA609A)</span>
+				<span class="tab-badge">表示中</span>
+			</a>
+			<a href="/site/pokemonjet/" class="portal-tab-btn">
+				<span class="tab-icon">⚡</span>
+				<span class="tab-label">ポケモンジェット全機 (全5機)</span>
+			</a>
+		</nav>
+
 		<!-- ステータスバー（現在地・今夜の駐機先・更新時刻） -->
 		<div class="status-bar">
 			<div class="status-top-meta">
@@ -328,10 +341,96 @@ const pageSchema = {
 				))}
 			</div>
 		</section>
+
+		<!-- 下部相互リンク（ポケモンジェット） -->
+		<div class="bottom-nav">
+			<a href="/site/pokemonjet/" class="bottom-nav-card pokemon-card">
+				<div class="bn-icon">⚡</div>
+				<div class="bn-text">
+					<span class="bn-sub">ANA特別塗装機シリーズ</span>
+					<span class="bn-main">ポケモンジェット全機（国内線赤・ピカチュウ・イーブイ）運航状況＆予想 ➔</span>
+				</div>
+			</a>
+		</div>
 	</div>
 </Layout>
 
 <style>
+	/* ✈️ ポータル ナビゲーションタブ */
+	.portal-tab-nav {
+		display: flex;
+		gap: 10px;
+		margin-bottom: 20px;
+		border-bottom: 2px solid #e2e8f0;
+		padding-bottom: 12px;
+	}
+	.portal-tab-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 10px 18px;
+		border-radius: 12px;
+		background: #f1f5f9;
+		color: #475569;
+		text-decoration: none;
+		font-weight: 700;
+		font-size: 0.95rem;
+		transition: all 0.2s ease;
+	}
+	.portal-tab-btn:hover {
+		background: #e2e8f0;
+		color: #0f172a;
+	}
+	.portal-tab-btn.active {
+		background: #0284c7;
+		color: #ffffff;
+		box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+	}
+	.tab-badge {
+		background: rgba(255, 255, 255, 0.25);
+		font-size: 0.72rem;
+		padding: 2px 6px;
+		border-radius: 8px;
+		font-weight: 800;
+	}
+
+	/* 下部相互リンク */
+	.bottom-nav {
+		margin-top: 24px;
+	}
+	.bottom-nav-card {
+		display: flex;
+		align-items: center;
+		gap: 16px;
+		background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+		border: 2px solid #60a5fa;
+		border-radius: 16px;
+		padding: 18px 24px;
+		text-decoration: none;
+		color: #1e3a8a;
+		transition: transform 0.2s ease, box-shadow 0.2s ease;
+	}
+	.bottom-nav-card:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+	}
+	.bn-icon {
+		font-size: 2rem;
+	}
+	.bn-text {
+		display: flex;
+		flex-direction: column;
+	}
+	.bn-sub {
+		font-size: 0.75rem;
+		font-weight: 700;
+		color: #2563eb;
+	}
+	.bn-main {
+		font-size: 1.05rem;
+		font-weight: 800;
+	}
+
 	/* ブログレイアウト側の不要な装飾や巨大ヒーロー画像をリセット */
 	:global(.hero-image) {
 		display: none !important;
