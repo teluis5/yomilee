@@ -1228,19 +1228,29 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
       if (df.origin !== startAirport) return false;
       const depM = parseTimeToMinutes(df.depTime);
       if (depM === null) return false;
+
+      // ⚠️ 重大修正: 当日ODPT公式ダイヤで別機種確定（321, 32P, 78P, 738等）の便は即座に完全除外！
+      const is76 = Boolean(df.is767 || df.is76P || String(df.model || '').includes('76'));
+      if (!is76) return false;
+
       // 地方空港泊は06:30〜10:30発、羽田泊は06:00〜10:30発（実績があれば午後出庫も可）
       const hasHist = (stayHistMap[df.flightNo] || 0) > 0;
       if (startAirport !== 'HND') {
-        return (depM >= 390 && depM <= 630 && (df.is767 || hasHist));
+        return depM >= 390 && depM <= 630;
       }
-      return (depM >= 360 && depM <= 580 && (df.is767 || hasHist)) || hasHist;
+      return (depM >= 360 && depM <= 580) || hasHist;
     });
 
     // もし地方空港泊（startAirport !== 'HND'）で、朝一番の羽田帰還便（dest === 'HND'）が候補に含まれていない場合、
     // 機材変更による朝一羽田送り込み（例: NGO -> NH86 07:25発羽田行き等）も実運航で頻発するため候補に追加
     if (startAirport !== 'HND' && !morningFlights.some(df => df.dest === 'HND')) {
       const earlyHndReturns = effectiveFlights
-        .filter(df => df.origin === startAirport && df.dest === 'HND' && (parseTimeToMinutes(df.depTime) ?? 999) <= 570)
+        .filter(df => {
+          if (df.origin !== startAirport || df.dest !== 'HND') return false;
+          const is76 = Boolean(df.is767 || df.is76P || String(df.model || '').includes('76'));
+          if (!is76) return false;
+          return (parseTimeToMinutes(df.depTime) ?? 999) <= 570;
+        })
         .sort((a, b) => (parseTimeToMinutes(a.depTime) ?? 999) - (parseTimeToMinutes(b.depTime) ?? 999));
       if (earlyHndReturns.length > 0) {
         morningFlights.push(earlyHndReturns[0]);
@@ -1378,10 +1388,9 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
             return true;
           });
 
-          // 767候補またはマルコフ遷移実績のある便を優先（非767確定便は除外）
+          // ⚠️ 重大修正: 当日ODPT公式ダイヤで別機種確定（321, 32P, 78P, 738等）の便は完全除外
           const b767Next = nextCands.filter(df => {
-            const is76 = Boolean(df.is767 || df.is76P || String(df.model || '').includes('76'));
-            return is76 || (df.is767 !== false && transitions[curFn]?.[df.flightNo] > 0);
+            return Boolean(df.is767 || df.is76P || String(df.model || '').includes('76'));
           });
           if (b767Next.length > 0) {
             nextCands = b767Next;
