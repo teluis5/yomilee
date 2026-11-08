@@ -16,6 +16,78 @@ const SRC_OUTPUT_JSON_FILE = path.join(SRC_DATA_DIR, 'chiikawa_weekly_prediction
 const ANA_FLEET_STATUS_FILE = path.join(DATA_DIR, 'ana_fleet_status.json');
 const SNAPSHOT_FILE = path.join(DATA_DIR, 'daily_predictions_snapshot.json');
 const EVAL_LOG_FILE = path.join(DATA_DIR, 'evaluation_log.jsonl');
+const SPOT_STATUS_FILE = path.join(DATA_DIR, 'chiikawa_spot_status.json');
+const SRC_SPOT_STATUS_FILE = path.join(SRC_DATA_DIR, 'chiikawa_spot_status.json');
+
+// スポット状態のロード＆セーブ
+function loadCurrentSpotStatus() {
+  if (fs.existsSync(SPOT_STATUS_FILE)) {
+    try {
+      return JSON.parse(fs.readFileSync(SPOT_STATUS_FILE, 'utf-8'));
+    } catch (e) {
+      console.warn('⚠️ chiikawa_spot_status.json 読み込み失敗:', e.message);
+    }
+  }
+  return null;
+}
+
+function saveCurrentSpotStatus(spotData) {
+  try {
+    fs.mkdirSync(path.dirname(SPOT_STATUS_FILE), { recursive: true });
+    fs.writeFileSync(SPOT_STATUS_FILE, JSON.stringify(spotData, null, 2), 'utf-8');
+    if (fs.existsSync(path.dirname(SRC_SPOT_STATUS_FILE))) {
+      fs.writeFileSync(SRC_SPOT_STATUS_FILE, JSON.stringify(spotData, null, 2), 'utf-8');
+    }
+  } catch (e) {
+    console.warn('⚠️ chiikawa_spot_status.json 保存失敗:', e.message);
+  }
+}
+
+// 羽田空港（第2ターミナル）の駐機スポット ➔ 出発ゲート連動評価
+// ※40〜85分の通常ターンアラウンドではトーイングなしで到着スポットと同一ゲート（または隣接）から出発する航空運用原則を数式化
+function evaluateHndSpotAffinity(currentSpot, candidateDepGate, turnaroundMin) {
+  if (!currentSpot || !candidateDepGate) return 1.0;
+
+  const s1 = parseInt(String(currentSpot).replace(/[^0-9]/g, ''), 10);
+  const s2 = parseInt(String(candidateDepGate).replace(/[^0-9]/g, ''), 10);
+  if (isNaN(s1) || isNaN(s2)) return 1.0;
+
+  // 1. 同一スポット・同一ゲート（完全一致！）
+  if (s1 === s2) {
+    // 40〜85分の通常折り返しならトーイングなしで100%同一機材！
+    if (turnaroundMin >= 40 && turnaroundMin <= 85) return 4.5;
+    return 2.5;
+  }
+
+  // 2. バス搭乗口（500番台）同士（沖止め・オープンスポット）
+  const isBus1 = s1 >= 500 && s1 < 600;
+  const isBus2 = s2 >= 500 && s2 < 600;
+  if (isBus1 && isBus2) {
+    return 3.0;
+  }
+  if (isBus1 !== isBus2) {
+    // 沖止め ➔ 固定ゲート（または逆）はトーイング必須のため短時間ターンでは原則不可
+    if (turnaroundMin <= 75) return 0.15;
+    return 0.6;
+  }
+
+  // 3. 固定ボーディングブリッジ（本館ピア）間の距離
+  const diff = Math.abs(s1 - s2);
+  if (diff <= 3) {
+    // 隣接スポット（同一ピア内）
+    return 1.6;
+  } else if (diff <= 8) {
+    // 同一ウイング（北ピア同士 51〜59番、または南ピア同士 60〜73番）
+    return 1.2;
+  } else if (diff >= 12) {
+    // 北ピア ➔ 南ピアなどの大移動（例: 51番 ➔ 70番）
+    // 85分以下の短時間ターンでは牽引移動する理由がないため大幅減衰
+    if (turnaroundMin <= 85) return 0.2;
+    return 0.5;
+  }
+
+  return 1.0;
+}
 
 // ============================================================================
 // 1. 全49国内空港マスター辞書 ＆ 逆引き・時刻ユーティリティ (M1 / M2 完全対応)
@@ -544,7 +616,7 @@ function buildAssignedOtherRegFlights(fleetDb, todayStr, anaFleetData, learnedMo
 /**
  * 羽田空港における同時刻帯の他767機材とのターンアラウンド競合＆ゲート近接度スコアを計算する
  */
-function evaluateHndTurnaroundScore(arrMins, candidateDepFlight, dayFlights, prevArrGate = null) {
+function evaluateHndTurnaroundScore(arrMins, candidateDepFlight, dayFlights, currentSpot = null) {
   const depM = parseTimeToMinutes(candidateDepFlight.depTime);
   if (depM === null || arrMins === null) return 1.0;
   const turnaround = depM - arrMins;
@@ -594,17 +666,10 @@ function evaluateHndTurnaroundScore(arrMins, candidateDepFlight, dayFlights, pre
     factor *= Math.max(0.55, 1.0 - betterOtherArrivals.length * 0.18);
   }
 
-  // 4. ゲート番号（ウイング）近接ボーナス（当日ODPTでゲート情報が取得できている場合）
-  if (prevArrGate && candidateDepFlight.depGate) {
-    const g1 = parseInt(String(prevArrGate).replace(/[^0-9]/g, ''), 10);
-    const g2 = parseInt(String(candidateDepFlight.depGate).replace(/[^0-9]/g, ''), 10);
-    if (!isNaN(g1) && !isNaN(g2)) {
-      if (g1 === g2) {
-        factor *= 1.5; // 同一スポット折り返し！
-      } else if (Math.abs(g1 - g2) <= 3) {
-        factor *= 1.2; // 隣接スポット
-      }
-    }
+  // 4. 【スポット連動判定】羽田駐機スポット ➔ 次便出発ゲート連動評価！
+  if (currentSpot && candidateDepFlight.depGate) {
+    const spotAffinity = evaluateHndSpotAffinity(currentSpot, candidateDepFlight.depGate, turnaround);
+    factor *= spotAffinity;
   }
 
   return factor;
@@ -635,7 +700,9 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
       nightStayProbabilities: [{ airport: '東京(羽田)', code: 'HND', probability: 100 }],
       predictedRemainingToday: [],
       todayPlans: [],
-      pendingNightStayNote: '本日の初便運航データ取得待ちです。'
+      pendingNightStayNote: '本日の初便運航データ取得待ちです。',
+      currentSpot: null,
+      spotConfidenceNote: null
     };
   }
 
@@ -644,6 +711,32 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
   const odptLast = dayFlights[startFn];
   const startSchedArrMin = parseTimeToMinutes(odptLast?.arrTime || lastToday.arrTime) ?? 950;
   const startActArrMin = parseTimeToMinutes(odptLast?.actArrTime || lastToday.arrTime || odptLast?.arrTime) ?? startSchedArrMin;
+
+  // スポット情報の解決: CLI引数(--spot) > 保存済みステータス(chiikawa_spot_status.json)
+  let currentSpot = null;
+  const spotArg = process.argv.find(a => a.startsWith('--spot='));
+  if (spotArg) {
+    currentSpot = spotArg.split('=')[1]?.trim();
+  } else {
+    const spotIdx = process.argv.indexOf('--spot');
+    if (spotIdx !== -1 && process.argv[spotIdx + 1]) {
+      currentSpot = process.argv[spotIdx + 1].trim();
+    }
+  }
+  if (!currentSpot) {
+    const saved = loadCurrentSpotStatus();
+    if (saved && saved.airport === startAirport && saved.spot) {
+      currentSpot = String(saved.spot).trim();
+    }
+  } else {
+    // 明示指定されたスポット状態を保存
+    saveCurrentSpotStatus({
+      airport: startAirport,
+      spot: currentSpot,
+      flightNo: lastToday.flightNo,
+      updatedAt: new Date().toISOString()
+    });
+  }
 
   // 当該空港から物理的に出発可能な後続767便（未割当）を厳密に検索
   // ※安易に時刻だけでナイトステイと決めつけず、本当に後続・折り返し767便がないことを確認する
@@ -671,7 +764,9 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
       nightStayProbabilities: [{ airport: stayName, code: startAirport, probability: 100 }],
       predictedRemainingToday: [],
       todayPlans: [],
-      pendingNightStayNote: ''
+      pendingNightStayNote: '',
+      currentSpot,
+      spotConfidenceNote: currentSpot ? `羽田空港 ${currentSpot}番スポット連動判定` : null
     };
   }
 
@@ -770,7 +865,8 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
 
       // ターンアラウンド実現度（前便の遅延見込み時刻 curArrMin に対する余裕度）
       if (curAirport === 'HND') {
-        edgeWeight *= evaluateHndTurnaroundScore(curArrMin, df, dayFlights, odptLast?.arrGate);
+        const spotForEval = (depth === 0) ? currentSpot : null;
+        edgeWeight *= evaluateHndTurnaroundScore(curArrMin, df, dayFlights, spotForEval);
       } else {
         const turn = actDepM - curArrMin;
         if (turn >= 30 && turn <= 85) edgeWeight *= 1.45;
@@ -825,7 +921,9 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
       nightStayProbabilities: [{ airport: stayName, code: startAirport, probability: 100 }],
       predictedRemainingToday: [],
       todayPlans: [],
-      pendingNightStayNote: '本日の後続便候補を解析中です。'
+      pendingNightStayNote: '本日の後続便候補を解析中です。',
+      currentSpot,
+      spotConfidenceNote: currentSpot ? `羽田空港 ${currentSpot}番スポット連動判定` : null
     };
   }
 
@@ -949,7 +1047,9 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
     nightStayProbabilities,
     predictedRemainingToday,
     todayPlans,
-    pendingNightStayNote
+    pendingNightStayNote,
+    currentSpot,
+    spotConfidenceNote: currentSpot ? `羽田空港 ${currentSpot}番スポット連動判定適用中` : null
   };
 }
 
@@ -2336,6 +2436,8 @@ export async function generateWeeklyPrediction() {
       nickname: 'ANA ちいかわジェット',
       currentLocation: currentAirport,
       currentLocationCode: currentAirportCode,
+      currentSpot: remainderPred.currentSpot || null,
+      spotConfidenceNote: remainderPred.spotConfidenceNote || null,
       isAirborne,
       nightStay: nightStayName,
       nightStayCode,
