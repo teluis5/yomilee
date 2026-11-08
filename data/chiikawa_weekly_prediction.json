@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026年11月8日 08:00",
-  "updatedAtIso": "2026-11-07T23:00:26.857Z",
+  "updatedAt": "2026年11月8日 09:00",
+  "updatedAtIso": "2026-11-08T00:00:18.308Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (東京(羽田) ➔ 大阪(関空))",
+    "currentLocation": "大阪(関空)",
     "currentLocationCode": "KIX",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "広島(82%) / 名古屋(中部)(11%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
@@ -30,12 +30,12 @@
     ]
   },
   "accuracyStats": {
-    "dailyFullHitRate": 67.8,
-    "firstFlightHitRate": 81.3,
+    "dailyFullHitRate": 66.7,
+    "firstFlightHitRate": 75,
     "totalEvaluatedDays": 16,
     "perfectDays": 8,
     "totalFlightsEvaluated": 87,
-    "totalFlightsHit": 59,
+    "totalFlightsHit": 58,
     "streakHits": 7,
     "evaluationPeriod": "2026-10-23 〜 2026-11-07 (実データ検証)"
   },
@@ -452,9 +452,9 @@
       "dateStr": "2026-10-31",
       "date": "10月31日(土)",
       "type": "1日通しダイヤ (全6便)",
-      "hitLabel": "📊 6便中3便的中 (50%)",
-      "hitRate": "50%",
-      "predicted": "プランB: 伊丹 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
+      "hitLabel": "📊 6便中2便的中 (33%)",
+      "hitRate": "33%",
+      "predicted": "プランC: 伊丹 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
       "actual": "実運航: 伊丹 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 松山 ➔ 羽田 ➔ 長崎(泊)",
       "flights": [
         {
@@ -462,8 +462,8 @@
           "flightNo": "NH18",
           "route": "伊丹 ➔ 羽田",
           "time": "09:00発 - 10:10着",
-          "isHit": true,
-          "hitLabel": "🎯 的中"
+          "isHit": false,
+          "hitLabel": "△ プラン外分岐"
         },
         {
           "step": "② 第2便",
@@ -506,11 +506,11 @@
           "hitLabel": "△ プラン外分岐"
         }
       ],
-      "dayHitFlights": 3,
+      "dayHitFlights": 2,
       "dayTotalFlights": 6,
       "isPerfect": false,
-      "isFirstHit": true,
-      "reason": "初便NH18から3便が予測シナリオに合致（一部区間は当日の機材繰りにより別スジへ分岐）"
+      "isFirstHit": false,
+      "reason": "初便NH18から2便が予測シナリオに合致（一部区間は当日の機材繰りにより別スジへ分岐）"
     },
     {
       "dateStr": "2026-10-30",
@@ -1002,7 +1002,7 @@
       "isWeekend": true,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "飛行中 (東京(羽田) ➔ 大阪(関空))",
+      "currentAirport": "大阪(関空)",
       "nightStay": "広島(82%) / 名古屋(中部)(11%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH93 (東京(羽田) ➔ 大阪(関空)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 82% / 名古屋(中部) 11% / 東京(羽田) 7% と推定されます。",
@@ -1040,7 +1040,7 @@
               "dest": "KIX",
               "route": "東京(羽田) ➔ 大阪(関空)",
               "time": "07:35発 - 09:00着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "① 第1便"
             },
             {
@@ -1096,7 +1096,7 @@
               "dest": "KIX",
               "route": "東京(羽田) ➔ 大阪(関空)",
               "time": "07:35発 - 09:00着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "① 第1便"
             },
             {
@@ -1152,7 +1152,7 @@
               "dest": "KIX",
               "route": "東京(羽田) ➔ 大阪(関空)",
               "time": "07:35発 - 09:00着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "① 第1便"
             },
             {
@@ -1221,9 +1221,9 @@
             "flightNo": "NH93",
             "route": "東京(羽田) ➔ 大阪(関空)",
             "time": "07:35発 - 09:00着",
-            "status": "到着予定 (08:47)",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (08:58)",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -1351,9 +1351,9 @@
           "flightNo": "NH93",
           "route": "東京(羽田) ➔ 大阪(関空)",
           "time": "07:35発 - 09:00着",
-          "status": "到着予定 (08:47)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (08:58)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -3693,7 +3693,7 @@
       "code": "ITM",
       "name": "大阪(伊丹)",
       "note": "羽田シャトル便（NH18/NH21/NH23/NH39等）と新千歳直行便が乗り入れ。",
-      "prob": 62,
+      "prob": 63,
       "level": "A (高確率)"
     },
     {
@@ -3707,14 +3707,14 @@
       "code": "NGS",
       "name": "長崎空港",
       "note": "朝一便（NH661/NH664）および夜間ステイ便（NH669/NH662）で高頻度投入。",
-      "prob": 47,
+      "prob": 46,
       "level": "B (中確率)"
     },
     {
       "code": "HIJ",
       "name": "広島空港",
       "note": "昼往復便（NH679/NH680）および夜間ステイ便（NH685/NH672）の主要拠点。",
-      "prob": 42,
+      "prob": 41,
       "level": "B (中確率)"
     },
     {
@@ -3796,7 +3796,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 524,
+    "totalFleetFlights": 527,
     "fleetCount": 11
   }
 }
