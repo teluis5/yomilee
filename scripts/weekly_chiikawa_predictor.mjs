@@ -1871,6 +1871,7 @@ function buildDynamicAirportRadar(learnedModel) {
     { code: 'NGS', name: '長崎空港', note: '朝一便（NH661/NH664）および夜間ステイ便（NH669/NH662）で高頻度投入。' },
     { code: 'HIJ', name: '広島空港', note: '昼往復便（NH679/NH680）および夜間ステイ便（NH685/NH672）の主要拠点。' },
     { code: 'ITM', name: '大阪(伊丹)', note: '羽田シャトル便（NH18/NH21/NH23/NH39等）と新千歳直行便が乗り入れ。' },
+    { code: 'KIX', name: '大阪(関空)', note: '羽田-関空線（NH93/NH96等）でB767充当実績あり。関西の重要拠点。' },
     { code: 'CTS', name: '新千歳空港', note: '羽田・伊丹・中部・神戸を結ぶ北の基幹ネットワーク。' },
     { code: 'FUK', name: '福岡空港', note: '羽田幹線（NH245/NH250/NH265/NH270等）で連日高頻度運航。' },
     { code: 'KOJ', name: '鹿児島空港', note: '早朝羽田発（NH619/NH622）や夕方往復（NH627/NH630）の定番路線。' },
@@ -1882,6 +1883,8 @@ function buildDynamicAirportRadar(learnedModel) {
     { code: 'HKD', name: '函館空港', note: '羽田-函館線（NH553/NH554等）でB767投入実績あり。' },
     { code: 'TOY', name: '富山空港', note: '羽田-富山線（NH319/NH322）でB767投入実績あり。' },
     { code: 'KMQ', name: '小松空港', note: '羽田-小松線（NH751/NH754等）でB767投入実績あり。' },
+    { code: 'KCZ', name: '高知空港', note: '羽田-高知線（NH561/NH564等）でB767投入実績あり。' },
+    { code: 'KMI', name: '宮崎空港', note: '羽田-宮崎線（NH601/NH608等）でB767投入実績あり。' },
     { code: 'AKJ', name: '旭川空港', note: '羽田-旭川線（NH4783/NH783等）で季節・曜日により投入。' },
     { code: 'OIT', name: '大分空港', note: '羽田-大分線（NH791/NH794等）でB767運航枠あり。' }
   ];
