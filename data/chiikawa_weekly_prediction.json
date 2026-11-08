@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月8日 15:01",
-  "updatedAtIso": "2026-11-08T06:01:38.498Z",
+  "updatedAt": "2026年11月8日 16:00",
+  "updatedAtIso": "2026-11-08T07:00:17.778Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (東京(羽田) ➔ 宮古)",
+    "currentLocation": "宮古",
     "currentLocationCode": "MMY",
     "currentSpot": "53",
     "spotConfidenceNote": "羽田空港 53番スポット連動判定適用中",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "広島(92%) / 東京(羽田)(8%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
@@ -999,7 +999,7 @@
       "isWeekend": true,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "飛行中 (東京(羽田) ➔ 宮古)",
+      "currentAirport": "宮古",
       "nightStay": "広島(92%) / 東京(羽田)(8%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH87 (東京(羽田) ➔ 宮古) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 92% / 東京(羽田) 8% と推定されます。",
@@ -1050,7 +1050,7 @@
               "dest": "MMY",
               "route": "東京(羽田) ➔ 宮古",
               "time": "12:00発 - 15:15着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "③ 第3便"
             },
             {
@@ -1106,7 +1106,7 @@
               "dest": "MMY",
               "route": "東京(羽田) ➔ 宮古",
               "time": "12:00発 - 15:15着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "③ 第3便"
             },
             {
@@ -1209,9 +1209,9 @@
             "flightNo": "NH87",
             "route": "東京(羽田) ➔ 宮古",
             "time": "12:00発 - 15:15着",
-            "status": "到着予定 (15:06)",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (15:06)",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -1305,9 +1305,9 @@
           "flightNo": "NH87",
           "route": "東京(羽田) ➔ 宮古",
           "time": "12:00発 - 15:15着",
-          "status": "到着予定 (15:06)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (15:06)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -3646,7 +3646,7 @@
       "code": "NGO",
       "name": "名古屋(中部)",
       "note": "新千歳便（NH703/NH712等）や羽田便の夜間ステイ拠点。",
-      "prob": 59,
+      "prob": 60,
       "level": "A (高確率)"
     },
     {
@@ -3763,7 +3763,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 535,
+    "totalFleetFlights": 537,
     "fleetCount": 11
   }
 }
