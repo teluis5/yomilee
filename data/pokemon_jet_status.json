@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-08T02:00:27.830Z",
-  "updatedAtJst": "2026/11/8 11:00:27",
+  "updatedAt": "2026-11-08T03:00:28.090Z",
+  "updatedAtJst": "2026/11/8 12:00:28",
   "totalJets": 5,
   "jets": [
     {
@@ -17,71 +17,68 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "着陸済み 🔵",
-      "currentLocation": "東京(羽田) (HND)",
-      "currentFlight": null,
-      "nextFlight": {
-        "flightNo": "NH469",
+      "flightState": "飛行中 🟢",
+      "currentLocation": "東京(羽田) (HND) ➔ 石垣 (ISG)",
+      "currentFlight": {
+        "id": "427afc81",
+        "flightNo": "NH91",
         "origin": "HND",
         "originName": "東京(羽田) (HND)",
-        "destination": "沖縄(那覇) (OKA)",
-        "destinationName": "沖縄(那覇) (OKA)",
-        "depTimeJst": "10:30",
-        "arrTimeJst": "13:25",
-        "timeRange": "10:30 - 13:25",
-        "status": "予測枠 (★★★☆☆)",
-        "isPredicted": true
-      },
-      "lastLandedFlight": {
-        "id": "427a97cc",
-        "flightNo": "NH662",
-        "origin": "NGS",
-        "originName": "長崎 (NGS)",
-        "destination": "HND",
-        "destinationName": "東京(羽田) (HND)",
-        "depTimeJst": "2026-11-08 08:31",
-        "arrTimeJst": "2026-11-08 09:51",
-        "timeRange": "08:31 - 09:51",
+        "destination": "ISG",
+        "destinationName": "石垣 (ISG)",
+        "depTimeJst": "2026-11-08 11:46",
+        "arrTimeJst": "2026-11-08 15:00",
+        "timeRange": "11:46 - 15:00",
         "dateJst": "2026-11-08",
-        "status": "Landed 09:51",
-        "isLive": false,
+        "status": "Estimated dep 11:46",
+        "isLive": true,
         "isToday": true
       },
-      "nightStay": "東京(羽田) (HND)",
+      "nextFlight": {
+        "flightNo": "NH92",
+        "origin": "ISG",
+        "originName": "石垣 (ISG)",
+        "destination": "東京(羽田) (HND)",
+        "destinationName": "東京(羽田) (HND)",
+        "depTimeJst": "15:50",
+        "arrTimeJst": "18:30",
+        "timeRange": "15:50 - 18:30",
+        "status": "予測枠 (★★★★★ (最有力・55分ターン))",
+        "isPredicted": true
+      },
+      "lastLandedFlight": null,
+      "nightStay": "石垣 (ISG)",
       "domesticPrediction": {
         "nextCandidates": [
           {
-            "flightNo": "NH469",
-            "route": "東京(羽田) (HND) ➔ 沖縄(那覇) (OKA)",
-            "depTime": "10:30",
-            "arrTime": "13:25",
+            "flightNo": "NH92",
+            "route": "石垣 (ISG) ➔ 東京(羽田) (HND)",
+            "depTime": "15:50",
+            "arrTime": "18:30",
             "model": "78P",
-            "turnAroundMin": 39,
-            "probability": "★★★☆☆"
-          },
-          {
-            "flightNo": "NH663",
-            "route": "東京(羽田) (HND) ➔ 長崎 (NGS)",
-            "depTime": "10:55",
-            "arrTime": "12:55",
-            "model": "78P",
-            "turnAroundMin": 64,
+            "turnAroundMin": 50,
             "probability": "★★★★★ (最有力・55分ターン)"
-          },
-          {
-            "flightNo": "NH91",
-            "route": "東京(羽田) (HND) ➔ 石垣 (ISG)",
-            "depTime": "11:40",
-            "arrTime": "15:00",
-            "model": "78P",
-            "turnAroundMin": 109,
-            "probability": "★★★☆☆"
           }
         ],
         "predictedNightStay": "東京(羽田) (HND)"
       },
-      "todayFlightsCount": 1,
+      "todayFlightsCount": 2,
       "todayFlights": [
+        {
+          "id": "427afc81",
+          "flightNo": "NH91",
+          "origin": "HND",
+          "originName": "東京(羽田) (HND)",
+          "destination": "ISG",
+          "destinationName": "石垣 (ISG)",
+          "depTimeJst": "2026-11-08 11:46",
+          "arrTimeJst": "2026-11-08 15:00",
+          "timeRange": "11:46 - 15:00",
+          "dateJst": "2026-11-08",
+          "status": "Estimated dep 11:46",
+          "isLive": true,
+          "isToday": true
+        },
         {
           "id": "427a97cc",
           "flightNo": "NH662",
@@ -99,6 +96,21 @@
         }
       ],
       "recentFlights": [
+        {
+          "id": "427afc81",
+          "flightNo": "NH91",
+          "origin": "HND",
+          "originName": "東京(羽田) (HND)",
+          "destination": "ISG",
+          "destinationName": "石垣 (ISG)",
+          "depTimeJst": "2026-11-08 11:46",
+          "arrTimeJst": "2026-11-08 15:00",
+          "timeRange": "11:46 - 15:00",
+          "dateJst": "2026-11-08",
+          "status": "Estimated dep 11:46",
+          "isLive": true,
+          "isToday": true
+        },
         {
           "id": "427a97cc",
           "flightNo": "NH662",
@@ -173,24 +185,9 @@
           "status": "Landed 12:57",
           "isLive": false,
           "isToday": false
-        },
-        {
-          "id": "427731bc",
-          "flightNo": "NH661",
-          "origin": "HND",
-          "originName": "東京(羽田) (HND)",
-          "destination": "NGS",
-          "destinationName": "長崎 (NGS)",
-          "depTimeJst": "2026-11-07 08:43",
-          "arrTimeJst": "2026-11-07 10:26",
-          "timeRange": "08:43 - 10:26",
-          "dateJst": "2026-11-07",
-          "status": "Landed 10:26",
-          "isLive": false,
-          "isToday": false
         }
       ],
-      "updatedAt": "2026-11-08T02:00:26.041Z"
+      "updatedAt": "2026-11-08T03:00:26.358Z"
     },
     {
       "id": "pikachu-nh",
@@ -216,10 +213,10 @@
         "destination": "NRT",
         "destinationName": "東京(成田) (NRT)",
         "depTimeJst": "2026-11-08 08:38",
-        "arrTimeJst": "2026-11-08 15:27",
-        "timeRange": "08:38 - 15:27",
+        "arrTimeJst": "2026-11-08 15:26",
+        "timeRange": "08:38 - 15:26",
         "dateJst": "2026-11-08",
-        "status": "Estimated 15:27",
+        "status": "Estimated 15:26",
         "isLive": true,
         "isToday": true
       },
@@ -237,10 +234,10 @@
           "destination": "NRT",
           "destinationName": "東京(成田) (NRT)",
           "depTimeJst": "2026-11-08 08:38",
-          "arrTimeJst": "2026-11-08 15:27",
-          "timeRange": "08:38 - 15:27",
+          "arrTimeJst": "2026-11-08 15:26",
+          "timeRange": "08:38 - 15:26",
           "dateJst": "2026-11-08",
-          "status": "Estimated 15:27",
+          "status": "Estimated 15:26",
           "isLive": true,
           "isToday": true
         }
@@ -254,10 +251,10 @@
           "destination": "NRT",
           "destinationName": "東京(成田) (NRT)",
           "depTimeJst": "2026-11-08 08:38",
-          "arrTimeJst": "2026-11-08 15:27",
-          "timeRange": "08:38 - 15:27",
+          "arrTimeJst": "2026-11-08 15:26",
+          "timeRange": "08:38 - 15:26",
           "dateJst": "2026-11-08",
-          "status": "Estimated 15:27",
+          "status": "Estimated 15:26",
           "isLive": true,
           "isToday": true
         },
@@ -337,7 +334,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-08T02:00:26.494Z"
+      "updatedAt": "2026-11-08T03:00:26.786Z"
     },
     {
       "id": "eevee-nh",
@@ -499,7 +496,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-08T02:00:26.940Z"
+      "updatedAt": "2026-11-08T03:00:27.216Z"
     },
     {
       "id": "pokemon-green",
@@ -525,10 +522,10 @@
         "destination": "NRT",
         "destinationName": "東京(成田) (NRT)",
         "depTimeJst": "2026-11-08 09:26",
-        "arrTimeJst": "2026-11-08 14:59",
-        "timeRange": "09:26 - 14:59",
+        "arrTimeJst": "2026-11-08 15:05",
+        "timeRange": "09:26 - 15:05",
         "dateJst": "2026-11-08",
-        "status": "Estimated 14:59",
+        "status": "Estimated 15:05",
         "isLive": true,
         "isToday": true
       },
@@ -546,10 +543,10 @@
           "destination": "NRT",
           "destinationName": "東京(成田) (NRT)",
           "depTimeJst": "2026-11-08 09:26",
-          "arrTimeJst": "2026-11-08 14:59",
-          "timeRange": "09:26 - 14:59",
+          "arrTimeJst": "2026-11-08 15:05",
+          "timeRange": "09:26 - 15:05",
           "dateJst": "2026-11-08",
-          "status": "Estimated 14:59",
+          "status": "Estimated 15:05",
           "isLive": true,
           "isToday": true
         },
@@ -578,10 +575,10 @@
           "destination": "NRT",
           "destinationName": "東京(成田) (NRT)",
           "depTimeJst": "2026-11-08 09:26",
-          "arrTimeJst": "2026-11-08 14:59",
-          "timeRange": "09:26 - 14:59",
+          "arrTimeJst": "2026-11-08 15:05",
+          "timeRange": "09:26 - 15:05",
           "dateJst": "2026-11-08",
-          "status": "Estimated 14:59",
+          "status": "Estimated 15:05",
           "isLive": true,
           "isToday": true
         },
@@ -661,7 +658,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-08T02:00:27.386Z"
+      "updatedAt": "2026-11-08T03:00:27.663Z"
     },
     {
       "id": "pikachu-legacy",
@@ -740,10 +737,10 @@
           "destination": "FRA",
           "destinationName": "フランクフルト (FRA)",
           "depTimeJst": "2026-11-07 23:23",
-          "arrTimeJst": "2026-11-08 13:12",
-          "timeRange": "23:23 - 13:12",
+          "arrTimeJst": "2026-11-08 13:15",
+          "timeRange": "23:23 - 13:15",
           "dateJst": "2026-11-07",
-          "status": "Estimated 05:12",
+          "status": "Estimated 05:15",
           "isLive": true,
           "isToday": false
         },
@@ -808,7 +805,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-08T02:00:27.829Z"
+      "updatedAt": "2026-11-08T03:00:28.089Z"
     }
   ]
 }
