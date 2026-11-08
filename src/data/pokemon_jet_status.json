@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-08T12:02:09.301Z",
-  "updatedAtJst": "2026/11/8 21:02:09",
+  "updatedAt": "2026-11-08T13:01:58.309Z",
+  "updatedAtJst": "2026/11/8 22:01:58",
   "totalJets": 5,
   "jets": [
     {
@@ -17,9 +17,11 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "東京(羽田) (HND) ➔ TAK",
-      "currentFlight": {
+      "flightState": "着陸済み 🔵",
+      "currentLocation": "TAK",
+      "currentFlight": null,
+      "nextFlight": null,
+      "lastLandedFlight": {
         "id": "427bd2a3",
         "flightNo": "NH539",
         "origin": "HND",
@@ -27,15 +29,13 @@
         "destination": "TAK",
         "destinationName": "TAK",
         "depTimeJst": "2026-11-08 20:17",
-        "arrTimeJst": "2026-11-08 21:16",
-        "timeRange": "20:17 - 21:16",
+        "arrTimeJst": "2026-11-08 21:15",
+        "timeRange": "20:17 - 21:15",
         "dateJst": "2026-11-08",
-        "status": "Estimated 21:16",
-        "isLive": true,
+        "status": "Landed 21:15",
+        "isLive": false,
         "isToday": true
       },
-      "nextFlight": null,
-      "lastLandedFlight": null,
       "nightStay": "TAK",
       "domesticPrediction": {
         "nextCandidates": [],
@@ -51,11 +51,11 @@
           "destination": "TAK",
           "destinationName": "TAK",
           "depTimeJst": "2026-11-08 20:17",
-          "arrTimeJst": "2026-11-08 21:16",
-          "timeRange": "20:17 - 21:16",
+          "arrTimeJst": "2026-11-08 21:15",
+          "timeRange": "20:17 - 21:15",
           "dateJst": "2026-11-08",
-          "status": "Estimated 21:16",
-          "isLive": true,
+          "status": "Landed 21:15",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -113,11 +113,11 @@
           "destination": "TAK",
           "destinationName": "TAK",
           "depTimeJst": "2026-11-08 20:17",
-          "arrTimeJst": "2026-11-08 21:16",
-          "timeRange": "20:17 - 21:16",
+          "arrTimeJst": "2026-11-08 21:15",
+          "timeRange": "20:17 - 21:15",
           "dateJst": "2026-11-08",
-          "status": "Estimated 21:16",
-          "isLive": true,
+          "status": "Landed 21:15",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -196,7 +196,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-08T12:02:07.338Z"
+      "updatedAt": "2026-11-08T13:01:56.323Z"
     },
     {
       "id": "pikachu-nh",
@@ -222,10 +222,10 @@
         "destination": "KUL",
         "destinationName": "KUL",
         "depTimeJst": "2026-11-08 19:45",
-        "arrTimeJst": "2026-11-09 02:30",
-        "timeRange": "19:45 - 02:30",
+        "arrTimeJst": "2026-11-09 02:26",
+        "timeRange": "19:45 - 02:26",
         "dateJst": "2026-11-08",
-        "status": "Delayed 01:30",
+        "status": "Delayed 01:26",
         "isLive": true,
         "isToday": true
       },
@@ -243,10 +243,10 @@
           "destination": "KUL",
           "destinationName": "KUL",
           "depTimeJst": "2026-11-08 19:45",
-          "arrTimeJst": "2026-11-09 02:30",
-          "timeRange": "19:45 - 02:30",
+          "arrTimeJst": "2026-11-09 02:26",
+          "timeRange": "19:45 - 02:26",
           "dateJst": "2026-11-08",
-          "status": "Delayed 01:30",
+          "status": "Delayed 01:26",
           "isLive": true,
           "isToday": true
         },
@@ -275,10 +275,10 @@
           "destination": "KUL",
           "destinationName": "KUL",
           "depTimeJst": "2026-11-08 19:45",
-          "arrTimeJst": "2026-11-09 02:30",
-          "timeRange": "19:45 - 02:30",
+          "arrTimeJst": "2026-11-09 02:26",
+          "timeRange": "19:45 - 02:26",
           "dateJst": "2026-11-08",
-          "status": "Delayed 01:30",
+          "status": "Delayed 01:26",
           "isLive": true,
           "isToday": true
         },
@@ -358,7 +358,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-08T12:02:07.812Z"
+      "updatedAt": "2026-11-08T13:01:56.766Z"
     },
     {
       "id": "eevee-nh",
@@ -520,7 +520,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-08T12:02:08.338Z"
+      "updatedAt": "2026-11-08T13:01:57.286Z"
     },
     {
       "id": "pokemon-green",
@@ -546,10 +546,10 @@
         "destination": "SIN",
         "destinationName": "シンガポール (SIN)",
         "depTimeJst": "2026-11-08 17:21",
-        "arrTimeJst": "2026-11-09 00:00",
-        "timeRange": "17:21 - 00:00",
+        "arrTimeJst": "2026-11-08 23:59",
+        "timeRange": "17:21 - 23:59",
         "dateJst": "2026-11-08",
-        "status": "Estimated 23:00",
+        "status": "Estimated 22:59",
         "isLive": true,
         "isToday": true
       },
@@ -567,10 +567,10 @@
           "destination": "SIN",
           "destinationName": "シンガポール (SIN)",
           "depTimeJst": "2026-11-08 17:21",
-          "arrTimeJst": "2026-11-09 00:00",
-          "timeRange": "17:21 - 00:00",
+          "arrTimeJst": "2026-11-08 23:59",
+          "timeRange": "17:21 - 23:59",
           "dateJst": "2026-11-08",
-          "status": "Estimated 23:00",
+          "status": "Estimated 22:59",
           "isLive": true,
           "isToday": true
         },
@@ -614,10 +614,10 @@
           "destination": "SIN",
           "destinationName": "シンガポール (SIN)",
           "depTimeJst": "2026-11-08 17:21",
-          "arrTimeJst": "2026-11-09 00:00",
-          "timeRange": "17:21 - 00:00",
+          "arrTimeJst": "2026-11-08 23:59",
+          "timeRange": "17:21 - 23:59",
           "dateJst": "2026-11-08",
-          "status": "Estimated 23:00",
+          "status": "Estimated 22:59",
           "isLive": true,
           "isToday": true
         },
@@ -697,7 +697,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-08T12:02:08.789Z"
+      "updatedAt": "2026-11-08T13:01:57.856Z"
     },
     {
       "id": "pikachu-legacy",
@@ -723,10 +723,10 @@
         "destination": "HND",
         "destinationName": "東京(羽田) (HND)",
         "depTimeJst": "2026-11-08 20:05",
-        "arrTimeJst": "2026-11-09 08:30",
-        "timeRange": "20:05 - 08:30",
+        "arrTimeJst": "2026-11-09 08:18",
+        "timeRange": "20:05 - 08:18",
         "dateJst": "2026-11-08",
-        "status": "Estimated 08:30",
+        "status": "Estimated 08:18",
         "isLive": true,
         "isToday": true
       },
@@ -744,10 +744,10 @@
           "destination": "HND",
           "destinationName": "東京(羽田) (HND)",
           "depTimeJst": "2026-11-08 20:05",
-          "arrTimeJst": "2026-11-09 08:30",
-          "timeRange": "20:05 - 08:30",
+          "arrTimeJst": "2026-11-09 08:18",
+          "timeRange": "20:05 - 08:18",
           "dateJst": "2026-11-08",
-          "status": "Estimated 08:30",
+          "status": "Estimated 08:18",
           "isLive": true,
           "isToday": true
         }
@@ -761,10 +761,10 @@
           "destination": "HND",
           "destinationName": "東京(羽田) (HND)",
           "depTimeJst": "2026-11-08 20:05",
-          "arrTimeJst": "2026-11-09 08:30",
-          "timeRange": "20:05 - 08:30",
+          "arrTimeJst": "2026-11-09 08:18",
+          "timeRange": "20:05 - 08:18",
           "dateJst": "2026-11-08",
-          "status": "Estimated 08:30",
+          "status": "Estimated 08:18",
           "isLive": true,
           "isToday": true
         },
@@ -844,7 +844,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-08T12:02:09.300Z"
+      "updatedAt": "2026-11-08T13:01:58.308Z"
     }
   ]
 }
