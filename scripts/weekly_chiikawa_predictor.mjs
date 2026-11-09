@@ -240,9 +240,9 @@ function normalizeFlightNo(raw) {
  * - 3.5: B767 単独確定枠 (model === '763' || model === '76P' || is767Strict)
  *        ➔ 広島、長崎、新千歳、伊丹など、ANA公式ダイヤでB767専任の中核枠。
  * - 1.8: B767 主力・中小型機併記枠 (model が '763/...' で始まるもの: 763/73H, 763/321)
- *        ➔ B767がファーストチョイスで、需要調整で中小型化される頻出枠。
- * - 0.38: 他機種主力・代走枠 (model が '788/...', '789/...', '772/...' 等で始まるもの: 788/763, 789/763)
- *        ➔ 本来はB787-8やB787-9がレギュラーであり、B767は突発整備や一時的な代走枠にすぎない。
+ *        および 主要幹線（新千歳 CTS, 福岡 FUK, 伊丹 ITM, 那覇 OKA）への767充当枠
+ *        ➔ 781/772/763 等の表記であっても、幹線でのB767運用は日常的かつ最重要ローテーション枠！
+ * - 0.38: 地方ローカル線の他機種主力・代走枠 (model が '788/...', '772/...' 等で地方路線への突発代走)
  * - 0.1: 非767枠 (ODPTで767表記が一切ない枠)
  */
 function getAircraftModelPriority(df) {
@@ -262,18 +262,29 @@ function getAircraftModelPriority(df) {
   const parts = model.split('/');
   const primaryModel = parts[0]?.trim();
 
+  // 💡 主要幹線（新千歳 CTS, 福岡 FUK, 伊丹 ITM, 那覇 OKA）への充当枠判定
+  // 781/772/763 等の表記であっても、幹線でのB767運用は日常的な主力ローテーション枠！
+  const dest = df.destCode || df.dest;
+  const orig = df.origCode || df.origin;
+  const isMajorTrunk = (orig === 'HND' || dest === 'HND') && 
+    ['CTS', 'FUK', 'ITM', 'OKA'].includes(orig === 'HND' ? dest : orig);
+
   // 763が先頭（主担当機材）
   if (primaryModel === '763' || primaryModel === '76P') {
     return 1.8;
   }
 
-  // B787 / B777 など大型・中型機が先頭（767は代走・突発枠）
+  // B787 / B777 など大型・中型機が先頭
   if (primaryModel.startsWith('78') || primaryModel.startsWith('77')) {
+    // 主要幹線の場合は日常的ローテーション枠として主力同等に評価（1.8倍）
+    if (isMajorTrunk) {
+      return 1.8;
+    }
     return 0.38;
   }
 
   // その他共用枠
-  return 0.6;
+  return isMajorTrunk ? 1.5 : 0.6;
 }
 
 /**
@@ -622,19 +633,20 @@ function evaluateHndTurnaroundScore(arrMins, candidateDepFlight, dayFlights, cur
   const turnaround = depM - arrMins;
   if (turnaround < 35) return 0.05;
 
-  // 1. ターンアラウンド時間の自然さ（45〜85分が国内線B767の黄金ゾーン）
-  // ※日中（11:00〜16:00）に羽田で2時間以上アイドリング待機するスジは不自然なため厳格に減衰
+  // 1. ターンアラウンド時間の自然さ（50〜80分が国内線B767の最も機材稼働効率が良い黄金ゾーン）
   let factor = 1.0;
-  if (turnaround >= 45 && turnaround <= 85) {
-    factor = 1.5; // 黄金ゾーン（最も頻出する通常ターン）
-  } else if (turnaround >= 35 && turnaround < 45) {
-    factor = 1.0;
-  } else if (turnaround > 85 && turnaround <= 115) {
-    factor = 0.9; // やや余裕あり
-  } else if (turnaround > 115 && turnaround <= 140) {
-    factor = 0.4; // 2時間超待機（他に自然な折り返し便があれば大きく劣後）
-  } else if (turnaround > 140 && turnaround <= 180) {
-    factor = 0.15; // 2時間半〜3時間待機（日中稼働機としては極めて不自然なため大幅減衰）
+  if (turnaround >= 50 && turnaround <= 80) {
+    factor = 2.0; // 理想ゾーン（羽田でのNH59 65分折返し等、最も自然で無駄のない運用）
+  } else if (turnaround >= 35 && turnaround < 50) {
+    factor = 1.3;
+  } else if (turnaround > 80 && turnaround <= 100) {
+    factor = 1.1; // やや余裕あり（95分ターン等）
+  } else if (turnaround > 100 && turnaround <= 125) {
+    factor = 0.55; // 2時間近い待機（他に自然な折り返し便があれば劣後）
+  } else if (turnaround > 125 && turnaround <= 150) {
+    factor = 0.25; // 2時間超待機（大きく劣後）
+  } else if (turnaround > 150 && turnaround <= 180) {
+    factor = 0.12; // 2時間半〜3時間待機（日中稼働機としては極めて不自然なため大幅減衰）
   } else {
     factor = 0.05; // 3時間超の駐機（夕方以降のステイ便待機を除き原則選外）
   }
@@ -1528,28 +1540,58 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
     }
   }
 
-  // ② 異なる初便（firstFn）を持つプランを優先補充
-  for (const cand of eligiblePlans) {
-    if (selectedRaw.length >= 3) break;
-    const sig = cand.rawFlights.map(f => f.flightNo).join('>');
-    if (usedSignatures.has(sig)) continue;
-    const firstFn = cand.rawFlights[0]?.flightNo;
-    if (!selectedRaw.some(s => s.rawFlights[0]?.flightNo === firstFn)) {
-      selectedRaw.push(cand);
-      usedSignatures.add(sig);
+  // 💡 プラン選出の多様性最適化:
+  // 最有力ステイ先（validPriors[0]）の確率が高い場合（70%以上）、または地方泊で朝一便が羽田帰還に1本化されている場合、
+  // ファン・読者が知りたいのは「羽田到着後の分岐シナリオ（新千歳行きか、福岡行きか、他路線か）」である。
+  // そのため、2便目（羽田出発便）または中盤の目的地が異なるプランを優先選出する！
+  const topPrior = validPriors[0];
+  const isHighDominantStay = (topPrior && topPrior.probability >= 70);
+
+  if (isHighDominantStay) {
+    // 高確度ステイ先からの分岐シナリオを優先補充（2便目または主要経由地が異なるスジ）
+    for (const cand of eligiblePlans) {
+      if (selectedRaw.length >= 3) break;
+      const sig = cand.rawFlights.map(f => f.flightNo).join('>');
+      if (usedSignatures.has(sig)) continue;
+      
+      const secondFn = cand.rawFlights[1]?.flightNo;
+      const secondDest = cand.rawFlights[1]?.dest;
+      const mid = cand.midAirport;
+
+      // 既存プランと2便目、または中盤目的地が異なるものを採用
+      const isDistinctBranch = !selectedRaw.some(s => {
+        const sSecondFn = s.rawFlights[1]?.flightNo;
+        const sSecondDest = s.rawFlights[1]?.dest;
+        const sMid = s.midAirport;
+        return (secondFn && sSecondFn === secondFn) || (secondDest && sSecondDest === secondDest && sMid === mid);
+      });
+
+      if (isDistinctBranch) {
+        selectedRaw.push(cand);
+        usedSignatures.add(sig);
+      }
+    }
+  } else {
+    // 異なる初便（firstFn）を持つプランを優先補充
+    for (const cand of eligiblePlans) {
+      if (selectedRaw.length >= 3) break;
+      const sig = cand.rawFlights.map(f => f.flightNo).join('>');
+      if (usedSignatures.has(sig)) continue;
+      const firstFn = cand.rawFlights[0]?.flightNo;
+      if (!selectedRaw.some(s => s.rawFlights[0]?.flightNo === firstFn)) {
+        selectedRaw.push(cand);
+        usedSignatures.add(sig);
+      }
     }
   }
 
-  // ③ 中盤の経由空港（midAirport）が異なるプランを優先補充
+  // ③ まだ枠が余っている場合は、中盤の経由空港（midAirport）やシグネチャが異なるプランを補充
   for (const cand of eligiblePlans) {
     if (selectedRaw.length >= 3) break;
     const sig = cand.rawFlights.map(f => f.flightNo).join('>');
     if (usedSignatures.has(sig)) continue;
-    const mid = cand.midAirport;
-    if (!selectedRaw.some(s => s.midAirport === mid)) {
-      selectedRaw.push(cand);
-      usedSignatures.add(sig);
-    }
+    selectedRaw.push(cand);
+    usedSignatures.add(sig);
   }
 
   // ④ それでも3プラン未満の場合は残りの候補から補充
