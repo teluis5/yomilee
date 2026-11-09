@@ -1,12 +1,12 @@
 {
-  "updatedAt": "2026年11月9日 19:01",
-  "updatedAtIso": "2026-11-09T10:01:57.728Z",
+  "updatedAt": "2026年11月9日 20:00",
+  "updatedAtIso": "2026-11-09T11:00:16.526Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "札幌(新千歳)",
-    "currentLocationCode": "CTS",
+    "currentLocation": "東京(羽田)",
+    "currentLocationCode": "HND",
     "currentSpot": null,
     "spotConfidenceNote": null,
     "isAirborne": false,
@@ -1050,7 +1050,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "札幌(新千歳)",
+      "currentAirport": "東京(羽田)",
       "nightStay": "東京(羽田) (確定)",
       "isNightStayConfirmed": true,
       "pendingNightStayNote": "",
@@ -1507,8 +1507,8 @@
             "flightNo": "NH74",
             "route": "札幌(新千歳) ➔ 東京(羽田)",
             "time": "17:30発 - 19:10着",
-            "status": "遅延 (19:30予定)",
-            "isLanded": false,
+            "status": "着陸済 (19:28)",
+            "isLanded": true,
             "isLive": false
           }
         },
@@ -1565,8 +1565,8 @@
           "flightNo": "NH74",
           "route": "札幌(新千歳) ➔ 東京(羽田)",
           "time": "17:30発 - 19:10着",
-          "status": "遅延 (19:30予定)",
-          "isLanded": false,
+          "status": "着陸済 (19:28)",
+          "isLanded": true,
           "isLive": false,
           "isPredicted": false
         }
@@ -3895,16 +3895,16 @@
       "level": "A (高確率)"
     },
     {
-      "code": "ITM",
-      "name": "大阪(伊丹)",
-      "note": "羽田シャトル便（NH18/NH21/NH23/NH39等）と新千歳直行便が乗り入れ。",
-      "prob": 59,
-      "level": "A (高確率)"
-    },
-    {
       "code": "NGO",
       "name": "名古屋(中部)",
       "note": "新千歳便（NH703/NH712等）や羽田便の夜間ステイ拠点。",
+      "prob": 60,
+      "level": "A (高確率)"
+    },
+    {
+      "code": "ITM",
+      "name": "大阪(伊丹)",
+      "note": "羽田シャトル便（NH18/NH21/NH23/NH39等）と新千歳直行便が乗り入れ。",
       "prob": 59,
       "level": "A (高確率)"
     },
@@ -4022,7 +4022,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 573,
+    "totalFleetFlights": 575,
     "fleetCount": 11
   }
 }
