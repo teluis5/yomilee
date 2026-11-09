@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月9日 15:00",
-  "updatedAtIso": "2026-11-09T06:00:19.139Z",
+  "updatedAt": "2026年11月9日 16:00",
+  "updatedAtIso": "2026-11-09T07:00:28.890Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "東京(羽田)",
-    "currentLocationCode": "HND",
+    "currentLocation": "飛行中 (東京(羽田) ➔ 札幌(新千歳))",
+    "currentLocationCode": "CTS",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "東京(羽田) (100%)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
@@ -1050,11 +1050,11 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "東京(羽田)",
+      "currentAirport": "飛行中 (東京(羽田) ➔ 札幌(新千歳))",
       "nightStay": "東京(羽田) (100%)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH62 (札幌(新千歳) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
-      "todayOutlook": "現在 NH62 (札幌(新千歳) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "pendingNightStayNote": "現在 NH69 (東京(羽田) ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "todayOutlook": "現在 NH69 (東京(羽田) ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
       "nightStayProbabilities": [
         {
           "airport": "東京(羽田)",
@@ -1068,63 +1068,7 @@
           "planName": "プランA (羽田泊)",
           "stayCode": "HND",
           "rank": "本命 ◎",
-          "probability": 90,
-          "title": "【今夜羽田泊シナリオ】広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
-          "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
-          "flights": [
-            {
-              "flightNo": "NH672",
-              "orig": "HIJ",
-              "dest": "HND",
-              "route": "広島 ➔ 東京(羽田)",
-              "time": "07:35発 - 08:55着",
-              "tag": "運航完了",
-              "step": "① 第1便"
-            },
-            {
-              "flightNo": "NH59",
-              "orig": "HND",
-              "dest": "CTS",
-              "route": "東京(羽田) ➔ 札幌(新千歳)",
-              "time": "10:00発 - 11:35着",
-              "tag": "運航完了",
-              "step": "② 第2便"
-            },
-            {
-              "flightNo": "NH62",
-              "orig": "CTS",
-              "dest": "HND",
-              "route": "札幌(新千歳) ➔ 東京(羽田)",
-              "time": "12:30発 - 14:10着",
-              "tag": "運航完了",
-              "step": "③ 第3便"
-            },
-            {
-              "flightNo": "NH261",
-              "orig": "HND",
-              "dest": "FUK",
-              "route": "東京(羽田) ➔ 福岡",
-              "time": "15:45発 - 17:45着",
-              "tag": "予想接続(76P)",
-              "step": "④ 第4便"
-            },
-            {
-              "flightNo": "NH266",
-              "orig": "FUK",
-              "dest": "HND",
-              "route": "福岡 ➔ 東京(羽田)",
-              "time": "18:30発 - 20:10着",
-              "tag": "🌙羽田泊候補",
-              "step": "⑤ 第5便"
-            }
-          ]
-        },
-        {
-          "planId": "today-plan-b",
-          "planName": "プランB (羽田泊)",
-          "stayCode": "HND",
-          "rank": "有力 ◯",
-          "probability": 10,
+          "probability": 100,
           "title": "【今夜羽田泊シナリオ】広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 新千歳 ➔ 羽田(泊)",
           "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 新千歳 ➔ 羽田(泊)",
           "flights": [
@@ -1161,7 +1105,7 @@
               "dest": "CTS",
               "route": "東京(羽田) ➔ 札幌(新千歳)",
               "time": "15:00発 - 16:35着",
-              "tag": "予想接続(76P)",
+              "tag": "飛行中",
               "step": "④ 第4便"
             },
             {
@@ -1287,12 +1231,12 @@
             "time": "14:15発 - 15:40着"
           },
           "actual": {
-            "flightNo": "NH261 (予想)",
-            "route": "東京(羽田) ➔ 福岡",
-            "time": "15:45発 - 17:45着",
-            "status": "折返し確定予想 (76P枠)",
+            "flightNo": "NH69",
+            "route": "東京(羽田) ➔ 札幌(新千歳)",
+            "time": "15:00発 - 16:35着",
+            "status": "到着予定 (16:46)",
             "isLanded": false,
-            "isLive": false
+            "isLive": true
           }
         },
         {
@@ -1313,9 +1257,9 @@
             "time": "16:20発 - 17:40着"
           },
           "actual": {
-            "flightNo": "NH266 (予想)",
-            "route": "福岡 ➔ 東京(羽田)",
-            "time": "18:30発 - 20:10着",
+            "flightNo": "NH74 (予想)",
+            "route": "札幌(新千歳) ➔ 東京(羽田)",
+            "time": "17:30発 - 19:10着",
             "status": "本命予想 (100%・羽田帰還候補)",
             "isLanded": false,
             "isLive": false
@@ -1362,26 +1306,22 @@
           "isPredicted": false
         },
         {
-          "flightNo": "NH261",
-          "origCode": "HND",
-          "destCode": "FUK",
-          "route": "東京(羽田) ➔ 福岡",
-          "depTime": "15:45",
-          "arrTime": "17:45",
-          "time": "15:45発 - 17:45着 (予想)",
-          "status": "折返し確定予想 (76P枠)",
+          "flightNo": "NH69",
+          "route": "東京(羽田) ➔ 札幌(新千歳)",
+          "time": "15:00発 - 16:35着",
+          "status": "到着予定 (16:46)",
           "isLanded": false,
-          "isLive": false,
-          "isPredicted": true
+          "isLive": true,
+          "isPredicted": false
         },
         {
-          "flightNo": "NH266",
-          "origCode": "FUK",
+          "flightNo": "NH74",
+          "origCode": "CTS",
           "destCode": "HND",
-          "route": "福岡 ➔ 東京(羽田)",
-          "depTime": "18:30",
-          "arrTime": "20:10",
-          "time": "18:30発 - 20:10着 (予想)",
+          "route": "札幌(新千歳) ➔ 東京(羽田)",
+          "depTime": "17:30",
+          "arrTime": "19:10",
+          "time": "17:30発 - 19:10着 (予想)",
           "status": "本命予想 (100%・羽田帰還候補)",
           "isLanded": false,
           "isLive": false,
@@ -1399,7 +1339,7 @@
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
       "expectedStart": "羽田発 (NH561)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH62 (札幌(新千歳) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "pendingNightStayNote": "現在 NH69 (東京(羽田) ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
@@ -3743,7 +3683,7 @@
       "code": "OKA",
       "name": "沖縄(那覇)",
       "note": "羽田・伊丹・中部から飛来する大型幹線。",
-      "prob": 34,
+      "prob": 33,
       "level": "C (注目)"
     },
     {
@@ -3839,7 +3779,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 565,
+    "totalFleetFlights": 567,
     "fleetCount": 11
   }
 }
