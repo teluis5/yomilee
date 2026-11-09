@@ -245,7 +245,7 @@ function normalizeFlightNo(raw) {
  * - 0.38: 地方ローカル線の他機種主力・代走枠 (model が '788/...', '772/...' 等で地方路線への突発代走)
  * - 0.1: 非767枠 (ODPTで767表記が一切ない枠)
  */
-function getAircraftModelPriority(df) {
+function getAircraftModelPriority(df, learnedModel = null) {
   if (!df) return 0.1;
   const model = String(df.model || '').trim();
 
@@ -269,6 +269,12 @@ function getAircraftModelPriority(df) {
   const isMajorTrunk = (orig === 'HND' || dest === 'HND') && 
     ['CTS', 'FUK', 'ITM', 'OKA'].includes(orig === 'HND' ? dest : orig);
 
+  // 💡 過去のB767実運航実績判定（松山 NH583/584, 宮古 NH87/88 等の確定定番スジ）
+  // 公式ダイヤ上は 788/763 併記であっても、実績DBでB767が日常的に充当されている便は主力枠（1.8倍）として評価！
+  const fn = df.flightNo ? normalizeFlightNo(df.flightNo) : '';
+  const histCount = learnedModel?.flightMeta?.[fn]?.count || 0;
+  const hasHistory = histCount > 0;
+
   // 763が先頭（主担当機材）
   if (primaryModel === '763' || primaryModel === '76P') {
     return 1.8;
@@ -276,15 +282,15 @@ function getAircraftModelPriority(df) {
 
   // B787 / B777 など大型・中型機が先頭
   if (primaryModel.startsWith('78') || primaryModel.startsWith('77')) {
-    // 主要幹線の場合は日常的ローテーション枠として主力同等に評価（1.8倍）
-    if (isMajorTrunk) {
+    // 主要幹線、または過去にB767が実際に充当されている実績便（松山・宮古スジ等）は主力枠（1.8倍）として正当評価
+    if (isMajorTrunk || hasHistory) {
       return 1.8;
     }
     return 0.38;
   }
 
   // その他共用枠
-  return isMajorTrunk ? 1.5 : 0.6;
+  return (isMajorTrunk || hasHistory) ? 1.5 : 0.6;
 }
 
 /**
@@ -627,7 +633,7 @@ function buildAssignedOtherRegFlights(fleetDb, todayStr, anaFleetData, learnedMo
 /**
  * 羽田空港における同時刻帯の他767機材とのターンアラウンド競合＆ゲート近接度スコアを計算する
  */
-function evaluateHndTurnaroundScore(arrMins, candidateDepFlight, dayFlights, currentSpot = null) {
+function evaluateHndTurnaroundScore(arrMins, candidateDepFlight, dayFlights, currentSpot = null, learnedModel = null) {
   const depM = parseTimeToMinutes(candidateDepFlight.depTime);
   if (depM === null || arrMins === null) return 1.0;
   const turnaround = depM - arrMins;
@@ -652,7 +658,7 @@ function evaluateHndTurnaroundScore(arrMins, candidateDepFlight, dayFlights, cur
   }
 
   // 2. 機材モデル（レギュラー確定枠 vs 763主力枠 vs 他機種レギュラー代走枠）の優先度反映
-  const modelPrio = getAircraftModelPriority(candidateDepFlight);
+  const modelPrio = getAircraftModelPriority(candidateDepFlight, learnedModel);
   if (modelPrio >= 3.0) {
     factor *= 1.35; // 763単独確定枠ボーナス
   } else if (modelPrio >= 1.5) {
@@ -883,14 +889,14 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
       // ターンアラウンド実現度（前便の遅延見込み時刻 curArrMin に対する余裕度）
       if (curAirport === 'HND') {
         const spotForEval = (depth === 0) ? currentSpot : null;
-        let turnScore = evaluateHndTurnaroundScore(curArrMin, df, dayFlights, spotForEval);
+        let turnScore = evaluateHndTurnaroundScore(curArrMin, df, dayFlights, spotForEval, learnedModel);
         // 💡 玉突き遅延（Inbound Delay）の適正評価:
         // 同一空港へのピストン折返し便や遷移実績がある便は、前便が遅延しても出発を遅らせて同一機材で運航する。
         // 実着時刻ベースで35分未満でも、定刻ダイヤ上で正常（45〜85分）であれば定刻ベースのスコアを評価する！
         const schedTurn = schedDepM - curSchedArrMin;
         const isPairOrReturn = (lastToday && df.dest === lastToday.origCode) || (transCount > 0);
         if (isPairOrReturn && schedTurn >= 45 && schedTurn <= 85 && turnScore < 1.0) {
-          const schedTurnScore = evaluateHndTurnaroundScore(curSchedArrMin, df, dayFlights, spotForEval);
+          const schedTurnScore = evaluateHndTurnaroundScore(curSchedArrMin, df, dayFlights, spotForEval, learnedModel);
           turnScore = Math.max(turnScore, schedTurnScore * 0.9); // 玉突き遅延前提で高スコアを維持
         }
         if (isPairOrReturn && df.dest === lastToday?.origCode) {
@@ -1316,8 +1322,14 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
     const scoredMorning = morningFlights.map(df => {
       const depM = parseTimeToMinutes(df.depTime) ?? 500;
       // レギュラー機材判定（確定枠 3.5 / 主力枠 1.8 / 代走枠 0.38）
-      const modelPrio = getAircraftModelPriority(df);
+      const modelPrio = getAircraftModelPriority(df, learnedModel);
       let score = modelPrio;
+
+      // 💡 ナイトステイ空港からの初便過去実績ボーナス（羽田からのNH583松山便など、過去に実績がある初便を正当評価）
+      const stayHistCount = stayHistMap[df.flightNo] || 0;
+      if (stayHistCount > 0) {
+        score *= (1.0 + Math.min(stayHistCount * 0.25, 2.0)); // 実績回数に応じたブースト
+      }
 
       // 前夜到着便との往復ペアリング（ANA 767地方ステイ折返し率 88.3%の実データ相関）
       // 地方空港で同型機が複数泊まる場合（例: NGOにCTS便とOKA便が同時ステイ等）、
@@ -1330,7 +1342,7 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
         }
       } else if (startAirport !== 'HND' && df.dest === 'HND' && depM <= 540) {
         score *= 1.35; // 地方泊からの朝一番羽田帰還便は高優先度
-      } else if (modelPrio <= 0.4) {
+      } else if (modelPrio <= 0.4 && stayHistCount === 0) {
         score *= 0.35;
       }
 
@@ -1437,7 +1449,7 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
           const scoredNext = nextCands.map(df => {
             const transCount = transitions[curFn]?.[df.flightNo] || 0;
             // レギュラー機材判定（確定枠 3.5 / 主力枠 1.8 / 代走枠 0.38 / 非767 0.1）
-            let modelPrio = getAircraftModelPriority(df);
+            let modelPrio = getAircraftModelPriority(df, learnedModel);
 
             // 💡 過去の同一機材遷移実績（実データ検証）がある便は、共用枠（788/763等）であっても
             // 実際にB767が充当される確立されたスジであるため優先度を正当に評価
@@ -1464,7 +1476,7 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
 
             if (curAirport === 'HND') {
               // 羽田空港でのターンアラウンド評価（なるべく45〜85分から探すが、長め待機もソフトに評価）
-              edgeScore *= evaluateHndTurnaroundScore(curArrMin, df, dayFlightsMap, null);
+              edgeScore *= evaluateHndTurnaroundScore(curArrMin, df, dayFlightsMap, null, learnedModel);
               // 2晩連続で同一の地方空港にナイトステイする反復ループを適度に抑制（機材ローテーション分散）
               const arrM = parseTimeToMinutes(df.arrTime) ?? 0;
               if (startAirport !== 'HND' && df.dest === startAirport && arrM >= 1110) {
@@ -1585,7 +1597,7 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
       const stepLabel = getStepLabel(fIdx, item.rawFlights.length, depM, arrM, df.dest);
       const isLast = fIdx === item.rawFlights.length - 1;
 
-      const modelPrio = getAircraftModelPriority(df);
+      const modelPrio = getAircraftModelPriority(df, learnedModel);
       let tag = df.is767Strict
         ? '🔒763確定枠'
         : (modelPrio >= 1.5 ? '763主力枠' : (df.is767 ? '763代走候補' : '機材変更候補'));

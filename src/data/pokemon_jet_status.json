@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-09T13:00:27.539Z",
-  "updatedAtJst": "2026/11/9 22:00:27",
+  "updatedAt": "2026-11-09T14:00:29.625Z",
+  "updatedAtJst": "2026/11/9 23:00:29",
   "totalJets": 5,
   "jets": [
     {
@@ -196,7 +196,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-09T13:00:25.620Z"
+      "updatedAt": "2026-11-09T14:00:27.620Z"
     },
     {
       "id": "pikachu-nh",
@@ -222,10 +222,10 @@
         "destination": "BKK",
         "destinationName": "バンコク (BKK)",
         "depTimeJst": "2026-11-09 19:30",
-        "arrTimeJst": "2026-11-10 01:47",
-        "timeRange": "19:30 - 01:47",
+        "arrTimeJst": "2026-11-10 01:48",
+        "timeRange": "19:30 - 01:48",
         "dateJst": "2026-11-09",
-        "status": "Estimated 23:47",
+        "status": "Estimated 23:48",
         "isLive": true,
         "isToday": true
       },
@@ -243,10 +243,10 @@
           "destination": "BKK",
           "destinationName": "バンコク (BKK)",
           "depTimeJst": "2026-11-09 19:30",
-          "arrTimeJst": "2026-11-10 01:47",
-          "timeRange": "19:30 - 01:47",
+          "arrTimeJst": "2026-11-10 01:48",
+          "timeRange": "19:30 - 01:48",
           "dateJst": "2026-11-09",
-          "status": "Estimated 23:47",
+          "status": "Estimated 23:48",
           "isLive": true,
           "isToday": true
         },
@@ -275,10 +275,10 @@
           "destination": "BKK",
           "destinationName": "バンコク (BKK)",
           "depTimeJst": "2026-11-09 19:30",
-          "arrTimeJst": "2026-11-10 01:47",
-          "timeRange": "19:30 - 01:47",
+          "arrTimeJst": "2026-11-10 01:48",
+          "timeRange": "19:30 - 01:48",
           "dateJst": "2026-11-09",
-          "status": "Estimated 23:47",
+          "status": "Estimated 23:48",
           "isLive": true,
           "isToday": true
         },
@@ -358,7 +358,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-09T13:00:26.134Z"
+      "updatedAt": "2026-11-09T14:00:28.129Z"
     },
     {
       "id": "eevee-nh",
@@ -520,7 +520,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-09T13:00:26.591Z"
+      "updatedAt": "2026-11-09T14:00:28.630Z"
     },
     {
       "id": "pokemon-green",
@@ -537,28 +537,43 @@
       "color": "#22c55e",
       "serviceStart": "2026-09-18",
       "flightState": "飛行中 🟢",
-      "currentLocation": "東京(成田) (NRT) ➔ BOM",
+      "currentLocation": "BOM ➔ 東京(成田) (NRT)",
       "currentFlight": {
-        "id": "427e63b9",
-        "flightNo": "NH829",
-        "origin": "NRT",
-        "originName": "東京(成田) (NRT)",
-        "destination": "BOM",
-        "destinationName": "BOM",
-        "depTimeJst": "2026-11-09 12:11",
-        "arrTimeJst": "2026-11-09 22:02",
-        "timeRange": "12:11 - 22:02",
+        "id": "JA923A-1794234600",
+        "flightNo": "NH830",
+        "origin": "BOM",
+        "originName": "BOM",
+        "destination": "NRT",
+        "destinationName": "東京(成田) (NRT)",
+        "depTimeJst": "2026-11-09 23:30",
+        "arrTimeJst": "2026-11-10 07:45",
+        "timeRange": "23:30 - 07:45",
         "dateJst": "2026-11-09",
-        "status": "Estimated 18:32",
-        "isLive": true,
+        "status": "Estimated dep 20:00",
+        "isLive": false,
         "isToday": true
       },
       "nextFlight": null,
       "lastLandedFlight": null,
-      "nightStay": "BOM",
+      "nightStay": "東京(成田) (NRT)",
       "domesticPrediction": null,
-      "todayFlightsCount": 2,
+      "todayFlightsCount": 3,
       "todayFlights": [
+        {
+          "id": "JA923A-1794234600",
+          "flightNo": "NH830",
+          "origin": "BOM",
+          "originName": "BOM",
+          "destination": "NRT",
+          "destinationName": "東京(成田) (NRT)",
+          "depTimeJst": "2026-11-09 23:30",
+          "arrTimeJst": "2026-11-10 07:45",
+          "timeRange": "23:30 - 07:45",
+          "dateJst": "2026-11-09",
+          "status": "Estimated dep 20:00",
+          "isLive": false,
+          "isToday": true
+        },
         {
           "id": "427e63b9",
           "flightNo": "NH829",
@@ -567,11 +582,11 @@
           "destination": "BOM",
           "destinationName": "BOM",
           "depTimeJst": "2026-11-09 12:11",
-          "arrTimeJst": "2026-11-09 22:02",
-          "timeRange": "12:11 - 22:02",
+          "arrTimeJst": "2026-11-09 22:01",
+          "timeRange": "12:11 - 22:01",
           "dateJst": "2026-11-09",
-          "status": "Estimated 18:32",
-          "isLive": true,
+          "status": "Landed 18:31",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -592,6 +607,21 @@
       ],
       "recentFlights": [
         {
+          "id": "JA923A-1794234600",
+          "flightNo": "NH830",
+          "origin": "BOM",
+          "originName": "BOM",
+          "destination": "NRT",
+          "destinationName": "東京(成田) (NRT)",
+          "depTimeJst": "2026-11-09 23:30",
+          "arrTimeJst": "2026-11-10 07:45",
+          "timeRange": "23:30 - 07:45",
+          "dateJst": "2026-11-09",
+          "status": "Estimated dep 20:00",
+          "isLive": false,
+          "isToday": true
+        },
+        {
           "id": "427e63b9",
           "flightNo": "NH829",
           "origin": "NRT",
@@ -599,11 +629,11 @@
           "destination": "BOM",
           "destinationName": "BOM",
           "depTimeJst": "2026-11-09 12:11",
-          "arrTimeJst": "2026-11-09 22:02",
-          "timeRange": "12:11 - 22:02",
+          "arrTimeJst": "2026-11-09 22:01",
+          "timeRange": "12:11 - 22:01",
           "dateJst": "2026-11-09",
-          "status": "Estimated 18:32",
-          "isLive": true,
+          "status": "Landed 18:31",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -665,24 +695,9 @@
           "status": "Landed 04:30",
           "isLive": false,
           "isToday": false
-        },
-        {
-          "id": "427589ab",
-          "flightNo": "NH856",
-          "origin": "CGK",
-          "originName": "CGK",
-          "destination": "HND",
-          "destinationName": "東京(羽田) (HND)",
-          "depTimeJst": "2026-11-07 00:00",
-          "arrTimeJst": "2026-11-07 06:33",
-          "timeRange": "00:00 - 06:33",
-          "dateJst": "2026-11-06",
-          "status": "Landed 06:33",
-          "isLive": false,
-          "isToday": false
         }
       ],
-      "updatedAt": "2026-11-09T13:00:27.110Z"
+      "updatedAt": "2026-11-09T14:00:29.185Z"
     },
     {
       "id": "pikachu-legacy",
@@ -829,7 +844,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-09T13:00:27.538Z"
+      "updatedAt": "2026-11-09T14:00:29.624Z"
     }
   ]
 }
