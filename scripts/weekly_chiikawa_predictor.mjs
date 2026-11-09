@@ -763,7 +763,12 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
 
     const depM = parseTimeToMinutes(df.actDepTime || df.depTime);
     const minTurn = startAirport === 'HND' ? 35 : 30;
-    return depM !== null && depM >= startActArrMin + minTurn;
+    const isPairOrReturn = (lastToday.origCode && df.dest === lastToday.origCode) || ((transitions[startFn]?.[df.flightNo] || 0) > 0);
+    const schedTurn = (parseTimeToMinutes(df.depTime) ?? 0) - startSchedArrMin;
+    if (depM !== null && depM >= startActArrMin + minTurn) return true;
+    // 💡 玉突き遅延候補: 前便が遅延しても、ピストン折返しや強い遷移実績がある便は出発を遅延させて同一機材で運航する
+    if (isPairOrReturn && schedTurn >= minTurn && schedTurn <= 120) return true;
+    return false;
   });
 
   // 深夜23:00以降着、または後続の767便がダイヤ上に1便も存在しないことを確認できた場合のみナイトステイ確定
@@ -878,7 +883,20 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
       // ターンアラウンド実現度（前便の遅延見込み時刻 curArrMin に対する余裕度）
       if (curAirport === 'HND') {
         const spotForEval = (depth === 0) ? currentSpot : null;
-        edgeWeight *= evaluateHndTurnaroundScore(curArrMin, df, dayFlights, spotForEval);
+        let turnScore = evaluateHndTurnaroundScore(curArrMin, df, dayFlights, spotForEval);
+        // 💡 玉突き遅延（Inbound Delay）の適正評価:
+        // 同一空港へのピストン折返し便や遷移実績がある便は、前便が遅延しても出発を遅らせて同一機材で運航する。
+        // 実着時刻ベースで35分未満でも、定刻ダイヤ上で正常（45〜85分）であれば定刻ベースのスコアを評価する！
+        const schedTurn = schedDepM - curSchedArrMin;
+        const isPairOrReturn = (lastToday && df.dest === lastToday.origCode) || (transCount > 0);
+        if (isPairOrReturn && schedTurn >= 45 && schedTurn <= 85 && turnScore < 1.0) {
+          const schedTurnScore = evaluateHndTurnaroundScore(curSchedArrMin, df, dayFlights, spotForEval);
+          turnScore = Math.max(turnScore, schedTurnScore * 0.9); // 玉突き遅延前提で高スコアを維持
+        }
+        if (isPairOrReturn && df.dest === lastToday?.origCode) {
+          turnScore *= 1.8; // 💡 ピストン折返し運用ボーナス（新千歳ピストン等）
+        }
+        edgeWeight *= turnScore;
       } else {
         const turn = actDepM - curArrMin;
         if (turn >= 30 && turn <= 85) edgeWeight *= 1.45;
