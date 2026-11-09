@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月9日 11:33",
-  "updatedAtIso": "2026-11-09T02:33:57.523Z",
+  "updatedAt": "2026年11月9日 12:00",
+  "updatedAtIso": "2026-11-09T03:00:19.374Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (東京(羽田) ➔ 札幌(新千歳))",
+    "currentLocation": "札幌(新千歳)",
     "currentLocationCode": "CTS",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "東京(羽田)(95%) / 名古屋(中部)(5%)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
@@ -1055,7 +1055,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "飛行中 (東京(羽田) ➔ 札幌(新千歳))",
+      "currentAirport": "札幌(新千歳)",
       "nightStay": "東京(羽田)(95%) / 名古屋(中部)(5%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH59 (東京(羽田) ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 95% / 名古屋(中部) 5% と推定されます。",
@@ -1097,7 +1097,7 @@
               "dest": "CTS",
               "route": "東京(羽田) ➔ 札幌(新千歳)",
               "time": "10:00発 - 11:35着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -1153,7 +1153,7 @@
               "dest": "CTS",
               "route": "東京(羽田) ➔ 札幌(新千歳)",
               "time": "10:00発 - 11:35着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -1209,7 +1209,7 @@
               "dest": "CTS",
               "route": "東京(羽田) ➔ 札幌(新千歳)",
               "time": "10:00発 - 11:35着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -1304,9 +1304,9 @@
             "flightNo": "NH59",
             "route": "東京(羽田) ➔ 札幌(新千歳)",
             "time": "10:00発 - 11:35着",
-            "status": "到着予定 (11:31)",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (11:29)",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -1413,9 +1413,9 @@
           "flightNo": "NH59",
           "route": "東京(羽田) ➔ 札幌(新千歳)",
           "time": "10:00発 - 11:35着",
-          "status": "到着予定 (11:31)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (11:29)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -3826,7 +3826,7 @@
       "code": "OKA",
       "name": "沖縄(那覇)",
       "note": "羽田・伊丹・中部から飛来する大型幹線。",
-      "prob": 33,
+      "prob": 34,
       "level": "C (注目)"
     },
     {
@@ -3840,7 +3840,7 @@
       "code": "MYJ",
       "name": "松山空港",
       "note": "午後便（NH593/NH596）や夕方便での投入実績多数。",
-      "prob": 26,
+      "prob": 25,
       "level": "C (注目)"
     },
     {
@@ -3922,7 +3922,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 556,
+    "totalFleetFlights": 559,
     "fleetCount": 11
   }
 }
