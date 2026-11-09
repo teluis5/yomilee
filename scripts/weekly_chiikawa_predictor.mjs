@@ -894,7 +894,7 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
           turnScore = Math.max(turnScore, schedTurnScore * 0.9); // 玉突き遅延前提で高スコアを維持
         }
         if (isPairOrReturn && df.dest === lastToday?.origCode) {
-          turnScore *= 1.8; // 💡 ピストン折返し運用ボーナス（新千歳ピストン等）
+          turnScore *= 1.1; // 💡 ピストン折返し運用ボーナス（過剰な偏りを防ぐため1.1倍に調整）
         }
         edgeWeight *= turnScore;
       } else {
