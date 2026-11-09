@@ -1,19 +1,23 @@
 ---
 // Google AdSense & 楽天・Amazon ハイブリッド広告表示コンポーネント (共通UIマスター)
 // 指定された位置（ホーム上部、記事内H2前、記事下、サイドバーなど）に、
-// AdSense・楽天アフィリエイト・Amazonアソシエイトを適切に混ぜて配信・収益化します。
+// AdSense・楽天モーションウィジェット・Amazonアソシエイトを適切に混ぜて配信・収益化します。
 interface Props {
   slot?: string;
   position?: 'home-top' | 'bottom' | 'sidebar' | 'blog-card' | 'custom';
   client?: string;
   type?: 'mixed' | 'adsense' | 'rakuten' | 'amazon';
+  eventText?: string;
+  eventUrl?: string;
 }
 
 const {
   slot,
   position = 'custom',
   client = 'ca-pub-8011635154814608',
-  type = 'mixed'
+  type = 'mixed',
+  eventText,
+  eventUrl,
 } = Astro.props;
 
 // ユーザー指定スロットIDマッピング
@@ -29,69 +33,98 @@ const targetSlot = slot || POSITION_SLOTS[position] || '4644769398';
 
 // アフィリエイトID
 const AMAZON_TAG = 'teluis-22';
-const RAKUTEN_ID = '52513ff1.59ebf487.52513ff2.71d0e9e4';
+const RAKUTEN_AFF_ID = '593aa0ae.e4c58ccb.593aa0af.89b253c2';
 
-// クリエイティブ定義
-const AFFILIATE_DATA = {
-  amazon: [
-    {
-      title: 'Amazon 毎日更新 タイムセール祭り',
-      desc: '人気ガジェット・家電・日用品が特別価格！数量限定セール開催中',
-      btnText: 'タイムセール会場を見る',
-      url: `https://www.amazon.co.jp/gp/goldbox?tag=${AMAZON_TAG}`,
-      badge: 'Amazon',
-      badgeColor: '#ff9900',
-      btnBg: '#f59e0b',
-    },
-    {
-      title: 'Amazon 総合売れ筋ランキング',
-      desc: 'リアルタイムで更新！いま最も売れている人気アイテムをチェック',
-      btnText: '売れ筋ランキングを見る',
-      url: `https://www.amazon.co.jp/ranking?tag=${AMAZON_TAG}`,
-      badge: 'Amazon',
-      badgeColor: '#ff9900',
-      btnBg: '#f59e0b',
-    },
-    {
-      title: 'Amazonプライム 30日間無料体験',
-      desc: '最短翌日配送・Prime Video見放題！まずは無料でお試し',
-      btnText: '30日間無料で体験する',
-      url: `https://www.amazon.co.jp/tryprimefree?tag=${AMAZON_TAG}`,
-      badge: 'Amazon',
-      badgeColor: '#ff9900',
-      btnBg: '#f59e0b',
-    },
-  ],
-  rakuten: [
-    {
-      title: '楽天市場 お買い物マラソン＆スーパーSALE',
-      desc: 'ポイント最大46倍！ショップ買いまわりでお得にポイント獲得',
-      btnText: 'ポイント還元セールを見る',
-      url: `https://hb.afl.rakuten.co.jp/hgc/${RAKUTEN_ID}/?pc=https%3A%2F%2Fevent.rakuten.co.jp%2Fcampaign%2Fpoint-up%2Fmarathon%2F&m=https%3A%2F%2Fevent.rakuten.co.jp%2Fcampaign%2Fpoint-up%2Fmarathon%2F`,
-      badge: '楽天市場',
-      badgeColor: '#bf0000',
-      btnBg: '#bf0000',
-    },
-    {
-      title: '楽天市場 リアルタイム総合ランキング',
-      desc: '家電・日用品・トレンド商品まで、今みんなが買っている注目商品',
-      btnText: '人気ランキングをチェック',
-      url: `https://hb.afl.rakuten.co.jp/hgc/${RAKUTEN_ID}/?pc=https%3A%2F%2Franking.rakuten.co.jp%2F&m=https%3A%2F%2Franking.rakuten.co.jp%2F`,
-      badge: '楽天市場',
-      badgeColor: '#bf0000',
-      btnBg: '#bf0000',
-    },
-    {
-      title: '楽天ふるさと納税 人気の返礼品特集',
-      desc: 'ポイント還元でお得に税金控除！グルメ・日用品・旅行クーポン多数',
-      btnText: 'ふるさと納税特集へ',
-      url: `https://hb.afl.rakuten.co.jp/hgc/${RAKUTEN_ID}/?pc=https%3A%2F%2Fevent.rakuten.co.jp%2Ffurusato%2F&m=https%3A%2F%2Fevent.rakuten.co.jp%2Ffurusato%2F`,
-      badge: '楽天市場',
-      badgeColor: '#bf0000',
-      btnBg: '#bf0000',
-    },
-  ],
-};
+// 楽天買いまわりイベント訴求の自動判定・生成
+function getRakutenCampaign(customText?: string, customLink?: string) {
+  if (customText) {
+    const rawUrl = customLink || 'https://event.rakuten.co.jp/campaign/point-up/marathon/';
+    const enc = encodeURIComponent(rawUrl);
+    return {
+      badge: '買いまわり',
+      text: customText,
+      url: `https://hb.afl.rakuten.co.jp/hgc/${RAKUTEN_AFF_ID}/?pc=${enc}&m=${enc}`,
+    };
+  }
+
+  const now = new Date();
+  const day = now.getDate(); // 1〜31
+
+  // 1. 5と0のつく日（5, 10, 15, 20, 25, 30日）
+  if (day === 5 || day === 10 || day === 15 || day === 20 || day === 25 || day === 30) {
+    const rawUrl = 'https://event.rakuten.co.jp/campaign/point-up/card/';
+    const enc = encodeURIComponent(rawUrl);
+    return {
+      badge: '本日限定',
+      text: '【5と0のつく日】エントリー＆楽天カード利用でポイント4倍！',
+      url: `https://hb.afl.rakuten.co.jp/hgc/${RAKUTEN_AFF_ID}/?pc=${enc}&m=${enc}`,
+    };
+  }
+
+  // 2. ワンダフルデー（毎月1日）
+  if (day === 1) {
+    const rawUrl = 'https://event.rakuten.co.jp/campaign/point-up/wonderfulday/';
+    const enc = encodeURIComponent(rawUrl);
+    return {
+      badge: '毎月1日',
+      text: '【ワンダフルデー】全ショップポイント3倍＆リピート購入2倍！',
+      url: `https://hb.afl.rakuten.co.jp/hgc/${RAKUTEN_AFF_ID}/?pc=${enc}&m=${enc}`,
+    };
+  }
+
+  // 3. ご愛顧感謝デー（毎月18日）
+  if (day === 18) {
+    const rawUrl = 'https://event.rakuten.co.jp/campaign/point-up/ichiba-day/';
+    const enc = encodeURIComponent(rawUrl);
+    return {
+      badge: '市場の日',
+      text: '【ご愛顧感謝デー】会員ランク別ポイント最大4倍！',
+      url: `https://hb.afl.rakuten.co.jp/hgc/${RAKUTEN_AFF_ID}/?pc=${enc}&m=${enc}`,
+    };
+  }
+
+  // 4. 通常時（お買い物マラソン・買いまわり訴求）
+  const rawUrl = 'https://event.rakuten.co.jp/campaign/point-up/marathon/';
+  const enc = encodeURIComponent(rawUrl);
+  return {
+    badge: '買いまわり',
+    text: '【楽天市場】お買い物マラソン・買いまわりでポイント最大10倍（最大46倍）！',
+    url: `https://hb.afl.rakuten.co.jp/hgc/${RAKUTEN_AFF_ID}/?pc=${enc}&m=${enc}`,
+  };
+}
+
+const rakutenCampaign = getRakutenCampaign(eventText, eventUrl);
+
+// Amazon クリエイティブ定義
+const AMAZON_DATA = [
+  {
+    title: 'Amazon 毎日更新 タイムセール祭り',
+    desc: '人気ガジェット・家電・日用品が特別価格！数量限定セール開催中',
+    btnText: 'タイムセール会場を見る',
+    url: `https://www.amazon.co.jp/gp/goldbox?tag=${AMAZON_TAG}`,
+    badge: 'Amazon',
+    badgeColor: '#ff9900',
+    btnBg: '#f59e0b',
+  },
+  {
+    title: 'Amazon 総合売れ筋ランキング',
+    desc: 'リアルタイムで更新！いま最も売れている人気アイテムをチェック',
+    btnText: '売れ筋ランキングを見る',
+    url: `https://www.amazon.co.jp/ranking?tag=${AMAZON_TAG}`,
+    badge: 'Amazon',
+    badgeColor: '#ff9900',
+    btnBg: '#f59e0b',
+  },
+  {
+    title: 'Amazonプライム 30日間無料体験',
+    desc: '最短翌日配送・Prime Video見放題！まずは無料でお試し',
+    btnText: '30日間無料で体験する',
+    url: `https://www.amazon.co.jp/tryprimefree?tag=${AMAZON_TAG}`,
+    badge: 'Amazon',
+    badgeColor: '#ff9900',
+    btnBg: '#f59e0b',
+  },
+];
 
 // AdSense 有効化判定
 const currentHost = (Astro.site?.hostname || '').toLowerCase();
@@ -109,7 +142,7 @@ if (type === 'rakuten') {
 } else {
   // mixed の場合: position やドメインに応じてバランスよく分配
   if (!isAdEnabled) {
-    // teluis等（AdSense未合格ドメイン）は楽天・Amazonを配置別に振り分け
+    // teluis等（AdSense未合格ドメイン）は楽天モーションウィジェットとAmazonを配置別に振り分け
     if (position === 'bottom') renderType = 'amazon';
     else if (position === 'sidebar') renderType = 'amazon';
     else renderType = 'rakuten';
@@ -120,10 +153,10 @@ if (type === 'rakuten') {
   }
 }
 
-// 選択されたアフィリエイトクリエイティブ
-const selectedAffiliate = renderType === 'amazon' 
-  ? AFFILIATE_DATA.amazon[0] 
-  : AFFILIATE_DATA.rakuten[0];
+const selectedAmazon = AMAZON_DATA[0];
+
+// 楽天モーションウィジェットのiframe URL
+const rakutenWidgetIframeUrl = `https://static.affiliate.rakuten.co.jp/widget/html/smartphone_pcview_468x160.html?rakuten_design=slide&rakuten_affiliateId=${RAKUTEN_AFF_ID}&rakuten_items=ctsmatch&rakuten_genreId=0&rakuten_size=468x160&rakuten_target=_blank&rakuten_theme=gray&rakuten_border=off&rakuten_auto_mode=on&rakuten_genre_title=off&rakuten_recommend=on&rakuten_ts=1794185538992`;
 ---
 
 <!-- 1. AdSense 表示 -->
@@ -144,23 +177,56 @@ const selectedAffiliate = renderType === 'amazon'
   </div>
 )}
 
-<!-- 2. 楽天またはAmazonアフィリエイト表示 -->
-{(renderType === 'rakuten' || renderType === 'amazon') && selectedAffiliate && (
+<!-- 2. 楽天モーションウィジェット ＋ 買いまわりイベント訴求帯 -->
+{renderType === 'rakuten' && (
+  <div class={`adsense-wrapper ad-pos-${position}`}>
+    <!-- 買いまわり系イベント訴求テキスト帯 -->
+    {rakutenCampaign && (
+      <div class="rakuten-event-banner">
+        <a href={rakutenCampaign.url} target="_blank" rel="sponsored noopener noreferrer" class="rakuten-event-link">
+          <span class="rakuten-event-badge">{rakutenCampaign.badge}</span>
+          <span class="rakuten-event-text">{rakutenCampaign.text}</span>
+          <span class="rakuten-event-cta">エントリー &raquo;</span>
+        </a>
+      </div>
+    )}
+
+    <!-- 楽天モーションウィジェット本体 -->
+    <div class="rakuten-motion-widget-wrapper">
+      <div class="rakuten-widget-container">
+        <iframe
+          src={rakutenWidgetIframeUrl}
+          width="468"
+          height="160"
+          frameborder="0"
+          scrolling="no"
+          loading="lazy"
+          title="楽天市場 おすすめ商品"
+          style="border:0; display:block; margin:0 auto;"
+        ></iframe>
+      </div>
+      <div class="adsense-label" style="margin-top:0.35rem; margin-bottom:0;">PR 楽天市場</div>
+    </div>
+  </div>
+)}
+
+<!-- 3. Amazonアソシエイト表示 -->
+{renderType === 'amazon' && selectedAmazon && (
   <div class={`adsense-wrapper ad-pos-${position}`}>
     <div class="affiliate-banner-card">
       <div class="aff-badge-wrap">
-        <span class="aff-badge" style={`background-color: ${selectedAffiliate.badgeColor};`}>
-          {selectedAffiliate.badge}
+        <span class="aff-badge" style={`background-color: ${selectedAmazon.badgeColor};`}>
+          {selectedAmazon.badge}
         </span>
         <span class="aff-pr-label">PR</span>
       </div>
       <div class="aff-content">
-        <div class="aff-title">{selectedAffiliate.title}</div>
-        <div class="aff-desc">{selectedAffiliate.desc}</div>
+        <div class="aff-title">{selectedAmazon.title}</div>
+        <div class="aff-desc">{selectedAmazon.desc}</div>
       </div>
       <div class="aff-action">
-        <a href={selectedAffiliate.url} target="_blank" rel="sponsored noopener noreferrer" class="aff-btn" style={`background-color: ${selectedAffiliate.btnBg};`}>
-          <span>{selectedAffiliate.btnText}</span>
+        <a href={selectedAmazon.url} target="_blank" rel="sponsored noopener noreferrer" class="aff-btn" style={`background-color: ${selectedAmazon.btnBg};`}>
+          <span>{selectedAmazon.btnText}</span>
           <svg class="aff-arrow" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
             <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
           </svg>
@@ -170,9 +236,9 @@ const selectedAffiliate = renderType === 'amazon'
   </div>
 )}
 
-<!-- 3. 記事内H2前 動的挿入スクリプト（AdSense + 楽天 + Amazonを交互・分散挿入） -->
+<!-- 4. 記事内H2前 動的挿入スクリプト（AdSense + 楽天モーションウィジェット + Amazonを分散挿入） -->
 {position === 'bottom' && (
-  <script is:inline define:vars={{ isAdEnabled, client, slotId: targetSlot }}>
+  <script is:inline define:vars={{ isAdEnabled, client, slotId: targetSlot, rakutenCampaign, rakutenWidgetIframeUrl }}>
     (() => {
       if (window.__adsense_h2_injected__) return;
       window.__adsense_h2_injected__ = true;
@@ -196,7 +262,7 @@ const selectedAffiliate = renderType === 'amazon'
         if (allH2.length >= 2) targetIndices.push(1);
         if (allH2.length >= 3) targetIndices.push(2);
 
-        // クリエイティブ一覧（クライアント動的用）
+        // クライアント側 Amazon クリエイティブ
         const amazonAds = [
           {
             title: 'Amazon 毎日更新 タイムセール祭り',
@@ -215,27 +281,6 @@ const selectedAffiliate = renderType === 'amazon'
             badge: 'Amazon',
             badgeColor: '#ff9900',
             btnBg: '#f59e0b',
-          }
-        ];
-
-        const rakutenAds = [
-          {
-            title: '楽天市場 お買い物マラソン＆スーパーSALE',
-            desc: 'ポイント最大46倍！ショップ買いまわりでお得にポイント獲得',
-            btnText: 'ポイント還元セールを見る',
-            url: 'https://hb.afl.rakuten.co.jp/hgc/52513ff1.59ebf487.52513ff2.71d0e9e4/?pc=https%3A%2F%2Fevent.rakuten.co.jp%2Fcampaign%2Fpoint-up%2Fmarathon%2F&m=https%3A%2F%2Fevent.rakuten.co.jp%2Fcampaign%2Fpoint-up%2Fmarathon%2F',
-            badge: '楽天市場',
-            badgeColor: '#bf0000',
-            btnBg: '#bf0000',
-          },
-          {
-            title: '楽天市場 リアルタイム総合ランキング',
-            desc: '家電・日用品・トレンド商品まで、今みんなが買っている注目商品',
-            btnText: '人気ランキングをチェック',
-            url: 'https://hb.afl.rakuten.co.jp/hgc/52513ff1.59ebf487.52513ff2.71d0e9e4/?pc=https%3A%2F%2Franking.rakuten.co.jp%2F&m=https%3A%2F%2Franking.rakuten.co.jp%2F',
-            badge: '楽天市場',
-            badgeColor: '#bf0000',
-            btnBg: '#bf0000',
           }
         ];
 
@@ -277,12 +322,36 @@ const selectedAffiliate = renderType === 'amazon'
             } catch (e) {
               console.debug('[AdSense] in-article push notice:', e);
             }
+          } else if (idx === 2 || (!isAdEnabled && isFirstH2Ad)) {
+            // 2つ目のH2前（またはAdSense未合格ドメインの1つ目）: 楽天モーションウィジェット ＋ 買いまわりイベント訴求帯
+            adWrapper.innerHTML = `
+              <div class="rakuten-event-banner">
+                <a href="${rakutenCampaign.url}" target="_blank" rel="sponsored noopener noreferrer" class="rakuten-event-link">
+                  <span class="rakuten-event-badge">${rakutenCampaign.badge}</span>
+                  <span class="rakuten-event-text">${rakutenCampaign.text}</span>
+                  <span class="rakuten-event-cta">エントリー &raquo;</span>
+                </a>
+              </div>
+              <div class="rakuten-motion-widget-wrapper">
+                <div class="rakuten-widget-container">
+                  <iframe
+                    src="${rakutenWidgetIframeUrl}"
+                    width="468"
+                    height="160"
+                    frameborder="0"
+                    scrolling="no"
+                    loading="lazy"
+                    title="楽天市場 おすすめ商品"
+                    style="border:0; display:block; margin:0 auto;"
+                  ></iframe>
+                </div>
+                <div class="adsense-label" style="margin-top:0.35rem; margin-bottom:0;">PR 楽天市場</div>
+              </div>
+            `;
+            targetH2.parentNode.insertBefore(adWrapper, targetH2);
           } else {
-            // 2つ目のH2前（またはAdSense未合格ドメインの1つ目）: 楽天またはAmazonアフィリエイト
-            const adData = (idx % 2 === 0) 
-              ? amazonAds[Math.floor(Math.random() * amazonAds.length)]
-              : rakutenAds[Math.floor(Math.random() * rakutenAds.length)];
-
+            // その他: Amazonアソシエイト
+            const adData = amazonAds[Math.floor(Math.random() * amazonAds.length)];
             adWrapper.innerHTML = `
               <div class="affiliate-banner-card">
                 <div class="aff-badge-wrap">
@@ -375,7 +444,99 @@ const selectedAffiliate = renderType === 'amazon'
     overflow: hidden;
   }
 
-  /* 楽天・Amazon アフィリエイトバナーカード */
+  /* 楽天イベント訴求テキスト帯 */
+  .rakuten-event-banner {
+    margin: 0 auto 0.65rem auto;
+    max-width: 468px;
+    background: #fff5f5;
+    border: 1px solid #fecdd3;
+    border-radius: 6px;
+    padding: 0.45rem 0.75rem;
+    box-sizing: border-box;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+  .rakuten-event-banner:hover {
+    background: #ffe4e6;
+    border-color: #fda4af;
+  }
+  .rakuten-event-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    text-decoration: none !important;
+    color: #1e293b !important;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+  .rakuten-event-badge {
+    background: #bf0000;
+    color: #ffffff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .rakuten-event-text {
+    flex: 1;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+  .rakuten-event-cta {
+    font-size: 0.72rem;
+    color: #bf0000;
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* 楽天モーションウィジェット */
+  .rakuten-motion-widget-wrapper {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    overflow: hidden;
+  }
+  .rakuten-widget-container {
+    width: 468px;
+    height: 160px;
+    margin: 0 auto;
+    transform-origin: top center;
+  }
+
+  /* モバイル・サイドバーでの縮小最適化 */
+  @media (max-width: 500px) {
+    .rakuten-event-banner {
+      max-width: 100%;
+      padding: 0.4rem 0.6rem;
+    }
+    .rakuten-event-text {
+      font-size: 0.74rem;
+    }
+    .rakuten-widget-container {
+      transform: scale(calc((100vw - 32px) / 468));
+      margin-bottom: calc(160px * (calc((100vw - 32px) / 468) - 1));
+    }
+  }
+
+  .ad-pos-sidebar .rakuten-event-banner {
+    max-width: 100%;
+    padding: 0.35rem 0.5rem;
+  }
+  .ad-pos-sidebar .rakuten-event-text {
+    font-size: 0.72rem;
+  }
+  .ad-pos-sidebar .rakuten-widget-container {
+    transform: scale(calc(290 / 468));
+    margin-bottom: calc(160px * (calc(290 / 468) - 1));
+  }
+
+  /* Amazon アフィリエイトバナーカード */
   .affiliate-banner-card {
     display: flex;
     align-items: center;
@@ -466,7 +627,6 @@ const selectedAffiliate = renderType === 'amazon'
     transform: translateX(2px);
   }
 
-  /* サイドバーまたはスマホでの縦並び最適化 */
   @media (max-width: 640px) {
     .affiliate-banner-card {
       flex-direction: column;
