@@ -368,8 +368,7 @@ function isDuplicateTopic(topic, blogDir) {
 // -------------------------------------------------------------
 async function generateSingleArticleWithGemini(topic, dateInfo, categories) {
   if (!GEMINI_API_KEY) {
-    console.log('⚠️ GEMINI_API_KEY が未設定のため、親しみやすいブロガー風フォールバック記事を生成します。');
-    return generateSingleFallbackArticle(topic, dateInfo, categories);
+    throw new Error('GEMINI_API_KEY が未設定です。.secrets/gemini-key.txt または環境変数を確認してください。低品質なフォールバック記事の生成は禁止されています。');
   }
 
   console.log(`🤖 Gemini で【1話題深掘り・yomilee等身大ブロガー風】記事を執筆中: "${topic.title.slice(0, 25)}..."`);
@@ -810,14 +809,18 @@ async function main() {
     // 記事本文の生成
     let articleMdx = '';
     if (isDryRun) {
-      console.log('🧪 --dry-run モード: yomilee風個別フォールバック記事を生成します。');
-      articleMdx = generateSingleFallbackArticle(topic, dateInfo, categories);
+      console.log('🧪 --dry-run モード: 記事生成をシミュレーションします（ファイル保存なし）。');
+      continue;
     } else {
       try {
         articleMdx = await generateSingleArticleWithGemini(topic, dateInfo, categories);
       } catch (err) {
-        console.warn(`⚠️ Gemini API生成失敗 (${err.message})。フォールバック記事で継続します。`);
-        articleMdx = generateSingleFallbackArticle(topic, dateInfo, categories);
+        console.error(`❌ Gemini API生成失敗 (${err.message})。低品質記事の生成を回避するためスキップします。`);
+        // 作成した空ディレクトリを削除
+        if (fs.existsSync(targetDir)) {
+          fs.rmSync(targetDir, { recursive: true, force: true });
+        }
+        continue;
       }
       // APIレート制限回避のための安全なインターバル（1.5秒）
       if (i < selectedTopics.length - 1) {
