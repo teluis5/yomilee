@@ -364,6 +364,53 @@ function isDuplicateTopic(topic, blogDir) {
 }
 
 // -------------------------------------------------------------
+// 一次情報フェッチャー & 品質バリデータ（低品質・AIポエム排除）
+// -------------------------------------------------------------
+async function fetchPageContent(url) {
+  if (!url || !url.startsWith('http')) return '';
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 6000);
+    const res = await fetch(url, { headers: FETCH_HEADERS, signal: controller.signal });
+    clearTimeout(timeout);
+    if (!res.ok) return '';
+    const html = await res.text();
+    const cleanText = html
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+      .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return cleanText.slice(0, 3000);
+  } catch {
+    return '';
+  }
+}
+
+function validateArticleQuality(content) {
+  const bannedPhrases = [
+    '日常の作業効率化、暮らしの快適さ向上',
+    '日々の生活の中にあるちょっとした不便や疑問',
+    'これ、生活がちょっと便利になりそう！',
+    'いかがでしたでしょうか',
+    'と言えるでしょう',
+    'してみてはいかがでしょうか'
+  ];
+
+  for (const phrase of bannedPhrases) {
+    if (content.includes(phrase)) {
+      throw new Error(`低品質・AI定型句を検知しました: "${phrase}"`);
+    }
+  }
+
+  if (!content.includes('|')) {
+    throw new Error('必須要件である「Markdownテーブル（比較表）」が含まれていません。');
+  }
+
+  return true;
+}
+
+// -------------------------------------------------------------
 // 1話題に特化した Gemini API 記事執筆（AI・ニュース・新商品対応）
 // -------------------------------------------------------------
 async function generateSingleArticleWithGemini(topic, dateInfo, categories) {
@@ -373,10 +420,20 @@ async function generateSingleArticleWithGemini(topic, dateInfo, categories) {
 
   console.log(`🤖 Gemini で【1話題深掘り・yomilee等身大ブロガー風】記事を執筆中: "${topic.title.slice(0, 25)}..."`);
 
+  // 一次情報Webページの本文を取得
+  const targetUrl = topic.link || topic.news?.[0]?.url || '';
+  let webContent = '';
+  if (targetUrl) {
+    console.log(`🌐 一次情報Webページから本文を取得中: ${targetUrl}`);
+    webContent = await fetchPageContent(targetUrl);
+  }
+
   const topicData = `タイトル: ${topic.title}
 情報源: ${topic.sourceName || '話題のトピック'}
-URL: ${topic.link || topic.news?.[0]?.url || ''}
-概要・抜粋: ${topic.description || topic.news?.map(n => n.title).join(' / ') || ''}`;
+URL: ${targetUrl}
+一次情報本文抜粋（事実・数字・スペック）:
+${webContent ? webContent.slice(0, 2000) : (topic.description || topic.news?.map(n => n.title).join(' / ') || '一次情報なし')}
+概要・抜粋: ${topic.description || ''}`;
 
   const systemInstruction = `あなたはスポーツ・注目の新商品・ガジェット・暮らしの話題を発信する人気情報メディア「ヨミトク（YomiToku）」の専任エディター「yomilee」です。
 読者に寄り添う親しみやすく等身大の語り口で、提示された【1つの話題（スポーツ、最新AI・テクノロジー、注目の新商品、暮らしのトレンド、時事など）】を深く・わかりやすく・読者目線で掘り下げた単独ブログ記事（1話題1記事）を執筆してください。
@@ -463,121 +520,11 @@ ${topicData}
   }
 
   generatedText = generatedText.replace(/^```(?:mdx|markdown)?\s*\n/, '').replace(/\n```\s*$/, '').trim();
+
+  // 品質バリデーション検査（低品質・AIポエム・表欠落の検知）
+  validateArticleQuality(generatedText);
+
   return generatedText;
-}
-
-// 1話題に特化したフォールバック記事生成（APIキー未設定時でも高品質）
-function generateSingleFallbackArticle(topic, dateInfo, categories) {
-  let mainCleanTitle = topic.title.replace(/[-|].*$/, '').trim();
-  mainCleanTitle = mainCleanTitle.replace(/^[「『"']/, '').replace(/[」』"']$/, '').trim();
-  const displayTitle = mainCleanTitle.length > 26 ? mainCleanTitle.slice(0, 25) + '…' : mainCleanTitle;
-
-  const isSports = categories.includes('スポーツ');
-  const isProduct = categories.includes('新商品・トレンド');
-  const isTech = categories.includes('IT・ガジェット');
-  const isTravel = categories.includes('旅行・おでかけ');
-
-  let title = `【速報・本音レビュー】${displayTitle}は買い？注目の理由と知っておくべき真実`;
-  if (isSports) {
-    title = `【勝敗・採点分析】${displayTitle}！勝敗を分けた真因とファンの本音評価`;
-  } else if (isProduct) {
-    title = `【本音レビュー】${displayTitle}は買いか見送りか？進化した点・欠点まとめ`;
-  } else if (isTech) {
-    title = `【徹底検証】${displayTitle}は何が凄い？従来との違いと今すぐ使える活用術`;
-  } else if (isTravel) {
-    title = `【2026最新ガイド】${displayTitle}の混雑・日程・見どころ攻略まとめ`;
-  }
-
-  const description = `いまネットや検索で大注目の「${displayTitle}」について、等身大エディター目線で徹底分析！スペックや一次情報の丸写しではなく、メリット・デメリット・ファンの本音を分かりやすく総括します。`;
-
-  const safeTitle = title.replace(/"/g, '「');
-  const safeDescription = description.replace(/"/g, '「');
-
-  let mdx = `---
-title: ${JSON.stringify(safeTitle)}
-description: ${JSON.stringify(safeDescription)}
-pubDate: "${dateInfo.dateStr}"
-categories: ${JSON.stringify(categories)}
-heroImage: "./hero.jpg"
----
-import ProblemBox from '../../../components/ProblemBox.astro';
-import ConclusionBox from '../../../components/ConclusionBox.astro';
-
-こんにちは、ヨミトク（yomilee）です！
-
-日々の生活やネットを見ていると、<b>「これ、生活がちょっと便利になりそう！」「知っておくと役立つ！」</b>と思える面白い新製品やテクノロジー、話題がたくさんありますよね。
-
-今回は、いまネットやメディアで大きな注目を集めている<b>「${mainCleanTitle}」</b>について、等身大ブロガーの目線で詳しく深掘りしてみたいと思います。
-
-<ProblemBox>
-- 「${displayTitle}」が話題になっているけれど、具体的に何が凄いの？
-- 自分の普段の生活や仕事、家計にどう役立つのか知りたい
-- 取り入れる際の注意点や失敗しないコツを事前にチェックしておきたい
-</ProblemBox>
-
-それでは、気になる詳細をさっそくチェックしていきましょう！
-
----
-
-## 📊 【一目でわかる】注目のポイントと概要まとめ
-
-まずは今回取り上げる話題の全体像を、わかりやすい一覧表で整理しました！
-
-| 項目 | ポイント・概要 |
-| :--- | :--- |
-| **トピック名** | ${mainCleanTitle} |
-| **注目の理由** | ネットやSNSで大きな反響を集めている最新トレンド |
-| **期待できる効果** | 日常の作業効率化、暮らしの快適さ向上、新しい体験 |
-| **おすすめな人** | 最新トレンドをいち早く暮らしや仕事に取り入れたい方 |
-
----
-
-## 🌟 何が話題になっている？注目の背景と概要
-
-本日、ネットやメディアで特に多くの反響を集めているのがこちらの話題です。
-
-${topic.description ? `> ${topic.description}\n\n` : ''}
-
-この話題が注目されている背景には、**「日々の生活の中にあるちょっとした不便や疑問に対して、新しい価値や実践的な解決策が提示されている」**という点があります。
-
-- **身近な課題へのアプローチ**: 「それ、気になっていた！」と感じる身近なテーマ
-- **すぐに役立つ実用性**: 高度すぎる話ではなく、日々の暮らしや買い物に直結する内容
-- **今後の動向にも期待**: 今後の普及やアップデートでさらに生活が便利になる可能性
-
----
-
-## 💡 日々の暮らしや日常はどう変わる？取り入れるメリット
-
-実際にこの話題や製品、サービスを生活に取り入れてみると、日々のちょっとしたストレスや作業の無駄を減らす大きなきっかけになりそうです。
-
-### 1. 作業や生活の効率化
-これまで時間がかかっていた作業や選び方に明確な基準ができるため、日々の生活をよりスマートに整えることができます。
-
-### 2. 暮らしの快適さ・満足度アップ
-無理のない範囲で新しい知恵や便利アイテムを取り入れることで、毎日の生活が一段と心地よく、前向きな気持ちになれますね。
-
----
-
-## ⚠️ 知っておきたい注意点やおすすめな人
-
-とても魅力的な話題ですが、取り入れる際にはいくつか気をつけたいポイントもあります。
-
-- **自分のライフスタイルに合わせて選ぶ**: 話題になっているからといって無理に全部を取り入れるのではなく、自分に合った部分を見極めるのが大切です。
-- **今後の口コミや情報もチェック**: 発売直後や新発表の場合は、実際のユーザーの声や続報もあわせて追っていくのが賢い付き合い方です。
-
-👉 **元記事・公式情報で詳細をチェック**:  
-<a href="${topic.link || topic.news?.[0]?.url || '#'}" target="_blank" rel="noopener noreferrer">${topic.title}</a>
-
----
-
-<ConclusionBox>
-- 本日は注目の「${displayTitle}」について、暮らしへの役立て方や知っておきたいポイントをご紹介しました。
-- 気になった方は、ぜひ無理のない範囲で日常の中に取り入れてみてくださいね。
-- 次回も暮らしやデジタル生活を豊かにする身近な気づきをお届けします！
-</ConclusionBox>
-`;
-
-  return mdx;
 }
 
 // サムネイル画像（hero.jpg）の取得・保存
