@@ -1519,89 +1519,36 @@ function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, 
   const perfect100Plans = candidateCompletePlans.filter(p => p.fleetConsistency?.is100Percent);
   const eligiblePlans = perfect100Plans.length > 0 ? perfect100Plans : candidateCompletePlans;
 
-  // 多様性を確保しながら上位3プラン（プランA / B / C）を選出：
-  // 優先順位①: priorStays に含まれる各出発空港（上位3空港まで）の最高スコアプランを1つずつ選出
-  // 優先順位②: まだ選ばれていない「異なる初便（firstFn）」を持つ最高スコアプランを選出（羽田泊のNH661/NH619/NH245や中部泊のNH703/NH86を確実に網羅）
-  // 優先順位③: 初便が1種類のみの場合は、中盤の経由空港（midAirport）が異なるプランを選出
+  // 💡 ユーザー指示: 「プランA・B・Cは異なる初便を選ぶは不要、確率に合わせて設定されれば良い」
+  // 恣意的な初便縛り（異なる初便の強制）や宿泊空港代表枠を全廃。
+  // ビームサーチとフリート整合性で計算された確率（weight）の降順に、素直に上位プランを選出する。
   eligiblePlans.sort((a, b) => b.weight - a.weight);
 
   const selectedRaw = [];
   const usedSignatures = new Set();
+  const usedMidAndEnd = new Set();
 
-  // ① 各宿泊空港ごとの代表プランを確保
-  for (const stay of validPriors.slice(0, 3)) {
-    const match = eligiblePlans.find(p => p.startAirport === stay.code);
-    if (match) {
-      const sig = match.rawFlights.map(f => f.flightNo).join('>');
-      if (!usedSignatures.has(sig)) {
-        selectedRaw.push(match);
-        usedSignatures.add(sig);
-      }
+  // ① 確率（weight）が高い順に、経由地や宿泊先の異なる上位シナリオを優先選出
+  for (const cand of eligiblePlans) {
+    if (selectedRaw.length >= 3) break;
+    const sig = cand.rawFlights.map(f => f.flightNo).join('>');
+    if (usedSignatures.has(sig)) continue;
+
+    const midEndKey = `${cand.midAirport}_${cand.endAirport}`;
+    if (!usedMidAndEnd.has(midEndKey)) {
+      selectedRaw.push(cand);
+      usedSignatures.add(sig);
+      usedMidAndEnd.add(midEndKey);
     }
   }
 
-  // 💡 プラン選出の多様性最適化:
-  // 最有力ステイ先（validPriors[0]）の確率が高い場合（70%以上）、または地方泊で朝一便が羽田帰還に1本化されている場合、
-  // ファン・読者が知りたいのは「羽田到着後の分岐シナリオ（新千歳行きか、福岡行きか、他路線か）」である。
-  // そのため、2便目（羽田出発便）または中盤の目的地が異なるプランを優先選出する！
-  const topPrior = validPriors[0];
-  const isHighDominantStay = (topPrior && topPrior.probability >= 70);
-
-  if (isHighDominantStay) {
-    // 高確度ステイ先からの分岐シナリオを優先補充（2便目または主要経由地が異なるスジ）
-    for (const cand of eligiblePlans) {
-      if (selectedRaw.length >= 3) break;
-      const sig = cand.rawFlights.map(f => f.flightNo).join('>');
-      if (usedSignatures.has(sig)) continue;
-      
-      const secondFn = cand.rawFlights[1]?.flightNo;
-      const secondDest = cand.rawFlights[1]?.dest;
-      const mid = cand.midAirport;
-
-      // 既存プランと2便目、または中盤目的地が異なるものを採用
-      const isDistinctBranch = !selectedRaw.some(s => {
-        const sSecondFn = s.rawFlights[1]?.flightNo;
-        const sSecondDest = s.rawFlights[1]?.dest;
-        const sMid = s.midAirport;
-        return (secondFn && sSecondFn === secondFn) || (secondDest && sSecondDest === secondDest && sMid === mid);
-      });
-
-      if (isDistinctBranch) {
-        selectedRaw.push(cand);
-        usedSignatures.add(sig);
-      }
-    }
-  } else {
-    // 異なる初便（firstFn）を持つプランを優先補充
-    for (const cand of eligiblePlans) {
-      if (selectedRaw.length >= 3) break;
-      const sig = cand.rawFlights.map(f => f.flightNo).join('>');
-      if (usedSignatures.has(sig)) continue;
-      const firstFn = cand.rawFlights[0]?.flightNo;
-      if (!selectedRaw.some(s => s.rawFlights[0]?.flightNo === firstFn)) {
-        selectedRaw.push(cand);
-        usedSignatures.add(sig);
-      }
-    }
-  }
-
-  // ③ まだ枠が余っている場合は、中盤の経由空港（midAirport）やシグネチャが異なるプランを補充
+  // ② まだ3プランに満たない場合は、純粋に確率（weight）順に未選出スジを補充
   for (const cand of eligiblePlans) {
     if (selectedRaw.length >= 3) break;
     const sig = cand.rawFlights.map(f => f.flightNo).join('>');
     if (usedSignatures.has(sig)) continue;
     selectedRaw.push(cand);
     usedSignatures.add(sig);
-  }
-
-  // ④ それでも3プラン未満の場合は残りの候補から補充
-  for (const cand of eligiblePlans) {
-    if (selectedRaw.length >= 3) break;
-    const sig = cand.rawFlights.map(f => f.flightNo).join('>');
-    if (!usedSignatures.has(sig)) {
-      selectedRaw.push(cand);
-      usedSignatures.add(sig);
-    }
   }
 
   // スコア順にソートしてHamilton法で合計100%に正規化
