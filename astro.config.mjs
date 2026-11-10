@@ -12,7 +12,20 @@ export default defineConfig({
 	build: {
 		inlineStylesheets: 'always',
 	},
-	integrations: [mdx(), sitemap(), icon()],
+	integrations: [
+		mdx(),
+		sitemap({
+			filter: (page) => {
+				const url = new URL(page);
+				// 数字のみのページネーション一覧URL（例: /2/, /68/ など）をサイトマップから除外
+				if (/^\/\d+\/?$/.test(url.pathname)) return false;
+				// 404ページを除外
+				if (url.pathname.includes('/404')) return false;
+				return true;
+			},
+		}),
+		icon(),
+	],
 	fonts: [
 		{
 			provider: fontProviders.local(),

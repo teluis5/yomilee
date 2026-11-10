@@ -20,7 +20,11 @@ const { page } = Astro.props;
 <!doctype html>
 <html lang="ja">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead
+			title={page.currentPage === 1 ? SITE_TITLE : `${SITE_TITLE} (${page.currentPage}ページ目)`}
+			description={SITE_DESCRIPTION}
+		/>
+		{page.currentPage > 1 && <meta name="robots" content="noindex, follow" />}
 		{page.currentPage === 1 && (
 			<link
 				rel="preload"
