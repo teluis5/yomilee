@@ -19,6 +19,16 @@ const normalizedPath = Astro.url.pathname.endsWith('/') || /\.[a-z0-9]+$/i.test(
 const canonicalURL = new URL(normalizedPath, Astro.site);
 
 const { title, description, image = FallbackImage } = Astro.props;
+
+// Google 検索結果にブランド名（サイト名）を表示させるための WebSite 構造化データ
+const siteUrl = Astro.site ? Astro.site.toString() : Astro.url.origin;
+const websiteSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'WebSite',
+	'name': 'ヨミトク',
+	'alternateName': ["yomilee","ヨミトク（yomilee）","YomiToku"],
+	'url': siteUrl,
+};
 ---
 
 <!-- Global Metadata -->
@@ -85,6 +95,9 @@ const { title, description, image = FallbackImage } = Astro.props;
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
+
+<!-- Google サイト名表示用 構造化データ (WebSite JSON-LD) -->
+<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
