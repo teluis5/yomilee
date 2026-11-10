@@ -1,32 +1,27 @@
 {
-  "updatedAt": "2026年11月10日 12:00",
-  "updatedAtIso": "2026-11-10T03:00:17.887Z",
+  "updatedAt": "2026年11月10日 13:00",
+  "updatedAtIso": "2026-11-10T04:00:15.781Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "東京(羽田)",
-    "currentLocationCode": "HND",
-    "currentSpot": null,
-    "spotConfidenceNote": null,
-    "isAirborne": false,
-    "nightStay": "広島(90%) / 東京(羽田)(5%)",
+    "currentLocation": "飛行中 (東京(羽田) ➔ 宮古)",
+    "currentLocationCode": "MMY",
+    "currentSpot": "53",
+    "spotConfidenceNote": "羽田空港 53番スポット連動判定適用中",
+    "isAirborne": true,
+    "nightStay": "広島(95%) / 東京(羽田)(5%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
     "nightStayProbabilities": [
       {
         "airport": "広島",
         "code": "HIJ",
-        "probability": 90
+        "probability": 95
       },
       {
         "airport": "東京(羽田)",
         "code": "HND",
-        "probability": 5
-      },
-      {
-        "airport": "名古屋(中部)",
-        "code": "NGO",
         "probability": 5
       }
     ]
@@ -1116,25 +1111,20 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "東京(羽田)",
-      "nightStay": "広島(90%) / 東京(羽田)(5%)",
+      "currentAirport": "飛行中 (東京(羽田) ➔ 宮古)",
+      "nightStay": "広島(95%) / 東京(羽田)(5%)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH584 (松山 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 90% / 東京(羽田) 5% / 名古屋(中部) 5% と推定されます。",
-      "todayOutlook": "現在 NH584 (松山 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 90% / 東京(羽田) 5% / 名古屋(中部) 5% と推定されます。",
+      "pendingNightStayNote": "現在 NH87 (東京(羽田) ➔ 宮古) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
+      "todayOutlook": "現在 NH87 (東京(羽田) ➔ 宮古) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
       "nightStayProbabilities": [
         {
           "airport": "広島",
           "code": "HIJ",
-          "probability": 90
+          "probability": 95
         },
         {
           "airport": "東京(羽田)",
           "code": "HND",
-          "probability": 5
-        },
-        {
-          "airport": "名古屋(中部)",
-          "code": "NGO",
           "probability": 5
         }
       ],
@@ -1144,7 +1134,7 @@
           "planName": "プランA (広島泊)",
           "stayCode": "HIJ",
           "rank": "本命 ◎",
-          "probability": 84,
+          "probability": 90,
           "title": "【今夜広島泊シナリオ】羽田 ➔ 松山 ➔ 羽田 ➔ 宮古 ➔ 羽田 ➔ 広島(泊)",
           "routeSummary": "羽田 ➔ 松山 ➔ 羽田 ➔ 宮古 ➔ 羽田 ➔ 広島(泊)",
           "flights": [
@@ -1172,7 +1162,7 @@
               "dest": "MMY",
               "route": "東京(羽田) ➔ 宮古",
               "time": "12:00発 - 15:15着",
-              "tag": "予想接続(76P)",
+              "tag": "飛行中",
               "step": "③ 第3便"
             },
             {
@@ -1228,7 +1218,7 @@
               "dest": "MMY",
               "route": "東京(羽田) ➔ 宮古",
               "time": "12:00発 - 15:15着",
-              "tag": "予想接続(76P)",
+              "tag": "飛行中",
               "step": "③ 第3便"
             },
             {
@@ -1239,62 +1229,6 @@
               "time": "16:15発 - 18:45着",
               "tag": "🌙羽田泊候補",
               "step": "④ 第4便"
-            }
-          ]
-        },
-        {
-          "planId": "today-plan-c",
-          "planName": "プランC (中部泊)",
-          "stayCode": "NGO",
-          "rank": "対抗 ▲",
-          "probability": 10,
-          "title": "【今夜中部泊シナリオ】羽田 ➔ 松山 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
-          "routeSummary": "羽田 ➔ 松山 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
-          "flights": [
-            {
-              "flightNo": "NH583",
-              "orig": "HND",
-              "dest": "MYJ",
-              "route": "東京(羽田) ➔ 松山",
-              "time": "07:15発 - 08:50着",
-              "tag": "運航完了",
-              "step": "① 第1便"
-            },
-            {
-              "flightNo": "NH584",
-              "orig": "MYJ",
-              "dest": "HND",
-              "route": "松山 ➔ 東京(羽田)",
-              "time": "09:40発 - 11:05着",
-              "tag": "運航完了",
-              "step": "② 第2便"
-            },
-            {
-              "flightNo": "NH27",
-              "orig": "HND",
-              "dest": "ITM",
-              "route": "東京(羽田) ➔ 大阪(伊丹)",
-              "time": "14:00発 - 15:10着",
-              "tag": "予想接続(76P)",
-              "step": "③ 第3便"
-            },
-            {
-              "flightNo": "NH777",
-              "orig": "ITM",
-              "dest": "CTS",
-              "route": "大阪(伊丹) ➔ 札幌(新千歳)",
-              "time": "16:00発 - 17:50着",
-              "tag": "予想接続(76P)",
-              "step": "④ 第4便"
-            },
-            {
-              "flightNo": "NH712",
-              "orig": "CTS",
-              "dest": "NGO",
-              "route": "札幌(新千歳) ➔ 名古屋(中部)",
-              "time": "18:35発 - 20:25着",
-              "tag": "🌙中部泊候補",
-              "step": "⑤ 第5便"
             }
           ]
         }
@@ -1384,12 +1318,12 @@
             "time": "15:45発 - 17:45着"
           },
           "actual": {
-            "flightNo": "NH87 (予想)",
+            "flightNo": "NH87",
             "route": "東京(羽田) ➔ 宮古",
             "time": "12:00発 - 15:15着",
-            "status": "折返し確定予想 (76P枠)",
+            "status": "到着予定 (15:17)",
             "isLanded": false,
-            "isLive": false
+            "isLive": true
           }
         },
         {
@@ -1435,7 +1369,7 @@
             "flightNo": "NH685 (予想)",
             "route": "東京(羽田) ➔ 広島",
             "time": "19:40発 - 21:10着",
-            "status": "本命予想 (90%・広島ステイ候補)",
+            "status": "本命予想 (95%・広島ステイ候補)",
             "isLanded": false,
             "isLive": false
           }
@@ -1462,16 +1396,12 @@
         },
         {
           "flightNo": "NH87",
-          "origCode": "HND",
-          "destCode": "MMY",
           "route": "東京(羽田) ➔ 宮古",
-          "depTime": "12:00",
-          "arrTime": "15:15",
-          "time": "12:00発 - 15:15着 (予想)",
-          "status": "折返し確定予想 (76P枠)",
+          "time": "12:00発 - 15:15着",
+          "status": "到着予定 (15:17)",
           "isLanded": false,
-          "isLive": false,
-          "isPredicted": true
+          "isLive": true,
+          "isPredicted": false
         },
         {
           "flightNo": "NH88",
@@ -1494,7 +1424,7 @@
           "depTime": "19:40",
           "arrTime": "21:10",
           "time": "19:40発 - 21:10着 (予想)",
-          "status": "本命予想 (90%・広島ステイ候補)",
+          "status": "本命予想 (95%・広島ステイ候補)",
           "isLanded": false,
           "isLive": false,
           "isPredicted": true
@@ -1511,7 +1441,7 @@
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
       "expectedStart": "広島発 (NH672)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH584 (松山 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 90% / 東京(羽田) 5% / 名古屋(中部) 5% と推定されます。",
+      "pendingNightStayNote": "現在 NH87 (東京(羽田) ➔ 宮古) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
@@ -3883,7 +3813,7 @@
       "code": "ITM",
       "name": "大阪(伊丹)",
       "note": "羽田シャトル便（NH18/NH21/NH23/NH39等）と新千歳直行便が乗り入れ。",
-      "prob": 59,
+      "prob": 58,
       "level": "A (高確率)"
     },
     {
@@ -3904,7 +3834,7 @@
       "code": "OKA",
       "name": "沖縄(那覇)",
       "note": "羽田・伊丹・中部から飛来する大型幹線。",
-      "prob": 33,
+      "prob": 34,
       "level": "C (注目)"
     },
     {
@@ -3918,7 +3848,7 @@
       "code": "MYJ",
       "name": "松山空港",
       "note": "午後便（NH593/NH596）や夕方便での投入実績多数。",
-      "prob": 26,
+      "prob": 25,
       "level": "C (注目)"
     },
     {
@@ -4000,7 +3930,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 584,
+    "totalFleetFlights": 587,
     "fleetCount": 11
   }
 }
