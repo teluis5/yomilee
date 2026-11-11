@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-11T09:01:23.899Z",
-  "updatedAtJst": "2026/11/11 18:01:23",
+  "updatedAt": "2026-11-11T11:00:36.043Z",
+  "updatedAtJst": "2026/11/11 20:00:36",
   "totalJets": 5,
   "jets": [
     {
@@ -18,52 +18,46 @@
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
       "flightState": "飛行中 🟢",
-      "currentLocation": "東京(羽田) (HND) ➔ 長崎 (NGS)",
+      "currentLocation": "長崎 (NGS) ➔ 東京(羽田) (HND)",
       "currentFlight": {
-        "id": "42866ccc",
-        "flightNo": "NH667",
-        "origin": "HND",
-        "originName": "東京(羽田) (HND)",
-        "destination": "NGS",
-        "destinationName": "長崎 (NGS)",
-        "depTimeJst": "2026-11-11 16:59",
-        "arrTimeJst": "2026-11-11 18:31",
-        "timeRange": "16:59 - 18:31",
-        "dateJst": "2026-11-11",
-        "status": "Estimated 18:31",
-        "isLive": true,
-        "isToday": true
-      },
-      "nextFlight": {
+        "id": "4286c400",
         "flightNo": "NH670",
         "origin": "NGS",
         "originName": "長崎 (NGS)",
-        "destination": "東京(羽田) (HND)",
+        "destination": "HND",
         "destinationName": "東京(羽田) (HND)",
-        "depTimeJst": "19:25",
-        "arrTimeJst": "21:00",
-        "timeRange": "19:25 - 21:00",
-        "status": "予測枠 (★★★★★ (最有力・55分ターン))",
-        "isPredicted": true
+        "depTimeJst": "2026-11-11 19:35",
+        "arrTimeJst": "2026-11-11 20:59",
+        "timeRange": "19:35 - 20:59",
+        "dateJst": "2026-11-11",
+        "status": "Estimated 20:59",
+        "isLive": true,
+        "isToday": true
       },
+      "nextFlight": null,
       "lastLandedFlight": null,
-      "nightStay": "長崎 (NGS)",
+      "nightStay": "東京(羽田) (HND)",
       "domesticPrediction": {
-        "nextCandidates": [
-          {
-            "flightNo": "NH670",
-            "route": "長崎 (NGS) ➔ 東京(羽田) (HND)",
-            "depTime": "19:25",
-            "arrTime": "21:00",
-            "model": "78P",
-            "turnAroundMin": 54,
-            "probability": "★★★★★ (最有力・55分ターン)"
-          }
-        ],
+        "nextCandidates": [],
         "predictedNightStay": "東京(羽田) (HND)"
       },
-      "todayFlightsCount": 4,
+      "todayFlightsCount": 5,
       "todayFlights": [
+        {
+          "id": "4286c400",
+          "flightNo": "NH670",
+          "origin": "NGS",
+          "originName": "長崎 (NGS)",
+          "destination": "HND",
+          "destinationName": "東京(羽田) (HND)",
+          "depTimeJst": "2026-11-11 19:35",
+          "arrTimeJst": "2026-11-11 20:59",
+          "timeRange": "19:35 - 20:59",
+          "dateJst": "2026-11-11",
+          "status": "Estimated 20:59",
+          "isLive": true,
+          "isToday": true
+        },
         {
           "id": "42866ccc",
           "flightNo": "NH667",
@@ -75,8 +69,8 @@
           "arrTimeJst": "2026-11-11 18:31",
           "timeRange": "16:59 - 18:31",
           "dateJst": "2026-11-11",
-          "status": "Estimated 18:31",
-          "isLive": true,
+          "status": "Landed 18:31",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -127,6 +121,21 @@
       ],
       "recentFlights": [
         {
+          "id": "4286c400",
+          "flightNo": "NH670",
+          "origin": "NGS",
+          "originName": "長崎 (NGS)",
+          "destination": "HND",
+          "destinationName": "東京(羽田) (HND)",
+          "depTimeJst": "2026-11-11 19:35",
+          "arrTimeJst": "2026-11-11 20:59",
+          "timeRange": "19:35 - 20:59",
+          "dateJst": "2026-11-11",
+          "status": "Estimated 20:59",
+          "isLive": true,
+          "isToday": true
+        },
+        {
           "id": "42866ccc",
           "flightNo": "NH667",
           "origin": "HND",
@@ -137,8 +146,8 @@
           "arrTimeJst": "2026-11-11 18:31",
           "timeRange": "16:59 - 18:31",
           "dateJst": "2026-11-11",
-          "status": "Estimated 18:31",
-          "isLive": true,
+          "status": "Landed 18:31",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -200,24 +209,9 @@
           "status": "Landed 19:48",
           "isLive": false,
           "isToday": false
-        },
-        {
-          "id": "42825fc7",
-          "flightNo": "NH983",
-          "origin": "ITM",
-          "originName": "大阪(伊丹) (ITM)",
-          "destination": "CTS",
-          "destinationName": "札幌(新千歳) (CTS)",
-          "depTimeJst": "2026-11-10 14:30",
-          "arrTimeJst": "2026-11-10 15:53",
-          "timeRange": "14:30 - 15:53",
-          "dateJst": "2026-11-10",
-          "status": "Landed 15:53",
-          "isLive": false,
-          "isToday": false
         }
       ],
-      "updatedAt": "2026-11-11T09:01:21.917Z"
+      "updatedAt": "2026-11-11T11:00:34.284Z"
     },
     {
       "id": "pikachu-nh",
@@ -364,7 +358,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-11T09:01:22.495Z"
+      "updatedAt": "2026-11-11T11:00:34.731Z"
     },
     {
       "id": "eevee-nh",
@@ -511,7 +505,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-11T09:01:22.981Z"
+      "updatedAt": "2026-11-11T11:00:35.187Z"
     },
     {
       "id": "pokemon-green",
@@ -658,7 +652,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-11T09:01:23.445Z"
+      "updatedAt": "2026-11-11T11:00:35.623Z"
     },
     {
       "id": "pikachu-legacy",
@@ -705,10 +699,10 @@
           "destination": "FRA",
           "destinationName": "フランクフルト (FRA)",
           "depTimeJst": "2026-11-11 11:11",
-          "arrTimeJst": "2026-11-12 00:35",
-          "timeRange": "11:11 - 00:35",
+          "arrTimeJst": "2026-11-12 00:36",
+          "timeRange": "11:11 - 00:36",
           "dateJst": "2026-11-11",
-          "status": "Estimated 16:35",
+          "status": "Estimated 16:36",
           "isLive": true,
           "isToday": true
         }
@@ -737,10 +731,10 @@
           "destination": "FRA",
           "destinationName": "フランクフルト (FRA)",
           "depTimeJst": "2026-11-11 11:11",
-          "arrTimeJst": "2026-11-12 00:35",
-          "timeRange": "11:11 - 00:35",
+          "arrTimeJst": "2026-11-12 00:36",
+          "timeRange": "11:11 - 00:36",
           "dateJst": "2026-11-11",
-          "status": "Estimated 16:35",
+          "status": "Estimated 16:36",
           "isLive": true,
           "isToday": true
         },
@@ -805,7 +799,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-11T09:01:23.898Z"
+      "updatedAt": "2026-11-11T11:00:36.042Z"
     }
   ]
 }
