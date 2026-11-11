@@ -620,7 +620,7 @@ async function main() {
   console.log('========================================================');
   console.log(`🐹 === teluis 【ちいかわ最新情報】自動更新システム ===`);
   console.log(`📅 対象日付: ${dateInfo.dateStr} (${dateInfo.formattedJa})`);
-  console.log(`🔑 Gemini APIキー状態: ${GEMINI_API_KEY ? '設定済み (Gemini 2.5 Flash)' : '未設定（フォールバックモード）'}`);
+  console.log(`🔑 Gemini APIキー状態: ${GEMINI_API_KEY ? '設定済み (Gemini 3.8 Flash)' : '未設定（フォールバックモード）'}`);
   console.log(`🎯 生成上限: ${targetLimit} 記事`);
   console.log('========================================================\n');
 
