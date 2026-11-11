@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月11日 16:00",
-  "updatedAtIso": "2026-11-11T07:00:32.207Z",
+  "updatedAt": "2026年11月11日 17:00",
+  "updatedAtIso": "2026-11-11T08:00:21.308Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (東京(羽田) ➔ 札幌(新千歳))",
+    "currentLocation": "札幌(新千歳)",
     "currentLocationCode": "CTS",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "東京(羽田) (100%)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
@@ -1162,7 +1162,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "飛行中 (東京(羽田) ➔ 札幌(新千歳))",
+      "currentAirport": "札幌(新千歳)",
       "nightStay": "東京(羽田) (100%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH69 (東京(羽田) ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
@@ -1217,7 +1217,7 @@
               "dest": "CTS",
               "route": "東京(羽田) ➔ 札幌(新千歳)",
               "time": "15:00発 - 16:35着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "④ 第4便"
             },
             {
@@ -1342,9 +1342,9 @@
             "flightNo": "NH69",
             "route": "東京(羽田) ➔ 札幌(新千歳)",
             "time": "15:00発 - 16:35着",
-            "status": "到着予定 (16:50)",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (16:52)",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -1402,9 +1402,9 @@
           "flightNo": "NH69",
           "route": "東京(羽田) ➔ 札幌(新千歳)",
           "time": "15:00発 - 16:35着",
-          "status": "到着予定 (16:50)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (16:52)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -3819,21 +3819,21 @@
       "code": "ITM",
       "name": "大阪(伊丹)",
       "note": "羽田シャトル便（NH18/NH21/NH23/NH39等）と新千歳直行便が乗り入れ。",
-      "prob": 56,
+      "prob": 57,
       "level": "A (高確率)"
     },
     {
       "code": "NGS",
       "name": "長崎空港",
       "note": "朝一便（NH661/NH664）および夜間ステイ便（NH669/NH662）で高頻度投入。",
-      "prob": 42,
+      "prob": 41,
       "level": "B (中確率)"
     },
     {
       "code": "HIJ",
       "name": "広島空港",
       "note": "昼往復便（NH679/NH680）および夜間ステイ便（NH685/NH672）の主要拠点。",
-      "prob": 38,
+      "prob": 37,
       "level": "B (中確率)"
     },
     {
@@ -3936,7 +3936,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 620,
+    "totalFleetFlights": 622,
     "fleetCount": 11
   }
 }
