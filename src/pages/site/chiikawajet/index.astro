@@ -4,8 +4,8 @@ import Ad from '../../../components/Ad.astro';
 import predictionData from '../../../data/chiikawa_weekly_prediction.json';
 import heroImage from '../../../assets/images/chiikawajet_ogp.png';
 
-const title = "ANAちいかわジェット 本日の運行状況＆週間フライト予想【JA609A】";
-const description = "ANA特別塗装機「ちいかわジェット（JA609A）」の本日のリアルタイム運行状況、明日の便予想、向こう1週間の就航確率を毎日更新。";
+const title = "【今日の運行状況】ANAちいかわジェット（ちいかわじぇっと）本日のフライト予定＆週間予想【JA609A】";
+const description = "【毎日自動更新】ANA特別塗装機「ちいかわジェット（ちいかわじぇっと・JA609A）」の今日・本日のリアルタイム運航状況、明日の便予想、羽田・新千歳・福岡などの就航確率を公開！現在いまどこを飛んでいるか、何時の便か1秒で特定できます。";
 
 const currentData = predictionData;
 const aircraft = currentData.aircraft;
@@ -24,7 +24,28 @@ const pageSchema = {
 	name: title,
 	description: description,
 	url: 'https://yomileeblog.com/site/chiikawajet/',
-	dateModified: currentData.updatedAtIso
+	dateModified: currentData.updatedAtIso,
+	mainEntity: {
+		'@type': 'FAQPage',
+		mainEntity: [
+			{
+				'@type': 'Question',
+				name: 'ちいかわジェット（ちいかわじぇっと）は今日どこを飛んでいますか？',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: '本日のリアルタイム運航状況およびフライト番号は当ダッシュボード上部にて毎日自動更新されています。機体記号JA609Aの現在のフライト情報をご確認ください。'
+				}
+			},
+			{
+				'@type': 'Question',
+				name: 'ちいかわジェットの今日のスケジュールはいつ確定しますか？',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'ANAの特別塗装機「ちいかわジェット」に固定ダイヤはなく、前日夕方〜当日早朝の機材繰りによって決定されます。当サイトでは毎晩翌朝の就航便をAI連鎖予測し、当日朝・昼・夕方に確定便へ自動補正しています。'
+				}
+			}
+		]
+	}
 };
 ---
 
@@ -342,6 +363,39 @@ const pageSchema = {
 			</div>
 		</section>
 
+		<!-- ❓ ちいかわジェット（ちいかわじぇっと）今日の運航・よくある質問（FAQ） -->
+		<section class="section-card faq-section">
+			<div class="sc-head">
+				<h2 class="sc-title">❓ よくある質問：ちいかわジェット（ちいかわじぇっと）今日の運航・ダイヤ</h2>
+			</div>
+			<div class="faq-list">
+				<div class="faq-item">
+					<h3 class="faq-q">Q1. ちいかわじぇっと（ちいかわジェット）は今日どこを飛んでいる？</h3>
+					<p class="faq-a">
+						ちいかわジェット（機体番号：<strong>JA609A</strong> / ボーイング767-300ER）は毎日異なる国内線路線を運航しています。本ページ上部の「本日のフライト」ステータスで、現在いまどこを飛んでいるか、何便として運航中かをリアルタイムに確認できます。
+					</p>
+				</div>
+				<div class="faq-item">
+					<h3 class="faq-q">Q2. 今日の運行スケジュールはどうやって調べる？</h3>
+					<p class="faq-a">
+						ANA公式からは事前の固定時刻表が発表されないため、航空機追跡サービス「Flightradar24」で機体番号<strong>JA609A</strong>を検索するか、当ページの自動更新ダッシュボードをブックマークしてチェックするのが最も確実です。
+					</p>
+				</div>
+				<div class="faq-item">
+					<h3 class="faq-q">Q3. 明日のちいかわ便を予約して乗ることはできる？</h3>
+					<p class="faq-a">
+						前日夕方〜夜にかけて翌日の最初の就航便（初便）がナイトステイ先から絞り込まれます。当サイトの「明日の予定（週間連鎖タイムテーブル予想）」を活用することで、就航確率の高い便を狙い撃ちすることが可能です。
+					</p>
+				</div>
+				<div class="faq-item">
+					<h3 class="faq-q">Q4. ちいかわジェットの詳しい乗り方やグッズ・機内仕様は？</h3>
+					<p class="faq-a">
+						機内の専用ヘッドレストカバーや紙コップ、限定グッズ、就航路線（羽田・新千歳・福岡・伊丹・那覇等）の詳細は、解説記事『<a href="/blog/ana-chiikawa-jet-schedule-guide/" style="color: #0284c7; font-weight: 700; text-decoration: underline;">ちいかわジェット運行予定の調べ方＆完全ガイド</a>』をご覧ください。
+					</p>
+				</div>
+			</div>
+		</section>
+
 		<!-- 下部相互リンク（ポケモンジェット） -->
 		<div class="bottom-nav">
 			<a href="/site/pokemonjet/" class="bottom-nav-card pokemon-card">
@@ -392,6 +446,34 @@ const pageSchema = {
 		padding: 2px 6px;
 		border-radius: 8px;
 		font-weight: 800;
+	}
+
+	/* FAQ セクション */
+	.faq-section {
+		margin-top: 1.5rem;
+	}
+	.faq-list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.85rem;
+	}
+	.faq-item {
+		background: #f8fafc;
+		border: 1px solid #e2e8f0;
+		border-radius: 8px;
+		padding: 1rem 1.1rem;
+	}
+	.faq-q {
+		font-size: 0.95rem;
+		font-weight: 700;
+		color: #0f172a;
+		margin-bottom: 0.4rem;
+	}
+	.faq-a {
+		font-size: 0.85rem;
+		color: #475569;
+		line-height: 1.6;
+		margin: 0;
 	}
 
 	/* 下部相互リンク */
