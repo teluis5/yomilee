@@ -491,7 +491,7 @@ ${topicData}
 
 上記の話題を「ヨミトクの黄金法則」に従って徹底的に料理し、読者が「読んで得した！」「このブログの意見が一番腑に落ちた！」と唸るハイクオリティなヨミトク記事を1本執筆してください！`;
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${GEMINI_API_KEY}`;
 
   const response = await fetch(url, {
     method: 'POST',
