@@ -4,8 +4,8 @@ import Ad from '../../../components/Ad.astro';
 import predictionData from '../../../data/pokemon_weekly_prediction.json';
 import heroImage from '../../../assets/images/chiikawajet_ogp.png';
 
-const title = "ANA ポケモンジェット全機 リアルタイム運航状況＆フライト予想【ピカチュウ・イーブイ・赤・緑】";
-const description = "ANA特別塗装機「ポケモンジェット全5機（国内線ポケモン赤・ピカチュウジェットNH・イーブイジェットNH・緑・初代）」のリアルタイム現在地、本日の運航便、明日のフライト予想を毎日自動更新。";
+const title = "【今日の運航状況】ANAポケモンジェット全機・ピカチュウジェット本日のフライト予定＆運航スケジュール【JA784A他】";
+const description = "【毎日自動更新】ANA特別塗装機「ポケモンジェット全5機（ピカチュウジェットNH・イーブイジェットNH・国内線ポケモン赤）」の今日・本日のリアルタイム運航スケジュール、現在地（いまどこ）、羽田・新千歳・那覇等の就航便予想を公開中！";
 
 const currentData = predictionData;
 const updatedAt = currentData.updatedAt || "更新中";
@@ -24,7 +24,28 @@ const pageSchema = {
 	name: title,
 	description: description,
 	url: 'https://yomileeblog.com/site/pokemonjet/',
-	dateModified: currentData.updatedAtIso
+	dateModified: currentData.updatedAtIso,
+	mainEntity: {
+		'@type': 'FAQPage',
+		mainEntity: [
+			{
+				'@type': 'Question',
+				name: 'ANAポケモンジェット（ピカチュウジェット・イーブイジェット）は今日どこを飛んでいますか？',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: '国内線用「ポケモン赤（JA784A）」および国際線用「ピカチュウジェットNH（JA894A）」「イーブイジェットNH（JA898A）」のリアルタイム現在地および本日のフライト情報は、本ページ上部にて毎日自動更新されています。'
+				}
+			},
+			{
+				'@type': 'Question',
+				name: 'ポケモンジェットの今日の運航スケジュールはどうやって調べる？',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: '特別塗装機は固定ダイヤを持たないため、Flightradar24で各機体の機体番号（レジ番）を追跡するか、当サイトのリアルタイム運航ダッシュボードをご確認いただくことで、本日飛ぶ便・路線を確実に特定できます。'
+				}
+			}
+		]
+	}
 };
 ---
 
@@ -269,6 +290,33 @@ const pageSchema = {
 				</div>
 			</div>
 		</div>
+
+		<!-- ❓ ポケモンジェット全機（ピカチュウ・イーブイ・赤）今日の運航・よくある質問（FAQ） -->
+		<section class="section-card faq-section">
+			<div class="sc-head">
+				<h2 class="sc-title">❓ よくある質問：ANAポケモンジェット全機・ピカチュウジェット今日の運航ダイヤ</h2>
+			</div>
+			<div class="faq-list">
+				<div class="faq-item">
+					<h3 class="faq-q">Q1. ポケモンジェット（ピカチュウジェット・イーブイジェット）は今日どこを飛んでいる？</h3>
+					<p class="faq-a">
+						ANAのポケモンジェットは機体ごとに国内線・国際線で運航エリアが分かれています。国内線のボーイング787（<strong>JA784A</strong>）は羽田〜新千歳・福岡・那覇などを巡回し、国際線のボーイング787-9（<strong>JA894A / JA898A</strong>）はアジア・北米・欧州路線を中心に飛行しています。本ページ上部のリアルタイムステータスで現在の運航状況を確認できます。
+					</p>
+				</div>
+				<div class="faq-item">
+					<h3 class="faq-q">Q2. 今日の運行スケジュールはどうやって特定できる？</h3>
+					<p class="faq-a">
+						事前の固定タイムテーブルは発表されませんが、航空機追跡サービス「Flightradar24」で機体番号（<strong>JA784A、JA894A、JA898A</strong>）を検索することで、本日何便としてどこへ飛ぶかをリアルタイム追跡可能です。当ダッシュボードでは毎日自動更新で最新状況を反映しています。
+					</p>
+				</div>
+				<div class="faq-item">
+					<h3 class="faq-q">Q3. 明日のポケモン便を予約して乗ることはできる？</h3>
+					<p class="faq-a">
+						前日夕方〜夜にかけてナイトステイ先から翌朝の初便が絞り込まれます。当サイトの「明日以降のフライト予想（就航確率）」をご参照いただくことで、乗れる確率の高い便を狙い撃ちすることができます。
+					</p>
+				</div>
+			</div>
+		</section>
 
 		<!-- 下部相互リンク -->
 		<div class="bottom-nav">
@@ -761,6 +809,34 @@ const pageSchema = {
 	}
 
 	/* 下部相互リンク */
+		/* FAQ セクション */
+	.faq-section {
+		margin-top: 24px;
+	}
+	.faq-list {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+	}
+	.faq-item {
+		background: #f8fafc;
+		border: 1px solid #e2e8f0;
+		border-radius: 10px;
+		padding: 14px 18px;
+	}
+	.faq-q {
+		font-size: 0.95rem;
+		font-weight: 700;
+		color: #0f172a;
+		margin: 0 0 6px 0;
+	}
+	.faq-a {
+		font-size: 0.85rem;
+		color: #475569;
+		line-height: 1.6;
+		margin: 0;
+	}
+
 	.bottom-nav {
 		margin-top: 20px;
 	}
