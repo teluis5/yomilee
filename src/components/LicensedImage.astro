@@ -1,0 +1,183 @@
+---
+import { Image } from 'astro:assets';
+
+interface MetaData {
+  schemaVersion?: string;
+  assetId?: string;
+  provider?: {
+    nameJa?: string;
+    nameEn?: string;
+    sourceUrl?: string;
+    libraryName?: string;
+  };
+  subject?: {
+    titleJa?: string;
+    titleEn?: string;
+    city?: string;
+    cityEn?: string;
+  };
+  i18n?: {
+    ja?: { alt?: string; caption?: string; credit?: string };
+    en?: { alt?: string; caption?: string; credit?: string };
+  };
+  credit?: string;
+  sourceUrl?: string;
+  title?: string;
+}
+
+interface Props {
+  src: any;
+  meta?: MetaData;
+  lang?: 'ja' | 'en';
+  alt?: string;
+  caption?: string;
+  credit?: string;
+  sourceUrl?: string;
+  author?: string;
+  license?: string;
+}
+
+const {
+  src,
+  meta,
+  lang = 'ja',
+  alt: propAlt,
+  caption: propCaption,
+  credit: propCredit,
+  sourceUrl: propSourceUrl,
+  author,
+  license
+} = Astro.props;
+
+// 言語別メタ情報の取得 (デフォルトは指定言語、フォールバックはja)
+const i18n = meta?.i18n?.[lang] || meta?.i18n?.ja;
+
+// 1. alt（代替テキスト）の優先解決
+const finalAlt = propAlt || i18n?.alt || (lang === 'en' ? meta?.subject?.titleEn : meta?.subject?.titleJa) || meta?.title || '観光写真';
+
+// 2. キャプションの優先解決 (明示的に空文字渡しの場合は非表示)
+let finalCaption = propCaption;
+if (finalCaption === undefined) {
+  finalCaption = i18n?.caption || (lang === 'en' ? meta?.subject?.titleEn : meta?.subject?.titleJa) || meta?.title || '';
+}
+
+// 3. クレジット表記の優先解決
+let finalCredit = propCredit || i18n?.credit || meta?.credit;
+if (!finalCredit) {
+  if (meta?.provider) {
+    const provName = lang === 'en' ? (meta.provider.nameEn || meta.provider.nameJa) : meta.provider.nameJa;
+    finalCredit = lang === 'en' ? `Photo courtesy of ${provName}` : `写真提供：${provName}`;
+  } else if (author) {
+    finalCredit = lang === 'en' ? `Photo by ${author}` : `写真提供：${author}`;
+  }
+}
+
+// 4. 出典元URLの優先解決
+const finalSourceUrl = propSourceUrl || meta?.provider?.sourceUrl || meta?.sourceUrl;
+---
+
+<figure class="licensed-image-figure">
+  <div class="image-wrapper">
+    {typeof src === 'string' ? (
+      <img src={src} alt={finalAlt} loading="lazy" decoding="async" />
+    ) : (
+      <Image src={src} alt={finalAlt} />
+    )}
+  </div>
+
+  {(finalCaption || finalCredit) && (
+    <figcaption class="image-caption-container">
+      {finalCaption && <span class="caption-main">{finalCaption}</span>}
+      {finalCredit && (
+        <span class="caption-credit">
+          {finalSourceUrl ? (
+            <a 
+              href={finalSourceUrl} 
+              target="_blank" 
+              rel="noopener noreferrer nofollow" 
+              class="credit-link"
+              title={`${finalCredit}（元ページを開く）`}
+            >
+              {finalCredit}
+            </a>
+          ) : (
+            finalCredit
+          )}
+        </span>
+      )}
+    </figcaption>
+  )}
+</figure>
+
+<style>
+  .licensed-image-figure {
+    margin: 2.25rem 0;
+    text-align: center;
+    width: 100%;
+  }
+
+  .image-wrapper {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+    background-color: #f8fafc;
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .image-wrapper :global(img) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+    margin: 0 auto;
+    transition: transform 0.3s ease;
+  }
+
+  .image-caption-container {
+    margin-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0 1rem;
+  }
+
+  .caption-main {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #334155;
+    line-height: 1.4;
+  }
+
+  .caption-credit {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    line-height: 1.3;
+  }
+
+  .credit-link {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.15s ease, opacity 0.15s ease;
+  }
+
+  .credit-link:hover {
+    color: #0284c7;
+    opacity: 0.85;
+  }
+
+  @media (max-width: 640px) {
+    .licensed-image-figure {
+      margin: 1.75rem 0;
+    }
+    .caption-main {
+      font-size: 0.8125rem;
+    }
+    .caption-credit {
+      font-size: 0.7rem;
+    }
+  }
+</style>
