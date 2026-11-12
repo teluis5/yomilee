@@ -707,18 +707,32 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
   const transitions = learnedModel.transitions || {};
   const routeFreq = learnedModel.routeFreq || {};
 
+  const jstNow = getJSTNow();
+  const nowMin = (todayStr === formatDate(jstNow)) ? (jstNow.getHours() * 60 + jstNow.getMinutes()) : null;
+
   const alreadyFlownSet = new Set(todayFlights.map(f => normalizeFlightNo(f.flightNo)));
   const lastToday = todayFlights.length > 0 ? todayFlights[todayFlights.length - 1] : null;
 
   if (!lastToday) {
+    // 当日1便も飛んでいない場合でも、20:30(1230分)以降で羽田発の残り767便が完全に0本なら整備・予備機ステイ確定と判定
+    const remHnd767 = (nowMin !== null && nowMin >= 1230) ? Object.values(dayFlights).filter(df => {
+      if (df.origin !== 'HND' || df.isCancelled) return false;
+      if (assignedOtherMap.has(df.flightNo)) return false;
+      if (/^(Departed|InAir|Arrived|Landed|TakeOff)$/i.test(String(df.status || '').trim())) return false;
+      const is76 = Boolean(df.is767 || df.is76P || String(df.model || '').includes('76'));
+      if (!is76) return false;
+      const dm = parseTimeToMinutes(df.actDepTime || df.depTime);
+      return dm !== null && dm + 40 >= nowMin;
+    }) : [1];
+    const confirmedIdle = (nowMin !== null && nowMin >= 1230 && remHnd767.length === 0);
     return {
-      isNightStayConfirmed: false,
+      isNightStayConfirmed: confirmedIdle,
       nightStayCode: 'HND',
-      nightStayName: '東京(羽田) (予定)',
+      nightStayName: confirmedIdle ? '東京(羽田) (確定)' : '東京(羽田) (予定)',
       nightStayProbabilities: [{ airport: '東京(羽田)', code: 'HND', probability: 100 }],
       predictedRemainingToday: [],
       todayPlans: [],
-      pendingNightStayNote: '本日の初便運航データ取得待ちです。',
+      pendingNightStayNote: confirmedIdle ? '本日の運航はなく羽田駐機でナイトステイ確定と判定されました。' : '本日の初便運航データ取得待ちです。',
       currentSpot: null,
       spotConfidenceNote: null
     };
@@ -756,7 +770,19 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
     });
   }
 
-  // 当該空港から物理的に出発可能な後続767便（未割当）を厳密に検索
+  // すでに他機材で出発済み・飛行中・到着済み、または出発時刻から十分経過して未搭乗確定の便を判定
+  const isFlightAlreadyGone = (df, isPairOrReturn = false) => {
+    const statusStr = String(df.status || '').trim();
+    if (/^(Departed|InAir|Arrived|Landed|TakeOff)$/i.test(statusStr)) return true;
+    const effectiveDepM = parseTimeToMinutes(df.actDepTime || df.depTime);
+    if (nowMin !== null && effectiveDepM !== null) {
+      const graceMin = (isPairOrReturn || /Delayed/i.test(statusStr)) ? 75 : 35;
+      if (nowMin > effectiveDepM + graceMin) return true;
+    }
+    return false;
+  };
+
+  // 当該空港から物理的に出発可能な後続767便（未割当・未出発）を厳密に検索
   // ※安易に時刻だけでナイトステイと決めつけず、本当に後続・折り返し767便がないことを確認する
   const immediateNext767 = Object.values(dayFlights).filter(df => {
     if (df.origin !== startAirport || df.isCancelled) return false;
@@ -770,6 +796,8 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
     const depM = parseTimeToMinutes(df.actDepTime || df.depTime);
     const minTurn = startAirport === 'HND' ? 35 : 30;
     const isPairOrReturn = (lastToday.origCode && df.dest === lastToday.origCode) || ((transitions[startFn]?.[df.flightNo] || 0) > 0);
+    if (isFlightAlreadyGone(df, isPairOrReturn)) return false;
+
     const schedTurn = (parseTimeToMinutes(df.depTime) ?? 0) - startSchedArrMin;
     if (depM !== null && depM >= startActArrMin + minTurn) return true;
     // 💡 玉突き遅延候補: 前便が遅延しても、ピストン折返しや強い遷移実績がある便は出発を遅延させて同一機材で運航する
@@ -777,8 +805,9 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
     return false;
   });
 
-  // 深夜23:00以降着、または後続の767便がダイヤ上に1便も存在しないことを確認できた場合のみナイトステイ確定
-  if (startActArrMin >= 1380 || (startActArrMin >= 1050 && immediateNext767.length === 0)) {
+  // 深夜23:00以降着、または17:30以降着/現在18:00以降で後続の未出発767便が1便も存在しない場合ナイトステイ確定
+  const isEveningOrLater = startActArrMin >= 1050 || (nowMin !== null && nowMin >= 1080);
+  if (startActArrMin >= 1380 || (isEveningOrLater && immediateNext767.length === 0)) {
     const stayName = AIRPORT_NAMES[startAirport] || startAirport;
     return {
       isNightStayConfirmed: true,
@@ -836,6 +865,9 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
       // ⚠️ 重大修正: 当日公式ダイヤで別機種確定（78P, 772, 738, 321等）の便は即座に完全除外！
       const is76 = Boolean(df.is767 || df.is76P || String(df.model || '').includes('76'));
       if (!is76) return false;
+
+      const isPairOrReturn = (transitions[curFn]?.[df.flightNo] || 0) > 0;
+      if (isFlightAlreadyGone(df, isPairOrReturn)) return false;
 
       const schedDepM = parseTimeToMinutes(df.depTime);
       const actDepM = parseTimeToMinutes(df.actDepTime || df.depTime);
