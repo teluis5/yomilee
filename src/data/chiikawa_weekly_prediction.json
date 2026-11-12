@@ -1,28 +1,28 @@
 {
-  "updatedAt": "2026年11月12日 18:00",
-  "updatedAtIso": "2026-11-12T09:00:19.708Z",
+  "updatedAt": "2026年11月12日 19:00",
+  "updatedAtIso": "2026-11-12T10:00:18.052Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (宮古 ➔ 東京(羽田))",
+    "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": true,
-    "nightStay": "広島(95%) / 東京(羽田)(5%)",
+    "isAirborne": false,
+    "nightStay": "広島(94%) / 東京(羽田)(6%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
     "nightStayProbabilities": [
       {
         "airport": "広島",
         "code": "HIJ",
-        "probability": 95
+        "probability": 94
       },
       {
         "airport": "東京(羽田)",
         "code": "HND",
-        "probability": 5
+        "probability": 6
       }
     ]
   },
@@ -1223,21 +1223,21 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "飛行中 (宮古 ➔ 東京(羽田))",
-      "nightStay": "広島(95%) / 東京(羽田)(5%)",
+      "currentAirport": "東京(羽田)",
+      "nightStay": "広島(94%) / 東京(羽田)(6%)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH88 (宮古 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
-      "todayOutlook": "現在 NH88 (宮古 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
+      "pendingNightStayNote": "現在 NH88 (宮古 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 94% / 東京(羽田) 6% と推定されます。",
+      "todayOutlook": "現在 NH88 (宮古 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 94% / 東京(羽田) 6% と推定されます。",
       "nightStayProbabilities": [
         {
           "airport": "広島",
           "code": "HIJ",
-          "probability": 95
+          "probability": 94
         },
         {
           "airport": "東京(羽田)",
           "code": "HND",
-          "probability": 5
+          "probability": 6
         }
       ],
       "plans": [
@@ -1283,7 +1283,7 @@
               "dest": "HND",
               "route": "宮古 ➔ 東京(羽田)",
               "time": "16:15発 - 18:45着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "④ 第4便"
             },
             {
@@ -1339,7 +1339,7 @@
               "dest": "HND",
               "route": "宮古 ➔ 東京(羽田)",
               "time": "16:15発 - 18:45着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "④ 第4便"
             }
           ]
@@ -1459,9 +1459,9 @@
             "flightNo": "NH88",
             "route": "宮古 ➔ 東京(羽田)",
             "time": "16:15発 - 18:45着",
-            "status": "到着予定 (18:54)",
-            "isLanded": false,
-            "isLive": true
+            "status": "着陸済 (18:56)",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -1481,7 +1481,7 @@
             "flightNo": "NH685 (予想)",
             "route": "東京(羽田) ➔ 広島",
             "time": "19:40発 - 21:10着",
-            "status": "本命予想 (95%・広島ステイ候補)",
+            "status": "本命予想 (94%・広島ステイ候補)",
             "isLanded": false,
             "isLive": false
           }
@@ -1530,9 +1530,9 @@
           "flightNo": "NH88",
           "route": "宮古 ➔ 東京(羽田)",
           "time": "16:15発 - 18:45着",
-          "status": "到着予定 (18:54)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (18:56)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -1543,7 +1543,7 @@
           "depTime": "19:40",
           "arrTime": "21:10",
           "time": "19:40発 - 21:10着 (予想)",
-          "status": "本命予想 (95%・広島ステイ候補)",
+          "status": "本命予想 (94%・広島ステイ候補)",
           "isLanded": false,
           "isLive": false,
           "isPredicted": true
@@ -1560,7 +1560,7 @@
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
       "expectedStart": "広島発 (NH672)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH88 (宮古 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
+      "pendingNightStayNote": "現在 NH88 (宮古 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 94% / 東京(羽田) 6% と推定されます。",
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
@@ -3913,7 +3913,7 @@
       "code": "NGO",
       "name": "名古屋(中部)",
       "note": "新千歳便（NH703/NH712等）や羽田便の夜間ステイ拠点。",
-      "prob": 59,
+      "prob": 60,
       "level": "A (高確率)"
     },
     {
@@ -4037,7 +4037,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 658,
+    "totalFleetFlights": 662,
     "fleetCount": 11
   }
 }
