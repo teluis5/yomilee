@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月14日 04:00",
-  "updatedAtIso": "2026-11-13T19:00:20.823Z",
+  "updatedAt": "2026年11月14日 05:00",
+  "updatedAtIso": "2026-11-13T20:00:19.746Z",
   "totalJets": 5,
   "jets": [
     {
@@ -292,9 +292,26 @@
       "routesSummary": "羽田/成田 ➔ サンフランシスコ / シカゴ / ロンドン / ニューヨーク",
       "color": "#d97706",
       "serviceStart": "2023-08-31",
-      "flightState": "確認中",
-      "currentLocation": "確認中",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "ロンドン (LHR) ➔ 東京(羽田) (HND)",
+      "currentFlight": {
+        "flightNo": "NH212",
+        "origin": "LHR",
+        "dest": "HND",
+        "originName": "ロンドン (LHR)",
+        "destinationName": "東京(羽田) (HND)",
+        "origCode": "LHR",
+        "destCode": "HND",
+        "route": "ロンドン ➔ 東京(羽田)",
+        "depTime": "04:43",
+        "arrTime": "17:55",
+        "timeRange": "04:43 - 17:55",
+        "dateJst": "2026-11-14",
+        "status": "Scheduled",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH212",
@@ -305,12 +322,12 @@
           "origCode": "LHR",
           "destCode": "HND",
           "route": "ロンドン ➔ 東京(羽田)",
-          "depTime": "04:00",
+          "depTime": "04:43",
           "arrTime": "17:55",
-          "timeRange": "04:00 - 17:55",
+          "timeRange": "04:43 - 17:55",
           "dateJst": "2026-11-14",
-          "status": "Estimated dep 19:12",
-          "isLive": false,
+          "status": "Scheduled",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         }
@@ -325,12 +342,12 @@
           "origCode": "LHR",
           "destCode": "HND",
           "route": "ロンドン ➔ 東京(羽田)",
-          "depTime": "04:00",
+          "depTime": "04:43",
           "arrTime": "17:55",
-          "timeRange": "04:00 - 17:55",
+          "timeRange": "04:43 - 17:55",
           "dateJst": "2026-11-14",
-          "status": "Estimated dep 19:12",
-          "isLive": false,
+          "status": "Scheduled",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         },
