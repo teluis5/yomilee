@@ -13,6 +13,9 @@ const blog = defineCollection({
 		'!2026-11-11-open-cearvol-liberte-d28ffd/**',
 		'!2026-11-13-open-tokyo-bay-popup-af1ba2/**',
 		'!2026-11-13-open-new-open-new-541c5b/**',
+		'!2026-11-11-open-choa-f7feb2/**',
+		'!2026-11-11-open-iphone-b3a70b/**',
+		'!2026-11-12-open-fit-easy-times-91d91e/**',
 	] }),
 	// Type-check frontmatter using a schema
 	schema: ({ image }) =>
