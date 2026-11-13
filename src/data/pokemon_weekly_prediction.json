@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月13日 19:00",
-  "updatedAtIso": "2026-11-13T10:00:20.574Z",
+  "updatedAt": "2026年11月13日 20:00",
+  "updatedAtIso": "2026-11-13T11:00:20.132Z",
   "totalJets": 5,
   "jets": [
     {
@@ -695,7 +695,7 @@
         "arrTime": "21:05",
         "timeRange": "09:05 - 21:05",
         "dateJst": "2026-11-13",
-        "status": "Estimated 20:12",
+        "status": "Estimated 20:13",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -714,7 +714,7 @@
           "arrTime": "21:05",
           "timeRange": "09:05 - 21:05",
           "dateJst": "2026-11-13",
-          "status": "Estimated 20:12",
+          "status": "Estimated 20:13",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -734,7 +734,7 @@
           "arrTime": "21:05",
           "timeRange": "09:05 - 21:05",
           "dateJst": "2026-11-13",
-          "status": "Estimated 20:12",
+          "status": "Estimated 20:13",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -833,7 +833,7 @@
     }
   ],
   "domesticPrediction": {
-    "nightStayName": "高松 (52%)",
+    "nightStayName": "高松 (71%)",
     "nightStayCode": "TAK",
     "isNightStayConfirmed": false,
     "nightStayProbabilities": [
@@ -841,28 +841,19 @@
         "code": "TAK",
         "airport": "高松",
         "weight": 1.08,
-        "floored": 52,
-        "remainder": 0.1739130434782581,
+        "floored": 71,
+        "remainder": 0.5882352941176521,
         "originalIndex": 0,
-        "probability": 52
-      },
-      {
-        "code": "MYJ",
-        "airport": "松山",
-        "weight": 0.54,
-        "floored": 26,
-        "remainder": 0.08695652173912904,
-        "originalIndex": 1,
-        "probability": 26
+        "probability": 71
       },
       {
         "code": "HND",
         "airport": "羽田",
         "weight": 0.45,
-        "floored": 22,
-        "remainder": 0.7391304347826058,
-        "originalIndex": 2,
-        "probability": 22
+        "floored": 29,
+        "remainder": 0.41176470588235503,
+        "originalIndex": 1,
+        "probability": 29
       }
     ],
     "predictedRemainingToday": [
@@ -884,7 +875,7 @@
         "planName": "プランA (高松泊)",
         "stayCode": "TAK",
         "rank": "本命 ◎",
-        "probability": 52,
+        "probability": 71,
         "title": "【今夜高松泊シナリオ】羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 高松(泊)",
         "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 高松(泊)",
         "flights": [
@@ -937,66 +928,10 @@
       },
       {
         "planId": "today-plan-2",
-        "planName": "プランB (松山泊)",
-        "stayCode": "MYJ",
-        "rank": "有力 ◯",
-        "probability": 26,
-        "title": "【今夜松山泊シナリオ】羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 松山(泊)",
-        "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 松山(泊)",
-        "flights": [
-          {
-            "flightNo": "NH247",
-            "orig": "HND",
-            "dest": "FUK",
-            "route": "東京(羽田) ➔ 福岡",
-            "time": "09:54発 - 11:19着",
-            "tag": "運航完了",
-            "step": "第1便"
-          },
-          {
-            "flightNo": "NH252",
-            "orig": "FUK",
-            "dest": "HND",
-            "route": "福岡 ➔ 東京(羽田)",
-            "time": "12:45発 - 14:13着",
-            "tag": "運航完了",
-            "step": "第2便"
-          },
-          {
-            "flightNo": "NH69",
-            "orig": "HND",
-            "dest": "CTS",
-            "route": "東京(羽田) ➔ 札幌(新千歳)",
-            "time": "15:28発 - 16:40着",
-            "tag": "運航完了",
-            "step": "第3便"
-          },
-          {
-            "flightNo": "NH74",
-            "orig": "CTS",
-            "dest": "HND",
-            "route": "札幌(新千歳) ➔ 東京(羽田)",
-            "time": "17:42発 - 18:58着",
-            "tag": "運航完了",
-            "step": "第4便"
-          },
-          {
-            "flightNo": "NH599",
-            "orig": "HND",
-            "dest": "MYJ",
-            "route": "東京(羽田) ➔ 松山",
-            "time": "19:40発 - 21:15着",
-            "tag": "🌙松山泊候補",
-            "step": "第5便"
-          }
-        ]
-      },
-      {
-        "planId": "today-plan-3",
-        "planName": "プランC (羽田泊)",
+        "planName": "プランB (羽田泊)",
         "stayCode": "HND",
-        "rank": "対抗 ▲",
-        "probability": 22,
+        "rank": "有力 ◯",
+        "probability": 29,
         "title": "【今夜羽田泊シナリオ】羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田(泊)",
         "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田(泊)",
         "flights": [

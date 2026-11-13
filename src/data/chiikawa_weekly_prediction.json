@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月13日 19:00",
-  "updatedAtIso": "2026-11-13T10:01:04.019Z",
+  "updatedAt": "2026年11月13日 20:00",
+  "updatedAtIso": "2026-11-13T11:00:17.612Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (福岡 ➔ 東京(羽田))",
+    "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "東京(羽田) (確定)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": true,
@@ -1274,7 +1274,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "飛行中 (福岡 ➔ 東京(羽田))",
+      "currentAirport": "東京(羽田)",
       "nightStay": "東京(羽田) (確定)",
       "isNightStayConfirmed": true,
       "pendingNightStayNote": "",
@@ -1742,10 +1742,10 @@
           "actual": {
             "flightNo": "NH266",
             "route": "福岡 ➔ 東京(羽田)",
-            "time": "18:40離陸",
-            "status": "飛行中",
-            "isLanded": false,
-            "isLive": true
+            "time": "18:40離陸 / 19:48着陸",
+            "status": "着陸済",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -1802,9 +1802,9 @@
           "flightNo": "NH266",
           "route": "福岡 ➔ 東京(羽田)",
           "time": "18:30発 - 20:10着",
-          "status": "到着予定 (19:59)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (19:48)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         }
       ]
@@ -4201,7 +4201,7 @@
       "code": "HIJ",
       "name": "広島空港",
       "note": "昼往復便（NH679/NH680）および夜間ステイ便（NH685/NH672）の主要拠点。",
-      "prob": 37,
+      "prob": 38,
       "level": "B (中確率)"
     },
     {
@@ -4304,7 +4304,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 697,
+    "totalFleetFlights": 701,
     "fleetCount": 11
   }
 }
