@@ -18,6 +18,22 @@ const todayData = weeklySchedule.find((d) => d.statusType === 'today');
 const observedFlights = (todayData?.flights || []).filter(f => !f.isPredicted && (f.isLive || f.isLanded));
 const lastObserved = observedFlights.at(-1);
 const upcomingFlights = (todayData?.flights || []).filter(f => f.isPredicted || (!f.isLive && !f.isLanded));
+const liveFlights = observedFlights.filter(f => f.isLive);
+const observedFlightNumbers = new Set(observedFlights.map(f => f.flightNo));
+const alternativePlans = (todayData?.plans || []).slice(1).map(plan => ({
+	...plan,
+	remainingFlights: (plan.flights || []).filter(f => !observedFlightNumbers.has(f.flightNo))
+})).filter(plan => plan.remainingFlights.length > 0);
+const changedFlights = (todayData?.todayComparison || [])
+	.map(row => row.planA)
+	.filter(flight => flight?.flightNo && flight.update);
+const changedActualFlights = (todayData?.todayComparison || [])
+	.filter(row => row.planA?.flightNo && (row.actual?.isLive || row.actual?.isLanded) &&
+		row.planA.flightNo !== row.actual.flightNo);
+const previousPlan = (todayData?.todayComparison || []).map(row => row.planA?.flightNo).filter(Boolean);
+const currentPlan = (todayData?.flights || []).map(flight => flight.flightNo).filter(Boolean);
+const hasChangedPlan = previousPlan.length > 0 && currentPlan.length > 0 &&
+	previousPlan.join('|') !== currentPlan.join('|');
 const tomorrowData = weeklySchedule.find((d) => d.statusType === 'tomorrow');
 const forecastDays = weeklySchedule.filter((d) => d.statusType === 'forecast');
 
@@ -119,12 +135,12 @@ const pageSchema = {
 					<span class="sec-tag tag-today">最終更新 {updatedAt}</span>
 				</div>
 				<p class="today-note">最新の運航情報をもとにした予想です。便や機材は変更される場合があります。</p>
-				{upcomingFlights.length > 0 ? (
+				{liveFlights.length > 0 || upcomingFlights.length > 0 ? (
 					<div class="upcoming-list">
-						{upcomingFlights.map((flight) => (
+						{[...liveFlights, ...upcomingFlights].map((flight, index) => (
 							<div class="upcoming-row">
 								<div class="upcoming-time">
-									<span>出発</span>
+									<span>{flight.isLive ? '飛行中' : index === liveFlights.length ? '次の便' : '出発'}</span>
 									<b>{flight.depTime || flight.time?.match(/\d{1,2}:\d{2}/)?.[0] || '時刻未定'}</b>
 								</div>
 								<div class="upcoming-detail">
@@ -132,7 +148,7 @@ const pageSchema = {
 									<div class="upcoming-meta">
 										<b>{flight.flightNo}</b>
 										<span>{flight.arrTime ? `${flight.arrTime}着` : flight.time?.match(/-\s*(\d{1,2}:\d{2})/)?.[1] ? `${flight.time.match(/-\s*(\d{1,2}:\d{2})/)[1]}着` : ''}</span>
-										<span class="upcoming-label">{flight.isPredicted ? '予想' : '運航予定'}</span>
+										<span class="upcoming-label">{flight.isLive ? '飛行中' : flight.isPredicted ? '予想' : '運航予定'}</span>
 									</div>
 								</div>
 							</div>
@@ -140,6 +156,31 @@ const pageSchema = {
 					</div>
 				) : (
 					<p class="today-empty">{aircraft.isNightStayConfirmed ? '本日の今後の運航予想はありません。' : '今後の運航予想を確認中です。'}</p>
+				)}
+				{alternativePlans.length > 0 && (
+					<details class="today-alternatives">
+						<summary>今日の別の候補を見る</summary>
+						{alternativePlans.map(plan => (
+							<div class="alternative-plan">
+								<b>{plan.planName}</b>
+								<span>{plan.remainingFlights.map(f => `${f.flightNo} ${f.route}（${f.time}）`).join(' → ')}</span>
+							</div>
+						))}
+					</details>
+				)}
+				{hasChangedPlan && (
+					<div class="change-reasons">
+						<b>前夜からの変更</b>
+						{changedFlights.map(flight => (
+							<p>{flight.flightNo}は前夜の本命候補でした。当日の情報では{flight.update}です。</p>
+						))}
+						{changedActualFlights.map(row => (
+							<p>前夜は{row.planA.flightNo}を予想していましたが、{row.actual.flightNo}の運航を確認しました。</p>
+						))}
+						{changedFlights.length === 0 && changedActualFlights.length === 0 && (
+							<p>最新の運航情報に合わせて本命予想を更新しました。</p>
+						)}
+					</div>
 				)}
 			</section>
 		)}
@@ -163,14 +204,14 @@ const pageSchema = {
 
 				<div class="plans-stack">
 					{(tomorrowData.plans || []).map((plan, idx) => (
-						<div class="plan-box">
-							<div class="plan-head">
+						<details class="plan-box" open={idx === 0}>
+							<summary class="plan-head">
 								<div class="ph-left">
 									<span class={`plan-badge p-${idx}`}>{plan.planName}</span>
 									<span class="plan-prob">{plan.probability}%</span>
 									<span class="plan-flow">{plan.title || plan.routeSummary}</span>
 								</div>
-							</div>
+							</summary>
 							<div class="plan-body">
 								{plan.description && (
 									<p style="font-size: 0.8rem; color: #475569; margin: 0.35rem 0 0.5rem; line-height: 1.45;">
@@ -186,7 +227,7 @@ const pageSchema = {
 									</div>
 								))}
 							</div>
-						</div>
+						</details>
 					))}
 				</div>
 			</section>
@@ -697,6 +738,37 @@ const pageSchema = {
 		color: #075985;
 		font-weight: 700;
 	}
+	.upcoming-row:first-child .upcoming-time b {
+		color: #075985;
+		font-size: 1.5rem;
+	}
+	.today-alternatives {
+		margin-top: 16px;
+	}
+	.today-alternatives summary {
+		color: #075985;
+		cursor: pointer;
+		font-weight: 700;
+	}
+	.alternative-plan {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		padding: 12px 0;
+		border-bottom: 1px solid #e2e8f0;
+		line-height: 1.6;
+	}
+	.change-reasons {
+		margin-top: 16px;
+		padding: 16px;
+		background: #f8fafc;
+		border-radius: 8px;
+		font-size: 0.875rem;
+		line-height: 1.6;
+	}
+	.change-reasons p {
+		margin: 4px 0 0;
+	}
 
 	/* 本日のフライト一覧 */
 	.flight-list {
@@ -852,6 +924,15 @@ const pageSchema = {
 	}
 	.plan-head::-webkit-details-marker {
 		display: none;
+	}
+	summary.plan-head::after {
+		content: '開く ▾';
+		color: #475569;
+		font-size: 0.75rem;
+		white-space: nowrap;
+	}
+	details[open] > summary.plan-head::after {
+		content: '閉じる ▴';
 	}
 	.ph-left {
 		display: flex;
