@@ -428,6 +428,8 @@ async function generateSingleArticleWithGemini(topic, dateInfo, categories) {
     webContent = await fetchPageContent(targetUrl);
   }
 
+  if (!webContent) throw new Error('情報源の本文を取得できないため記事生成を中止します。');
+
   const topicData = `タイトル: ${topic.title}
 情報源: ${topic.sourceName || '話題のトピック'}
 URL: ${targetUrl}
@@ -729,6 +731,7 @@ async function main() {
 
   console.log(`\n🎯 今回生成する話題: ${selectedTopics.length}件`);
   const createdSlugs = [];
+  let failedCount = 0;
 
   for (let i = 0; i < selectedTopics.length; i++) {
     const topic = selectedTopics[i];
@@ -747,6 +750,10 @@ async function main() {
       continue;
     }
 
+    if (isDryRun) {
+      console.log('🧪 --dry-run モード: ファイルを保存せず候補を確認しました。');
+      continue;
+    }
     fs.mkdirSync(targetDir, { recursive: true });
 
     // サムネイル画像保存
@@ -762,7 +769,8 @@ async function main() {
       try {
         articleMdx = await generateSingleArticleWithGemini(topic, dateInfo, categories);
       } catch (err) {
-        console.error(`❌ Gemini API生成失敗 (${err.message})。低品質記事の生成を回避するためスキップします。`);
+        failedCount++;
+        console.error(`❌ 記事生成失敗 (${err.message})。低品質記事の生成を回避するためスキップします。`);
         // 作成した空ディレクトリを削除
         if (fs.existsSync(targetDir)) {
           fs.rmSync(targetDir, { recursive: true, force: true });
@@ -790,7 +798,12 @@ async function main() {
     console.log('\n💡 コミット＆プッシュまで自動実行する場合は --auto-push を指定してください。');
   }
 
-  console.log('\n🎉 すべての処理が完了しました！');
+  if (failedCount > 0) {
+    console.error(`❌ 記事生成に ${failedCount} 件失敗しました（作成 ${createdSlugs.length} 件）。`);
+    process.exitCode = 1;
+  } else {
+    console.log('\n🎉 すべての処理が完了しました！');
+  }
 }
 
 main().catch(err => {
