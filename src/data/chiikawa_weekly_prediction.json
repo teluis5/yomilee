@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月13日 10:00",
-  "updatedAtIso": "2026-11-13T01:00:20.105Z",
+  "updatedAt": "2026年11月13日 10:52",
+  "updatedAtIso": "2026-11-13T01:52:47.283Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
@@ -1495,23 +1495,26 @@
           "planA": {
             "flightNo": "NH672",
             "route": "広島 ➔ 東京(羽田)",
-            "time": "07:35発 - 08:55着"
+            "time": "07:35発 - 08:55着",
+            "update": null
           },
           "planB": {
             "flightNo": "NH672",
             "route": "広島 ➔ 東京(羽田)",
-            "time": "07:35発 - 08:55着"
+            "time": "07:35発 - 08:55着",
+            "update": null
           },
           "planC": {
             "flightNo": "NH672",
             "route": "広島 ➔ 東京(羽田)",
-            "time": "07:35発 - 08:55着"
+            "time": "07:35発 - 08:55着",
+            "update": null
           },
           "actual": {
             "flightNo": "NH672",
             "route": "広島 ➔ 東京(羽田)",
-            "time": "07:35発 - 08:55着",
-            "status": "着陸済 (08:46)",
+            "time": "07:48離陸 / 08:46着陸",
+            "status": "着陸済",
             "isLanded": true,
             "isLive": false
           }
@@ -1521,23 +1524,26 @@
           "planA": {
             "flightNo": "NH59",
             "route": "東京(羽田) ➔ 札幌(新千歳)",
-            "time": "10:00発 - 11:35着"
+            "time": "10:00発 - 11:35着",
+            "update": null
           },
           "planB": {
             "flightNo": "NH59",
             "route": "東京(羽田) ➔ 札幌(新千歳)",
-            "time": "10:00発 - 11:35着"
+            "time": "10:00発 - 11:35着",
+            "update": null
           },
           "planC": {
             "flightNo": "NH249",
             "route": "東京(羽田) ➔ 福岡",
-            "time": "10:30発 - 12:35着"
+            "time": "10:30発 - 12:35着",
+            "update": "当日機種：78K（767対象外）"
           },
           "actual": {
             "flightNo": "NH59",
             "route": "東京(羽田) ➔ 札幌(新千歳)",
-            "time": "10:00発 - 11:35着",
-            "status": "到着予定 (10:00)",
+            "time": "10:13離陸",
+            "status": "飛行中",
             "isLanded": false,
             "isLive": true
           }
@@ -1547,78 +1553,66 @@
           "planA": {
             "flightNo": "NH62",
             "route": "札幌(新千歳) ➔ 東京(羽田)",
-            "time": "12:30発 - 14:10着"
+            "time": "12:30発 - 14:10着",
+            "update": null
           },
           "planB": {
             "flightNo": "NH62",
             "route": "札幌(新千歳) ➔ 東京(羽田)",
-            "time": "12:30発 - 14:10着"
+            "time": "12:30発 - 14:10着",
+            "update": null
           },
           "planC": {
             "flightNo": "NH254",
             "route": "福岡 ➔ 東京(羽田)",
-            "time": "13:25発 - 15:05着"
+            "time": "13:25発 - 15:05着",
+            "update": "当日機種：78K（767対象外）"
           },
-          "actual": {
-            "flightNo": "NH62 (予想)",
-            "route": "札幌(新千歳) ➔ 東京(羽田)",
-            "time": "12:30発 - 14:10着",
-            "status": "折返し確定予想 (76P枠)",
-            "isLanded": false,
-            "isLive": false
-          }
+          "actual": null
         },
         {
           "step": "#4",
           "planA": {
             "flightNo": "NH69",
             "route": "東京(羽田) ➔ 札幌(新千歳)",
-            "time": "15:00発 - 16:35着"
+            "time": "15:00発 - 16:35着",
+            "update": "当日機種：78P（767対象外）"
           },
           "planB": {
             "flightNo": "NH69",
             "route": "東京(羽田) ➔ 札幌(新千歳)",
-            "time": "15:00発 - 16:35着"
+            "time": "15:00発 - 16:35着",
+            "update": "当日機種：78P（767対象外）"
           },
           "planC": {
             "flightNo": "NH33",
             "route": "東京(羽田) ➔ 大阪(伊丹)",
-            "time": "16:00発 - 17:10着"
+            "time": "16:00発 - 17:10着",
+            "update": "当日機種：321（767対象外）"
           },
-          "actual": {
-            "flightNo": "NH681 (予想)",
-            "route": "東京(羽田) ➔ 広島",
-            "time": "15:00発 - 16:30着",
-            "status": "折返し確定予想 (76P枠)",
-            "isLanded": false,
-            "isLive": false
-          }
+          "actual": null
         },
         {
           "step": "#5",
           "planA": {
             "flightNo": "NH74",
             "route": "札幌(新千歳) ➔ 東京(羽田)",
-            "time": "17:30発 - 19:10着"
+            "time": "17:30発 - 19:10着",
+            "update": "当日機種：78P（767対象外）"
           },
           "planB": {
             "flightNo": "NH74",
             "route": "札幌(新千歳) ➔ 東京(羽田)",
-            "time": "17:30発 - 19:10着"
+            "time": "17:30発 - 19:10着",
+            "update": "当日機種：78P（767対象外）"
           },
           "planC": {
             "flightNo": "NH38",
             "route": "大阪(伊丹) ➔ 東京(羽田)",
-            "time": "19:00発 - 20:10着"
+            "time": "19:00発 - 20:10着",
+            "update": null
           },
-          "actual": {
-            "flightNo": "NH682 (予想)",
-            "route": "広島 ➔ 東京(羽田)",
-            "time": "17:20発 - 18:45着",
-            "status": "折返し確定予想 (76P枠)",
-            "isLanded": false,
-            "isLive": false
-          }
+          "actual": null
         },
         {
           "step": "#6",
@@ -1626,17 +1620,11 @@
           "planB": {
             "flightNo": "NH79",
             "route": "東京(羽田) ➔ 札幌(新千歳)",
-            "time": "20:00発 - 21:35着"
+            "time": "20:00発 - 21:35着",
+            "update": "当日機種：722（767対象外）"
           },
           "planC": null,
-          "actual": {
-            "flightNo": "NH685 (予想)",
-            "route": "東京(羽田) ➔ 広島",
-            "time": "19:40発 - 21:10着",
-            "status": "本命予想 (89%・広島ステイ候補)",
-            "isLanded": false,
-            "isLive": false
-          }
+          "actual": null
         }
       ],
       "flights": [
@@ -1653,7 +1641,7 @@
           "flightNo": "NH59",
           "route": "東京(羽田) ➔ 札幌(新千歳)",
           "time": "10:00発 - 11:35着",
-          "status": "到着予定 (10:00)",
+          "status": "到着予定 (11:31)",
           "isLanded": false,
           "isLive": true,
           "isPredicted": false
@@ -1666,7 +1654,7 @@
           "depTime": "12:30",
           "arrTime": "14:10",
           "time": "12:30発 - 14:10着 (予想)",
-          "status": "折返し確定予想 (76P枠)",
+          "status": "後続便候補",
           "isLanded": false,
           "isLive": false,
           "isPredicted": true
@@ -1679,7 +1667,7 @@
           "depTime": "15:00",
           "arrTime": "16:30",
           "time": "15:00発 - 16:30着 (予想)",
-          "status": "折返し確定予想 (76P枠)",
+          "status": "後続便候補",
           "isLanded": false,
           "isLive": false,
           "isPredicted": true
@@ -1692,7 +1680,7 @@
           "depTime": "17:20",
           "arrTime": "18:45",
           "time": "17:20発 - 18:45着 (予想)",
-          "status": "折返し確定予想 (76P枠)",
+          "status": "後続便候補",
           "isLanded": false,
           "isLive": false,
           "isPredicted": true

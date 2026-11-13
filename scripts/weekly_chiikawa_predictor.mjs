@@ -402,7 +402,8 @@ function translateStatus(statusText) {
   }
   if (/Estimated/i.test(statusText)) {
     const timeMatch = statusText.match(/\d{2}:\d{2}/);
-    return timeMatch ? `到着予定 (${timeMatch[0]})` : '到着予定';
+    const label = /Estimated dep/i.test(statusText) ? '出発予定' : '到着予定';
+    return timeMatch ? `${label} (${timeMatch[0]})` : label;
   }
   if (/Delayed/i.test(statusText)) {
     const timeMatch = statusText.match(/\d{2}:\d{2}/);
@@ -1051,7 +1052,7 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
       time: `${rf.depTime}発 - ${rf.arrTime}着 (予想)`,
       status: isFinal
         ? `本命予想 (${topStay.probability}%・${stayLabel}候補)`
-        : `折返し確定予想 (76P枠)`,
+        : '後続便候補',
       isLanded: false,
       isLive: false,
       isPredicted: true
@@ -2108,12 +2109,13 @@ export async function generateWeeklyPrediction() {
     const origName = AIRPORT_NAMES[origCode] || origCode;
     const destName = AIRPORT_NAMES[destCode] || destCode;
     const statusText = f.status?.text || '';
-    const statusJa = translateStatus(statusText);
 
     const depSched = f.time?.scheduled?.departure;
     const depReal = f.time?.real?.departure;
     const arrSched = f.time?.scheduled?.arrival;
     const arrReal = f.time?.real?.arrival;
+    const isLanded = Boolean(arrReal) || /Landed/i.test(statusText);
+    const isLive = !isLanded && (Boolean(depReal) || /Active|Live|EnRoute|InAir/i.test(statusText));
     const depTs = depSched || depReal || 0;
     const arrTs = arrSched || arrReal || 0;
     if (!depTs) continue;
@@ -2135,9 +2137,11 @@ export async function generateWeeklyPrediction() {
       depTs,
       arrTs,
       statusRaw: statusText,
-      statusJa,
-      isLanded: /Landed/i.test(statusText),
-      isLive: /Active|Live|Estimated/i.test(statusText) && !/Landed/i.test(statusText)
+      statusJa: translateStatus(statusText),
+      isLanded,
+      isLive,
+      actualDepTime: depReal ? formatTime(depReal) : null,
+      actualArrTime: arrReal ? formatTime(arrReal) : null
     });
   }
 
@@ -2164,8 +2168,11 @@ export async function generateWeeklyPrediction() {
         arrTs: parseTimeToMinutes(dbf.arrTime) ?? 0,
         statusRaw: dbf.status || 'Scheduled',
         statusJa: translateStatus(dbf.status || 'Scheduled'),
-        isLanded: /Landed/i.test(dbf.status || ''),
-        isLive: /EnRoute|InAir|Active|Live/i.test(dbf.status || '')
+        isLanded: Boolean(dbf.realArrival) || /Landed/i.test(dbf.status || ''),
+        isLive: !dbf.realArrival && !/Landed/i.test(dbf.status || '') &&
+          (Boolean(dbf.realDeparture) || /EnRoute|InAir|Active|Live/i.test(dbf.status || '')),
+        actualDepTime: dbf.realDeparture ? formatTime(dbf.realDeparture) : null,
+        actualArrTime: dbf.realArrival ? formatTime(dbf.realArrival) : null
       });
     }
   }
@@ -2223,51 +2230,12 @@ export async function generateWeeklyPrediction() {
   }
 
   // 実データ精度検証＆過去日履歴を構築
-  const { accuracyStats, pastPredictions, byDate } = computeRealAccuracyAndHistory(
+  const { accuracyStats, pastPredictions } = computeRealAccuracyAndHistory(
     fleetDb,
     todayStr,
     anaFleetData,
     snapshots
   );
-
-  // もし本日のスナップショットが存在しないか、または旧ハードコード汚染（前夜実到着地と本日のスナップショット第1便出発地が乖離している旧バグデータ）の場合、
-  // 昨日までのデータのみ（Out-of-Sample: 本日の実運航を一切参照しない）から生成した純粋な事前予測スナップショットを設定する
-  const allPastDates = Object.keys(byDate).filter(d => d < todayStr).sort();
-  const yesterdayStr = allPastDates.length > 0 ? allPastDates[allPastDates.length - 1] : null;
-  const yesterdayFlights = yesterdayStr ? byDate[yesterdayStr] : null;
-  const lastNightActualStay = (yesterdayFlights && yesterdayFlights.length > 0)
-    ? yesterdayFlights[yesterdayFlights.length - 1].dest
-    : (todayFlights[0]?.origCode || 'HND');
-
-  const existingTodaySnap = snapshots[todayStr];
-  const hasDuplicatePrefixInSnap = existingTodaySnap && existingTodaySnap.length >= 3 &&
-    existingTodaySnap[1]?.flights?.slice(0, 4).map(f => f.flightNo).join('>') ===
-    existingTodaySnap[2]?.flights?.slice(0, 4).map(f => f.flightNo).join('>');
-  const isLegacyCorruptedTodaySnap = existingTodaySnap && (
-    existingTodaySnap.length < 3 ||
-    hasDuplicatePrefixInSnap ||
-    (lastNightActualStay !== 'HND' &&
-     existingTodaySnap.every(p => (p.flights?.[0]?.orig || getAirportCodeFromName(p.flights?.[0]?.route?.split('➔')[0])) === 'HND'))
-  );
-
-  if (!existingTodaySnap || isLegacyCorruptedTodaySnap) {
-    const oosModelForToday = buildLearnedModel(fleetDb, todayStr); // todayStr未満の履歴のみ使用
-    const prevFirstFn = (yesterdayFlights && yesterdayFlights.length > 0) ? yesterdayFlights[0].normFn : null;
-    const prevArrivalFlight = (yesterdayFlights && yesterdayFlights.length > 0) ? {
-      orig: yesterdayFlights[yesterdayFlights.length - 1].orig || yesterdayFlights[yesterdayFlights.length - 1].origin,
-      dest: yesterdayFlights[yesterdayFlights.length - 1].dest || yesterdayFlights[yesterdayFlights.length - 1].destination,
-      flightNo: yesterdayFlights[yesterdayFlights.length - 1].flightNo
-    } : null;
-    snapshots[todayStr] = generateDayPlansViaBeamSearch(
-      [{ code: lastNightActualStay, probability: 100 }],
-      todayStr,
-      anaFleetData,
-      oosModelForToday,
-      prevFirstFn,
-      null,
-      prevArrivalFlight
-    );
-  }
 
   // 8. 向こう7日間（Day 0 〜 Day 6）の連鎖スケジュール構築
   const weeklyDays = [];
@@ -2338,54 +2306,48 @@ export async function generateWeeklyPrediction() {
       ];
 
       const lastNightPlans = snapshots[day.dateStr] || [];
-      const planA = lastNightPlans[0] || { planName: 'プランA', probability: 50, flights: [] };
-      const planB = lastNightPlans[1] || { planName: 'プランB', probability: 30, flights: [] };
-      const planC = lastNightPlans[2] || { planName: 'プランC', probability: 20, flights: [] };
-
-      const maxSlots = Math.max(
-        planA.flights?.length || 0,
-        planB.flights?.length || 0,
-        planC.flights?.length || 0,
-        combinedTodayFlights.length,
-        4
-      );
+      const [planA, planB, planC] = lastNightPlans;
+      const maxSlots = Math.max(todayFlights.length, ...lastNightPlans.map(plan => plan.flights.length));
+      const reportedFlights = anaFleetData?.dates?.[todayStr.replace(/-/g, '')] || {};
+      function compareFlight(flight) {
+        if (!flight) return null;
+        const reported = reportedFlights[normalizeFlightNo(flight.flightNo)];
+        // status は当日運航情報にのみ付く。週間ダイヤの機種一覧は変更判定に使わない。
+        let update = null;
+        if (reported?.isCancelled) update = '当日情報：欠航';
+        else if (reported?.status && reported.model && !reported.is767 && !reported.model.includes('76')) {
+          update = `当日機種：${reported.model}（767対象外）`;
+        }
+        return { flightNo: flight.flightNo, route: flight.route, time: flight.time, update };
+      }
 
       const todayComparison = [];
       for (let i = 0; i < maxSlots; i++) {
-        const fa = planA.flights?.[i] || null;
-        const fb = planB.flights?.[i] || null;
-        const fc = planC.flights?.[i] || null;
+        const fa = planA?.flights?.[i] || null;
+        const fb = planB?.flights?.[i] || null;
+        const fc = planC?.flights?.[i] || null;
         const act = todayFlights[i] || null;
-        const predRem = !act ? combinedTodayFlights[i] : null;
 
         todayComparison.push({
           step: `#${i + 1}`,
-          planA: fa ? { flightNo: fa.flightNo, route: fa.route, time: fa.time } : null,
-          planB: fb ? { flightNo: fb.flightNo, route: fb.route, time: fb.time } : null,
-          planC: fc ? { flightNo: fc.flightNo, route: fc.route, time: fc.time } : null,
-          actual: act ? {
+          planA: compareFlight(fa),
+          planB: compareFlight(fb),
+          planC: compareFlight(fc),
+          actual: act && (act.isLanded || act.isLive) ? {
             flightNo: act.flightNo,
             route: act.route,
-            time: `${act.depTime}発 - ${act.arrTime}着`,
-            status: act.statusJa || '運航予定',
+            time: [act.actualDepTime && `${act.actualDepTime}離陸`, act.actualArrTime && `${act.actualArrTime}着陸`].filter(Boolean).join(' / '),
+            status: act.isLanded ? '着陸済' : '飛行中',
             isLanded: act.isLanded,
             isLive: act.isLive
-          } : (predRem ? {
-            flightNo: `${predRem.flightNo} (予想)`,
-            route: predRem.route,
-            time: predRem.time.replace(' (予想)', ''),
-            status: predRem.status,
-            isLanded: false,
-            isLive: false
-          } : null)
+          } : null
         });
       }
 
-      const todayPlanHeaders = [
-        { name: planA.planName?.split(' ')[0] || 'プランA', prob: planA.probability || 50 },
-        { name: planB.planName?.split(' ')[0] || 'プランB', prob: planB.probability || 30 },
-        { name: planC.planName?.split(' ')[0] || 'プランC', prob: planC.probability || 20 }
-      ];
+      const todayPlanHeaders = lastNightPlans.map(plan => ({
+        name: plan.planName.split(' ')[0],
+        prob: plan.probability
+      }));
 
       weeklySchedule.push({
         ...day,

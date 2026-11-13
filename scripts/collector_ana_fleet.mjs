@@ -169,6 +169,11 @@ export async function collectFleetData() {
         };
         totalNewFlights++;
       }
+      // 予定段階で登録した便にも、その後受信した実時刻を保持する。
+      const flight = db.flights[flightId];
+      if (f.time?.real?.departure) flight.realDeparture = f.time.real.departure;
+      if (f.time?.real?.arrival) flight.realArrival = f.time.real.arrival;
+      if (status && (!flight.realArrival || /Landed/i.test(status))) flight.status = status;
     }
   }
 

@@ -15,6 +15,9 @@ const accuracyStats = currentData.accuracyStats || { dailyFullHitRate: 92.5, fir
 const pastPredictions = currentData.pastPredictions || [];
 
 const todayData = weeklySchedule.find((d) => d.statusType === 'today');
+const observedFlights = (todayData?.flights || []).filter(f => !f.isPredicted && (f.isLive || f.isLanded));
+const lastObserved = observedFlights.at(-1);
+const upcomingFlights = (todayData?.flights || []).filter(f => f.isPredicted || (!f.isLive && !f.isLanded));
 const tomorrowData = weeklySchedule.find((d) => d.statusType === 'tomorrow');
 const forecastDays = weeklySchedule.filter((d) => d.statusType === 'forecast');
 
@@ -84,15 +87,11 @@ const pageSchema = {
 				<div class="status-box">
 					<span class="status-label">現在の位置</span>
 					<div class="status-val-main">{aircraft.currentLocation}</div>
-					{todayData && todayData.flights && todayData.flights.length > 0 && (() => {
-						const actFls = todayData.flights.filter((fl) => !fl.isPredicted);
-						const lastFl = actFls.length > 0 ? actFls[actFls.length - 1] : todayData.flights[0];
-						return (
-							<div style="font-size: 0.78rem; color: #0369a1; font-weight: 600;">
-								直近便: {lastFl.flightNo} ({lastFl.time})
-							</div>
-						);
-					})()}
+					{lastObserved && (
+						<div style="font-size: 0.78rem; color: #0369a1; font-weight: 600;">
+							直近の確認便: {lastObserved.flightNo}
+						</div>
+					)}
 				</div>
 
 				<div class="status-box">
@@ -116,7 +115,7 @@ const pageSchema = {
 		{todayData && (
 			<section class="dash-section">
 				<div class="sec-head">
-					<h2 class="sec-title">本日のフライト：昨晩時点の予想 vs 実際（{todayData.dateJa}）</h2>
+					<h2 class="sec-title">本日のフライト：前夜予想と確認済みの運航（{todayData.dateJa}）</h2>
 					<span class="sec-tag tag-today">当日速報</span>
 				</div>
 
@@ -126,10 +125,8 @@ const pageSchema = {
 							<thead>
 								<tr>
 									<th>便</th>
-									<th>予想 {todayData.todayPlanHeaders?.[0]?.name || 'プランA'} ({todayData.todayPlanHeaders?.[0]?.prob ?? 50}%)</th>
-									<th>予想 {todayData.todayPlanHeaders?.[1]?.name || 'プランB'} ({todayData.todayPlanHeaders?.[1]?.prob ?? 30}%)</th>
-									<th>予想 {todayData.todayPlanHeaders?.[2]?.name || 'プランC'} ({todayData.todayPlanHeaders?.[2]?.prob ?? 20}%)</th>
-									<th>実際</th>
+									{todayData.todayPlanHeaders.map(h => <th>前夜 {h.name} ({h.prob}%)</th>)}
+									<th>運航実績</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -140,47 +137,28 @@ const pageSchema = {
 										const tm = item.time ? item.time.replace(/発 - /g, '-').replace(/着/g, '') : '';
 										return { no: item.flightNo || '', rt, tm };
 									};
-									const pa = fmt(row.planA);
-									const pb = fmt(row.planB);
-									const pc = fmt(row.planC);
-									const act = fmt(row.actual);
-									const cleanStatus = (row.actual && row.actual.status) ? row.actual.status.replace(/ ✈️/g, '').replace(/ \(.*\)/g, '') : '運航前';
+									const plans = [row.planA, row.planB, row.planC].slice(0, todayData.todayPlanHeaders.length);
+									const actual = row.actual?.isLanded || row.actual?.isLive ? row.actual : null;
 									return (
-										<tr class={act ? '' : 'row-muted'}>
+										<tr>
 											<td class="col-num">#{idx + 1}</td>
-											<td>
-												{pa ? (
+											{plans.map(item => {
+												const plan = fmt(item);
+												return <td>{plan ? (
 													<>
-														<div><span class="fn-text">{pa.no}</span> {pa.rt}</div>
-														<div class="tm-text">{pa.tm}</div>
+														<div><span class="fn-text">{plan.no}</span> {plan.rt}</div>
+														<div class="tm-text">{plan.tm}</div>
+														{item.update && <small>{item.update}</small>}
 													</>
-												) : '—'}
-											</td>
-											<td>
-												{pb ? (
-													<>
-														<div><span class="fn-text">{pb.no}</span> {pb.rt}</div>
-														<div class="tm-text">{pb.tm}</div>
-													</>
-												) : '—'}
-											</td>
-											<td>
-												{pc ? (
-													<>
-														<div><span class="fn-text">{pc.no}</span> {pc.rt}</div>
-														<div class="tm-text">{pc.tm}</div>
-													</>
-												) : '—'}
-											</td>
+												) : '—'}</td>;
+											})}
 											<td class="col-act">
-												{act ? (
+												{actual ? (
 													<>
-														<div><span class="fn-text">{act.no}</span> {act.rt}</div>
-														<div class="tm-text">{act.tm} ({cleanStatus})</div>
+														<div><span class="fn-text">{actual.flightNo}</span> {fmt(actual).rt}</div>
+														<div class="tm-text">{actual.isLanded ? '着陸済' : '飛行中'} {actual.time}</div>
 													</>
-												) : (
-													<span class="tm-text">運航前</span>
-												)}
+												) : '未確認'}
 											</td>
 										</tr>
 									);
@@ -188,10 +166,13 @@ const pageSchema = {
 							</tbody>
 						</table>
 					</div>
-				) : (
-					todayData.flights && todayData.flights.length > 0 && (
+				) : <p>確認済みの運航はまだありません。</p>}
+				{!todayData.todayPlanHeaders?.length && <p>前夜予想の記録はありません。</p>}
+				{upcomingFlights.length > 0 && (
+					<>
+						<h3>今後の便（当日更新）</h3>
 						<div class="flight-list">
-							{todayData.flights.map((f) => (
+							{upcomingFlights.map((f) => (
 								<div class={`flight-row ${f.isPredicted ? 'is-predicted' : ''}`}>
 									<div class="fl-time">{f.time.replace(/発 - /g, ' - ').replace(/着/g, '')}</div>
 									<div class="fl-main">
@@ -206,7 +187,7 @@ const pageSchema = {
 								</div>
 							))}
 						</div>
-					)
+					</>
 				)}
 			</section>
 		)}
@@ -726,9 +707,6 @@ const pageSchema = {
 		color: #475569;
 		font-size: 0.78rem;
 	}
-	.simple-comp-table tr.row-muted td {
-		color: #94a3b8;
-	}
 	.simple-comp-table th:last-child,
 	.simple-comp-table td.col-act {
 		border-left: 2px solid #cbd5e1;
@@ -742,9 +720,6 @@ const pageSchema = {
 		font-weight: 700;
 		color: #0f172a;
 		margin-right: 0.25rem;
-	}
-	.row-muted .fn-text {
-		color: #64748b;
 	}
 	.tm-text {
 		color: #64748b;
