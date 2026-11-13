@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
 import { generateWeeklyPrediction } from './weekly_chiikawa_predictor.mjs';
+import { generatePokemonWeeklyPrediction } from './weekly_pokemon_predictor.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,6 +27,10 @@ function performAutoPush(updatedAt) {
     } catch {}
 
     execSync('git add data/chiikawa_weekly_prediction.json src/data/chiikawa_weekly_prediction.json data/ana_fleet_status.json src/data/ana_fleet_status.json data/daily_predictions_snapshot.json scripts/ src/pages/site/chiikawajet/ src/assets/images/chiikawajet_ogp.png public/brand/chiikawajet_ogp.png src/content/blog', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+    execSync('git add data/pokemon_weekly_prediction.json src/data/pokemon_weekly_prediction.json', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+    if (fs.existsSync(path.join(YOMILEE_ROOT, 'data', 'pokemon_prediction_snapshots.json'))) {
+      execSync('git add data/pokemon_prediction_snapshots.json', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+    }
     if (fs.existsSync(path.join(YOMILEE_ROOT, 'data', 'evaluation_log.jsonl'))) {
       execSync('git add data/evaluation_log.jsonl', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
     }
@@ -48,6 +53,11 @@ function performAutoPush(updatedAt) {
 async function main() {
   const result = await generateWeeklyPrediction();
   if (!result) return;
+  try {
+    await generatePokemonWeeklyPrediction();
+  } catch (err) {
+    console.warn('⚠️ ポケモンジェットの予想更新に失敗しました:', err.message);
+  }
 
   // 運行予想インフォグラフィック画像（Twitterカード/OGP）を最新データで自動生成
   try {

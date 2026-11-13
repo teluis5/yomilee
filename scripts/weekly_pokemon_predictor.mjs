@@ -22,8 +22,7 @@ const SRC_DATA_DIR = path.join(YOMILEE_ROOT, 'src', 'data');
 const ANA_FLEET_STATUS_FILE = path.join(DATA_DIR, 'ana_fleet_status.json');
 const OUTPUT_JSON_FILE = path.join(DATA_DIR, 'pokemon_weekly_prediction.json');
 const SRC_OUTPUT_JSON_FILE = path.join(SRC_DATA_DIR, 'pokemon_weekly_prediction.json');
-const STATUS_JSON_FILE = path.join(DATA_DIR, 'pokemon_jet_status.json');
-const SRC_STATUS_JSON_FILE = path.join(SRC_DATA_DIR, 'pokemon_jet_status.json');
+const SNAPSHOT_FILE = path.join(DATA_DIR, 'pokemon_prediction_snapshots.json');
 
 // 全日本空輸 (ANA) ポケモンジェット フリートマスター
 export const POKEMON_JET_FLEET = [
@@ -198,7 +197,11 @@ export function fetchAircraftFlightsFR24(reg, limit = 15) {
 function loadOdptData() {
   if (fs.existsSync(ANA_FLEET_STATUS_FILE)) {
     try {
-      return JSON.parse(fs.readFileSync(ANA_FLEET_STATUS_FILE, 'utf-8'));
+      const data = JSON.parse(fs.readFileSync(ANA_FLEET_STATUS_FILE, 'utf-8'));
+      const updated = Date.parse(data.updatedAt || '');
+      if (Number.isFinite(updated) && Date.now() - updated <= 2 * 60 * 60 * 1000) return data;
+      console.warn('⚠️ ANAの機材データが古いため便の予想を保留します。');
+      return null;
     } catch (e) {
       console.warn('⚠️ ODPT機材データ読み込み失敗:', e.message);
     }
@@ -239,10 +242,10 @@ function normalizeTo100Percent(items, weightKey = 'weight', minFloor = 5) {
     const eq = Math.floor(100 / items.length);
     return items.map((it, idx) => ({ ...it, probability: idx === 0 ? 100 - eq * (items.length - 1) : eq }));
   }
-  const rawList = items.map(it => {
+  const rawList = items.map((it, index) => {
     const rawVal = ((it[weightKey] || 0) / total) * 100;
     const floored = Math.max(minFloor, Math.floor(rawVal));
-    return { ...it, floored, remainder: rawVal - floored };
+    return { ...it, floored, remainder: rawVal - floored, originalIndex: index };
   });
   let allocated = rawList.reduce((sum, it) => sum + it.floored, 0);
   let diff = 100 - allocated;
@@ -250,7 +253,8 @@ function normalizeTo100Percent(items, weightKey = 'weight', minFloor = 5) {
   for (let i = 0; i < diff; i++) {
     rawList[i % rawList.length].floored += 1;
   }
-  return rawList.map(it => ({ ...it, probability: it.floored }));
+  return rawList.sort((a, b) => a.originalIndex - b.originalIndex)
+    .map(it => ({ ...it, probability: it.floored }));
 }
 
 // ============================================================================
@@ -261,12 +265,12 @@ function predictDomesticTodayRemainder(todayFlights, todayStr, odptData) {
   const dayFlights = odptData?.dates?.[dKey] || {};
   const lastFl = todayFlights.length > 0 ? todayFlights[todayFlights.length - 1] : null;
 
-  if (!lastFl) {
+  if (!lastFl || Object.keys(dayFlights).length === 0) {
     return {
-      nightStayName: '東京(羽田) (予定)',
-      nightStayCode: 'HND',
+      nightStayName: '確認中',
+      nightStayCode: null,
       isNightStayConfirmed: false,
-      nightStayProbabilities: [{ airport: '東京(羽田)', code: 'HND', probability: 100 }],
+      nightStayProbabilities: [],
       predictedRemainingToday: [],
       todayPlans: []
     };
@@ -275,6 +279,8 @@ function predictDomesticTodayRemainder(todayFlights, todayStr, odptData) {
   const startAirport = lastFl.destCode;
   const startArrMin = parseTimeToMinutes(lastFl.arrTime) ?? 900;
   const alreadyFlownSet = new Set(todayFlights.map(f => f.flightNo));
+  const nowJst = new Date(Date.now() + 9 * 3600 * 1000);
+  const nowMin = nowJst.getUTCHours() * 60 + nowJst.getUTCMinutes();
 
   // DFS探索で残りの全有効パスを探索
   const completedPaths = [];
@@ -304,6 +310,7 @@ function predictDomesticTodayRemainder(todayFlights, todayStr, odptData) {
 
     let candidates = Object.values(dayFlights).filter(df => {
       if (df.origin !== curAirport || df.isCancelled) return false;
+      if (/^(Departed|InAir|Arrived|Landed|TakeOff)$/i.test(String(df.status || ''))) return false;
       if (alreadyFlownSet.has(df.flightNo)) return false;
       if (pathFlights.some(pf => pf.flightNo === df.flightNo)) return false;
 
@@ -312,7 +319,7 @@ function predictDomesticTodayRemainder(todayFlights, todayStr, odptData) {
       if (!is78) return false;
 
       const depM = parseTimeToMinutes(df.actDepTime || df.depTime);
-      return depM !== null && depM >= curArrMin + minTurn && depM <= curArrMin + maxTurn;
+      return depM !== null && depM >= nowMin && depM >= curArrMin + minTurn && depM <= curArrMin + maxTurn;
     });
 
     // 78P/788を最優先
@@ -337,10 +344,6 @@ function predictDomesticTodayRemainder(todayFlights, todayStr, odptData) {
       if (turn >= 45 && turn <= 85) edgeWeight *= 1.8;
       else if (turn < 45) edgeWeight *= 0.9;
       else if (turn > 120) edgeWeight *= 0.35;
-
-      if (curAirport === 'HND' && df.depGate) {
-        edgeWeight *= evaluateHndSpotAffinity('53', df.depGate, turn); // 羽田ゲート親和
-      }
 
       const origName = AIRPORT_NAMES[df.origin] || df.origin;
       const destName = AIRPORT_NAMES[df.dest] || df.dest;
@@ -410,7 +413,7 @@ function predictDomesticTodayRemainder(todayFlights, todayStr, odptData) {
     depTime: rf.depTime,
     arrTime: rf.arrTime,
     time: `${rf.depTime}発 - ${rf.arrTime}着 (予想)`,
-    status: idx === bestPath.remFlights.length - 1 ? `本命予想 (${topStay.airport}泊候補)` : '折返し確定予想 (78P枠)',
+    status: idx === bestPath.remFlights.length - 1 ? `予想 (${topStay.airport}泊候補)` : '後続便候補',
     isPredicted: true
   }));
 
@@ -472,90 +475,101 @@ function predictDomesticTodayRemainder(todayFlights, todayStr, odptData) {
 // ============================================================================
 // 国内線仕様機（JA819A）の翌日3大プラン予測エンジン
 // ============================================================================
-function predictTomorrowDomesticPlans(priorStays, targetDateStr, odptData) {
-  const dKey = targetDateStr.replace(/-/g, '');
-  const dayFlights = Object.values(odptData?.dates?.[dKey] || {}).filter(f => !f.isCancelled);
+function predictTomorrowDomesticPlans(priorStays, targetDateStr, odptData, history) {
+  const flights = Object.values(odptData?.dates?.[targetDateStr.replace(/-/g, '')] || {})
+    .filter(f => !f.isCancelled && /78P|788/.test(String(f.model || '')) &&
+      f.origin && f.dest && parseTimeToMinutes(f.depTime) !== null && parseTimeToMinutes(f.arrTime) !== null);
+  if (!flights.length || !priorStays.length) return [];
 
-  // 78P / 788 便を抽出
-  const b78Flights = dayFlights.filter(f => {
-    return Boolean(f.model && (f.model === '788' || f.model === '78P' || f.model.includes('788')));
-  });
-
-  const plans = [];
-  const planLetters = ['プランA', 'プランB', 'プランC'];
-  const rankLabels = ['本命 ◎', '有力 ◯', '対抗 ▲'];
-
-  for (let idx = 0; idx < Math.min(3, priorStays.length); idx++) {
-    const stay = priorStays[idx];
-    const startAirport = stay.code;
-
-    // 朝一便（06:30〜09:30発）
-    let morningCandidates = b78Flights.filter(df => {
-      if (df.origin !== startAirport) return false;
-      const depM = parseTimeToMinutes(df.depTime);
-      return depM !== null && depM >= 390 && depM <= 570;
-    });
-
-    if (morningCandidates.length === 0) {
-      morningCandidates = dayFlights.filter(df => {
-        if (df.origin !== startAirport) return false;
-        const depM = parseTimeToMinutes(df.depTime);
-        return depM !== null && depM <= 600 && df.model?.includes('78');
-      });
+  const counts = new Map();
+  const transitions = new Map();
+  const past = history.filter(f => f.dateJst < targetDateStr && (f.isLanded || f.isLive))
+    .sort((a, b) => a.dateJst.localeCompare(b.dateJst) || a.depTime.localeCompare(b.depTime));
+  for (let i = 0; i < past.length; i++) {
+    const f = past[i];
+    counts.set(f.flightNo, (counts.get(f.flightNo) || 0) + 1);
+    const previous = past[i - 1];
+    if (previous && previous.dateJst === f.dateJst && previous.destCode === f.origCode) {
+      const key = `${previous.flightNo}>${f.flightNo}`;
+      transitions.set(key, (transitions.get(key) || 0) + 1);
     }
-
-    if (morningCandidates.length === 0) continue;
-
-    // 最有力初便からデイリースジを構築
-    const f1 = morningCandidates[0];
-    const path = [f1];
-    let curAirport = f1.dest;
-    let curArr = parseTimeToMinutes(f1.arrTime) ?? 600;
-
-    for (let step = 0; step < 4; step++) {
-      const nextCands = b78Flights.filter(df => {
-        if (df.origin !== curAirport) return false;
-        if (path.some(p => p.flightNo === df.flightNo)) return false;
-        const dep = parseTimeToMinutes(df.depTime);
-        return dep !== null && dep >= curArr + 35 && dep <= curArr + 150;
-      });
-
-      if (nextCands.length === 0) break;
-      const nextF = nextCands[0];
-      path.push(nextF);
-      curAirport = nextF.dest;
-      curArr = parseTimeToMinutes(nextF.arrTime) ?? (curArr + 120);
-      if (curArr >= 1260) break; // 21:00以降着
-    }
-
-    const allF = path.map((f, fIdx) => ({
-      step: `第${fIdx + 1}便`,
-      flightNo: f.flightNo,
-      orig: f.origin,
-      dest: f.dest,
-      route: `${AIRPORT_NAMES[f.origin] || f.origin} ➔ ${AIRPORT_NAMES[f.dest] || f.dest}`,
-      time: `${f.depTime}発 - ${f.arrTime}着`,
-      tag: fIdx === path.length - 1 ? `🌙${shortAirportName(f.dest)}泊候補` : '予想接続 (78P)'
-    }));
-
-    const finalStay = path[path.length - 1].dest;
-    const stayLabel = shortAirportName(finalStay);
-    const stops = [path[0].origin, ...path.map(f => f.dest)];
-    const routeSummary = stops.map(s => shortAirportName(s)).join(' ➔ ') + '(泊)';
-
-    plans.push({
-      planId: `tomorrow-plan-${idx + 1}`,
-      planName: `${planLetters[idx]} (${shortAirportName(startAirport)}泊始発 ➔ ${stayLabel}泊)`,
-      stayCode: finalStay,
-      rank: rankLabels[idx],
-      probability: stay.probability,
-      title: `【${shortAirportName(startAirport)}始発】${routeSummary}`,
-      routeSummary,
-      flights: allF
-    });
   }
 
-  return plans;
+  const completed = [];
+  for (const stay of priorStays) {
+    const morning = flights.filter(f => f.origin === stay.code &&
+      parseTimeToMinutes(f.depTime) >= 360 && parseTimeToMinutes(f.depTime) <= 660);
+    const morningWeights = morning.map(f => ({
+      flights: [f],
+      weight: 1 + Math.min(counts.get(f.flightNo) || 0, 5)
+    }));
+    const morningWeightTotal = morningWeights.reduce((sum, item) => sum + item.weight, 0);
+    let beam = morningWeights.map(item => ({
+      flights: item.flights,
+      score: (stay.probability / 100) * item.weight / morningWeightTotal
+    })).sort((a, b) => b.score - a.score).slice(0, 12);
+
+    for (let step = 1; step < 8 && beam.length; step++) {
+      const nextBeam = [];
+      for (const state of beam) {
+        const last = state.flights[state.flights.length - 1];
+        const arrival = parseTimeToMinutes(last.arrTime);
+        if (arrival >= 1020) completed.push(state);
+        const next = flights.filter(f => {
+          const departure = parseTimeToMinutes(f.depTime);
+          const turn = departure - arrival;
+          return f.origin === last.dest && turn >= (last.dest === 'HND' ? 35 : 30) &&
+            turn <= (last.dest === 'HND' ? 270 : 180) &&
+            !state.flights.some(prev => prev.flightNo === f.flightNo);
+        }).map(f => {
+          const turn = parseTimeToMinutes(f.depTime) - arrival;
+          const transition = transitions.get(`${last.flightNo}>${f.flightNo}`) || 0;
+          const weight = (1 + Math.min(transition, 5)) * (turn <= 90 ? 1.5 : 1);
+          return { flight: f, weight };
+        }).sort((a, b) => b.weight - a.weight).slice(0, 8);
+        if (!next.length) {
+          completed.push(state);
+          continue;
+        }
+        const total = next.reduce((sum, item) => sum + item.weight, 0);
+        for (const item of next) nextBeam.push({
+          flights: [...state.flights, item.flight],
+          score: state.score * item.weight / total
+        });
+      }
+      beam = nextBeam.sort((a, b) => b.score - a.score).slice(0, 24);
+    }
+    completed.push(...beam);
+  }
+  const seen = new Set();
+  const candidates = completed.sort((a, b) => b.score - a.score).filter(plan => {
+    const key = plan.flights.map(f => f.flightNo).join('>');
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).slice(0, 3);
+  const normalized = normalizeTo100Percent(candidates, 'score', 0);
+  return normalized.map((plan, idx) => {
+    const path = plan.flights;
+    const routeSummary = [path[0].origin, ...path.map(f => f.dest)].map(shortAirportName).join(' ➔ ');
+    return {
+      planId: `tomorrow-plan-${idx + 1}`,
+      planName: `プラン${['A', 'B', 'C'][idx]}`,
+      stayCode: path[path.length - 1].dest,
+      rank: ['本命', '候補', '候補'][idx],
+      probability: plan.probability,
+      routeSummary,
+      flights: path.map((f, i) => ({
+        step: `第${i + 1}便`,
+        flightNo: f.flightNo,
+        orig: f.origin,
+        dest: f.dest,
+        route: `${AIRPORT_NAMES[f.origin] || f.origin} ➔ ${AIRPORT_NAMES[f.dest] || f.dest}`,
+        time: `${f.depTime}発 - ${f.arrTime}着`,
+        tag: '予想'
+      }))
+    };
+  });
 }
 
 // ============================================================================
@@ -573,20 +587,24 @@ export async function generatePokemonWeeklyPrediction() {
 
   for (const jetMeta of POKEMON_JET_FLEET) {
     process.stdout.write(`📡 [${jetMeta.reg}] ${jetMeta.name} の最新フライトを取得中... `);
-    const rawFls = fetchAircraftFlightsFR24(jetMeta.reg, 12);
+    const rawFls = fetchAircraftFlightsFR24(jetMeta.reg, 50);
+    if (jetMeta.id === 'pokemon-red' && rawFls.length === 0) {
+      throw new Error('ポケモンジェット赤の運航データを取得できません。予想の更新を中止します。');
+    }
 
     const todayFlights = [];
     const recentFlights = [];
     let curFl = null;
-    let flightState = '駐機・待機中 🟡';
+    let flightState = '確認中';
     let curLoc = '確認中';
 
     for (const f of rawFls) {
       const flightNo = f.identification?.number?.default || f.identification?.callsign || '';
       const orig = f.airport?.origin?.code?.iata || '';
       const dest = f.airport?.destination?.code?.iata || '';
-      const isLive = Boolean(f.status?.live);
       const statusText = f.status?.text || '';
+      const isLanded = Boolean(f.time?.real?.arrival) || /Landed/i.test(statusText);
+      const isLive = !isLanded && Boolean(f.time?.real?.departure);
 
       const depTs = f.time?.real?.departure || f.time?.scheduled?.departure || f.time?.estimated?.departure;
       const arrTs = f.time?.real?.arrival || f.time?.scheduled?.arrival || f.time?.estimated?.arrival;
@@ -610,6 +628,7 @@ export async function generatePokemonWeeklyPrediction() {
         dateJst: dateStr,
         status: statusText,
         isLive,
+        isLanded,
         isToday: dateStr === todayStr
       };
 
@@ -623,8 +642,9 @@ export async function generatePokemonWeeklyPrediction() {
       }
     }
 
-    if (!curFl && todayFlights.length > 0) {
-      const last = todayFlights[0];
+    const landedFlights = todayFlights.filter(f => f.isLanded);
+    if (!curFl && landedFlights.length > 0) {
+      const last = landedFlights[0];
       curLoc = formatAirport(last.dest);
       flightState = '着陸済・駐機中 🟡';
     }
@@ -635,7 +655,8 @@ export async function generatePokemonWeeklyPrediction() {
       currentLocation: curLoc,
       currentFlight: curFl,
       todayFlights: todayFlights.reverse(),
-      recentFlights: recentFlights.slice(0, 6)
+      recentFlights: recentFlights.slice(0, 6),
+      history: recentFlights
     });
     console.log(`✅ [${flightState}] ${curLoc}`);
   }
@@ -645,20 +666,49 @@ export async function generatePokemonWeeklyPrediction() {
   let domesticPrediction = null;
 
   if (redJet) {
-    const todayRemainder = predictDomesticTodayRemainder(redJet.todayFlights, todayStr, odptData);
+    const observed = redJet.todayFlights.filter(f => f.isLive || f.isLanded);
+    const todayRemainder = predictDomesticTodayRemainder(observed, todayStr, odptData);
 
     // 翌日（明日）の予測
     const tomorrowDate = new Date(jstNow.getTime() + 24 * 3600 * 1000);
     const tmrStr = `${tomorrowDate.getFullYear()}-${String(tomorrowDate.getMonth() + 1).padStart(2, '0')}-${String(tomorrowDate.getDate()).padStart(2, '0')}`;
-    const tomorrowPlans = predictTomorrowDomesticPlans(todayRemainder.nightStayProbabilities, tmrStr, odptData);
+    const tomorrowPlans = predictTomorrowDomesticPlans(todayRemainder.nightStayProbabilities, tmrStr, odptData, redJet.history);
+
+    let snapshots = {};
+    if (fs.existsSync(SNAPSHOT_FILE)) {
+      try {
+        snapshots = JSON.parse(fs.readFileSync(SNAPSHOT_FILE, 'utf-8'));
+      } catch (error) {
+        throw new Error(`前夜予想の記録を読み込めません: ${error.message}`);
+      }
+    }
+    const previous = snapshots[todayStr] || null;
+    if (tomorrowPlans.length > 0) {
+      snapshots[tmrStr] = { updatedAtIso: new Date().toISOString(), plans: tomorrowPlans };
+      fs.writeFileSync(SNAPSHOT_FILE, JSON.stringify(snapshots, null, 2), 'utf-8');
+    }
+    const dayFlights = odptData?.dates?.[todayStr.replace(/-/g, '')] || {};
+    const todayComparison = (previous?.plans?.[0]?.flights || []).map((flight, index) => {
+      const reported = dayFlights[flight.flightNo];
+      let update = null;
+      if (reported?.isCancelled && reported.status) update = '当日情報で欠航';
+      else if (reported?.status && reported.model && !/78P|788/.test(reported.model)) {
+        update = `当日の機種は${reported.model}`;
+      }
+      const actual = observed[index] || null;
+      return { predicted: flight, actual, update };
+    });
 
     domesticPrediction = {
       ...todayRemainder,
       tomorrowDate: tmrStr,
-      tomorrowPlans
+      tomorrowPlans,
+      previousPredictionAt: previous?.updatedAtIso || null,
+      todayComparison
     };
   }
 
+  for (const jet of rawJetsData) delete jet.history;
   const result = {
     updatedAt: nowJa,
     updatedAtIso: new Date().toISOString(),
@@ -671,21 +721,6 @@ export async function generatePokemonWeeklyPrediction() {
   fs.writeFileSync(OUTPUT_JSON_FILE, JSON.stringify(result, null, 2), 'utf-8');
   if (fs.existsSync(SRC_DATA_DIR)) {
     fs.writeFileSync(SRC_OUTPUT_JSON_FILE, JSON.stringify(result, null, 2), 'utf-8');
-  }
-
-  // 旧 pokemon_jet_status.json との互換性維持
-  const compatResult = {
-    updatedAt: result.updatedAtIso,
-    updatedAtJst: nowJa,
-    totalJets: rawJetsData.length,
-    jets: rawJetsData.map(j => ({
-      ...j,
-      domesticPrediction: j.id === 'pokemon-red' ? domesticPrediction : null
-    }))
-  };
-  fs.writeFileSync(STATUS_JSON_FILE, JSON.stringify(compatResult, null, 2), 'utf-8');
-  if (fs.existsSync(SRC_DATA_DIR)) {
-    fs.writeFileSync(SRC_STATUS_JSON_FILE, JSON.stringify(compatResult, null, 2), 'utf-8');
   }
 
   console.log(`💾 ポケモン予測データを保存しました: ${OUTPUT_JSON_FILE}`);
