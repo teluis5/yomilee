@@ -1,40 +1,49 @@
 {
   "2026-11-14": {
-    "updatedAtIso": "2026-11-13T11:00:20.116Z",
+    "updatedAtIso": "2026-11-13T12:00:29.618Z",
     "plans": [
       {
         "planId": "tomorrow-plan-1",
         "planName": "プランA",
         "stayCode": "HND",
         "rank": "本命",
-        "probability": 41,
-        "routeSummary": "高松 ➔ 羽田 ➔ 石垣 ➔ 羽田",
+        "probability": 58,
+        "routeSummary": "羽田 ➔ 伊丹 ➔ 新千歳 ➔ 伊丹 ➔ 羽田",
         "flights": [
           {
             "step": "第1便",
-            "flightNo": "NH532",
-            "orig": "TAK",
-            "dest": "HND",
-            "route": "高松 ➔ 東京(羽田)",
-            "time": "07:10発 - 08:25着",
+            "flightNo": "NH15",
+            "orig": "HND",
+            "dest": "ITM",
+            "route": "東京(羽田) ➔ 大阪(伊丹)",
+            "time": "08:15発 - 09:25着",
             "tag": "予想"
           },
           {
             "step": "第2便",
-            "flightNo": "NH91",
-            "orig": "HND",
-            "dest": "ISG",
-            "route": "東京(羽田) ➔ 石垣",
-            "time": "11:40発 - 15:00着",
+            "flightNo": "NH773",
+            "orig": "ITM",
+            "dest": "CTS",
+            "route": "大阪(伊丹) ➔ 札幌(新千歳)",
+            "time": "10:20発 - 12:10着",
             "tag": "予想"
           },
           {
             "step": "第3便",
-            "flightNo": "NH92",
-            "orig": "ISG",
+            "flightNo": "NH984",
+            "orig": "CTS",
+            "dest": "ITM",
+            "route": "札幌(新千歳) ➔ 大阪(伊丹)",
+            "time": "13:45発 - 15:45着",
+            "tag": "予想"
+          },
+          {
+            "step": "第4便",
+            "flightNo": "NH34",
+            "orig": "ITM",
             "dest": "HND",
-            "route": "石垣 ➔ 東京(羽田)",
-            "time": "15:50発 - 18:30着",
+            "route": "大阪(伊丹) ➔ 東京(羽田)",
+            "time": "16:50発 - 18:05着",
             "tag": "予想"
           }
         ]
@@ -42,36 +51,36 @@
       {
         "planId": "tomorrow-plan-2",
         "planName": "プランB",
-        "stayCode": "HND",
+        "stayCode": "NGS",
         "rank": "候補",
-        "probability": 41,
-        "routeSummary": "高松 ➔ 羽田 ➔ 宮古 ➔ 羽田",
+        "probability": 21,
+        "routeSummary": "羽田 ➔ 長崎 ➔ 羽田 ➔ 長崎",
         "flights": [
           {
             "step": "第1便",
-            "flightNo": "NH532",
-            "orig": "TAK",
-            "dest": "HND",
-            "route": "高松 ➔ 東京(羽田)",
-            "time": "07:10発 - 08:25着",
+            "flightNo": "NH663",
+            "orig": "HND",
+            "dest": "NGS",
+            "route": "東京(羽田) ➔ 長崎",
+            "time": "10:55発 - 12:55着",
             "tag": "予想"
           },
           {
             "step": "第2便",
-            "flightNo": "NH87",
-            "orig": "HND",
-            "dest": "MMY",
-            "route": "東京(羽田) ➔ 宮古",
-            "time": "12:00発 - 15:15着",
+            "flightNo": "NH666",
+            "orig": "NGS",
+            "dest": "HND",
+            "route": "長崎 ➔ 東京(羽田)",
+            "time": "13:45発 - 15:20着",
             "tag": "予想"
           },
           {
             "step": "第3便",
-            "flightNo": "NH88",
-            "orig": "MMY",
-            "dest": "HND",
-            "route": "宮古 ➔ 東京(羽田)",
-            "time": "16:15発 - 18:45着",
+            "flightNo": "NH667",
+            "orig": "HND",
+            "dest": "NGS",
+            "route": "東京(羽田) ➔ 長崎",
+            "time": "16:35発 - 18:35着",
             "tag": "予想"
           }
         ]
@@ -81,34 +90,43 @@
         "planName": "プランC",
         "stayCode": "HND",
         "rank": "候補",
-        "probability": 18,
-        "routeSummary": "高松 ➔ 羽田 ➔ 福岡 ➔ 羽田",
+        "probability": 21,
+        "routeSummary": "羽田 ➔ 長崎 ➔ 羽田 ➔ 長崎 ➔ 羽田",
         "flights": [
           {
             "step": "第1便",
-            "flightNo": "NH532",
-            "orig": "TAK",
-            "dest": "HND",
-            "route": "高松 ➔ 東京(羽田)",
-            "time": "07:10発 - 08:25着",
+            "flightNo": "NH663",
+            "orig": "HND",
+            "dest": "NGS",
+            "route": "東京(羽田) ➔ 長崎",
+            "time": "10:55発 - 12:55着",
             "tag": "予想"
           },
           {
             "step": "第2便",
-            "flightNo": "NH253",
-            "orig": "HND",
-            "dest": "FUK",
-            "route": "東京(羽田) ➔ 福岡",
-            "time": "12:40発 - 14:40着",
+            "flightNo": "NH666",
+            "orig": "NGS",
+            "dest": "HND",
+            "route": "長崎 ➔ 東京(羽田)",
+            "time": "13:45発 - 15:20着",
             "tag": "予想"
           },
           {
             "step": "第3便",
-            "flightNo": "NH258",
-            "orig": "FUK",
+            "flightNo": "NH667",
+            "orig": "HND",
+            "dest": "NGS",
+            "route": "東京(羽田) ➔ 長崎",
+            "time": "16:35発 - 18:35着",
+            "tag": "予想"
+          },
+          {
+            "step": "第4便",
+            "flightNo": "NH670",
+            "orig": "NGS",
             "dest": "HND",
-            "route": "福岡 ➔ 東京(羽田)",
-            "time": "15:30発 - 17:10着",
+            "route": "長崎 ➔ 東京(羽田)",
+            "time": "19:25発 - 21:00着",
             "tag": "予想"
           }
         ]
