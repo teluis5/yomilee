@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月13日 16:00",
-  "updatedAtIso": "2026-11-13T07:00:21.370Z",
+  "updatedAt": "2026年11月13日 17:00",
+  "updatedAtIso": "2026-11-13T08:00:18.977Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "東京(羽田)",
-    "currentLocationCode": "HND",
+    "currentLocation": "飛行中 (東京(羽田) ➔ 福岡)",
+    "currentLocationCode": "FUK",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "東京(羽田) (100%)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
@@ -1274,7 +1274,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "東京(羽田)",
+      "currentAirport": "飛行中 (東京(羽田) ➔ 福岡)",
       "nightStay": "東京(羽田) (100%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH261 (東京(羽田) ➔ 福岡) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
@@ -1329,7 +1329,7 @@
               "dest": "FUK",
               "route": "東京(羽田) ➔ 福岡",
               "time": "15:45発 - 17:45着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "④ 第4便"
             },
             {
@@ -1466,7 +1466,14 @@
             "time": "16:00発 - 17:10着",
             "update": "当日機種：321（767対象外）"
           },
-          "actual": null
+          "actual": {
+            "flightNo": "NH261",
+            "route": "東京(羽田) ➔ 福岡",
+            "time": "16:02離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#5",
@@ -1535,9 +1542,9 @@
           "flightNo": "NH261",
           "route": "東京(羽田) ➔ 福岡",
           "time": "15:45発 - 17:45着",
-          "status": "出発予定 (15:50)",
+          "status": "到着予定 (17:36)",
           "isLanded": false,
-          "isLive": false,
+          "isLive": true,
           "isPredicted": false
         },
         {
@@ -3493,7 +3500,7 @@
           "route": "東京(羽田) ⇔ 松山",
           "destCode": "MYJ",
           "isInterCity": false,
-          "probability": 27,
+          "probability": 26,
           "candidateFlights": "NH583 / NH584 / NH593 / NH596",
           "note": "羽田発着B767幹線スジ",
           "star": "★★★★★",
@@ -3515,7 +3522,7 @@
           "route": "東京(羽田) ⇔ 鹿児島",
           "destCode": "KOJ",
           "isInterCity": false,
-          "probability": 20,
+          "probability": 21,
           "candidateFlights": "NH619 / NH622 / NH627 / NH630",
           "note": "羽田発着B767幹線スジ",
           "star": "★★★★☆",
@@ -3648,7 +3655,7 @@
           "stayCode": "HND",
           "startAirportCode": "HND",
           "rank": "有力 ◯",
-          "probability": 34,
+          "probability": 33,
           "title": "【前夜羽田泊(NH583始発)】羽田 ➔ 松山 ➔ 羽田 ➔ 宮古 ➔ 羽田(泊)",
           "routeSummary": "羽田 ➔ 松山 ➔ 羽田 ➔ 宮古 ➔ 羽田(泊)",
           "airports": [
@@ -3729,7 +3736,7 @@
           "stayCode": "HND",
           "startAirportCode": "HND",
           "rank": "対抗 ▲",
-          "probability": 26,
+          "probability": 27,
           "title": "【前夜羽田泊(NH619始発)】羽田 ➔ 鹿児島 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 鹿児島 ➔ 羽田(泊)",
           "routeSummary": "羽田 ➔ 鹿児島 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 鹿児島 ➔ 羽田(泊)",
           "airports": [
@@ -3926,7 +3933,7 @@
       "code": "NGO",
       "name": "名古屋(中部)",
       "note": "新千歳便（NH703/NH712等）や羽田便の夜間ステイ拠点。",
-      "prob": 61,
+      "prob": 60,
       "level": "A (高確率)"
     },
     {
@@ -3940,7 +3947,7 @@
       "code": "NGS",
       "name": "長崎空港",
       "note": "朝一便（NH661/NH664）および夜間ステイ便（NH669/NH662）で高頻度投入。",
-      "prob": 41,
+      "prob": 40,
       "level": "B (中確率)"
     },
     {
@@ -4050,7 +4057,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 689,
+    "totalFleetFlights": 692,
     "fleetCount": 11
   }
 }
