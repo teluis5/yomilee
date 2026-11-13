@@ -2,12 +2,13 @@
 import Layout from '../../../layouts/BlogPost.astro';
 import Ad from '../../../components/Ad.astro';
 import predictionData from '../../../data/pokemon_weekly_prediction.json';
-import heroImage from '../../../assets/images/chiikawajet_ogp.png';
 
-const title = "【今日の運航状況】ANAポケモンジェット全機・ピカチュウジェット本日のフライト予定＆運航スケジュール【JA784A他】";
+const title = "【今日の運航状況】ANAポケモンジェット全機・ピカチュウジェット本日のフライト予定＆運航スケジュール【JA819A他】";
 const description = "【毎日自動更新】ANA特別塗装機「ポケモンジェット全5機（ピカチュウジェットNH・イーブイジェットNH・国内線ポケモン赤）」の今日・本日のリアルタイム運航スケジュール、現在地（いまどこ）、羽田・新千歳・那覇等の就航便予想を公開中！";
 
 const currentData = predictionData;
+const updatedAtMs = Date.parse(currentData.updatedAtIso || '');
+const dataIsStale = !Number.isFinite(updatedAtMs) || Date.now() - updatedAtMs > 2 * 60 * 60 * 1000;
 const updatedAt = currentData.updatedAt || "更新中";
 const jets = currentData.jets || [];
 const redJet = jets.find((j) => j.id === 'pokemon-red') || jets[0];
@@ -33,7 +34,7 @@ const pageSchema = {
 				name: 'ANAポケモンジェット（ピカチュウジェット・イーブイジェット）は今日どこを飛んでいますか？',
 				acceptedAnswer: {
 					'@type': 'Answer',
-					text: '国内線用「ポケモン赤（JA784A）」および国際線用「ピカチュウジェットNH（JA894A）」「イーブイジェットNH（JA898A）」のリアルタイム現在地および本日のフライト情報は、本ページ上部にて毎日自動更新されています。'
+					text: '各機体の取得済みの運航情報と更新時刻を、本ページ上部で確認できます。'
 				}
 			},
 			{
@@ -54,29 +55,17 @@ const pageSchema = {
 	description={description}
 	pubDate={new Date('2026-11-02')}
 	updatedDate={new Date(currentData.updatedAtIso || Date.now())}
-	heroImage={heroImage}
 >
 	<script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
 
 	<div class="pokemon-dashboard google-anno-skip">
-		<!-- ✈️ 特別塗装機 統合ポータル ナビゲーションタブ -->
-		<nav class="portal-tab-nav">
-			<a href="/site/chiikawajet/" class="portal-tab-btn">
-				<span class="tab-icon">✈️</span>
-				<span class="tab-label">ちいかわジェット (JA609A)</span>
-			</a>
-			<a href="/site/pokemonjet/" class="portal-tab-btn active">
-				<span class="tab-icon">⚡</span>
-				<span class="tab-label">ポケモンジェット全機 (全5機)</span>
-				<span class="tab-badge">表示中</span>
-			</a>
-		</nav>
+
 
 		<!-- ヒーローヘッダー -->
 		<div class="hero-banner">
 			<div class="hero-top-row">
 				<span class="hero-tag">⚡ ANA × そらとぶピカチュウプロジェクト ＆ ポケモン30周年</span>
-				<span class="live-pill">● LIVE TRACKING</span>
+				<span class="live-pill">運航情報</span>
 			</div>
 			<h1 class="hero-title">ANA ポケモンジェット全機 運航状況・現在地トラッカー</h1>
 			<p class="hero-subtitle">
@@ -88,6 +77,15 @@ const pageSchema = {
 				<span>稼働中機材: <b>{jets.length} 機</b></span>
 			</div>
 		</div>
+
+		<p class="stale-notice" role="status" hidden={!dataIsStale} data-updated-at={currentData.updatedAtIso || ''}>運航情報の最終更新は{updatedAt}です。掲載している便や予想は更新時点の情報です。</p>
+		<script>
+			const notice = document.querySelector('.stale-notice');
+			if (notice instanceof HTMLElement) {
+				const updated = Date.parse(notice.dataset.updatedAt || '');
+				if (!Number.isFinite(updated) || Date.now() - updated > 2 * 60 * 60 * 1000) notice.hidden = false;
+			}
+		</script>
 
 		<!-- ============================================================ -->
 		<!-- 国内線特集: ポケモンジェット 赤 (JA819A / B787-8) -->
@@ -284,10 +282,7 @@ const pageSchema = {
 					<h4>2. 国内線ポケモン赤（JA819A）に会える確率は？</h4>
 					<p>B787-8（78P）国内線仕様機として、羽田を拠点に福岡・石垣・長崎・松山・新千歳・那覇など全国を毎日4〜5便飛んでいます。当サイトの「翌日予想ダイヤ」を参考にすることで、前日の段階で高い確率で狙い撃ちが可能です。</p>
 				</div>
-				<div class="guide-item">
-					<h4>3. ちいかわジェットとの違いは？</h4>
-					<p>ちいかわジェット（JA609A）はB767-300ER（主に地方幹線）ですが、ポケモン赤は最新のB787-8（全席モニター完備・ワイドボディ機）。長距離リゾート路線（石垣・那覇）や高需要路線にも積極的に投入されます。</p>
-				</div>
+
 			</div>
 		</div>
 
@@ -300,13 +295,13 @@ const pageSchema = {
 				<div class="faq-item">
 					<h3 class="faq-q">Q1. ポケモンジェット（ピカチュウジェット・イーブイジェット）は今日どこを飛んでいる？</h3>
 					<p class="faq-a">
-						ANAのポケモンジェットは機体ごとに国内線・国際線で運航エリアが分かれています。国内線のボーイング787（<strong>JA784A</strong>）は羽田〜新千歳・福岡・那覇などを巡回し、国際線のボーイング787-9（<strong>JA894A / JA898A</strong>）はアジア・北米・欧州路線を中心に飛行しています。本ページ上部のリアルタイムステータスで現在の運航状況を確認できます。
+						ANAのポケモンジェットは機体ごとに国内線・国際線で運航エリアが分かれています。各機体の運航状況は、本ページ上部に掲載しています。最終更新時刻を確認してください。
 					</p>
 				</div>
 				<div class="faq-item">
 					<h3 class="faq-q">Q2. 今日の運行スケジュールはどうやって特定できる？</h3>
 					<p class="faq-a">
-						事前の固定タイムテーブルは発表されませんが、航空機追跡サービス「Flightradar24」で機体番号（<strong>JA784A、JA894A、JA898A</strong>）を検索することで、本日何便としてどこへ飛ぶかをリアルタイム追跡可能です。当ダッシュボードでは毎日自動更新で最新状況を反映しています。
+						事前の固定タイムテーブルは発表されませんが、航空機追跡サービス「Flightradar24」で機体番号（<strong>JA819A、JA894A、JA784A</strong>）を検索することで、本日何便としてどこへ飛ぶかをリアルタイム追跡可能です。当ダッシュボードでは毎日自動更新で最新状況を反映しています。
 					</p>
 				</div>
 				<div class="faq-item">
@@ -340,42 +335,13 @@ const pageSchema = {
 		color: #1e293b;
 	}
 
-	/* ✈️ ポータル ナビゲーションタブ */
-	.portal-tab-nav {
-		display: flex;
-		gap: 10px;
-		margin-bottom: 20px;
-		border-bottom: 2px solid #e2e8f0;
-		padding-bottom: 12px;
-	}
-	.portal-tab-btn {
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-		padding: 10px 18px;
-		border-radius: 12px;
-		background: #f1f5f9;
-		color: #475569;
-		text-decoration: none;
-		font-weight: 700;
-		font-size: 0.95rem;
-		transition: all 0.2s ease;
-	}
-	.portal-tab-btn:hover {
-		background: #e2e8f0;
-		color: #0f172a;
-	}
-	.portal-tab-btn.active {
-		background: #2563eb;
-		color: #ffffff;
-		box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-	}
-	.tab-badge {
-		background: rgba(255, 255, 255, 0.25);
-		font-size: 0.72rem;
-		padding: 2px 6px;
+	.stale-notice {
+		margin: 0 0 24px;
+		padding: 16px;
+		background: #fff7ed;
+		color: #7c2d12;
 		border-radius: 8px;
-		font-weight: 800;
+		line-height: 1.6;
 	}
 
 	/* ヒーローバナー */
