@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月13日 13:00",
-  "updatedAtIso": "2026-11-13T04:00:15.690Z",
+  "updatedAt": "2026年11月13日 14:00",
+  "updatedAtIso": "2026-11-13T05:00:18.348Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (札幌(新千歳) ➔ 東京(羽田))",
+    "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "広島(92%) / 東京(羽田)(8%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
@@ -1279,7 +1279,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "currentAirport": "飛行中 (札幌(新千歳) ➔ 東京(羽田))",
+      "currentAirport": "東京(羽田)",
       "nightStay": "広島(92%) / 東京(羽田)(8%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH62 (札幌(新千歳) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 92% / 東京(羽田) 8% と推定されます。",
@@ -1330,7 +1330,7 @@
               "dest": "HND",
               "route": "札幌(新千歳) ➔ 東京(羽田)",
               "time": "12:30発 - 14:10着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "③ 第3便"
             },
             {
@@ -1395,7 +1395,7 @@
               "dest": "HND",
               "route": "札幌(新千歳) ➔ 東京(羽田)",
               "time": "12:30発 - 14:10着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "③ 第3便"
             },
             {
@@ -1451,7 +1451,7 @@
               "dest": "HND",
               "route": "札幌(新千歳) ➔ 東京(羽田)",
               "time": "12:30発 - 14:10着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "③ 第3便"
             },
             {
@@ -1571,10 +1571,10 @@
           "actual": {
             "flightNo": "NH62",
             "route": "札幌(新千歳) ➔ 東京(羽田)",
-            "time": "12:41離陸",
-            "status": "飛行中",
-            "isLanded": false,
-            "isLive": true
+            "time": "12:41離陸 / 13:57着陸",
+            "status": "着陸済",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -1657,9 +1657,9 @@
           "flightNo": "NH62",
           "route": "札幌(新千歳) ➔ 東京(羽田)",
           "time": "12:30発 - 14:10着",
-          "status": "到着予定 (13:59)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (13:57)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -4190,7 +4190,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 681,
+    "totalFleetFlights": 683,
     "fleetCount": 11
   }
 }
