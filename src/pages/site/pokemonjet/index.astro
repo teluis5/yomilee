@@ -148,7 +148,7 @@ const pageSchema = {
 						{upcomingFlights.map((f, idx) => (
 							<div class="forecast-flight">
 								<span>{idx === 0 ? '次の便の予想' : '予想'}</span><b>{f.flightNo}</b><span>{f.route}</span><span>{f.time}</span>
-							</details>
+							</div>
 						))}
 					</div>
 				) : <p class="sub-sec-desc">今後の便の予想を確認中です。</p>}
