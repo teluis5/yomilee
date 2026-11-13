@@ -111,12 +111,93 @@ const pageSchema = {
 			</div>
 		</div>
 
-		<!-- ① 本日のフライト（昨晩時点の予想 vs 実際） -->
+		<!-- 本日の運航予定 -->
+		{todayData && (
+			<section class="dash-section today-upcoming">
+				<div class="sec-head">
+					<h2 class="sec-title">今日のこれからの運航予想（{todayData.dateJa}）</h2>
+					<span class="sec-tag tag-today">最終更新 {updatedAt}</span>
+				</div>
+				<p class="today-note">最新の運航情報をもとにした予想です。便や機材は変更される場合があります。</p>
+				{upcomingFlights.length > 0 ? (
+					<div class="upcoming-list">
+						{upcomingFlights.map((flight) => (
+							<div class="upcoming-row">
+								<div class="upcoming-time">
+									<span>出発</span>
+									<b>{flight.depTime || flight.time?.match(/\d{1,2}:\d{2}/)?.[0] || '時刻未定'}</b>
+								</div>
+								<div class="upcoming-detail">
+									<div class="upcoming-route">{flight.route}</div>
+									<div class="upcoming-meta">
+										<b>{flight.flightNo}</b>
+										<span>{flight.arrTime ? `${flight.arrTime}着` : flight.time?.match(/-\s*(\d{1,2}:\d{2})/)?.[1] ? `${flight.time.match(/-\s*(\d{1,2}:\d{2})/)[1]}着` : ''}</span>
+										<span class="upcoming-label">{flight.isPredicted ? '予想' : '運航予定'}</span>
+									</div>
+								</div>
+							</div>
+						))}
+					</div>
+				) : (
+					<p class="today-empty">{aircraft.isNightStayConfirmed ? '本日の今後の運航予想はありません。' : '今後の運航予想を確認中です。'}</p>
+				)}
+			</section>
+		)}
+
+		<!-- ② 明日の予定 -->
+		{tomorrowData && (
+			<section class="dash-section">
+				<div class="sec-head">
+					<h2 class="sec-title">明日の運航予想（{tomorrowData.dateJa}）</h2>
+					<span class="sec-sub-note">最新の運航情報をもとにした予想</span>
+				</div>
+
+				{tomorrowData.confirmedFirstFlight && (
+					<div class="confirmed-first">
+						<span class="cf-tag">朝一便の予想</span>
+						<b>{tomorrowData.confirmedFirstFlight.flightNo}</b>
+						<span>{tomorrowData.confirmedFirstFlight.route}</span>
+						<span class="cf-time">({tomorrowData.confirmedFirstFlight.time})</span>
+					</div>
+				)}
+
+				<div class="plans-stack">
+					{(tomorrowData.plans || []).map((plan, idx) => (
+						<div class="plan-box">
+							<div class="plan-head">
+								<div class="ph-left">
+									<span class={`plan-badge p-${idx}`}>{plan.planName}</span>
+									<span class="plan-prob">{plan.probability}%</span>
+									<span class="plan-flow">{plan.title || plan.routeSummary}</span>
+								</div>
+							</div>
+							<div class="plan-body">
+								{plan.description && (
+									<p style="font-size: 0.8rem; color: #475569; margin: 0.35rem 0 0.5rem; line-height: 1.45;">
+										{plan.description}
+									</p>
+								)}
+								{plan.flights.map((f) => (
+									<div class="plan-fl-row">
+										<span class="pf-step">{f.step}</span>
+										<span class="pf-time">{f.time.replace(/発 - /g, ' - ').replace(/着/g, '')}</span>
+										<span class="pf-no">{f.flightNo}</span>
+										<span class="pf-route">{f.route} {f.tag ? `[${f.tag}]` : ''}</span>
+									</div>
+								))}
+							</div>
+						</div>
+					))}
+				</div>
+			</section>
+		)}
+
+		<!-- 前夜予想と実績の比較 -->
 		{todayData && (
 			<section class="dash-section">
 				<div class="sec-head">
-					<h2 class="sec-title">本日のフライト：前夜予想と確認済みの運航（{todayData.dateJa}）</h2>
-					<span class="sec-tag tag-today">当日速報</span>
+					<h2 class="sec-title">前夜予想と確認済みの運航（{todayData.dateJa}）</h2>
+
 				</div>
 
 				{todayData.todayComparison && todayData.todayComparison.length > 0 ? (
@@ -168,77 +249,10 @@ const pageSchema = {
 					</div>
 				) : <p>確認済みの運航はまだありません。</p>}
 				{!todayData.todayPlanHeaders?.length && <p>前夜予想の記録はありません。</p>}
-				{upcomingFlights.length > 0 && (
-					<>
-						<h3>今後の便（当日更新）</h3>
-						<div class="flight-list">
-							{upcomingFlights.map((f) => (
-								<div class={`flight-row ${f.isPredicted ? 'is-predicted' : ''}`}>
-									<div class="fl-time">{f.time.replace(/発 - /g, ' - ').replace(/着/g, '')}</div>
-									<div class="fl-main">
-										<span class="fl-no">{f.flightNo}</span>
-										<span class="fl-route">{f.route}</span>
-									</div>
-									<div class="fl-status">
-										<span class={`status-badge ${f.isPredicted ? 'b-pred' : (f.isLanded ? 'b-landed' : (f.isLive ? 'b-live' : 'b-sched'))}`}>
-											{f.status}
-										</span>
-									</div>
-								</div>
-							))}
-						</div>
-					</>
-				)}
+
 			</section>
 		)}
 
-		<!-- ② 明日の予定 -->
-		{tomorrowData && (
-			<section class="dash-section">
-				<div class="sec-head">
-					<h2 class="sec-title">明日の予定（{tomorrowData.dateJa}）</h2>
-					<span class="sec-sub-note">客観推定確率（ANA公式76P枠・実績連動）</span>
-				</div>
-
-				{tomorrowData.confirmedFirstFlight && (
-					<div class="confirmed-first">
-						<span class="cf-tag">朝一確定便</span>
-						<b>{tomorrowData.confirmedFirstFlight.flightNo}</b>
-						<span>{tomorrowData.confirmedFirstFlight.route}</span>
-						<span class="cf-time">({tomorrowData.confirmedFirstFlight.time})</span>
-					</div>
-				)}
-
-				<div class="plans-stack">
-					{(tomorrowData.plans || []).map((plan, idx) => (
-						<div class="plan-box">
-							<div class="plan-head">
-								<div class="ph-left">
-									<span class={`plan-badge p-${idx}`}>{plan.planName}</span>
-									<span class="plan-prob">{plan.probability}%</span>
-									<span class="plan-flow">{plan.title || plan.routeSummary}</span>
-								</div>
-							</div>
-							<div class="plan-body">
-								{plan.description && (
-									<p style="font-size: 0.8rem; color: #475569; margin: 0.35rem 0 0.5rem; line-height: 1.45;">
-										{plan.description}
-									</p>
-								)}
-								{plan.flights.map((f) => (
-									<div class="plan-fl-row">
-										<span class="pf-step">{f.step}</span>
-										<span class="pf-time">{f.time.replace(/発 - /g, ' - ').replace(/着/g, '')}</span>
-										<span class="pf-no">{f.flightNo}</span>
-										<span class="pf-route">{f.route} {f.tag ? `[${f.tag}]` : ''}</span>
-									</div>
-								))}
-							</div>
-						</div>
-					))}
-				</div>
-			</section>
-		)}
 
 		<!-- ③ 明日以降の予定（週間タイムテーブル連鎖予想） -->
 		{forecastDays.length > 0 && (
@@ -625,6 +639,63 @@ const pageSchema = {
 	.sec-sub-note {
 		font-size: 0.75rem;
 		color: #64748b;
+	}
+
+	.today-note,
+	.today-empty {
+		margin: 0 0 12px;
+		color: #475569;
+		font-size: 0.875rem;
+		line-height: 1.6;
+	}
+	.upcoming-list {
+		background: #f1f5f9;
+		border-radius: 8px;
+		padding: 0 16px;
+	}
+	.upcoming-row {
+		display: grid;
+		grid-template-columns: 72px minmax(0, 1fr);
+		gap: 16px;
+		padding: 16px 0;
+		border-bottom: 1px solid #cbd5e1;
+	}
+	.upcoming-row:last-child {
+		border-bottom: 0;
+	}
+	.upcoming-time {
+		display: flex;
+		flex-direction: column;
+		color: #475569;
+		font-size: 0.75rem;
+	}
+	.upcoming-time b {
+		color: #0f172a;
+		font-size: 1.25rem;
+		font-variant-numeric: tabular-nums;
+		line-height: 1.3;
+	}
+	.upcoming-route {
+		color: #0f172a;
+		font-size: 1rem;
+		font-weight: 700;
+		line-height: 1.4;
+	}
+	.upcoming-meta {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 4px;
+		color: #475569;
+		font-size: 0.875rem;
+	}
+	.upcoming-meta b {
+		color: #075985;
+	}
+	.upcoming-label {
+		color: #075985;
+		font-weight: 700;
 	}
 
 	/* 本日のフライト一覧 */
