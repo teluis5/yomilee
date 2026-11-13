@@ -292,7 +292,8 @@ const rakutenWidgetIframeUrl = `https://static.affiliate.rakuten.co.jp/widget/ht
           if (!targetH2 || !targetH2.parentNode) return;
 
           // 直前にすでに広告が存在する場合はスキップ
-          const prevEl = targetH2.previousElementSibling;
+          const anchor = targetH2.closest('.sec-head, .sc-head') || targetH2;
+          const prevEl = anchor.previousElementSibling;
           if (prevEl && prevEl.classList.contains('adsense-wrapper')) return;
 
           const adWrapper = document.createElement('div');
@@ -317,7 +318,7 @@ const rakutenWidgetIframeUrl = `https://static.affiliate.rakuten.co.jp/widget/ht
                      data-full-width-responsive="true"></ins>
               </div>
             `;
-            targetH2.parentNode.insertBefore(adWrapper, targetH2);
+            anchor.before(adWrapper);
 
             try {
               (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -350,7 +351,7 @@ const rakutenWidgetIframeUrl = `https://static.affiliate.rakuten.co.jp/widget/ht
                 <div class="adsense-label" style="margin-top:0.35rem; margin-bottom:0;">PR 楽天市場</div>
               </div>
             `;
-            targetH2.parentNode.insertBefore(adWrapper, targetH2);
+            anchor.before(adWrapper);
           } else {
             // その他: Amazonアソシエイト
             const adData = amazonAds[Math.floor(Math.random() * amazonAds.length)];
@@ -374,7 +375,7 @@ const rakutenWidgetIframeUrl = `https://static.affiliate.rakuten.co.jp/widget/ht
                 </div>
               </div>
             `;
-            targetH2.parentNode.insertBefore(adWrapper, targetH2);
+            anchor.before(adWrapper);
           }
         });
       };
