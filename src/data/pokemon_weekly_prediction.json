@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月14日 07:00",
-  "updatedAtIso": "2026-11-13T22:00:23.206Z",
+  "updatedAt": "2026年11月14日 08:00",
+  "updatedAtIso": "2026-11-13T23:00:21.393Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,11 +17,65 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "確認中",
-      "currentLocation": "確認中",
-      "currentFlight": null,
-      "todayFlights": [],
+      "flightState": "飛行中 🟢",
+      "currentLocation": "東京(羽田) (HND) ➔ 松山 (MYJ)",
+      "currentFlight": {
+        "flightNo": "NH583",
+        "origin": "HND",
+        "dest": "MYJ",
+        "originName": "東京(羽田) (HND)",
+        "destinationName": "松山 (MYJ)",
+        "origCode": "HND",
+        "destCode": "MYJ",
+        "route": "東京(羽田) ➔ 松山",
+        "depTime": "07:39",
+        "arrTime": "08:50",
+        "timeRange": "07:39 - 08:50",
+        "dateJst": "2026-11-14",
+        "status": "Estimated 08:45",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
+      "todayFlights": [
+        {
+          "flightNo": "NH583",
+          "origin": "HND",
+          "dest": "MYJ",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "松山 (MYJ)",
+          "origCode": "HND",
+          "destCode": "MYJ",
+          "route": "東京(羽田) ➔ 松山",
+          "depTime": "07:39",
+          "arrTime": "08:50",
+          "timeRange": "07:39 - 08:50",
+          "dateJst": "2026-11-14",
+          "status": "Estimated 08:45",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
+        }
+      ],
       "recentFlights": [
+        {
+          "flightNo": "NH583",
+          "origin": "HND",
+          "dest": "MYJ",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "松山 (MYJ)",
+          "origCode": "HND",
+          "destCode": "MYJ",
+          "route": "東京(羽田) ➔ 松山",
+          "depTime": "07:39",
+          "arrTime": "08:50",
+          "timeRange": "07:39 - 08:50",
+          "dateJst": "2026-11-14",
+          "status": "Estimated 08:45",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH74",
           "origin": "CTS",
@@ -108,24 +162,6 @@
           "timeRange": "21:47 - 23:08",
           "dateJst": "2026-11-12",
           "status": "Landed 23:08",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
-        },
-        {
-          "flightNo": "NH77",
-          "origin": "HND",
-          "dest": "CTS",
-          "originName": "東京(羽田) (HND)",
-          "destinationName": "札幌(新千歳) (CTS)",
-          "origCode": "HND",
-          "destCode": "CTS",
-          "route": "東京(羽田) ➔ 札幌(新千歳)",
-          "depTime": "19:33",
-          "arrTime": "20:45",
-          "timeRange": "19:33 - 20:45",
-          "dateJst": "2026-11-12",
-          "status": "Landed 20:45",
           "isLive": false,
           "isLanded": true,
           "isToday": false
@@ -290,7 +326,7 @@
         "arrTime": "17:55",
         "timeRange": "05:00 - 17:55",
         "dateJst": "2026-11-14",
-        "status": "Estimated 17:47",
+        "status": "Estimated 18:06",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -309,7 +345,7 @@
           "arrTime": "17:55",
           "timeRange": "05:00 - 17:55",
           "dateJst": "2026-11-14",
-          "status": "Estimated 17:47",
+          "status": "Estimated 18:06",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -329,7 +365,7 @@
           "arrTime": "17:55",
           "timeRange": "05:00 - 17:55",
           "dateJst": "2026-11-14",
-          "status": "Estimated 17:47",
+          "status": "Estimated 18:06",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -455,7 +491,7 @@
         "arrTime": "08:30",
         "timeRange": "23:11 - 08:30",
         "dateJst": "2026-11-13",
-        "status": "Estimated 10:00",
+        "status": "Estimated 10:03",
         "isLive": true,
         "isLanded": false,
         "isToday": false
@@ -475,7 +511,7 @@
           "arrTime": "08:30",
           "timeRange": "23:11 - 08:30",
           "dateJst": "2026-11-13",
-          "status": "Estimated 10:00",
+          "status": "Estimated 10:03",
           "isLive": true,
           "isLanded": false,
           "isToday": false
@@ -703,14 +739,386 @@
     }
   ],
   "domesticPrediction": {
-    "nightStayName": "確認中",
-    "nightStayCode": null,
+    "nightStayName": "福岡 (27%)",
+    "nightStayCode": "FUK",
     "isNightStayConfirmed": false,
-    "nightStayProbabilities": [],
-    "predictedRemainingToday": [],
-    "todayPlans": [],
+    "nightStayProbabilities": [
+      {
+        "code": "FUK",
+        "airport": "福岡",
+        "weight": 10.692,
+        "floored": 27,
+        "remainder": 0.30093071354705714,
+        "originalIndex": 0,
+        "probability": 27
+      },
+      {
+        "code": "MYJ",
+        "airport": "松山",
+        "weight": 10.692,
+        "floored": 27,
+        "remainder": 0.30093071354705714,
+        "originalIndex": 1,
+        "probability": 27
+      },
+      {
+        "code": "ITM",
+        "airport": "伊丹",
+        "weight": 9.3636,
+        "floored": 24,
+        "remainder": 0.9089968976215097,
+        "originalIndex": 2,
+        "probability": 24
+      },
+      {
+        "code": "TAK",
+        "airport": "高松",
+        "weight": 8.4159,
+        "floored": 22,
+        "remainder": 0.4891416752843867,
+        "originalIndex": 3,
+        "probability": 22
+      }
+    ],
+    "predictedRemainingToday": [
+      {
+        "flightNo": "NH584",
+        "origCode": "MYJ",
+        "destCode": "HND",
+        "route": "松山 ➔ 東京(羽田)",
+        "depTime": "09:40",
+        "arrTime": "11:05",
+        "time": "09:40発 - 11:05着 (予想)",
+        "status": "後続便候補",
+        "isPredicted": true
+      },
+      {
+        "flightNo": "NH65",
+        "origCode": "HND",
+        "destCode": "CTS",
+        "route": "東京(羽田) ➔ 札幌(新千歳)",
+        "depTime": "13:00",
+        "arrTime": "14:35",
+        "time": "13:00発 - 14:35着 (予想)",
+        "status": "後続便候補",
+        "isPredicted": true
+      },
+      {
+        "flightNo": "NH68",
+        "origCode": "CTS",
+        "destCode": "HND",
+        "route": "札幌(新千歳) ➔ 東京(羽田)",
+        "depTime": "15:30",
+        "arrTime": "17:10",
+        "time": "15:30発 - 17:10着 (予想)",
+        "status": "後続便候補",
+        "isPredicted": true
+      },
+      {
+        "flightNo": "NH75",
+        "origCode": "HND",
+        "destCode": "CTS",
+        "route": "東京(羽田) ➔ 札幌(新千歳)",
+        "depTime": "18:00",
+        "arrTime": "19:35",
+        "time": "18:00発 - 19:35着 (予想)",
+        "status": "予想 (福岡泊候補)",
+        "isPredicted": true
+      }
+    ],
+    "todayPlans": [
+      {
+        "planId": "today-plan-1",
+        "planName": "プランA (新千歳泊)",
+        "stayCode": "CTS",
+        "rank": "本命 ◎",
+        "probability": 36,
+        "title": "【今夜新千歳泊シナリオ】羽田 ➔ 松山 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 新千歳(泊)",
+        "routeSummary": "羽田 ➔ 松山 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 新千歳(泊)",
+        "flights": [
+          {
+            "flightNo": "NH583",
+            "orig": "HND",
+            "dest": "MYJ",
+            "route": "東京(羽田) ➔ 松山",
+            "time": "07:39発 - 08:50着",
+            "tag": "飛行中 🟢",
+            "step": "第1便"
+          },
+          {
+            "flightNo": "NH584",
+            "orig": "MYJ",
+            "dest": "HND",
+            "route": "松山 ➔ 東京(羽田)",
+            "time": "09:40発 - 11:05着",
+            "tag": "予想接続 (78P)",
+            "step": "第2便"
+          },
+          {
+            "flightNo": "NH65",
+            "orig": "HND",
+            "dest": "CTS",
+            "route": "東京(羽田) ➔ 札幌(新千歳)",
+            "time": "13:00発 - 14:35着",
+            "tag": "予想接続 (78P)",
+            "step": "第3便"
+          },
+          {
+            "flightNo": "NH68",
+            "orig": "CTS",
+            "dest": "HND",
+            "route": "札幌(新千歳) ➔ 東京(羽田)",
+            "time": "15:30発 - 17:10着",
+            "tag": "予想接続 (78P)",
+            "step": "第4便"
+          },
+          {
+            "flightNo": "NH75",
+            "orig": "HND",
+            "dest": "CTS",
+            "route": "東京(羽田) ➔ 札幌(新千歳)",
+            "time": "18:00発 - 19:35着",
+            "tag": "🌙新千歳泊候補",
+            "step": "第5便"
+          }
+        ]
+      },
+      {
+        "planId": "today-plan-2",
+        "planName": "プランB (福岡泊)",
+        "stayCode": "FUK",
+        "rank": "有力 ◯",
+        "probability": 32,
+        "title": "【今夜福岡泊シナリオ】羽田 ➔ 松山 ➔ 羽田 ➔ 石垣 ➔ 羽田 ➔ 福岡(泊)",
+        "routeSummary": "羽田 ➔ 松山 ➔ 羽田 ➔ 石垣 ➔ 羽田 ➔ 福岡(泊)",
+        "flights": [
+          {
+            "flightNo": "NH583",
+            "orig": "HND",
+            "dest": "MYJ",
+            "route": "東京(羽田) ➔ 松山",
+            "time": "07:39発 - 08:50着",
+            "tag": "飛行中 🟢",
+            "step": "第1便"
+          },
+          {
+            "flightNo": "NH584",
+            "orig": "MYJ",
+            "dest": "HND",
+            "route": "松山 ➔ 東京(羽田)",
+            "time": "09:40発 - 11:05着",
+            "tag": "予想接続 (78P)",
+            "step": "第2便"
+          },
+          {
+            "flightNo": "NH91",
+            "orig": "HND",
+            "dest": "ISG",
+            "route": "東京(羽田) ➔ 石垣",
+            "time": "11:40発 - 15:00着",
+            "tag": "予想接続 (78P)",
+            "step": "第3便"
+          },
+          {
+            "flightNo": "NH92",
+            "orig": "ISG",
+            "dest": "HND",
+            "route": "石垣 ➔ 東京(羽田)",
+            "time": "15:50発 - 18:30着",
+            "tag": "予想接続 (78P)",
+            "step": "第4便"
+          },
+          {
+            "flightNo": "NH271",
+            "orig": "HND",
+            "dest": "FUK",
+            "route": "東京(羽田) ➔ 福岡",
+            "time": "19:15発 - 21:20着",
+            "tag": "🌙福岡泊候補",
+            "step": "第5便"
+          }
+        ]
+      },
+      {
+        "planId": "today-plan-3",
+        "planName": "プランC (松山泊)",
+        "stayCode": "MYJ",
+        "rank": "対抗 ▲",
+        "probability": 32,
+        "title": "【今夜松山泊シナリオ】羽田 ➔ 松山 ➔ 羽田 ➔ 石垣 ➔ 羽田 ➔ 松山(泊)",
+        "routeSummary": "羽田 ➔ 松山 ➔ 羽田 ➔ 石垣 ➔ 羽田 ➔ 松山(泊)",
+        "flights": [
+          {
+            "flightNo": "NH583",
+            "orig": "HND",
+            "dest": "MYJ",
+            "route": "東京(羽田) ➔ 松山",
+            "time": "07:39発 - 08:50着",
+            "tag": "飛行中 🟢",
+            "step": "第1便"
+          },
+          {
+            "flightNo": "NH584",
+            "orig": "MYJ",
+            "dest": "HND",
+            "route": "松山 ➔ 東京(羽田)",
+            "time": "09:40発 - 11:05着",
+            "tag": "予想接続 (78P)",
+            "step": "第2便"
+          },
+          {
+            "flightNo": "NH91",
+            "orig": "HND",
+            "dest": "ISG",
+            "route": "東京(羽田) ➔ 石垣",
+            "time": "11:40発 - 15:00着",
+            "tag": "予想接続 (78P)",
+            "step": "第3便"
+          },
+          {
+            "flightNo": "NH92",
+            "orig": "ISG",
+            "dest": "HND",
+            "route": "石垣 ➔ 東京(羽田)",
+            "time": "15:50発 - 18:30着",
+            "tag": "予想接続 (78P)",
+            "step": "第4便"
+          },
+          {
+            "flightNo": "NH599",
+            "orig": "HND",
+            "dest": "MYJ",
+            "route": "東京(羽田) ➔ 松山",
+            "time": "19:40発 - 21:15着",
+            "tag": "🌙松山泊候補",
+            "step": "第5便"
+          }
+        ]
+      }
+    ],
     "tomorrowDate": "2026-11-15",
-    "tomorrowPlans": [],
+    "tomorrowPlans": [
+      {
+        "planId": "tomorrow-plan-1",
+        "planName": "プランA",
+        "stayCode": "HND",
+        "rank": "本命",
+        "probability": 53,
+        "routeSummary": "伊丹 ➔ 新千歳 ➔ 伊丹 ➔ 羽田",
+        "flights": [
+          {
+            "step": "第1便",
+            "flightNo": "NH773",
+            "orig": "ITM",
+            "dest": "CTS",
+            "route": "大阪(伊丹) ➔ 札幌(新千歳)",
+            "time": "10:20発 - 12:10着",
+            "tag": "予想"
+          },
+          {
+            "step": "第2便",
+            "flightNo": "NH984",
+            "orig": "CTS",
+            "dest": "ITM",
+            "route": "札幌(新千歳) ➔ 大阪(伊丹)",
+            "time": "13:45発 - 15:45着",
+            "tag": "予想"
+          },
+          {
+            "step": "第3便",
+            "flightNo": "NH34",
+            "orig": "ITM",
+            "dest": "HND",
+            "route": "大阪(伊丹) ➔ 東京(羽田)",
+            "time": "16:50発 - 18:05着",
+            "tag": "予想"
+          }
+        ]
+      },
+      {
+        "planId": "tomorrow-plan-2",
+        "planName": "プランB",
+        "stayCode": "ITM",
+        "rank": "候補",
+        "probability": 27,
+        "routeSummary": "伊丹 ➔ 新千歳 ➔ 伊丹 ➔ 新千歳 ➔ 伊丹",
+        "flights": [
+          {
+            "step": "第1便",
+            "flightNo": "NH771",
+            "orig": "ITM",
+            "dest": "CTS",
+            "route": "大阪(伊丹) ➔ 札幌(新千歳)",
+            "time": "08:30発 - 10:20着",
+            "tag": "予想"
+          },
+          {
+            "step": "第2便",
+            "flightNo": "NH774",
+            "orig": "CTS",
+            "dest": "ITM",
+            "route": "札幌(新千歳) ➔ 大阪(伊丹)",
+            "time": "11:10発 - 13:10着",
+            "tag": "予想"
+          },
+          {
+            "step": "第3便",
+            "flightNo": "NH983",
+            "orig": "ITM",
+            "dest": "CTS",
+            "route": "大阪(伊丹) ➔ 札幌(新千歳)",
+            "time": "14:00発 - 15:50着",
+            "tag": "予想"
+          },
+          {
+            "step": "第4便",
+            "flightNo": "NH780",
+            "orig": "CTS",
+            "dest": "ITM",
+            "route": "札幌(新千歳) ➔ 大阪(伊丹)",
+            "time": "17:50発 - 19:50着",
+            "tag": "予想"
+          }
+        ]
+      },
+      {
+        "planId": "tomorrow-plan-3",
+        "planName": "プランC",
+        "stayCode": "HND",
+        "rank": "候補",
+        "probability": 20,
+        "routeSummary": "高松 ➔ 羽田 ➔ 石垣 ➔ 羽田",
+        "flights": [
+          {
+            "step": "第1便",
+            "flightNo": "NH532",
+            "orig": "TAK",
+            "dest": "HND",
+            "route": "高松 ➔ 東京(羽田)",
+            "time": "07:10発 - 08:25着",
+            "tag": "予想"
+          },
+          {
+            "step": "第2便",
+            "flightNo": "NH91",
+            "orig": "HND",
+            "dest": "ISG",
+            "route": "東京(羽田) ➔ 石垣",
+            "time": "11:40発 - 15:00着",
+            "tag": "予想"
+          },
+          {
+            "step": "第3便",
+            "flightNo": "NH92",
+            "orig": "ISG",
+            "dest": "HND",
+            "route": "石垣 ➔ 東京(羽田)",
+            "time": "15:50発 - 18:30着",
+            "tag": "予想"
+          }
+        ]
+      }
+    ],
     "previousPredictionAt": "2026-11-13T14:00:19.985Z",
     "todayComparison": [
       {
@@ -723,7 +1131,24 @@
           "time": "08:15発 - 09:25着",
           "tag": "予想"
         },
-        "actual": null,
+        "actual": {
+          "flightNo": "NH583",
+          "origin": "HND",
+          "dest": "MYJ",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "松山 (MYJ)",
+          "origCode": "HND",
+          "destCode": "MYJ",
+          "route": "東京(羽田) ➔ 松山",
+          "depTime": "07:39",
+          "arrTime": "08:50",
+          "timeRange": "07:39 - 08:50",
+          "dateJst": "2026-11-14",
+          "status": "Estimated 08:45",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
+        },
         "update": "当日の機種は321"
       },
       {
