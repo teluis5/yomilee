@@ -130,6 +130,7 @@ const AMAZON_DATA = [
 const currentHost = (Astro.site?.hostname || '').toLowerCase();
 const isTeluisMain = currentHost === 'teluis.com';
 const isAdEnabled = !isTeluisMain;
+const showYomileeFirstH2Ad = currentHost === 'yomileeblog.com' || currentHost === 'www.yomileeblog.com';
 
 // 静的レンダリング時の広告タイプの決定
 let renderType: 'adsense' | 'rakuten' | 'amazon' = 'adsense';
@@ -238,7 +239,7 @@ const rakutenWidgetIframeUrl = `https://static.affiliate.rakuten.co.jp/widget/ht
 
 <!-- 4. 記事内H2前 動的挿入スクリプト（AdSense + 楽天モーションウィジェット + Amazonを分散挿入） -->
 {position === 'bottom' && (
-  <script is:inline define:vars={{ isAdEnabled, client, slotId: targetSlot, rakutenCampaign, rakutenWidgetIframeUrl }}>
+  <script is:inline define:vars={{ isAdEnabled, showYomileeFirstH2Ad, client, slotId: targetSlot, rakutenCampaign, rakutenWidgetIframeUrl }}>
     (() => {
       if (window.__adsense_h2_injected__) return;
       window.__adsense_h2_injected__ = true;
@@ -255,10 +256,11 @@ const rakutenWidgetIframeUrl = `https://static.affiliate.rakuten.co.jp/widget/ht
                  !h2.closest('.sidebar');
         });
 
-        if (allH2.length < 2) return;
+        if (allH2.length < (showYomileeFirstH2Ad ? 1 : 2)) return;
 
         // 挿入対象のH2インデックス（2番目: index 1、3番目: index 2）
         const targetIndices = [];
+        if (showYomileeFirstH2Ad && allH2.length >= 1) targetIndices.push(0);
         if (allH2.length >= 2) targetIndices.push(1);
         if (allH2.length >= 3) targetIndices.push(2);
 
@@ -302,7 +304,7 @@ const rakutenWidgetIframeUrl = `https://static.affiliate.rakuten.co.jp/widget/ht
 
           const isFirstH2Ad = idx === 1;
 
-          if (isFirstH2Ad && isAdEnabled) {
+          if ((isFirstH2Ad || (showYomileeFirstH2Ad && idx === 0)) && isAdEnabled) {
             // 1つ目のH2前: Google AdSense（AdSense有効時）
             adWrapper.innerHTML = `
               <div class="adsense-label" style="display:block; width:100%; text-align:center; font-size:0.7rem; color:#94a3b8; font-weight:500; letter-spacing:0.08em; margin-bottom:0.35rem;">広告</div>
