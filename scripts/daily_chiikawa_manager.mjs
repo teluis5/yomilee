@@ -34,6 +34,9 @@ function performAutoPush(updatedAt) {
     if (fs.existsSync(path.join(YOMILEE_ROOT, 'data', 'evaluation_log.jsonl'))) {
       execSync('git add data/evaluation_log.jsonl', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
     }
+    if (fs.existsSync(path.join(YOMILEE_ROOT, 'data', 'chiikawa_first_flight_history.json'))) {
+      execSync('git add data/chiikawa_first_flight_history.json', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+    }
 
     const commitMsg = `feat(yomilee): update Chiikawa Jet weekly prediction dashboard (${updatedAt})`;
     console.log(`📝 コミット実行: "${commitMsg}"`);

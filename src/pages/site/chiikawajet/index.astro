@@ -11,8 +11,7 @@ const currentData = predictionData;
 const aircraft = currentData.aircraft;
 const weeklySchedule = currentData.weeklySchedule;
 const updatedAt = currentData.updatedAt;
-const accuracyStats = currentData.accuracyStats || { dailyFullHitRate: 92.5, firstFlightHitRate: 96.0, totalEvaluatedDays: 25, perfectDays: 23 };
-const pastPredictions = currentData.pastPredictions || [];
+const firstFlightStats = currentData.firstFlightStats || {};
 
 const todayData = weeklySchedule.find((d) => d.statusType === 'today');
 const observedFlights = (todayData?.flights || []).filter(f => !f.isPredicted && (f.isLive || f.isLanded));
@@ -157,6 +156,18 @@ const pageSchema = {
 						))}
 					</details>
 				)}
+				{todayData.firstFlightHistory?.morning?.candidates?.length > 0 && (
+					<div class="first-flight-candidates">
+						<h3>本日の朝に更新した初便候補</h3>
+						<p>更新 {new Date(todayData.firstFlightHistory.morning.updatedAtIso).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}</p>
+						<ol>{todayData.firstFlightHistory.morning.candidates.map(f => <li><b>{f.flightNo}</b> {f.route} {f.depTime}発</li>)}</ol>
+					</div>
+				)}
+				{todayData.firstFlightArrival && (
+					<p class="today-note">前夜の最終到着 {todayData.firstFlightArrival.flightNo} {todayData.firstFlightArrival.time}着
+						{todayData.firstFlightArrival.gate && ` · 到着ゲート ${todayData.firstFlightArrival.gate}`}
+					</p>
+				)}
 				{hasChangedPlan && (
 					<div class="change-reasons">
 						<b>前夜からの変更</b>
@@ -188,6 +199,18 @@ const pageSchema = {
 						<b>{tomorrowData.confirmedFirstFlight.flightNo}</b>
 						<span>{tomorrowData.confirmedFirstFlight.route}</span>
 						<span class="cf-time">({tomorrowData.confirmedFirstFlight.time})</span>
+					</div>
+				)}
+
+				{tomorrowData.firstFlightCandidates?.length > 0 && (
+					<div class="first-flight-candidates">
+						<h3>明日の初便候補</h3>
+						<p>初便をまとめた候補順です。経路全体のプランとは順位が異なる場合があります。</p>
+						<ol>
+							{tomorrowData.firstFlightCandidates.map(f => (
+								<li><b>{f.flightNo}</b> {f.route} {f.depTime}発{f.depGate ? ` · 搭乗口 ${f.depGate}` : ''}</li>
+							))}
+						</ol>
 					</div>
 				)}
 
@@ -353,39 +376,15 @@ const pageSchema = {
 
 		<Ad position="bottom" />
 
-		<!-- ④ その他（過去の的中実績・検証） -->
 		<section class="dash-section">
-			<div class="sec-head">
-				<h2 class="sec-title">その他（過去の的中実績・検証）</h2>
-				<div class="acc-pills">
-					<span class="acc-pill">1日的中率 <b>{accuracyStats.dailyFullHitRate}%</b></span>
-					<span class="acc-pill">初便的中率 <b>{accuracyStats.firstFlightHitRate}%</b></span>
-				</div>
-			</div>
-
-			<div class="past-stack">
-				{pastPredictions.slice(0, 3).map((p) => (
-					<div class="past-card">
-						<div class="pc-head">
-							<span class="pc-date">{p.date}</span>
-							<span class="pc-route">{p.actual.replace('実運航: ', '')}</span>
-							<span class="pc-badge">{p.hitLabel}</span>
-						</div>
-						{p.flights && (
-							<div class="pc-flights">
-								{p.flights.map((f) => (
-									<div class={`pcf-chip ${f.isHit ? 'hit' : 'miss'}`}>
-										<span class="pcf-no">{f.flightNo}</span>
-										<span class="pcf-rt">{f.route}</span>
-										{f.time && <span style="color: #64748b; font-size: 0.72rem;">({f.time.replace(/発 - /g, '-').replace(/着/g, '')})</span>}
-										<span class="pcf-res">{f.isHit ? '◯' : '△'}</span>
-									</div>
-								))}
-							</div>
-						)}
-					</div>
-				))}
-			</div>
+			<div class="sec-head"><h2 class="sec-title">保存した初便予想の検証</h2></div>
+			{['previousNight', 'morning'].map(phase => {
+				const stat = firstFlightStats[phase];
+				return <p class="today-note">
+					{phase === 'previousNight' ? '前夜の予想' : '当日朝の更新'}
+					{stat?.total ? ` 本命 ${stat.firstHits}/${stat.total}日 · 上位候補内 ${stat.candidateHits}/${stat.total}日` : ' 記録を蓄積中'}
+				</p>;
+			})}
 		</section>
 
 		<!-- ❓ ちいかわジェット（ちいかわじぇっと）今日の運航・よくある質問（FAQ） -->
@@ -632,6 +631,17 @@ const pageSchema = {
 		font-size: 0.75rem;
 		color: #64748b;
 	}
+
+	.first-flight-candidates {
+		margin: 16px 0;
+		padding: 16px;
+		background: #f1f5f9;
+		border-radius: 8px;
+		line-height: 1.6;
+	}
+	.first-flight-candidates p { margin: 8px 0; font-size: 0.875rem; color: #475569; }
+	.first-flight-candidates ol { margin: 8px 0 0; padding-left: 24px; }
+	.first-flight-candidates li { padding: 4px 0; }
 
 	.today-note,
 	.today-empty {

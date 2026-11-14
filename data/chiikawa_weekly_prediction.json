@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月14日 12:00",
-  "updatedAtIso": "2026-11-14T03:00:18.514Z",
+  "updatedAt": "2026年11月14日 12:03",
+  "updatedAtIso": "2026-11-14T03:04:05.550Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
@@ -45,6 +45,18 @@
     "totalFlightsHit": 82,
     "streakHits": 3,
     "evaluationPeriod": "2026-10-23 〜 2026-11-13 (実データ検証)"
+  },
+  "firstFlightStats": {
+    "previousNight": {
+      "total": 0,
+      "firstHits": 0,
+      "candidateHits": 0
+    },
+    "morning": {
+      "total": 0,
+      "firstHits": 0,
+      "candidateHits": 0
+    }
   },
   "pastPredictions": [
     {
@@ -1345,6 +1357,15 @@
       "isWeekend": true,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
+      "firstFlightCandidates": [],
+      "firstFlightArrival": {
+        "airport": "HND",
+        "arrivalMin": 1188,
+        "gate": null,
+        "flightNo": "NH266",
+        "time": "19:48"
+      },
+      "firstFlightHistory": null,
       "currentAirport": "飛行中 (福岡 ➔ 東京(羽田))",
       "nightStay": "長崎(68%) / 名古屋(中部)(19%)",
       "isNightStayConfirmed": false,
@@ -1691,7 +1712,7 @@
           "flightNo": "NH250",
           "route": "福岡 ➔ 東京(羽田)",
           "time": "11:45発 - 13:25着",
-          "status": "到着予定 (13:16)",
+          "status": "到着予定 (13:14)",
           "isLanded": false,
           "isLive": true,
           "isPredicted": false
@@ -1744,6 +1765,53 @@
       "dow": "日",
       "isWeekend": true,
       "statusType": "tomorrow",
+      "firstFlightCandidates": [
+        {
+          "flightNo": "NH662",
+          "orig": "NGS",
+          "dest": "HND",
+          "route": "長崎 ➔ 東京(羽田)",
+          "depTime": "08:25",
+          "arrTime": "10:00",
+          "depGate": null
+        },
+        {
+          "flightNo": "NH303",
+          "orig": "NGO",
+          "dest": "OKA",
+          "route": "名古屋(中部) ➔ 沖縄(那覇)",
+          "depTime": "08:20",
+          "arrTime": "10:55",
+          "depGate": null
+        },
+        {
+          "flightNo": "NH672",
+          "orig": "HIJ",
+          "dest": "HND",
+          "route": "広島 ➔ 東京(羽田)",
+          "depTime": "07:35",
+          "arrTime": "08:55",
+          "depGate": null
+        },
+        {
+          "flightNo": "NH703",
+          "orig": "NGO",
+          "dest": "CTS",
+          "route": "名古屋(中部) ➔ 札幌(新千歳)",
+          "depTime": "08:40",
+          "arrTime": "10:25",
+          "depGate": null
+        },
+        {
+          "flightNo": "NH661",
+          "orig": "HND",
+          "dest": "NGS",
+          "route": "東京(羽田) ➔ 長崎",
+          "depTime": "08:30",
+          "arrTime": "10:30",
+          "depGate": null
+        }
+      ],
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
       "expectedStart": "中部発 (NH303)",
       "isNightStayConfirmed": false,
