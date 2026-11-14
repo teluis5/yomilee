@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月14日 12:22",
-  "updatedAtIso": "2026-11-14T03:22:36.278Z",
+  "updatedAt": "2026年11月14日 12:29",
+  "updatedAtIso": "2026-11-14T03:30:07.560Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
@@ -57,6 +57,26 @@
       "firstHits": 0,
       "candidateHits": 0
     }
+  },
+  "pairedFirstFlightStats": {
+    "total": 0,
+    "previousNightHits": 0,
+    "morningHits": 0
+  },
+  "overnightTrialStats": {
+    "samplePairs": 128,
+    "chiikawaPairs": 23,
+    "screening": {
+      "samples": 59,
+      "baselineHits": 26,
+      "modelHits": 26,
+      "chiikawaSamples": 11,
+      "chiikawaBaselineHits": 4,
+      "chiikawaModelHits": 4
+    },
+    "savedComparisons": 0,
+    "baselineHits": 0,
+    "trialHits": 0
   },
   "pastPredictions": [
     {
@@ -1712,7 +1732,7 @@
           "flightNo": "NH250",
           "route": "福岡 ➔ 東京(羽田)",
           "time": "11:45発 - 13:25着",
-          "status": "到着予定 (13:14)",
+          "status": "到着予定 (13:13)",
           "isLanded": false,
           "isLive": true,
           "isPredicted": false

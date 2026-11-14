@@ -12,6 +12,8 @@ const aircraft = currentData.aircraft;
 const weeklySchedule = currentData.weeklySchedule;
 const updatedAt = currentData.updatedAt;
 const firstFlightStats = currentData.firstFlightStats || {};
+const pairedFirstFlightStats = currentData.pairedFirstFlightStats || {};
+const overnightTrialStats = currentData.overnightTrialStats || {};
 
 const todayData = weeklySchedule.find((d) => d.statusType === 'today');
 const observedFlights = (todayData?.flights || []).filter(f => !f.isPredicted && (f.isLive || f.isLanded));
@@ -385,6 +387,9 @@ const pageSchema = {
 					{stat?.total ? ` 本命 ${stat.firstHits}/${stat.total}日 · 上位候補内 ${stat.candidateHits}/${stat.total}日` : ' 記録を蓄積中'}
 				</p>;
 			})}
+			<p class="today-note">同じ日に両方の予想を保存できた場合の比較：{pairedFirstFlightStats.total ? `前夜 ${pairedFirstFlightStats.previousNightHits}/${pairedFirstFlightStats.total}日 · 当日朝 ${pairedFirstFlightStats.morningHits}/${pairedFirstFlightStats.total}日` : '記録を蓄積中'}</p>
+			<p class="today-note">予想は初便の出発前に保存し、確認できた実際の初便と照合しています。朝の更新が間に合わない日は比較に含みません。</p>
+			<p class="today-note">同型機の前夜到着と翌朝の初便、ちいかわじぇっと自身の傾向を使った新しい補正も検証中です（過去の対応 {overnightTrialStats.samplePairs || 0}組）。精度の改善が確認できるまでは公開中の順位に反映しません。</p>
 		</section>
 
 		<!-- ❓ ちいかわジェット（ちいかわじぇっと）今日の運航・よくある質問（FAQ） -->

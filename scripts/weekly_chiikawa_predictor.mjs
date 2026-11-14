@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
 import { collectFleetData } from './collector_ana_fleet.mjs';
+import { overnightPairs, overnightWeights, walkForward } from './chiikawa_overnight_model.mjs';
 import { updateAnaFleetStatusFromODPT } from '../../../5_script/fetch_ana_odpt_fleet_status.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -512,7 +513,8 @@ function buildLearnedModel(fleetDb, cutoffDateStr = null) {
     routeFreq,
     flightMeta,
     totalFlights: allFlights.length,
-    activeFleetCount: Math.max(activeRegs.size, 11)
+    activeFleetCount: Math.max(activeRegs.size, 11),
+    overnightPairs: overnightPairs(Object.fromEntries(allFlights.map((f, i) => [i, f])))
   };
 }
 
@@ -1352,6 +1354,11 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
     // 初便のスコア計算
     // ※ちいかわジェット単体の過去傾向（運用期間が短いため）に過剰依存せず、
     //   ANAの全767-300ER（76P）公式ダイヤ・投入枠をフラットに評価して全路線を公平に網羅する
+    const shadowWeights = arrival?.arrivalMin != null && arrival?.flightNo
+      ? overnightWeights(learnedModel?.overnightPairs || [], {
+          airport: startAirport, date: targetDateStr, arrivalFlight: arrival.flightNo,
+          arrivalMin: arrival.arrivalMin
+        }, morningFlights) : new Map();
     const scoredMorning = morningFlights.map(df => {
       const depM = parseTimeToMinutes(df.depTime) ?? 500;
       // レギュラー機材判定（確定枠 3.5 / 主力枠 1.8 / 代走枠 0.38）
@@ -1407,7 +1414,8 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
           depTime: df.depTime, arrTime: df.arrTime, depGate: df.depGate || null,
           model: df.model || null, modelSource: df.modelSource || null,
           modelObservedAt: df.modelObservedAt || null,
-          score: stayPriorProb * score / morningScoreSum
+          score: stayPriorProb * score / morningScoreSum,
+          shadowScore: stayPriorProb * score / morningScoreSum * (shadowWeights.get(normalizeFlightNo(df.flightNo)) || 1)
         });
       }
     }
@@ -2322,16 +2330,16 @@ export async function generateWeeklyPrediction() {
     time: previousLanded.actualArrTime
   } : null;
 
-  function rankFirstCandidates(raw) {
+  function rankFirstCandidates(raw, scoreField = 'score') {
     const byFlight = new Map();
     for (const flight of raw) {
       const key = `${flight.orig}:${flight.flightNo}`;
       const existing = byFlight.get(key);
-      if (existing) existing.score += flight.score;
-      else byFlight.set(key, { ...flight });
+      if (existing) existing.rankScore += flight[scoreField];
+      else byFlight.set(key, { ...flight, rankScore: flight[scoreField] });
     }
-    return [...byFlight.values()].sort((a, b) => b.score - a.score).slice(0, 5)
-      .map(({ score, ...flight }) => flight);
+    return [...byFlight.values()].sort((a, b) => b.rankScore - a.rankScore).slice(0, 5)
+      .map(({ score, shadowScore, rankScore, ...flight }) => flight);
   }
 
   const tomorrowFirstFlights = rankFirstCandidates(tomorrowFirstRaw);
@@ -2363,13 +2371,16 @@ export async function generateWeeklyPrediction() {
     if (tomorrowFirstFlights.length && jstNow.getHours() >= 17) {
       firstFlightHistory[tomorrowDateStr] ||= {};
       firstFlightHistory[tomorrowDateStr].previousNight = {
-        updatedAtIso: new Date().toISOString(), candidates: tomorrowFirstFlights
+        updatedAtIso: new Date().toISOString(), candidates: tomorrowFirstFlights,
+        trialCandidates: rankFirstCandidates(tomorrowFirstRaw, 'shadowScore'),
+        trialApplicable: Boolean(tomorrowArrival)
       };
     }
     if (morningFirstFlights.length) {
       firstFlightHistory[todayStr] ||= {};
       firstFlightHistory[todayStr].morning = {
-        updatedAtIso: new Date().toISOString(), arrival: arrivalContext, candidates: morningFirstFlights
+        updatedAtIso: new Date().toISOString(), arrival: arrivalContext, candidates: morningFirstFlights,
+        trialCandidates: rankFirstCandidates(morningFirstRaw, 'shadowScore'), trialApplicable: true
       };
     }
     if (firstObserved && firstFlightHistory[todayStr]) {
@@ -2392,6 +2403,25 @@ export async function generateWeeklyPrediction() {
       )).length
     };
   }
+  // Compare both revisions on identical days only; do not count an absent morning forecast as a miss.
+  const pairedEntries = Object.values(firstFlightHistory || {}).filter(entry =>
+    entry.actual?.flightNo && entry.previousNight?.candidates?.length && entry.morning?.candidates?.length);
+  const pairedFirstFlightStats = {
+    total: pairedEntries.length,
+    previousNightHits: pairedEntries.filter(e => e.previousNight.candidates[0].flightNo === e.actual.flightNo).length,
+    morningHits: pairedEntries.filter(e => e.morning.candidates[0].flightNo === e.actual.flightNo).length
+  };
+  const trialEntries = Object.values(firstFlightHistory || {}).flatMap(entry =>
+    ['previousNight', 'morning'].map(phase => ({ actual: entry.actual, prediction: entry[phase] })))
+    .filter(e => e.actual?.flightNo && e.prediction?.trialApplicable && e.prediction?.trialCandidates?.length);
+  const overnightTrialStats = {
+    samplePairs: learnedModel.overnightPairs.length,
+    chiikawaPairs: learnedModel.overnightPairs.filter(p => p.reg === 'JA609A').length,
+    screening: walkForward(learnedModel.overnightPairs),
+    savedComparisons: trialEntries.length,
+    baselineHits: trialEntries.filter(e => e.prediction.candidates[0].flightNo === e.actual.flightNo).length,
+    trialHits: trialEntries.filter(e => e.prediction.trialCandidates[0].flightNo === e.actual.flightNo).length
+  };
 
   // 明日の最新予測を明日のスナップショットとして保存（明日になった後は上書きされない）
   if (tomorrowPlans && tomorrowPlans.length > 0) {
@@ -2591,6 +2621,8 @@ export async function generateWeeklyPrediction() {
     },
     accuracyStats,
     firstFlightStats,
+    pairedFirstFlightStats,
+    overnightTrialStats,
     pastPredictions,
     weeklySchedule,
     airportRadar,
