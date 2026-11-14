@@ -134,27 +134,18 @@
     ]
   },
   "2026-11-15": {
-    "updatedAtIso": "2026-11-14T01:00:25.540Z",
+    "updatedAtIso": "2026-11-14T02:00:24.166Z",
     "plans": [
       {
         "planId": "tomorrow-plan-1",
         "planName": "プランA",
         "stayCode": "HND",
         "rank": "本命",
-        "probability": 58,
-        "routeSummary": "羽田 ➔ 伊丹 ➔ 新千歳 ➔ 伊丹 ➔ 羽田",
+        "probability": 41,
+        "routeSummary": "伊丹 ➔ 新千歳 ➔ 伊丹 ➔ 羽田",
         "flights": [
           {
             "step": "第1便",
-            "flightNo": "NH15",
-            "orig": "HND",
-            "dest": "ITM",
-            "route": "東京(羽田) ➔ 大阪(伊丹)",
-            "time": "08:15発 - 09:25着",
-            "tag": "予想"
-          },
-          {
-            "step": "第2便",
             "flightNo": "NH773",
             "orig": "ITM",
             "dest": "CTS",
@@ -163,7 +154,7 @@
             "tag": "予想"
           },
           {
-            "step": "第3便",
+            "step": "第2便",
             "flightNo": "NH984",
             "orig": "CTS",
             "dest": "ITM",
@@ -172,7 +163,7 @@
             "tag": "予想"
           },
           {
-            "step": "第4便",
+            "step": "第3便",
             "flightNo": "NH34",
             "orig": "ITM",
             "dest": "HND",
@@ -187,7 +178,7 @@
         "planName": "プランB",
         "stayCode": "HND",
         "rank": "候補",
-        "probability": 21,
+        "probability": 30,
         "routeSummary": "松山 ➔ 羽田 ➔ 石垣 ➔ 羽田",
         "flights": [
           {
@@ -224,7 +215,7 @@
         "planName": "プランC",
         "stayCode": "HND",
         "rank": "候補",
-        "probability": 21,
+        "probability": 29,
         "routeSummary": "松山 ➔ 羽田 ➔ 宮古 ➔ 羽田",
         "flights": [
           {
