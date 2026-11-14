@@ -134,14 +134,14 @@
     ]
   },
   "2026-11-15": {
-    "updatedAtIso": "2026-11-14T09:00:24.505Z",
+    "updatedAtIso": "2026-11-14T10:00:19.751Z",
     "plans": [
       {
         "planId": "tomorrow-plan-1",
         "planName": "プランA",
         "stayCode": "HND",
         "rank": "本命",
-        "probability": 43,
+        "probability": 50,
         "routeSummary": "松山 ➔ 羽田 ➔ 宮古 ➔ 羽田",
         "flights": [
           {
@@ -178,16 +178,16 @@
         "planName": "プランB",
         "stayCode": "HND",
         "rank": "候補",
-        "probability": 29,
-        "routeSummary": "高松 ➔ 羽田 ➔ 石垣 ➔ 羽田",
+        "probability": 25,
+        "routeSummary": "松山 ➔ 羽田 ➔ 石垣 ➔ 羽田",
         "flights": [
           {
             "step": "第1便",
-            "flightNo": "NH532",
-            "orig": "TAK",
+            "flightNo": "NH584",
+            "orig": "MYJ",
             "dest": "HND",
-            "route": "高松 ➔ 東京(羽田)",
-            "time": "07:10発 - 08:25着",
+            "route": "松山 ➔ 東京(羽田)",
+            "time": "09:40発 - 11:05着",
             "tag": "予想"
           },
           {
@@ -213,18 +213,18 @@
       {
         "planId": "tomorrow-plan-3",
         "planName": "プランC",
-        "stayCode": "HND",
+        "stayCode": "MYJ",
         "rank": "候補",
-        "probability": 28,
-        "routeSummary": "高松 ➔ 羽田 ➔ 宮古 ➔ 羽田",
+        "probability": 25,
+        "routeSummary": "松山 ➔ 羽田 ➔ 宮古 ➔ 羽田 ➔ 松山",
         "flights": [
           {
             "step": "第1便",
-            "flightNo": "NH532",
-            "orig": "TAK",
+            "flightNo": "NH584",
+            "orig": "MYJ",
             "dest": "HND",
-            "route": "高松 ➔ 東京(羽田)",
-            "time": "07:10発 - 08:25着",
+            "route": "松山 ➔ 東京(羽田)",
+            "time": "09:40発 - 11:05着",
             "tag": "予想"
           },
           {
@@ -243,6 +243,15 @@
             "dest": "HND",
             "route": "宮古 ➔ 東京(羽田)",
             "time": "16:15発 - 18:45着",
+            "tag": "予想"
+          },
+          {
+            "step": "第4便",
+            "flightNo": "NH599",
+            "orig": "HND",
+            "dest": "MYJ",
+            "route": "東京(羽田) ➔ 松山",
+            "time": "19:40発 - 21:15着",
             "tag": "予想"
           }
         ]
