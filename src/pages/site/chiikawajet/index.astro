@@ -208,7 +208,7 @@ const pageSchema = {
 						<p>初便をまとめた候補順です。経路全体のプランとは順位が異なる場合があります。</p>
 						<ol>
 							{tomorrowData.firstFlightCandidates.map(f => (
-								<li><b>{f.flightNo}</b> {f.route} {f.depTime}発{f.depGate ? ` · 搭乗口 ${f.depGate}` : ''}</li>
+								<li><b>{f.flightNo}</b> {f.route} {f.depTime}発{f.modelSource === 'ANA運航状況' ? ` · ANA予定機種 ${f.model}` : ''}{f.depGate ? ` · 搭乗口 ${f.depGate}` : ''}</li>
 							))}
 						</ol>
 					</div>

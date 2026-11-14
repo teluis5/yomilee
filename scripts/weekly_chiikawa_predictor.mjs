@@ -1226,8 +1226,23 @@ function getStepLabel(idx, total, depMin, arrMin, destCode) {
  * ハードコードされたテンプレートや架空便注入は一切行わない。
  */
 export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFleetData, learnedModel, prevFirstFlightNo = null, prevVisitedDestSet = null, prevArrivalFlight = null, firstFlightOptions = {}) {
-  const dayFlightsMap = getDayFlightsWithDowFallback(targetDateStr, anaFleetData);
-  const dayFlights = Object.values(dayFlightsMap).filter(f => !f.isCancelled);
+  const schedule = getDayFlightsWithDowFallback(targetDateStr, anaFleetData);
+  const dayFlightsMap = Object.fromEntries(Object.entries(schedule).map(([key, flight]) => {
+    if (flight.modelSource !== 'ANA運航状況') return [key, flight];
+    const observed = Date.parse(flight.modelObservedAt || '');
+    if (Number.isFinite(observed) && Date.now() >= observed && Date.now() - observed <= 2 * 60 * 60 * 1000) {
+      return [key, flight];
+    }
+    const model = flight.scheduledModel || '';
+    return [key, {
+      ...flight, model, is767: /763|76P/.test(model),
+      is76P: model === '76P', is767Strict: model === '763' || model === '76P',
+      isCancelled: false, depGate: null, modelSource: null, modelObservedAt: null
+    }];
+  }));
+  const dayFlights = Object.values(dayFlightsMap).filter(f =>
+    !f.isCancelled && (f.modelSource !== 'ANA運航状況' || f.is767)
+  );
 
   const transitions = learnedModel.transitions || {};
   const nightStays = learnedModel.nightStays || {};
@@ -1307,7 +1322,8 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
           is767: true,
           is767Strict: true
         } : null);
-        if (df && df.origin === startAirport) morningFlights.push(df);
+        if (df && df.origin === startAirport &&
+            (df.modelSource !== 'ANA運航状況' || df.is767)) morningFlights.push(df);
       }
     }
     if (morningFlights.length === 0) {
@@ -1389,6 +1405,8 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
           flightNo: normalizeFlightNo(df.flightNo), orig: df.origin, dest: df.dest,
           route: `${AIRPORT_NAMES[df.origin] || df.origin} ➔ ${AIRPORT_NAMES[df.dest] || df.dest}`,
           depTime: df.depTime, arrTime: df.arrTime, depGate: df.depGate || null,
+          model: df.model || null, modelSource: df.modelSource || null,
+          modelObservedAt: df.modelObservedAt || null,
           score: stayPriorProb * score / morningScoreSum
         });
       }
@@ -1631,7 +1649,7 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
 
       const modelPrio = getAircraftModelPriority(df, learnedModel);
       let tag = df.is767Strict
-        ? '🔒763確定枠'
+        ? '767機種予定'
         : (modelPrio >= 1.5 ? '763主力枠' : (df.is767 ? '763代走候補' : '機材変更候補'));
       if (fIdx === 0 && df.origin !== 'HND') {
         tag = `🔒${shortAirportName(df.origin)}始発・羽田帰還`;
