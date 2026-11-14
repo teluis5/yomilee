@@ -56,8 +56,17 @@ function buildTomorrowPlans(plans = [], tomorrowMd) {
 
 /**
  * chiikawa_weekly_prediction.json の内容から本日の日次スケジュール記事を生成・更新する
+ * （毎朝6時以降に作成・更新）
  */
-export function generateDailyChiikawaArticle(predictionData = null) {
+export function generateDailyChiikawaArticle(predictionData = null, options = {}) {
+  const { force = process.argv.includes('--force') } = options;
+  const now = new Date();
+  const jstHour = new Date(now.getTime() + (9 * 60 + now.getTimezoneOffset()) * 60 * 1000).getHours();
+  if (!force && jstHour < 6) {
+    console.log(`ℹ️ 日次スケジュール記事は毎朝6時以降に作成します（現在JST ${jstHour}時台のためスキップ）`);
+    return null;
+  }
+
   const jsonPath = path.join(YOMILEE_ROOT, 'data', 'chiikawa_weekly_prediction.json');
   const data = predictionData || JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
 
