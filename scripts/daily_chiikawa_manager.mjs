@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
 import { generateWeeklyPrediction } from './weekly_chiikawa_predictor.mjs';
 import { generatePokemonWeeklyPrediction } from './weekly_pokemon_predictor.mjs';
+import { generateDailyChiikawaArticle } from './generate_daily_chiikawa_article.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -56,6 +57,11 @@ function performAutoPush(updatedAt) {
 async function main() {
   const result = await generateWeeklyPrediction();
   if (!result) return;
+  try {
+    generateDailyChiikawaArticle(result);
+  } catch (err) {
+    console.warn('⚠️ 日次スケジュール記事の生成に失敗しました:', err.message);
+  }
   try {
     await generatePokemonWeeklyPrediction();
   } catch (err) {
