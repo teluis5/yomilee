@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月14日 15:00",
-  "updatedAtIso": "2026-11-14T06:00:18.717Z",
+  "updatedAt": "2026年11月14日 16:00",
+  "updatedAtIso": "2026-11-14T07:00:17.438Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (東京(羽田) ➔ 松山)",
+    "currentLocation": "松山",
     "currentLocationCode": "MYJ",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "長崎(88%) / 広島(7%)",
     "nightStayCode": "NGS",
     "isNightStayConfirmed": false,
@@ -1381,7 +1381,7 @@
         "time": "19:48"
       },
       "firstFlightHistory": null,
-      "currentAirport": "飛行中 (東京(羽田) ➔ 松山)",
+      "currentAirport": "松山",
       "nightStay": "長崎(88%) / 広島(7%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH593 (東京(羽田) ➔ 松山) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 長崎 88% / 広島 7% / 東京(羽田) 5% と推定されます。",
@@ -1437,7 +1437,7 @@
               "dest": "MYJ",
               "route": "東京(羽田) ➔ 松山",
               "time": "14:15発 - 15:50着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "③ 第3便"
             },
             {
@@ -1493,7 +1493,7 @@
               "dest": "MYJ",
               "route": "東京(羽田) ➔ 松山",
               "time": "14:15発 - 15:50着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "③ 第3便"
             },
             {
@@ -1549,7 +1549,7 @@
               "dest": "MYJ",
               "route": "東京(羽田) ➔ 松山",
               "time": "14:15発 - 15:50着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "③ 第3便"
             },
             {
@@ -1660,10 +1660,10 @@
           "actual": {
             "flightNo": "NH593",
             "route": "東京(羽田) ➔ 松山",
-            "time": "14:30離陸",
-            "status": "飛行中",
-            "isLanded": false,
-            "isLive": true
+            "time": "14:30離陸 / 15:47着陸",
+            "status": "着陸済",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -1729,9 +1729,9 @@
           "flightNo": "NH593",
           "route": "東京(羽田) ➔ 松山",
           "time": "14:15発 - 15:50着",
-          "status": "到着予定 (15:44)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (15:47)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -1780,7 +1780,7 @@
           "depGate": null,
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-14T06:00:06.273Z"
+          "modelObservedAt": "2026-11-14T07:00:05.480Z"
         },
         {
           "flightNo": "NH672",
@@ -1792,7 +1792,7 @@
           "depGate": null,
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-14T06:00:05.522Z"
+          "modelObservedAt": "2026-11-14T07:00:04.712Z"
         },
         {
           "flightNo": "NH661",
@@ -1804,7 +1804,7 @@
           "depGate": "48",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-14T06:00:05.850Z"
+          "modelObservedAt": "2026-11-14T07:00:05.098Z"
         },
         {
           "flightNo": "NH245",
@@ -1816,7 +1816,7 @@
           "depGate": "57",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-14T06:00:05.582Z"
+          "modelObservedAt": "2026-11-14T07:00:04.822Z"
         },
         {
           "flightNo": "NH1077",
@@ -1828,7 +1828,7 @@
           "depGate": "58",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-14T06:00:05.582Z"
+          "modelObservedAt": "2026-11-14T07:00:04.822Z"
         }
       ],
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
@@ -2047,18 +2047,19 @@
         {
           "planId": "plan-c",
           "planName": "プランC (広島泊始発)",
-          "stayCode": "HIJ",
+          "stayCode": "HND",
           "startAirportCode": "HIJ",
           "rank": "対抗 ▲",
           "probability": 10,
-          "title": "【前夜広島泊(NH672始発)】広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
-          "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
+          "title": "【前夜広島泊(NH672始発)】広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
+          "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
           "airports": [
             "広島",
             "東京(羽田)",
-            "札幌(新千歳)"
+            "札幌(新千歳)",
+            "福岡"
           ],
-          "description": "前夜広島駐機シナリオから連動。朝一NH672(07:35発 - 08:55着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全6便を運航して夜に広島泊となる予測スジ。 [フリート整合: 他機体6機スジ整合（76P確定枠カバー率100%）]",
+          "description": "前夜広島駐機シナリオから連動。朝一NH672(07:35発 - 08:55着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全5便を運航して夜に羽田泊となる予測スジ。 [フリート整合: 他機体6機スジ整合（76P確定枠カバー率100%）]",
           "fleetConsistency": {
             "fleetScore": 2,
             "is100Percent": true,
@@ -2110,46 +2111,32 @@
               "tag": "767機種予定"
             },
             {
-              "step": "④ 午後便",
-              "time": "15:00発 - 16:30着",
-              "depTime": "15:00",
-              "arrTime": "16:30",
-              "flightNo": "NH681",
+              "step": "④ 夕方便",
+              "time": "15:45発 - 17:45着",
+              "depTime": "15:45",
+              "arrTime": "17:45",
+              "flightNo": "NH261",
               "orig": "HND",
-              "dest": "HIJ",
-              "route": "東京(羽田) ➔ 広島",
+              "dest": "FUK",
+              "route": "東京(羽田) ➔ 福岡",
               "model": "76P",
               "is767Confirmed": true,
               "is767Strict": true,
               "tag": "767機種予定"
             },
             {
-              "step": "⑤ 夕方便",
-              "time": "17:20発 - 18:45着",
-              "depTime": "17:20",
-              "arrTime": "18:45",
-              "flightNo": "NH682",
-              "orig": "HIJ",
+              "step": "⑤ 夜最終",
+              "time": "18:30発 - 20:10着",
+              "depTime": "18:30",
+              "arrTime": "20:10",
+              "flightNo": "NH266",
+              "orig": "FUK",
               "dest": "HND",
-              "route": "広島 ➔ 東京(羽田)",
+              "route": "福岡 ➔ 東京(羽田)",
               "model": "76P",
               "is767Confirmed": true,
               "is767Strict": true,
-              "tag": "767機種予定"
-            },
-            {
-              "step": "⑥ 夜最終",
-              "time": "19:40発 - 21:10着",
-              "depTime": "19:40",
-              "arrTime": "21:10",
-              "flightNo": "NH685",
-              "orig": "HND",
-              "dest": "HIJ",
-              "route": "東京(羽田) ➔ 広島",
-              "model": "76P",
-              "is767Confirmed": true,
-              "is767Strict": true,
-              "tag": "🌙広島ナイトステイ(泊)"
+              "tag": "🌙羽田帰還(泊)"
             }
           ]
         }
@@ -2369,7 +2356,7 @@
           "stayCode": "HND",
           "startAirportCode": "HIJ",
           "rank": "有力 ◯",
-          "probability": 37,
+          "probability": 36,
           "title": "【前夜広島泊(NH672始発)】広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 新千歳 ➔ 羽田(泊)",
           "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 新千歳 ➔ 羽田(泊)",
           "airports": [
@@ -2464,7 +2451,7 @@
           "stayCode": "KIX",
           "startAirportCode": "HIJ",
           "rank": "対抗 ▲",
-          "probability": 26,
+          "probability": 27,
           "title": "【前夜広島泊(NH672始発)】広島 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 関空(泊)",
           "routeSummary": "広島 ➔ 羽田 ➔ 福岡 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 関空(泊)",
           "airports": [
@@ -4443,7 +4430,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 721,
+    "totalFleetFlights": 725,
     "fleetCount": 11
   }
 }
