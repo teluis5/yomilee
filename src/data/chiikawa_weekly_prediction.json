@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月15日 04:00",
-  "updatedAtIso": "2026-11-14T19:00:16.494Z",
+  "updatedAt": "2026年11月15日 05:00",
+  "updatedAtIso": "2026-11-14T20:00:18.746Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
@@ -1418,7 +1418,20 @@
       "isWeekend": true,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "firstFlightCandidates": [],
+      "firstFlightCandidates": [
+        {
+          "flightNo": "NH662",
+          "orig": "NGS",
+          "dest": "HND",
+          "route": "長崎 ➔ 東京(羽田)",
+          "depTime": "08:25",
+          "arrTime": "10:00",
+          "depGate": null,
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        }
+      ],
       "firstFlightArrival": {
         "airport": "NGS",
         "arrivalMin": 1280,
@@ -1455,6 +1468,45 @@
               "model": "76P",
               "modelSource": "ANA運航状況",
               "modelObservedAt": "2026-11-14T14:00:09.363Z"
+            }
+          ],
+          "trialApplicable": true
+        },
+        "morning": {
+          "updatedAtIso": "2026-11-14T20:00:18.325Z",
+          "arrival": {
+            "airport": "NGS",
+            "arrivalMin": 1280,
+            "gate": null,
+            "flightNo": "NH669",
+            "time": "21:20"
+          },
+          "candidates": [
+            {
+              "flightNo": "NH662",
+              "orig": "NGS",
+              "dest": "HND",
+              "route": "長崎 ➔ 東京(羽田)",
+              "depTime": "08:25",
+              "arrTime": "10:00",
+              "depGate": null,
+              "model": "76P",
+              "modelSource": null,
+              "modelObservedAt": null
+            }
+          ],
+          "trialCandidates": [
+            {
+              "flightNo": "NH662",
+              "orig": "NGS",
+              "dest": "HND",
+              "route": "長崎 ➔ 東京(羽田)",
+              "depTime": "08:25",
+              "arrTime": "10:00",
+              "depGate": null,
+              "model": "76P",
+              "modelSource": null,
+              "modelObservedAt": null
             }
           ],
           "trialApplicable": true
@@ -1809,7 +1861,7 @@
           "depGate": "57",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-14T19:00:05.195Z"
+          "modelObservedAt": "2026-11-14T20:00:07.253Z"
         },
         {
           "flightNo": "NH661",
@@ -1821,7 +1873,7 @@
           "depGate": "48",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-14T19:00:05.386Z"
+          "modelObservedAt": "2026-11-14T20:00:07.445Z"
         },
         {
           "flightNo": "NH1077",
@@ -1833,7 +1885,7 @@
           "depGate": "58",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-14T19:00:05.195Z"
+          "modelObservedAt": "2026-11-14T20:00:07.253Z"
         },
         {
           "flightNo": "NH21",
@@ -1845,7 +1897,7 @@
           "depGate": "63",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-14T19:00:05.254Z"
+          "modelObservedAt": "2026-11-14T20:00:07.342Z"
         },
         {
           "flightNo": "NH27",
@@ -1857,7 +1909,7 @@
           "depGate": "64",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-14T19:00:05.254Z"
+          "modelObservedAt": "2026-11-14T20:00:07.342Z"
         }
       ],
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
