@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月15日 15:00",
-  "updatedAtIso": "2026-11-15T06:00:25.729Z",
+  "updatedAt": "2026年11月15日 16:00",
+  "updatedAtIso": "2026-11-15T07:00:24.110Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,9 +17,26 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "着陸済・駐機中 🟡",
-      "currentLocation": "東京(羽田) (HND)",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "東京(羽田) (HND) ➔ 札幌(新千歳) (CTS)",
+      "currentFlight": {
+        "flightNo": "NH69",
+        "origin": "HND",
+        "dest": "CTS",
+        "originName": "東京(羽田) (HND)",
+        "destinationName": "札幌(新千歳) (CTS)",
+        "origCode": "HND",
+        "destCode": "CTS",
+        "route": "東京(羽田) ➔ 札幌(新千歳)",
+        "depTime": "15:19",
+        "arrTime": "16:35",
+        "timeRange": "15:19 - 16:35",
+        "dateJst": "2026-11-15",
+        "status": "Estimated 16:27",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH582",
@@ -74,9 +91,45 @@
           "isLive": false,
           "isLanded": true,
           "isToday": true
+        },
+        {
+          "flightNo": "NH69",
+          "origin": "HND",
+          "dest": "CTS",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "札幌(新千歳) (CTS)",
+          "origCode": "HND",
+          "destCode": "CTS",
+          "route": "東京(羽田) ➔ 札幌(新千歳)",
+          "depTime": "15:19",
+          "arrTime": "16:35",
+          "timeRange": "15:19 - 16:35",
+          "dateJst": "2026-11-15",
+          "status": "Estimated 16:27",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
         }
       ],
       "recentFlights": [
+        {
+          "flightNo": "NH69",
+          "origin": "HND",
+          "dest": "CTS",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "札幌(新千歳) (CTS)",
+          "origCode": "HND",
+          "destCode": "CTS",
+          "route": "東京(羽田) ➔ 札幌(新千歳)",
+          "depTime": "15:19",
+          "arrTime": "16:35",
+          "timeRange": "15:19 - 16:35",
+          "dateJst": "2026-11-15",
+          "status": "Estimated 16:27",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH252",
           "origin": "FUK",
@@ -166,24 +219,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH87",
-          "origin": "HND",
-          "dest": "MMY",
-          "originName": "東京(羽田) (HND)",
-          "destinationName": "宮古 (MMY)",
-          "origCode": "HND",
-          "destCode": "MMY",
-          "route": "東京(羽田) ➔ 宮古",
-          "depTime": "12:28",
-          "arrTime": "15:07",
-          "timeRange": "12:28 - 15:07",
-          "dateJst": "2026-11-14",
-          "status": "Landed 15:07",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -216,7 +251,7 @@
         "arrTime": "20:55",
         "timeRange": "11:27 - 20:55",
         "dateJst": "2026-11-15",
-        "status": "Estimated 16:38",
+        "status": "Estimated 16:42",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -235,7 +270,7 @@
           "arrTime": "20:55",
           "timeRange": "11:27 - 20:55",
           "dateJst": "2026-11-15",
-          "status": "Estimated 16:38",
+          "status": "Estimated 16:42",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -255,7 +290,7 @@
           "arrTime": "20:55",
           "timeRange": "11:27 - 20:55",
           "dateJst": "2026-11-15",
-          "status": "Estimated 16:38",
+          "status": "Estimated 16:42",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -529,7 +564,7 @@
         "arrTime": "20:15",
         "timeRange": "11:36 - 20:15",
         "dateJst": "2026-11-15",
-        "status": "Delayed 21:02",
+        "status": "Delayed 21:03",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -548,7 +583,7 @@
           "arrTime": "20:15",
           "timeRange": "11:36 - 20:15",
           "dateJst": "2026-11-15",
-          "status": "Delayed 21:02",
+          "status": "Delayed 21:03",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -568,7 +603,7 @@
           "arrTime": "20:15",
           "timeRange": "11:36 - 20:15",
           "dateJst": "2026-11-15",
-          "status": "Delayed 21:02",
+          "status": "Delayed 21:03",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -815,59 +850,30 @@
     }
   ],
   "domesticPrediction": {
-    "nightStayName": "羽田 (71%)",
+    "nightStayName": "羽田 (78%)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
     "nightStayProbabilities": [
       {
         "code": "HND",
         "airport": "羽田",
-        "weight": 17.9856,
-        "floored": 71,
-        "remainder": 0.8853575482406342,
+        "weight": 6.822000000000001,
+        "floored": 78,
+        "remainder": 0.8234086242299696,
         "originalIndex": 0,
-        "probability": 71
+        "probability": 78
       },
       {
         "code": "TAK",
         "airport": "高松",
-        "weight": 3.4992000000000005,
-        "floored": 14,
-        "remainder": 0.7911464245175939,
+        "weight": 1.944,
+        "floored": 22,
+        "remainder": 0.17659137577001616,
         "originalIndex": 1,
-        "probability": 14
-      },
-      {
-        "code": "CTS",
-        "airport": "新千歳",
-        "weight": 1.944,
-        "floored": 8,
-        "remainder": 0.6617480136208851,
-        "originalIndex": 2,
-        "probability": 8
-      },
-      {
-        "code": "KIX",
-        "airport": "関空",
-        "weight": 1.944,
-        "floored": 7,
-        "remainder": 0.6617480136208851,
-        "originalIndex": 3,
-        "probability": 7
+        "probability": 22
       }
     ],
     "predictedRemainingToday": [
-      {
-        "flightNo": "NH69",
-        "origCode": "HND",
-        "destCode": "CTS",
-        "route": "東京(羽田) ➔ 札幌(新千歳)",
-        "depTime": "15:00",
-        "arrTime": "16:35",
-        "time": "15:00発 - 16:35着 (予想)",
-        "status": "後続便候補",
-        "isPredicted": true
-      },
       {
         "flightNo": "NH780",
         "origCode": "CTS",
@@ -933,8 +939,8 @@
             "orig": "HND",
             "dest": "CTS",
             "route": "東京(羽田) ➔ 札幌(新千歳)",
-            "time": "15:00発 - 16:35着",
-            "tag": "予想接続 (78P)",
+            "time": "15:19発 - 16:35着",
+            "tag": "飛行中 🟢",
             "step": "第4便"
           },
           {
@@ -998,8 +1004,8 @@
             "orig": "HND",
             "dest": "CTS",
             "route": "東京(羽田) ➔ 札幌(新千歳)",
-            "time": "15:00発 - 16:35着",
-            "tag": "予想接続 (78P)",
+            "time": "15:19発 - 16:35着",
+            "tag": "飛行中 🟢",
             "step": "第4便"
           },
           {
@@ -1063,8 +1069,8 @@
             "orig": "HND",
             "dest": "CTS",
             "route": "東京(羽田) ➔ 札幌(新千歳)",
-            "time": "15:00発 - 16:35着",
-            "tag": "予想接続 (78P)",
+            "time": "15:19発 - 16:35着",
+            "tag": "飛行中 🟢",
             "step": "第4便"
           },
           {
@@ -1086,7 +1092,7 @@
         "planName": "プランA",
         "stayCode": "HND",
         "rank": "本命",
-        "probability": 35,
+        "probability": 37,
         "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田",
         "flights": [
           {
@@ -1132,7 +1138,7 @@
         "planName": "プランB",
         "stayCode": "TAK",
         "rank": "候補",
-        "probability": 34,
+        "probability": 37,
         "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 高松",
         "flights": [
           {
@@ -1187,7 +1193,7 @@
         "planName": "プランC",
         "stayCode": "NGS",
         "rank": "候補",
-        "probability": 31,
+        "probability": 26,
         "routeSummary": "羽田 ➔ 長崎 ➔ 羽田 ➔ 長崎",
         "flights": [
           {
