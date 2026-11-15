@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月15日 22:00",
-  "updatedAtIso": "2026-11-15T13:00:25.953Z",
+  "updatedAt": "2026年11月15日 23:00",
+  "updatedAtIso": "2026-11-15T14:00:20.291Z",
   "totalJets": 5,
   "jets": [
     {
@@ -255,9 +255,26 @@
       "routesSummary": "羽田/成田 ➔ シンガポール / バンクーバー / ホノルル / シドニー / マニラ / ジャカルタ",
       "color": "#eab308",
       "serviceStart": "2023-06-04",
-      "flightState": "着陸済・駐機中 🟡",
-      "currentLocation": "DEL",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "DEL ➔ 東京(羽田) (HND)",
+      "currentFlight": {
+        "flightNo": "NH838",
+        "origin": "DEL",
+        "dest": "HND",
+        "originName": "DEL",
+        "destinationName": "東京(羽田) (HND)",
+        "origCode": "DEL",
+        "destCode": "HND",
+        "route": "DEL ➔ 東京(羽田)",
+        "depTime": "22:44",
+        "arrTime": "05:55",
+        "timeRange": "22:44 - 05:55",
+        "dateJst": "2026-11-15",
+        "status": "Estimated 05:45",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH837",
@@ -286,12 +303,12 @@
           "origCode": "DEL",
           "destCode": "HND",
           "route": "DEL ➔ 東京(羽田)",
-          "depTime": "22:25",
+          "depTime": "22:44",
           "arrTime": "05:55",
-          "timeRange": "22:25 - 05:55",
+          "timeRange": "22:44 - 05:55",
           "dateJst": "2026-11-15",
-          "status": "Estimated dep 18:55",
-          "isLive": false,
+          "status": "Estimated 05:45",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         }
@@ -306,12 +323,12 @@
           "origCode": "DEL",
           "destCode": "HND",
           "route": "DEL ➔ 東京(羽田)",
-          "depTime": "22:25",
+          "depTime": "22:44",
           "arrTime": "05:55",
-          "timeRange": "22:25 - 05:55",
+          "timeRange": "22:44 - 05:55",
           "dateJst": "2026-11-15",
-          "status": "Estimated dep 18:55",
-          "isLive": false,
+          "status": "Estimated 05:45",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         },
@@ -767,7 +784,7 @@
         "arrTime": "08:45",
         "timeRange": "19:55 - 08:45",
         "dateJst": "2026-11-15",
-        "status": "Estimated 08:15",
+        "status": "Estimated 08:14",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -786,7 +803,7 @@
           "arrTime": "08:45",
           "timeRange": "19:55 - 08:45",
           "dateJst": "2026-11-15",
-          "status": "Estimated 08:15",
+          "status": "Estimated 08:14",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -806,7 +823,7 @@
           "arrTime": "08:45",
           "timeRange": "19:55 - 08:45",
           "dateJst": "2026-11-15",
-          "status": "Estimated 08:15",
+          "status": "Estimated 08:14",
           "isLive": true,
           "isLanded": false,
           "isToday": true
