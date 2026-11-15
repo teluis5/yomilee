@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月15日 11:00",
-  "updatedAtIso": "2026-11-15T02:00:19.216Z",
+  "updatedAt": "2026年11月15日 12:00",
+  "updatedAtIso": "2026-11-15T03:00:26.525Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,26 +17,9 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "東京(羽田) (HND) ➔ 福岡 (FUK)",
-      "currentFlight": {
-        "flightNo": "NH247",
-        "origin": "HND",
-        "dest": "FUK",
-        "originName": "東京(羽田) (HND)",
-        "destinationName": "福岡 (FUK)",
-        "origCode": "HND",
-        "destCode": "FUK",
-        "route": "東京(羽田) ➔ 福岡",
-        "depTime": "09:47",
-        "arrTime": "11:30",
-        "timeRange": "09:47 - 11:30",
-        "dateJst": "2026-11-15",
-        "status": "Estimated 11:23",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": true
-      },
+      "flightState": "着陸済・駐機中 🟡",
+      "currentLocation": "福岡 (FUK)",
+      "currentFlight": null,
       "todayFlights": [
         {
           "flightNo": "NH582",
@@ -66,12 +49,12 @@
           "destCode": "FUK",
           "route": "東京(羽田) ➔ 福岡",
           "depTime": "09:47",
-          "arrTime": "11:30",
-          "timeRange": "09:47 - 11:30",
+          "arrTime": "11:17",
+          "timeRange": "09:47 - 11:17",
           "dateJst": "2026-11-15",
-          "status": "Estimated 11:23",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 11:17",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         }
       ],
@@ -86,12 +69,12 @@
           "destCode": "FUK",
           "route": "東京(羽田) ➔ 福岡",
           "depTime": "09:47",
-          "arrTime": "11:30",
-          "timeRange": "09:47 - 11:30",
+          "arrTime": "11:17",
+          "timeRange": "09:47 - 11:17",
           "dateJst": "2026-11-15",
-          "status": "Estimated 11:23",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 11:17",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         {
@@ -200,9 +183,26 @@
       "routesSummary": "羽田/成田 ➔ シンガポール / バンクーバー / ホノルル / シドニー / マニラ / ジャカルタ",
       "color": "#eab308",
       "serviceStart": "2023-06-04",
-      "flightState": "確認中",
-      "currentLocation": "確認中",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "東京(羽田) (HND) ➔ DEL",
+      "currentFlight": {
+        "flightNo": "NH837",
+        "origin": "HND",
+        "dest": "DEL",
+        "originName": "東京(羽田) (HND)",
+        "destinationName": "DEL",
+        "origCode": "HND",
+        "destCode": "DEL",
+        "route": "東京(羽田) ➔ DEL",
+        "depTime": "11:27",
+        "arrTime": "20:55",
+        "timeRange": "11:27 - 20:55",
+        "dateJst": "2026-11-15",
+        "status": "Estimated 16:33",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH837",
@@ -213,12 +213,12 @@
           "origCode": "HND",
           "destCode": "DEL",
           "route": "東京(羽田) ➔ DEL",
-          "depTime": "10:35",
+          "depTime": "11:27",
           "arrTime": "20:55",
-          "timeRange": "10:35 - 20:55",
+          "timeRange": "11:27 - 20:55",
           "dateJst": "2026-11-15",
-          "status": "Estimated dep 10:35*",
-          "isLive": false,
+          "status": "Estimated 16:33",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         }
@@ -233,12 +233,12 @@
           "origCode": "HND",
           "destCode": "DEL",
           "route": "東京(羽田) ➔ DEL",
-          "depTime": "10:35",
+          "depTime": "11:27",
           "arrTime": "20:55",
-          "timeRange": "10:35 - 20:55",
+          "timeRange": "11:27 - 20:55",
           "dateJst": "2026-11-15",
-          "status": "Estimated dep 10:35*",
-          "isLive": false,
+          "status": "Estimated 16:33",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         },
@@ -477,9 +477,26 @@
       "routesSummary": "羽田/成田 ➔ シアトル / 欧州 / 北米 / バンコク / アジア幹線",
       "color": "#22c55e",
       "serviceStart": "2026-09-18",
-      "flightState": "確認中",
-      "currentLocation": "確認中",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "シドニー (SYD) ➔ 東京(羽田) (HND)",
+      "currentFlight": {
+        "flightNo": "NH890",
+        "origin": "SYD",
+        "dest": "HND",
+        "originName": "シドニー (SYD)",
+        "destinationName": "東京(羽田) (HND)",
+        "origCode": "SYD",
+        "destCode": "HND",
+        "route": "シドニー ➔ 東京(羽田)",
+        "depTime": "11:36",
+        "arrTime": "20:15",
+        "timeRange": "11:36 - 20:15",
+        "dateJst": "2026-11-15",
+        "status": "Delayed 20:49",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH890",
@@ -490,12 +507,12 @@
           "origCode": "SYD",
           "destCode": "HND",
           "route": "シドニー ➔ 東京(羽田)",
-          "depTime": "10:25",
+          "depTime": "11:36",
           "arrTime": "20:15",
-          "timeRange": "10:25 - 20:15",
+          "timeRange": "11:36 - 20:15",
           "dateJst": "2026-11-15",
-          "status": "Estimated dep 12:25*",
-          "isLive": false,
+          "status": "Delayed 20:49",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         }
@@ -510,12 +527,12 @@
           "origCode": "SYD",
           "destCode": "HND",
           "route": "シドニー ➔ 東京(羽田)",
-          "depTime": "10:25",
+          "depTime": "11:36",
           "arrTime": "20:15",
-          "timeRange": "10:25 - 20:15",
+          "timeRange": "11:36 - 20:15",
           "dateJst": "2026-11-15",
-          "status": "Estimated dep 12:25*",
-          "isLive": false,
+          "status": "Delayed 20:49",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         },
@@ -640,7 +657,7 @@
         "arrTime": "13:30",
         "timeRange": "23:34 - 13:30",
         "dateJst": "2026-11-14",
-        "status": "Estimated 05:14",
+        "status": "Estimated 05:17",
         "isLive": true,
         "isLanded": false,
         "isToday": false
@@ -697,7 +714,7 @@
           "arrTime": "13:30",
           "timeRange": "23:34 - 13:30",
           "dateJst": "2026-11-14",
-          "status": "Estimated 05:14",
+          "status": "Estimated 05:17",
           "isLive": true,
           "isLanded": false,
           "isToday": false
@@ -889,8 +906,8 @@
             "orig": "HND",
             "dest": "FUK",
             "route": "東京(羽田) ➔ 福岡",
-            "time": "09:47発 - 11:30着",
-            "tag": "飛行中 🟢",
+            "time": "09:47発 - 11:17着",
+            "tag": "運航完了",
             "step": "第2便"
           },
           {
@@ -954,8 +971,8 @@
             "orig": "HND",
             "dest": "FUK",
             "route": "東京(羽田) ➔ 福岡",
-            "time": "09:47発 - 11:30着",
-            "tag": "飛行中 🟢",
+            "time": "09:47発 - 11:17着",
+            "tag": "運航完了",
             "step": "第2便"
           },
           {
@@ -1010,8 +1027,8 @@
             "orig": "HND",
             "dest": "FUK",
             "route": "東京(羽田) ➔ 福岡",
-            "time": "09:47発 - 11:30着",
-            "tag": "飛行中 🟢",
+            "time": "09:47発 - 11:17着",
+            "tag": "運航完了",
             "step": "第2便"
           },
           {
@@ -1058,28 +1075,9 @@
       {
         "planId": "tomorrow-plan-1",
         "planName": "プランA",
-        "stayCode": "NGS",
-        "rank": "本命",
-        "probability": 38,
-        "routeSummary": "羽田 ➔ 長崎",
-        "flights": [
-          {
-            "step": "第1便",
-            "flightNo": "NH661",
-            "orig": "HND",
-            "dest": "NGS",
-            "route": "東京(羽田) ➔ 長崎",
-            "time": "08:30発 - 10:30着",
-            "tag": "予想"
-          }
-        ]
-      },
-      {
-        "planId": "tomorrow-plan-2",
-        "planName": "プランB",
         "stayCode": "HND",
-        "rank": "候補",
-        "probability": 31,
+        "rank": "本命",
+        "probability": 34,
         "routeSummary": "高松 ➔ 羽田 ➔ 石垣 ➔ 羽田",
         "flights": [
           {
@@ -1112,11 +1110,11 @@
         ]
       },
       {
-        "planId": "tomorrow-plan-3",
-        "planName": "プランC",
+        "planId": "tomorrow-plan-2",
+        "planName": "プランB",
         "stayCode": "HND",
         "rank": "候補",
-        "probability": 31,
+        "probability": 33,
         "routeSummary": "高松 ➔ 羽田 ➔ 宮古 ➔ 羽田",
         "flights": [
           {
@@ -1144,6 +1142,61 @@
             "dest": "HND",
             "route": "宮古 ➔ 東京(羽田)",
             "time": "16:15発 - 18:45着",
+            "tag": "予想"
+          }
+        ]
+      },
+      {
+        "planId": "tomorrow-plan-3",
+        "planName": "プランC",
+        "stayCode": "TAK",
+        "rank": "候補",
+        "probability": 33,
+        "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 高松",
+        "flights": [
+          {
+            "step": "第1便",
+            "flightNo": "NH247",
+            "orig": "HND",
+            "dest": "FUK",
+            "route": "東京(羽田) ➔ 福岡",
+            "time": "09:30発 - 11:30着",
+            "tag": "予想"
+          },
+          {
+            "step": "第2便",
+            "flightNo": "NH252",
+            "orig": "FUK",
+            "dest": "HND",
+            "route": "福岡 ➔ 東京(羽田)",
+            "time": "12:15発 - 13:55着",
+            "tag": "予想"
+          },
+          {
+            "step": "第3便",
+            "flightNo": "NH69",
+            "orig": "HND",
+            "dest": "CTS",
+            "route": "東京(羽田) ➔ 札幌(新千歳)",
+            "time": "15:00発 - 16:35着",
+            "tag": "予想"
+          },
+          {
+            "step": "第4便",
+            "flightNo": "NH74",
+            "orig": "CTS",
+            "dest": "HND",
+            "route": "札幌(新千歳) ➔ 東京(羽田)",
+            "time": "17:30発 - 19:10着",
+            "tag": "予想"
+          },
+          {
+            "step": "第5便",
+            "flightNo": "NH539",
+            "orig": "HND",
+            "dest": "TAK",
+            "route": "東京(羽田) ➔ 高松",
+            "time": "20:05発 - 21:25着",
             "tag": "予想"
           }
         ]
@@ -1201,12 +1254,12 @@
           "destCode": "FUK",
           "route": "東京(羽田) ➔ 福岡",
           "depTime": "09:47",
-          "arrTime": "11:30",
-          "timeRange": "09:47 - 11:30",
+          "arrTime": "11:17",
+          "timeRange": "09:47 - 11:17",
           "dateJst": "2026-11-15",
-          "status": "Estimated 11:23",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 11:17",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         "update": null
