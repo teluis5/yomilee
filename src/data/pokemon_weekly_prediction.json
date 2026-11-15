@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月15日 21:00",
-  "updatedAtIso": "2026-11-15T12:00:26.856Z",
+  "updatedAt": "2026年11月15日 22:00",
+  "updatedAtIso": "2026-11-15T13:00:25.953Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,26 +17,9 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "東京(羽田) (HND) ➔ 高松 (TAK)",
-      "currentFlight": {
-        "flightNo": "NH539",
-        "origin": "HND",
-        "dest": "TAK",
-        "originName": "東京(羽田) (HND)",
-        "destinationName": "高松 (TAK)",
-        "origCode": "HND",
-        "destCode": "TAK",
-        "route": "東京(羽田) ➔ 高松",
-        "depTime": "20:38",
-        "arrTime": "21:25",
-        "timeRange": "20:38 - 21:25",
-        "dateJst": "2026-11-15",
-        "status": "Estimated 21:37",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": true
-      },
+      "flightState": "着陸済・駐機中 🟡",
+      "currentLocation": "高松 (TAK)",
+      "currentFlight": null,
       "todayFlights": [
         {
           "flightNo": "NH582",
@@ -138,12 +121,12 @@
           "destCode": "TAK",
           "route": "東京(羽田) ➔ 高松",
           "depTime": "20:38",
-          "arrTime": "21:25",
-          "timeRange": "20:38 - 21:25",
+          "arrTime": "21:37",
+          "timeRange": "20:38 - 21:37",
           "dateJst": "2026-11-15",
-          "status": "Estimated 21:37",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 21:37",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         }
       ],
@@ -158,12 +141,12 @@
           "destCode": "TAK",
           "route": "東京(羽田) ➔ 高松",
           "depTime": "20:38",
-          "arrTime": "21:25",
-          "timeRange": "20:38 - 21:25",
+          "arrTime": "21:37",
+          "timeRange": "20:38 - 21:37",
           "dateJst": "2026-11-15",
-          "status": "Estimated 21:37",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 21:37",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         {
@@ -621,26 +604,9 @@
       "routesSummary": "羽田/成田 ➔ シアトル / 欧州 / 北米 / バンコク / アジア幹線",
       "color": "#22c55e",
       "serviceStart": "2026-09-18",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "シドニー (SYD) ➔ 東京(羽田) (HND)",
-      "currentFlight": {
-        "flightNo": "NH890",
-        "origin": "SYD",
-        "dest": "HND",
-        "originName": "シドニー (SYD)",
-        "destinationName": "東京(羽田) (HND)",
-        "origCode": "SYD",
-        "destCode": "HND",
-        "route": "シドニー ➔ 東京(羽田)",
-        "depTime": "11:36",
-        "arrTime": "20:15",
-        "timeRange": "11:36 - 20:15",
-        "dateJst": "2026-11-15",
-        "status": "Delayed 21:06",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": true
-      },
+      "flightState": "着陸済・駐機中 🟡",
+      "currentLocation": "東京(羽田) (HND)",
+      "currentFlight": null,
       "todayFlights": [
         {
           "flightNo": "NH890",
@@ -652,12 +618,12 @@
           "destCode": "HND",
           "route": "シドニー ➔ 東京(羽田)",
           "depTime": "11:36",
-          "arrTime": "20:15",
-          "timeRange": "11:36 - 20:15",
+          "arrTime": "21:06",
+          "timeRange": "11:36 - 21:06",
           "dateJst": "2026-11-15",
-          "status": "Delayed 21:06",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 21:06",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         }
       ],
@@ -672,12 +638,12 @@
           "destCode": "HND",
           "route": "シドニー ➔ 東京(羽田)",
           "depTime": "11:36",
-          "arrTime": "20:15",
-          "timeRange": "11:36 - 20:15",
+          "arrTime": "21:06",
+          "timeRange": "11:36 - 21:06",
           "dateJst": "2026-11-15",
-          "status": "Delayed 21:06",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 21:06",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         {
@@ -1014,8 +980,8 @@
             "orig": "HND",
             "dest": "TAK",
             "route": "東京(羽田) ➔ 高松",
-            "time": "20:38発 - 21:25着",
-            "tag": "飛行中 🟢",
+            "time": "20:38発 - 21:37着",
+            "tag": "運航完了",
             "step": "第6便"
           }
         ]
