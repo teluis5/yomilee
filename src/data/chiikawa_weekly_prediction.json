@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月15日 09:00",
-  "updatedAtIso": "2026-11-15T00:00:17.302Z",
+  "updatedAt": "2026年11月15日 10:00",
+  "updatedAtIso": "2026-11-15T01:00:16.970Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (長崎 ➔ 東京(羽田))",
+    "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "広島(95%) / 東京(羽田)(5%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
@@ -1508,7 +1508,7 @@
           "route": "長崎 ➔ 東京(羽田)"
         }
       },
-      "currentAirport": "飛行中 (長崎 ➔ 東京(羽田))",
+      "currentAirport": "東京(羽田)",
       "nightStay": "広島(95%) / 東京(羽田)(5%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH662 (長崎 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
@@ -1541,7 +1541,7 @@
               "dest": "HND",
               "route": "長崎 ➔ 東京(羽田)",
               "time": "08:25発 - 10:00着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "① 第1便"
             },
             {
@@ -1606,7 +1606,7 @@
               "dest": "HND",
               "route": "長崎 ➔ 東京(羽田)",
               "time": "08:25発 - 10:00着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "① 第1便"
             },
             {
@@ -1662,7 +1662,7 @@
               "dest": "HND",
               "route": "長崎 ➔ 東京(羽田)",
               "time": "08:25発 - 10:00着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "① 第1便"
             },
             {
@@ -1733,10 +1733,10 @@
           "actual": {
             "flightNo": "NH662",
             "route": "長崎 ➔ 東京(羽田)",
-            "time": "08:37離陸",
-            "status": "飛行中",
-            "isLanded": false,
-            "isLive": true
+            "time": "08:37離陸 / 09:52着陸",
+            "status": "着陸済",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -1825,9 +1825,9 @@
           "flightNo": "NH662",
           "route": "長崎 ➔ 東京(羽田)",
           "time": "08:25発 - 10:00着",
-          "status": "到着予定 (09:57)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (09:52)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -1915,7 +1915,7 @@
           "depGate": null,
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-15T00:00:05.856Z"
+          "modelObservedAt": "2026-11-15T01:00:05.034Z"
         },
         {
           "flightNo": "NH245",
@@ -1927,7 +1927,7 @@
           "depGate": "57",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-15T00:00:05.904Z"
+          "modelObservedAt": "2026-11-15T01:00:05.085Z"
         },
         {
           "flightNo": "NH661",
@@ -1939,7 +1939,7 @@
           "depGate": "48",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-15T00:00:06.115Z"
+          "modelObservedAt": "2026-11-15T01:00:05.391Z"
         },
         {
           "flightNo": "NH1077",
@@ -1951,7 +1951,7 @@
           "depGate": "58",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-15T00:00:05.904Z"
+          "modelObservedAt": "2026-11-15T01:00:05.085Z"
         },
         {
           "flightNo": "NH21",
@@ -1963,7 +1963,7 @@
           "depGate": "63",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-15T00:00:05.997Z"
+          "modelObservedAt": "2026-11-15T01:00:05.204Z"
         }
       ],
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
@@ -4385,7 +4385,7 @@
       "code": "ITM",
       "name": "大阪(伊丹)",
       "note": "羽田シャトル便（NH18/NH21/NH23/NH39等）と新千歳直行便が乗り入れ。",
-      "prob": 56,
+      "prob": 55,
       "level": "A (高確率)"
     },
     {
@@ -4406,8 +4406,8 @@
       "code": "OKA",
       "name": "沖縄(那覇)",
       "note": "羽田・伊丹・中部から飛来する大型幹線。",
-      "prob": 35,
-      "level": "B (中確率)"
+      "prob": 34,
+      "level": "C (注目)"
     },
     {
       "code": "FUK",
@@ -4502,7 +4502,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 741,
+    "totalFleetFlights": 742,
     "fleetCount": 11
   }
 }
