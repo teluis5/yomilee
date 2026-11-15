@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月15日 16:00",
-  "updatedAtIso": "2026-11-15T07:00:21.370Z",
+  "updatedAt": "2026年11月15日 17:00",
+  "updatedAtIso": "2026-11-15T08:00:22.282Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (東京(羽田) ➔ 広島)",
+    "currentLocation": "広島",
     "currentLocationCode": "HIJ",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "広島(95%) / 東京(羽田)(5%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
@@ -1508,7 +1508,7 @@
           "route": "長崎 ➔ 東京(羽田)"
         }
       },
-      "currentAirport": "飛行中 (東京(羽田) ➔ 広島)",
+      "currentAirport": "広島",
       "nightStay": "広島(95%) / 東京(羽田)(5%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH681 (東京(羽田) ➔ 広島) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
@@ -1568,7 +1568,7 @@
               "dest": "HIJ",
               "route": "東京(羽田) ➔ 広島",
               "time": "15:00発 - 16:30着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "④ 第4便"
             },
             {
@@ -1633,7 +1633,7 @@
               "dest": "HIJ",
               "route": "東京(羽田) ➔ 広島",
               "time": "15:00発 - 16:30着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "④ 第4便"
             },
             {
@@ -1749,10 +1749,10 @@
           "actual": {
             "flightNo": "NH681",
             "route": "東京(羽田) ➔ 広島",
-            "time": "15:36離陸",
-            "status": "飛行中",
-            "isLanded": false,
-            "isLive": true
+            "time": "15:36離陸 / 16:43着陸",
+            "status": "着陸済",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -1817,9 +1817,9 @@
           "flightNo": "NH681",
           "route": "東京(羽田) ➔ 広島",
           "time": "15:00発 - 16:30着",
-          "status": "到着予定 (16:42)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (16:43)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -1868,7 +1868,7 @@
           "depGate": null,
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-15T06:46:04.355Z"
+          "modelObservedAt": "2026-11-15T08:00:08.404Z"
         },
         {
           "flightNo": "NH245",
@@ -1880,7 +1880,7 @@
           "depGate": "57",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-15T06:46:04.977Z"
+          "modelObservedAt": "2026-11-15T08:00:08.455Z"
         },
         {
           "flightNo": "NH661",
@@ -1892,7 +1892,7 @@
           "depGate": "48",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-15T06:46:08.015Z"
+          "modelObservedAt": "2026-11-15T08:00:08.720Z"
         },
         {
           "flightNo": "NH1077",
@@ -1904,7 +1904,7 @@
           "depGate": "58",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-15T06:46:04.977Z"
+          "modelObservedAt": "2026-11-15T08:00:08.455Z"
         },
         {
           "flightNo": "NH21",
@@ -1916,7 +1916,7 @@
           "depGate": "63",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-15T06:46:06.059Z"
+          "modelObservedAt": "2026-11-15T08:00:08.558Z"
         }
       ],
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
@@ -4533,7 +4533,7 @@
       "code": "NGO",
       "name": "名古屋(中部)",
       "note": "新千歳便（NH703/NH712等）や羽田便の夜間ステイ拠点。",
-      "prob": 61,
+      "prob": 60,
       "level": "A (高確率)"
     },
     {
@@ -4554,14 +4554,14 @@
       "code": "FUK",
       "name": "福岡空港",
       "note": "羽田幹線（NH245/NH250/NH265/NH270等）で連日高頻度運航。",
-      "prob": 38,
+      "prob": 37,
       "level": "B (中確率)"
     },
     {
       "code": "NGS",
       "name": "長崎空港",
       "note": "朝一便（NH661/NH664）および夜間ステイ便（NH669/NH662）で高頻度投入。",
-      "prob": 36,
+      "prob": 35,
       "level": "B (中確率)"
     },
     {
@@ -4657,7 +4657,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 640,
+    "totalFleetFlights": 642,
     "fleetCount": 11
   }
 }
