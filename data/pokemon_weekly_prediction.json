@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月15日 14:00",
-  "updatedAtIso": "2026-11-15T05:00:21.213Z",
+  "updatedAt": "2026年11月15日 15:00",
+  "updatedAtIso": "2026-11-15T06:00:25.729Z",
   "totalJets": 5,
   "jets": [
     {
@@ -216,7 +216,7 @@
         "arrTime": "20:55",
         "timeRange": "11:27 - 20:55",
         "dateJst": "2026-11-15",
-        "status": "Estimated 16:37",
+        "status": "Estimated 16:38",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -235,7 +235,7 @@
           "arrTime": "20:55",
           "timeRange": "11:27 - 20:55",
           "dateJst": "2026-11-15",
-          "status": "Estimated 16:37",
+          "status": "Estimated 16:38",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -255,7 +255,7 @@
           "arrTime": "20:55",
           "timeRange": "11:27 - 20:55",
           "dateJst": "2026-11-15",
-          "status": "Estimated 16:37",
+          "status": "Estimated 16:38",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -366,11 +366,48 @@
       "routesSummary": "羽田/成田 ➔ サンフランシスコ / シカゴ / ロンドン / ニューヨーク",
       "color": "#d97706",
       "serviceStart": "2023-08-31",
-      "flightState": "確認中",
-      "currentLocation": "確認中",
+      "flightState": "着陸済・駐機中 🟡",
+      "currentLocation": "東京(成田) (NRT)",
       "currentFlight": null,
-      "todayFlights": [],
+      "todayFlights": [
+        {
+          "flightNo": "NH9372",
+          "origin": "HND",
+          "dest": "NRT",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "東京(成田) (NRT)",
+          "origCode": "HND",
+          "destCode": "NRT",
+          "route": "東京(羽田) ➔ 東京(成田)",
+          "depTime": "14:22",
+          "arrTime": "14:40",
+          "timeRange": "14:22 - 14:40",
+          "dateJst": "2026-11-15",
+          "status": "Landed 14:40",
+          "isLive": false,
+          "isLanded": true,
+          "isToday": true
+        }
+      ],
       "recentFlights": [
+        {
+          "flightNo": "NH9372",
+          "origin": "HND",
+          "dest": "NRT",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "東京(成田) (NRT)",
+          "origCode": "HND",
+          "destCode": "NRT",
+          "route": "東京(羽田) ➔ 東京(成田)",
+          "depTime": "14:22",
+          "arrTime": "14:40",
+          "timeRange": "14:22 - 14:40",
+          "dateJst": "2026-11-15",
+          "status": "Landed 14:40",
+          "isLive": false,
+          "isLanded": true,
+          "isToday": true
+        },
         {
           "flightNo": "NH212",
           "origin": "LHR",
@@ -460,24 +497,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH12",
-          "origin": "NRT",
-          "dest": "ORD",
-          "originName": "東京(成田) (NRT)",
-          "destinationName": "シカゴ (ORD)",
-          "origCode": "NRT",
-          "destCode": "ORD",
-          "route": "東京(成田) ➔ シカゴ",
-          "depTime": "17:34",
-          "arrTime": "03:59",
-          "timeRange": "17:34 - 03:59",
-          "dateJst": "2026-11-09",
-          "status": "Landed 12:59",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -510,7 +529,7 @@
         "arrTime": "20:15",
         "timeRange": "11:36 - 20:15",
         "dateJst": "2026-11-15",
-        "status": "Delayed 21:03",
+        "status": "Delayed 21:02",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -529,7 +548,7 @@
           "arrTime": "20:15",
           "timeRange": "11:36 - 20:15",
           "dateJst": "2026-11-15",
-          "status": "Delayed 21:03",
+          "status": "Delayed 21:02",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -549,7 +568,7 @@
           "arrTime": "20:15",
           "timeRange": "11:36 - 20:15",
           "dateJst": "2026-11-15",
-          "status": "Delayed 21:03",
+          "status": "Delayed 21:02",
           "isLive": true,
           "isLanded": false,
           "isToday": true
