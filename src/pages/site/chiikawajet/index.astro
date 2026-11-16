@@ -5,7 +5,7 @@ import predictionData from '../../../data/chiikawa_weekly_prediction.json';
 import heroImage from '../../../assets/images/chiikawajet_ogp.png';
 
 const title = "毎日更新【今日の運行状況】ちいかわジェット本日のフライト予定＆週間予想【JA609A】";
-const description = "【毎日自動更新】ANA特別塗装機「ちいかわジェット（ちいかわじぇっと・JA609A）」の今日・本日のリアルタイム運航状況、明日の便予想、羽田・新千歳・福岡などの就航確率を公開！現在いまどこを飛んでいるか、何時の便か1秒で特定できます。";
+const description = "【毎日自動更新】ANA特別塗装機「ちいかわジェット（ちいかわじぇっと・JA609A）」の今日・本日のリアルタイム運航状況、明日の便予想、週間フライト予定を公開！現在いまどこを飛んでいるか、何時の便か1秒で特定できます。";
 
 const currentData = predictionData;
 const aircraft = currentData.aircraft;
@@ -228,7 +228,6 @@ const pageSchema = {
 							<summary class="plan-head">
 								<div class="ph-left">
 									<span class={`plan-badge p-${idx}`}>{plan.planName}</span>
-									<span class="plan-prob">{plan.probability}%</span>
 									<span class="plan-flow">{plan.title || plan.routeSummary}</span>
 								</div>
 							</summary>
@@ -417,7 +416,7 @@ const pageSchema = {
 				<div class="faq-item">
 					<h3 class="faq-q">Q3. 明日のちいかわ便を予約して乗ることはできる？</h3>
 					<p class="faq-a">
-						前日夕方〜夜にかけて翌日の最初の就航便（初便）がナイトステイ先から絞り込まれます。当サイトの「明日の予定（週間連鎖タイムテーブル予想）」を活用することで、就航確率の高い便を狙い撃ちすることが可能です。
+						前日夕方〜夜にかけて翌日の最初の就航便（初便）がナイトステイ先から絞り込まれます。当サイトの「明日の運航予想」や週間タイムテーブル予想を活用することで、就航予定の便を把握することが可能です。
 					</p>
 				</div>
 				<div class="faq-item">
@@ -1021,7 +1020,7 @@ const pageSchema = {
 	}
 	.fd-row {
 		display: grid;
-		grid-template-columns: 65px 45px 1fr auto;
+		grid-template-columns: 65px 1fr auto;
 		align-items: center;
 		gap: 0.5rem;
 		padding: 0.25rem 0;

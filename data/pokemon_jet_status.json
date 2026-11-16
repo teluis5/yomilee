@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-16T01:00:38.301Z",
-  "updatedAtJst": "2026/11/16 10:00:38",
+  "updatedAt": "2026-11-16T02:00:42.596Z",
+  "updatedAtJst": "2026/11/16 11:00:42",
   "totalJets": 5,
   "jets": [
     {
@@ -17,23 +17,9 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "東京(羽田) (HND) ➔ 松山 (MYJ)",
-      "currentFlight": {
-        "id": "42973ac6",
-        "flightNo": "NH585",
-        "origin": "HND",
-        "originName": "東京(羽田) (HND)",
-        "destination": "MYJ",
-        "destinationName": "松山 (MYJ)",
-        "depTimeJst": "2026-11-16 09:43",
-        "arrTimeJst": "2026-11-16 10:50",
-        "timeRange": "09:43 - 10:50",
-        "dateJst": "2026-11-16",
-        "status": "Estimated 10:50",
-        "isLive": true,
-        "isToday": true
-      },
+      "flightState": "着陸済み 🔵",
+      "currentLocation": "松山 (MYJ)",
+      "currentFlight": null,
       "nextFlight": {
         "flightNo": "NH590",
         "origin": "MYJ",
@@ -46,7 +32,21 @@
         "status": "予測枠 (★★★★★ (最有力・55分ターン))",
         "isPredicted": true
       },
-      "lastLandedFlight": null,
+      "lastLandedFlight": {
+        "id": "42973ac6",
+        "flightNo": "NH585",
+        "origin": "HND",
+        "originName": "東京(羽田) (HND)",
+        "destination": "MYJ",
+        "destinationName": "松山 (MYJ)",
+        "depTimeJst": "2026-11-16 09:43",
+        "arrTimeJst": "2026-11-16 10:49",
+        "timeRange": "09:43 - 10:49",
+        "dateJst": "2026-11-16",
+        "status": "Landed 10:49",
+        "isLive": false,
+        "isToday": true
+      },
       "nightStay": "松山 (MYJ)",
       "domesticPrediction": {
         "nextCandidates": [
@@ -56,7 +56,7 @@
             "depTime": "11:35",
             "arrTime": "12:55",
             "model": "78P",
-            "turnAroundMin": 45,
+            "turnAroundMin": 46,
             "probability": "★★★★★ (最有力・55分ターン)"
           }
         ],
@@ -72,11 +72,11 @@
           "destination": "MYJ",
           "destinationName": "松山 (MYJ)",
           "depTimeJst": "2026-11-16 09:43",
-          "arrTimeJst": "2026-11-16 10:50",
-          "timeRange": "09:43 - 10:50",
+          "arrTimeJst": "2026-11-16 10:49",
+          "timeRange": "09:43 - 10:49",
           "dateJst": "2026-11-16",
-          "status": "Estimated 10:50",
-          "isLive": true,
+          "status": "Landed 10:49",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -104,11 +104,11 @@
           "destination": "MYJ",
           "destinationName": "松山 (MYJ)",
           "depTimeJst": "2026-11-16 09:43",
-          "arrTimeJst": "2026-11-16 10:50",
-          "timeRange": "09:43 - 10:50",
+          "arrTimeJst": "2026-11-16 10:49",
+          "timeRange": "09:43 - 10:49",
           "dateJst": "2026-11-16",
-          "status": "Estimated 10:50",
-          "isLive": true,
+          "status": "Landed 10:49",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -187,7 +187,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-16T01:00:36.540Z"
+      "updatedAt": "2026-11-16T02:00:40.776Z"
     },
     {
       "id": "pikachu-nh",
@@ -206,18 +206,18 @@
       "flightState": "飛行中 🟢",
       "currentLocation": "東京(羽田) (HND) ➔ DEL",
       "currentFlight": {
-        "id": "JA894A-1794792900",
+        "id": "429761fc",
         "flightNo": "NH837",
         "origin": "HND",
         "originName": "東京(羽田) (HND)",
         "destination": "DEL",
         "destinationName": "DEL",
-        "depTimeJst": "2026-11-16 10:35",
+        "depTimeJst": "2026-11-16 10:41",
         "arrTimeJst": "2026-11-16 20:55",
-        "timeRange": "10:35 - 20:55",
+        "timeRange": "10:41 - 20:55",
         "dateJst": "2026-11-16",
-        "status": "Estimated dep 10:35",
-        "isLive": false,
+        "status": "Estimated dep 10:41*",
+        "isLive": true,
         "isToday": true
       },
       "nextFlight": null,
@@ -227,35 +227,35 @@
       "todayFlightsCount": 1,
       "todayFlights": [
         {
-          "id": "JA894A-1794792900",
+          "id": "429761fc",
           "flightNo": "NH837",
           "origin": "HND",
           "originName": "東京(羽田) (HND)",
           "destination": "DEL",
           "destinationName": "DEL",
-          "depTimeJst": "2026-11-16 10:35",
+          "depTimeJst": "2026-11-16 10:41",
           "arrTimeJst": "2026-11-16 20:55",
-          "timeRange": "10:35 - 20:55",
+          "timeRange": "10:41 - 20:55",
           "dateJst": "2026-11-16",
-          "status": "Estimated dep 10:35",
-          "isLive": false,
+          "status": "Estimated dep 10:41*",
+          "isLive": true,
           "isToday": true
         }
       ],
       "recentFlights": [
         {
-          "id": "JA894A-1794792900",
+          "id": "429761fc",
           "flightNo": "NH837",
           "origin": "HND",
           "originName": "東京(羽田) (HND)",
           "destination": "DEL",
           "destinationName": "DEL",
-          "depTimeJst": "2026-11-16 10:35",
+          "depTimeJst": "2026-11-16 10:41",
           "arrTimeJst": "2026-11-16 20:55",
-          "timeRange": "10:35 - 20:55",
+          "timeRange": "10:41 - 20:55",
           "dateJst": "2026-11-16",
-          "status": "Estimated dep 10:35",
-          "isLive": false,
+          "status": "Estimated dep 10:41*",
+          "isLive": true,
           "isToday": true
         },
         {
@@ -334,7 +334,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-16T01:00:36.987Z"
+      "updatedAt": "2026-11-16T02:00:41.213Z"
     },
     {
       "id": "eevee-nh",
@@ -481,7 +481,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-16T01:00:37.427Z"
+      "updatedAt": "2026-11-16T02:00:41.679Z"
     },
     {
       "id": "pokemon-green",
@@ -612,7 +612,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-16T01:00:37.856Z"
+      "updatedAt": "2026-11-16T02:00:42.150Z"
     },
     {
       "id": "pikachu-legacy",
@@ -743,7 +743,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-16T01:00:38.300Z"
+      "updatedAt": "2026-11-16T02:00:42.595Z"
     }
   ]
 }
