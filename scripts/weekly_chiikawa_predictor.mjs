@@ -2652,6 +2652,7 @@ export async function generateWeeklyPrediction() {
           route: f.route,
           time: `${f.depTime}発 - ${f.arrTime}着`,
           depGate: todayAnaMap[normalizeFlightNo(f.flightNo)]?.depGate || null,
+          arrGate: todayAnaMap[normalizeFlightNo(f.flightNo)]?.arrGate || null,
           status: f.statusJa,
           isLanded: f.isLanded,
           isLive: f.isLive,
@@ -2659,7 +2660,8 @@ export async function generateWeeklyPrediction() {
         })),
         ...predictedRemainingToday.map(pf => ({
           ...pf,
-          depGate: pf.depGate || todayAnaMap[normalizeFlightNo(pf.flightNo)]?.depGate || null
+          depGate: pf.depGate || todayAnaMap[normalizeFlightNo(pf.flightNo)]?.depGate || null,
+          arrGate: pf.arrGate || todayAnaMap[normalizeFlightNo(pf.flightNo)]?.arrGate || null
         }))
       ];
 
