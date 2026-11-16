@@ -185,6 +185,45 @@
         }
       ],
       "trialApplicable": true
+    },
+    "morning": {
+      "updatedAtIso": "2026-11-16T20:00:04.424Z",
+      "arrival": {
+        "airport": "HIJ",
+        "arrivalMin": 1295,
+        "gate": null,
+        "flightNo": "NH685",
+        "time": "21:35"
+      },
+      "candidates": [
+        {
+          "flightNo": "NH672",
+          "orig": "HIJ",
+          "dest": "HND",
+          "route": "広島 ➔ 東京(羽田)",
+          "depTime": "07:35",
+          "arrTime": "08:55",
+          "depGate": null,
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        }
+      ],
+      "trialCandidates": [
+        {
+          "flightNo": "NH672",
+          "orig": "HIJ",
+          "dest": "HND",
+          "route": "広島 ➔ 東京(羽田)",
+          "depTime": "07:35",
+          "arrTime": "08:55",
+          "depGate": null,
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        }
+      ],
+      "trialApplicable": true
     }
   }
 }
