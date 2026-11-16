@@ -149,33 +149,27 @@ const pageSchema = {
 							</div>
 						))}
 
-						{/* 最終便の後にナイトステイ先の列を追加し、そこのみ到着ゲートを表示 */}
+						{/* 最終便の後にナイトステイ先の列を追加（他行と同一デザイン・到着ゲート表示） */}
 						{(() => {
 							const allTodayList = [...liveFlights, ...upcomingFlights];
 							const lastFlight = allTodayList.at(-1);
 							const stayAirport = aircraft.nightStayProbabilities?.[0]?.airport || (lastFlight?.destCode ? lastFlight.destCode : '未定');
-							const stayProb = aircraft.nightStayProbabilities?.[0]?.probability;
 							const isConfirmed = aircraft.isNightStayConfirmed;
 							const arrGate = lastFlight?.arrGate;
+							const arrTimeStr = lastFlight?.arrTime || (lastFlight?.time?.match(/-\s*(\d{1,2}:\d{2})/)?.[1]) || '夜';
 
 							return (
-								<div class="upcoming-row nightstay-row">
-									<div class="upcoming-time nightstay-time">
-										<span>{isConfirmed ? '確定' : '予想'}</span>
-										<b>🌙 宿泊</b>
+								<div class="upcoming-row">
+									<div class="upcoming-time">
+										<span>宿泊</span>
+										<b>{arrTimeStr}</b>
 									</div>
 									<div class="upcoming-detail">
-										<div class="upcoming-route">
-											ナイトステイ先：{stayAirport}
-											{!isConfirmed && stayProb ? <span class="ns-prob-badge">({stayProb}%)</span> : ''}
-										</div>
+										<div class="upcoming-route">ナイトステイ先: {stayAirport}</div>
 										<div class="upcoming-meta">
-											<span class="ns-desc">{lastFlight ? `${lastFlight.flightNo} 到着後に駐機・夜明かし` : '本日の全フライト終了後の宿泊地'}</span>
-											{arrGate ? (
-												<span class="upcoming-gate arr-gate">🛬 到着ゲート: {arrGate}</span>
-											) : (
-												<span class="upcoming-gate arr-gate-pending">到着ゲート: 当日情報待ち</span>
-											)}
+											<b>{lastFlight ? `${lastFlight.flightNo} 運航後` : '本日最終'}</b>
+											<span class="upcoming-label">{isConfirmed ? 'ステイ確定' : 'ステイ予想'}</span>
+											{arrGate && <span class="upcoming-gate arr-gate">到着ゲート: {arrGate}</span>}
 										</div>
 									</div>
 								</div>
@@ -770,36 +764,6 @@ const pageSchema = {
 		background: #f0fdf4;
 		color: #15803d;
 		border: 1px solid #86efac;
-	}
-	.upcoming-gate.arr-gate-pending {
-		background: #f1f5f9;
-		color: #64748b;
-		border: 1px solid #cbd5e1;
-	}
-	.upcoming-row.nightstay-row {
-		background: #f8fafc;
-		border-top: 2px dashed #94a3b8;
-		border-bottom: 0;
-		padding: 14px 12px;
-		margin: 8px -8px 0;
-		border-radius: 8px;
-	}
-	.nightstay-time span {
-		color: #475569;
-		font-weight: 700;
-	}
-	.nightstay-time b {
-		color: #1e3a8a;
-		font-size: 1.05rem;
-	}
-	.ns-prob-badge {
-		font-size: 0.85rem;
-		color: #0284c7;
-		font-weight: 600;
-	}
-	.ns-desc {
-		color: #475569;
-		font-size: 0.85rem;
 	}
 	.upcoming-row:first-child .upcoming-time b {
 		color: #075985;
