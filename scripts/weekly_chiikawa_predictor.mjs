@@ -860,8 +860,10 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
     return false;
   };
 
-  // 当該空港から物理的に出発可能な後続767便（未割当・未出発）を厳密に検索
-  // ※安易に時刻だけでナイトステイと決めつけず、本当に後続・折り返し767便がないことを確認する
+  // ✈️ 【新ロジック: 到着先空港から到着30分後以降に出発する76P便がないことによる早期ナイトステイ確定】
+  // 到着先空港（startAirport）から物理的に出発可能な後続767便（未割当・未出発）を厳密に検索
+  // 最短折り返し時間: 羽田35分、地方空港30分
+  const minTurn = startAirport === 'HND' ? 35 : 30;
   const immediateNext767 = Object.values(dayFlights).filter(df => {
     if (df.origin !== startAirport || df.isCancelled) return false;
     if (alreadyFlownSet.has(df.flightNo)) return false;
@@ -872,21 +874,34 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
     if (!is76) return false;
 
     const depM = parseTimeToMinutes(df.actDepTime || df.depTime);
-    const minTurn = startAirport === 'HND' ? 35 : 30;
     const isPairOrReturn = (lastToday.origCode && df.dest === lastToday.origCode) || ((transitions[startFn]?.[df.flightNo] || 0) > 0);
     if (isFlightAlreadyGone(df, isPairOrReturn)) return false;
 
     const schedTurn = (parseTimeToMinutes(df.depTime) ?? 0) - startSchedArrMin;
+    // 到着予定時刻 + 30分（羽田は35分）以降に出発する便があるか
     if (depM !== null && depM >= startActArrMin + minTurn) return true;
     // 💡 玉突き遅延候補: 前便が遅延しても、ピストン折返しや強い遷移実績がある便は出発を遅延させて同一機材で運航する
     if (isPairOrReturn && schedTurn >= minTurn && schedTurn <= 120) return true;
     return false;
   });
 
-  // 深夜23:00以降着、または17:30以降着/現在18:00以降で後続の未出発767便が1便も存在しない場合ナイトステイ確定
-  const isEveningOrLater = startActArrMin >= 1050 || (nowMin !== null && nowMin >= 1080);
-  if (startActArrMin >= 1380 || (isEveningOrLater && immediateNext767.length === 0)) {
+  // ナイトステイ確定判定（早期確定対応）:
+  // ① 地方空港（startAirport !== 'HND'）:
+  //    夕方17:00以降着（または現在17:00以降）で、到着から30分後以降に出発する76P便が0便の場合、即座に確定！
+  // ② 羽田空港（startAirport === 'HND'）:
+  //    夕方17:30以降着（または現在18:00以降）で、後続の未出発76P便が0便の場合、羽田ステイ確定！
+  // ③ 深夜23:00以降着（1380分以降）
+  const isRegional = startAirport !== 'HND';
+  const isEveningForAirport = isRegional
+    ? (startActArrMin >= 1020 || (nowMin !== null && nowMin >= 1020)) // 地方空港は17:00以降
+    : (startActArrMin >= 1050 || (nowMin !== null && nowMin >= 1080)); // 羽田は17:30/18:00以降
+
+  if (startActArrMin >= 1380 || (isEveningForAirport && immediateNext767.length === 0)) {
     const stayName = AIRPORT_NAMES[startAirport] || startAirport;
+    const confirmReason = isRegional
+      ? `${stayName}到着後（+30分以降）に出発する当日の76P便が0便のためナイトステイ確定`
+      : '羽田到着後、当日の後続76P便が存在しないため羽田ナイトステイ確定';
+    console.log(`🌙 【早期ナイトステイ確定】${confirmReason} (${stayName})`);
     return {
       isNightStayConfirmed: true,
       nightStayCode: startAirport,
