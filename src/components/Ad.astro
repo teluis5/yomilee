@@ -8,7 +8,8 @@ interface Props {
   slot?: string;
   position?: 'home-top' | 'bottom' | 'sidebar' | 'blog-card' | 'custom';
   client?: string;
-  type?: 'mixed' | 'adsense' | 'rakuten' | 'amazon';
+  type?: 'mixed' | 'adsense' | 'googlead' | 'rakuten' | 'amazon';
+  provider?: 'mixed' | 'adsense' | 'googlead' | 'rakuten' | 'amazon';
   eventText?: string;
   eventUrl?: string;
   disableAdsense?: boolean;
@@ -18,11 +19,15 @@ const {
   slot,
   position = 'custom',
   client = 'ca-pub-8011635154814608',
-  type = 'mixed',
+  type,
+  provider,
   eventText,
   eventUrl,
   disableAdsense = false,
 } = Astro.props;
+
+// provider または type から広告種別を決定（rakuten, amazon, googlead / adsense, mixed）
+const selectedType = (provider || type || 'mixed').toLowerCase();
 
 // ユーザー指定スロットIDマッピング
 const POSITION_SLOTS: Record<string, string> = {
@@ -143,22 +148,38 @@ const AMAZON_DATA = [
   },
 ];
 
-// AdSense 有効化判定
-// ※ teluis.com 本家は Google AdSense 未審査・未対応ドメインのため AdSense を完全ブロックし、
-// 楽天モーションウィジェットやAmazonアソシエイトへ安全に自動フォールバックします。
-const currentHost = (Astro.site?.hostname || '').toLowerCase();
+// 安全なホスト名取得
+let currentHost = '';
+try {
+  if (Astro.site) {
+    currentHost = (typeof Astro.site === 'string' ? new URL(Astro.site).hostname : Astro.site.hostname || '').toLowerCase();
+  } else if (Astro.url) {
+    currentHost = Astro.url.hostname.toLowerCase();
+  }
+} catch (e) {
+  currentHost = '';
+}
+
 const isTeluisMain = currentHost === 'teluis.com' || currentHost === 'www.teluis.com';
-const isAdEnabled = !isTeluisMain && !disableAdsense;
-const showYomileeFirstH2Ad = currentHost === 'yomileeblog.com' || currentHost === 'www.yomileeblog.com';
+const isYomilee = currentHost === 'yomileeblog.com' || currentHost === 'www.yomileeblog.com' || currentHost.includes('yomilee');
+
+// AdSense 有効化判定
+// ※ yomilee は Google AdSense 審査通過済みドメインのため最優先で完全有効化
+// ※ teluis.com 本家は Google AdSense 未審査・未対応ドメインのため AdSense をブロックし、
+// 楽天モーションウィジェットやAmazonアソシエイトへ安全に自動フォールバックします。
+const isAdEnabled = (isYomilee || !isTeluisMain) && !disableAdsense;
+const showYomileeFirstH2Ad = isYomilee;
 
 // 静的レンダリング時の広告タイプの決定
 let renderType: 'adsense' | 'rakuten' | 'amazon' = 'adsense';
-if (type === 'rakuten') {
+if (selectedType === 'rakuten') {
   renderType = 'rakuten';
-} else if (type === 'amazon') {
+} else if (selectedType === 'amazon') {
   renderType = 'amazon';
-} else if (type === 'adsense') {
-  // AdSense無効ドメイン（teluis本家等）では楽天モーションウィジェットへ強制フォールバック
+} else if (selectedType === 'googlead' || selectedType === 'adsense') {
+  // 明示的に googlead または adsense が選択された場合
+  // AdSense有効ドメイン（yomilee等）では確実に Google AdSense を描画
+  // 未審査ドメイン（teluis等）では楽天へ安全フォールバック
   renderType = isAdEnabled ? 'adsense' : 'rakuten';
 } else {
   // mixed の場合:
@@ -167,9 +188,13 @@ if (type === 'rakuten') {
     if (position === 'bottom') renderType = 'amazon';
     else if (position === 'sidebar') renderType = 'amazon';
     else renderType = 'rakuten';
-  } else {
-    // AdSense合格ドメイン: 全ての広告枠を Google AdSense に統一
+  } else if (isYomilee) {
+    // yomilee では Google AdSense を確実に有効化
     renderType = 'adsense';
+  } else {
+    // その他のAdSense合格ドメイン
+    if (position === 'bottom') renderType = 'amazon';
+    else renderType = 'adsense';
   }
 }
 

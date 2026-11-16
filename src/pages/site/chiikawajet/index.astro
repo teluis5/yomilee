@@ -330,7 +330,7 @@ const pageSchema = {
 								<div class="fd-left">
 									<span class="fd-date">{day.dateJa}</span>
 									<span class="fd-top">
-										本命スジ: <b>{day.plans?.[0]?.routeSummary || day.topRoute}</b> ({day.plans?.[0]?.probability || day.topProbability || 35}%)
+										本命スジ: <b>{day.plans?.[0]?.routeSummary || day.topRoute}</b>
 									</span>
 								</div>
 								<span class="fd-toggle">タイムテーブル ▾</span>
@@ -343,7 +343,6 @@ const pageSchema = {
 												<div class="plan-head">
 													<div class="ph-left">
 														<span class={`plan-badge p-${pIdx}`}>{plan.planName}</span>
-														<span class="plan-prob">{plan.probability}%</span>
 														<span class="plan-flow">{plan.title || plan.routeSummary}</span>
 													</div>
 												</div>
@@ -369,7 +368,6 @@ const pageSchema = {
 									day.routes && day.routes.map((r) => (
 										<div class="fd-row">
 											<span class="fd-plan">{r.planName}</span>
-											<span class="fd-prob">{r.probability}%</span>
 											<span class="fd-route">{r.route}</span>
 											<span class="fd-flights">{r.candidateFlights}</span>
 										</div>
