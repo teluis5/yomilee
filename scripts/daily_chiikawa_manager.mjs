@@ -13,6 +13,7 @@ const YOMILEE_ROOT = path.resolve(__dirname, '..');
 const args = process.argv.slice(2);
 const isDryRun = args.includes('--dry-run');
 const isAutoPush = args.includes('--auto-push');
+const isQuick = args.includes('--quick');
 
 function performAutoPush(updatedAt) {
   console.log('\n🔒 === yomilee: 安全なGitコミット＆プッシュを開始 ===');
@@ -27,19 +28,26 @@ function performAutoPush(updatedAt) {
       execSync('git pull origin main --rebase --autostash', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
     } catch {}
 
-    execSync('git add data/chiikawa_weekly_prediction.json src/data/chiikawa_weekly_prediction.json data/ana_fleet_status.json src/data/ana_fleet_status.json data/daily_predictions_snapshot.json scripts/ src/pages/site/chiikawajet/ src/assets/images/chiikawajet_ogp.png public/brand/chiikawajet_ogp.png src/content/blog', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
-    execSync('git add data/pokemon_weekly_prediction.json src/data/pokemon_weekly_prediction.json', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
-    if (fs.existsSync(path.join(YOMILEE_ROOT, 'data', 'pokemon_prediction_snapshots.json'))) {
-      execSync('git add data/pokemon_prediction_snapshots.json', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
-    }
-    if (fs.existsSync(path.join(YOMILEE_ROOT, 'data', 'evaluation_log.jsonl'))) {
-      execSync('git add data/evaluation_log.jsonl', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
-    }
-    if (fs.existsSync(path.join(YOMILEE_ROOT, 'data', 'chiikawa_first_flight_history.json'))) {
-      execSync('git add data/chiikawa_first_flight_history.json', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+    if (isQuick) {
+      // 15分毎のクイックモード: ちいかわ予測JSONのみステージングして軽量コミット
+      execSync('git add data/chiikawa_weekly_prediction.json src/data/chiikawa_weekly_prediction.json data/daily_predictions_snapshot.json data/evaluation_log.jsonl', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+    } else {
+      execSync('git add data/chiikawa_weekly_prediction.json src/data/chiikawa_weekly_prediction.json data/ana_fleet_status.json src/data/ana_fleet_status.json data/daily_predictions_snapshot.json scripts/ src/pages/site/chiikawajet/ src/assets/images/chiikawajet_ogp.png public/brand/chiikawajet_ogp.png src/content/blog', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+      execSync('git add data/pokemon_weekly_prediction.json src/data/pokemon_weekly_prediction.json', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+      if (fs.existsSync(path.join(YOMILEE_ROOT, 'data', 'pokemon_prediction_snapshots.json'))) {
+        execSync('git add data/pokemon_prediction_snapshots.json', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+      }
+      if (fs.existsSync(path.join(YOMILEE_ROOT, 'data', 'evaluation_log.jsonl'))) {
+        execSync('git add data/evaluation_log.jsonl', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+      }
+      if (fs.existsSync(path.join(YOMILEE_ROOT, 'data', 'chiikawa_first_flight_history.json'))) {
+        execSync('git add data/chiikawa_first_flight_history.json', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+      }
     }
 
-    const commitMsg = `feat(yomilee): update Chiikawa Jet weekly prediction dashboard (${updatedAt})`;
+    const commitMsg = isQuick
+      ? `feat(yomilee): update Chiikawa Jet (JA609A) real-time position (${updatedAt})`
+      : `feat(yomilee): update Chiikawa Jet weekly prediction dashboard (${updatedAt})`;
     console.log(`📝 コミット実行: "${commitMsg}"`);
     try {
       execSync(`git commit -m "${commitMsg}"`, { cwd: YOMILEE_ROOT, stdio: 'inherit' });
@@ -57,24 +65,29 @@ function performAutoPush(updatedAt) {
 async function main() {
   const result = await generateWeeklyPrediction();
   if (!result) return;
-  try {
-    generateDailyChiikawaArticle(result);
-  } catch (err) {
-    console.warn('⚠️ 日次スケジュール記事の生成に失敗しました:', err.message);
-  }
-  try {
-    await generatePokemonWeeklyPrediction();
-  } catch (err) {
-    console.warn('⚠️ ポケモンジェットの予想更新に失敗しました:', err.message);
-  }
 
-  // 運行予想インフォグラフィック画像（Twitterカード/OGP）を最新データで自動生成
-  try {
-    const cardGenScript = path.resolve(YOMILEE_ROOT, '..', '..', '5_script', 'generate_chiikawa_tweet_card.py');
-    console.log(`🖼️ 運行予想インフォグラフィック画像を再生成中: python "${cardGenScript}"`);
-    execSync(`python "${cardGenScript}"`, { stdio: 'inherit' });
-  } catch (err) {
-    console.warn('⚠️ カード画像生成で警告が発生しました:', err.message);
+  if (!isQuick) {
+    try {
+      generateDailyChiikawaArticle(result);
+    } catch (err) {
+      console.warn('⚠️ 日次スケジュール記事の生成に失敗しました:', err.message);
+    }
+    try {
+      await generatePokemonWeeklyPrediction();
+    } catch (err) {
+      console.warn('⚠️ ポケモンジェットの予想更新に失敗しました:', err.message);
+    }
+
+    // 運行予想インフォグラフィック画像（Twitterカード/OGP）を最新データで自動生成
+    try {
+      const cardGenScript = path.resolve(YOMILEE_ROOT, '..', '..', '5_script', 'generate_chiikawa_tweet_card.py');
+      console.log(`🖼️ 運行予想インフォグラフィック画像を再生成中: python "${cardGenScript}"`);
+      execSync(`python "${cardGenScript}"`, { stdio: 'inherit' });
+    } catch (err) {
+      console.warn('⚠️ カード画像生成で警告が発生しました:', err.message);
+    }
+  } else {
+    console.log('⚡ 15分毎クイックモード: ポケモン予想・記事生成・画像レンダリングをスキップ（サーバー負荷抑制）');
   }
 
   if (isDryRun) {

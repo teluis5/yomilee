@@ -129,12 +129,21 @@ function toJSTTimeStr(ts) {
   return `${hh}:${min}`;
 }
 
-export async function collectFleetData() {
-  console.log('✈️  === ANA B767-300ER 機材群 フライトデータ収集＆プライベート蓄積開始 ===');
+export async function collectFleetData(options = {}) {
+  const isQuick = options.targetRegOnly || options.quick || process.argv.includes('--quick');
+  const targetReg = options.targetReg || 'JA609A';
+  const targetFleet = isQuick ? [targetReg] : ANA_B767_FLEET;
+
+  if (isQuick) {
+    console.log(`✈️  === ANA B767-300ER 軽量追跡モード (対象機材: ${targetReg} のみ・サーバー負荷抑制) ===`);
+  } else {
+    console.log('✈️  === ANA B767-300ER 機材群 フライトデータ収集＆プライベート蓄積開始 ===');
+  }
+
   const db = loadHistory();
   let totalNewFlights = 0;
 
-  for (const reg of ANA_B767_FLEET) {
+  for (const reg of targetFleet) {
     console.log(`📡 ${reg} のデータを取得中...`);
     const rawList = fetchAircraftFlights(reg, 20);
 

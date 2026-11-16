@@ -402,9 +402,9 @@ function formatTime(ts) {
 // ============================================================================
 // 2. ODPT ＆ FR24 データ取得
 // ============================================================================
-async function loadAnaFleetStatus() {
+async function loadAnaFleetStatus(options = {}) {
   try {
-    return await updateAnaFleetStatusFromODPT();
+    return await updateAnaFleetStatusFromODPT(options);
   } catch (e) {
     console.warn('⚠️ ODPT API即時同期スキップ（キャッシュを使用します）:', e.message);
   }
@@ -2303,18 +2303,21 @@ export async function generateWeeklyPrediction() {
   const min = String(jstNow.getMinutes()).padStart(2, '0');
   const nowJa = `${jstNow.getFullYear()}年${jstNow.getMonth() + 1}月${jstNow.getDate()}日 ${hh}:${min}`;
 
+  const isFull = process.argv.includes('--full');
+  const isQuick = !isFull || process.argv.includes('--quick');
+
   console.log('========================================================');
-  console.log('✈️  === ANAちいかわジェット (JA609A) 週間運行予測エンジン v2.0 ===');
+  console.log(`✈️  === ANAちいかわジェット (JA609A) 運行予測エンジン (${isQuick ? '軽量モード: 予定機材JA609Aのみ' : 'フル更新モード'}) ===`);
   console.log(`📅 実行時刻: ${nowJa} (JST)`);
   console.log('========================================================\n');
 
-  // 1. 同型機フライト履歴の収集＆学習モデル構築
-  const fleetDb = await collectFleetData();
+  // 1. 同型機フライト履歴の収集＆学習モデル構築（予定機材JA609Aのみ更新してサーバー負荷を徹底抑制）
+  const fleetDb = await collectFleetData({ targetRegOnly: isQuick, targetReg: 'JA609A' });
   const learnedModel = buildLearnedModel(fleetDb, null, getSeasonStartDateStr(todayStr));
   console.log(`📚 学習済みDB構築完了: 全 ${learnedModel.totalFlights} 便 (ダイヤ基準日: ${learnedModel.seasonStartDate}以降) / 稼働76P機体数: ${learnedModel.activeFleetCount} 機`);
 
-  // 2. ANA公式運航状況（ODPT確定機種＆週間ダイヤデータ）の同期＆ロード
-  const anaFleetData = await loadAnaFleetStatus();
+  // 2. ANA公式運航状況（ODPT確定機種＆週間ダイヤデータ）のロード（キャッシュがあれば外部APIをスキップ）
+  const anaFleetData = await loadAnaFleetStatus({ force: isFull });
   const anaDateKeys = Object.keys(anaFleetData.dates || {});
   console.log(`✈️ ANA公式運航状況ロード完了: 対象日 [${anaDateKeys.join(', ')}]`);
 
