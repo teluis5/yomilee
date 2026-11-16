@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月16日 20:00",
-  "updatedAtIso": "2026-11-16T11:00:07.393Z",
+  "updatedAt": "2026年11月16日 21:00",
+  "updatedAtIso": "2026-11-16T12:00:07.787Z",
   "totalJets": 5,
   "jets": [
     {
@@ -32,7 +32,7 @@
         "arrTime": "21:20",
         "timeRange": "19:52 - 21:20",
         "dateJst": "2026-11-16",
-        "status": "Estimated 21:21",
+        "status": "Estimated 21:19",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -141,7 +141,7 @@
           "arrTime": "21:20",
           "timeRange": "19:52 - 21:20",
           "dateJst": "2026-11-16",
-          "status": "Estimated 21:21",
+          "status": "Estimated 21:19",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -161,7 +161,7 @@
           "arrTime": "21:20",
           "timeRange": "19:52 - 21:20",
           "dateJst": "2026-11-16",
-          "status": "Estimated 21:21",
+          "status": "Estimated 21:19",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -287,7 +287,7 @@
         "arrTime": "20:55",
         "timeRange": "11:46 - 20:55",
         "dateJst": "2026-11-16",
-        "status": "Estimated 17:24",
+        "status": "Delayed 17:42",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -306,13 +306,49 @@
           "arrTime": "20:55",
           "timeRange": "11:46 - 20:55",
           "dateJst": "2026-11-16",
-          "status": "Estimated 17:24",
+          "status": "Delayed 17:42",
           "isLive": true,
+          "isLanded": false,
+          "isToday": true
+        },
+        {
+          "flightNo": "NH838",
+          "origin": "DEL",
+          "dest": "HND",
+          "originName": "DEL",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "DEL",
+          "destCode": "HND",
+          "route": "DEL ➔ 東京(羽田)",
+          "depTime": "22:25",
+          "arrTime": "05:55",
+          "timeRange": "22:25 - 05:55",
+          "dateJst": "2026-11-16",
+          "status": "Estimated dep 18:55",
+          "isLive": false,
           "isLanded": false,
           "isToday": true
         }
       ],
       "recentFlights": [
+        {
+          "flightNo": "NH838",
+          "origin": "DEL",
+          "dest": "HND",
+          "originName": "DEL",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "DEL",
+          "destCode": "HND",
+          "route": "DEL ➔ 東京(羽田)",
+          "depTime": "22:25",
+          "arrTime": "05:55",
+          "timeRange": "22:25 - 05:55",
+          "dateJst": "2026-11-16",
+          "status": "Estimated dep 18:55",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH837",
           "origin": "HND",
@@ -326,7 +362,7 @@
           "arrTime": "20:55",
           "timeRange": "11:46 - 20:55",
           "dateJst": "2026-11-16",
-          "status": "Estimated 17:24",
+          "status": "Delayed 17:42",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -402,24 +438,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH844",
-          "origin": "SIN",
-          "dest": "HND",
-          "originName": "シンガポール (SIN)",
-          "destinationName": "東京(羽田) (HND)",
-          "origCode": "SIN",
-          "destCode": "HND",
-          "route": "シンガポール ➔ 東京(羽田)",
-          "depTime": "23:36",
-          "arrTime": "05:39",
-          "timeRange": "23:36 - 05:39",
-          "dateJst": "2026-11-13",
-          "status": "Landed 05:39",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -476,9 +494,45 @@
           "isLive": false,
           "isLanded": true,
           "isToday": true
+        },
+        {
+          "flightNo": "NH160",
+          "origin": "HND",
+          "dest": "JFK",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "ニューヨーク (JFK)",
+          "origCode": "HND",
+          "destCode": "JFK",
+          "route": "東京(羽田) ➔ ニューヨーク",
+          "depTime": "22:55",
+          "arrTime": "11:55",
+          "timeRange": "22:55 - 11:55",
+          "dateJst": "2026-11-16",
+          "status": "Estimated dep 22:55",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
         }
       ],
       "recentFlights": [
+        {
+          "flightNo": "NH160",
+          "origin": "HND",
+          "dest": "JFK",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "ニューヨーク (JFK)",
+          "origCode": "HND",
+          "destCode": "JFK",
+          "route": "東京(羽田) ➔ ニューヨーク",
+          "depTime": "22:55",
+          "arrTime": "11:55",
+          "timeRange": "22:55 - 11:55",
+          "dateJst": "2026-11-16",
+          "status": "Estimated dep 22:55",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH9371",
           "origin": "NRT",
@@ -565,24 +619,6 @@
           "timeRange": "05:00 - 18:11",
           "dateJst": "2026-11-14",
           "status": "Landed 18:11",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
-        },
-        {
-          "flightNo": "NH211",
-          "origin": "HND",
-          "dest": "LHR",
-          "originName": "東京(羽田) (HND)",
-          "destinationName": "ロンドン (LHR)",
-          "origCode": "HND",
-          "destCode": "LHR",
-          "route": "東京(羽田) ➔ ロンドン",
-          "depTime": "10:25",
-          "arrTime": "23:59",
-          "timeRange": "10:25 - 23:59",
-          "dateJst": "2026-11-13",
-          "status": "Landed 14:59",
           "isLive": false,
           "isLanded": true,
           "isToday": false
@@ -747,7 +783,7 @@
         "arrTime": "22:55",
         "timeRange": "11:36 - 22:55",
         "dateJst": "2026-11-16",
-        "status": "Estimated 08:00",
+        "status": "Estimated 08:03",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -766,7 +802,7 @@
           "arrTime": "22:55",
           "timeRange": "11:36 - 22:55",
           "dateJst": "2026-11-16",
-          "status": "Estimated 08:00",
+          "status": "Estimated 08:03",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -786,7 +822,7 @@
           "arrTime": "22:55",
           "timeRange": "11:36 - 22:55",
           "dateJst": "2026-11-16",
-          "status": "Estimated 08:00",
+          "status": "Estimated 08:03",
           "isLive": true,
           "isLanded": false,
           "isToday": true
