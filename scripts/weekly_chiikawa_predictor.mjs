@@ -212,9 +212,23 @@ function normalizeFlightNo(raw) {
 function getAircraftModelPriority(df, learnedModel = null) {
   if (!df) return 0.1;
   const model = String(df.model || '').trim();
+  const fn = df.flightNo ? normalizeFlightNo(df.flightNo) : '';
+  const histCount = learnedModel?.flightMeta?.[fn]?.count || 0;
+  const hasSufficientHistory = (learnedModel?.totalFlights || 0) >= 150;
 
   // 単独確定枠
   if (df.is767Strict || model === '763' || model === '76P') {
+    // ANA運航状況（当日・翌日の実予定機材）で確定している場合は最高優先度
+    if (df.modelSource === 'ANA運航状況') {
+      return 3.5;
+    }
+    // 2日先以降のODPT静的ダイヤは名目機種が含まれるため、現行シーズンの実充当頻度で補正
+    if (hasSufficientHistory) {
+      if (histCount >= 5) return 3.6;
+      if (histCount >= 2) return 2.6;
+      if (histCount === 1) return 1.7;
+      return 1.15;
+    }
     return 3.5;
   }
 
@@ -235,8 +249,6 @@ function getAircraftModelPriority(df, learnedModel = null) {
 
   // 💡 過去のB767実運航実績判定（松山 NH583/584, 宮古 NH87/88 等の確定定番スジ）
   // 公式ダイヤ上は 788/763 併記であっても、実績DBでB767が日常的に充当されている便は主力枠（1.8倍）として評価！
-  const fn = df.flightNo ? normalizeFlightNo(df.flightNo) : '';
-  const histCount = learnedModel?.flightMeta?.[fn]?.count || 0;
   const hasHistory = histCount > 0;
 
   // 763が先頭（主担当機材）
@@ -451,14 +463,22 @@ function getSeasonStartDateStr(refDateStr = null) {
   return latest;
 }
 
+function getDowType(dateStr) {
+  if (!dateStr) return 'weekday';
+  const dow = new Date(`${dateStr}T00:00:00+09:00`).getUTCDay();
+  return (dow === 0 || dow === 6) ? 'weekend' : 'weekday';
+}
+
 /**
  * fleetDb から、現行ダイヤシーズン開始日(seasonStartDateStr)以降かつ指定日(cutoffDateStr)未満の履歴のみを用いて
  * マルコフ遷移行列・ナイトステイ初便分布・路線頻度・同時到着シチュエーション別遷移を動的に集計する。
  */
 function buildLearnedModel(fleetDb, cutoffDateStr = null, seasonStartDateStr = null) {
   const transitions = {};
+  const transitionsByDow = { weekday: {}, weekend: {} };
   const situationTransitions = {}; // situationTransitions[airport][inFn][coArrFn][outFn] = count
   const nightStays = {};
+  const nightStaysByDow = { weekday: {}, weekend: {} };
   const routeFreq = {};
   const flightMeta = {};
   const activeRegs = new Set();
@@ -521,9 +541,12 @@ function buildLearnedModel(fleetDb, cutoffDateStr = null, seasonStartDateStr = n
       const prevDayList = prevDate ? byDate[prevDate] : null;
       const prevLastDest = prevDayList && prevDayList.length > 0 ? prevDayList[prevDayList.length - 1].dest : null;
 
+      const dowType = getDowType(d);
       if (firstF.depMin <= 660 || (prevLastDest && prevLastDest === firstF.orig)) {
         if (!nightStays[firstF.orig]) nightStays[firstF.orig] = {};
         nightStays[firstF.orig][firstF.normFn] = (nightStays[firstF.orig][firstF.normFn] || 0) + 1;
+        if (!nightStaysByDow[dowType][firstF.orig]) nightStaysByDow[dowType][firstF.orig] = {};
+        nightStaysByDow[dowType][firstF.orig][firstF.normFn] = (nightStaysByDow[dowType][firstF.orig][firstF.normFn] || 0) + 1;
       }
 
       // 同日内のマルコフ遷移を記録
@@ -533,6 +556,8 @@ function buildLearnedModel(fleetDb, cutoffDateStr = null, seasonStartDateStr = n
         if (curr.dest === next.orig && next.depMin >= curr.arrMin) {
           if (!transitions[curr.normFn]) transitions[curr.normFn] = {};
           transitions[curr.normFn][next.normFn] = (transitions[curr.normFn][next.normFn] || 0) + 1;
+          if (!transitionsByDow[dowType][curr.normFn]) transitionsByDow[dowType][curr.normFn] = {};
+          transitionsByDow[dowType][curr.normFn][next.normFn] = (transitionsByDow[dowType][curr.normFn][next.normFn] || 0) + 1;
         }
       }
     }
@@ -588,8 +613,10 @@ function buildLearnedModel(fleetDb, cutoffDateStr = null, seasonStartDateStr = n
 
   return {
     transitions,
+    transitionsByDow,
     situationTransitions,
     nightStays,
+    nightStaysByDow,
     routeFreq,
     flightMeta,
     seasonStartDate: effectiveSeasonStart,
@@ -1340,7 +1367,9 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
     !f.isCancelled && (f.modelSource !== 'ANA運航状況' || f.is767)
   );
 
+  const dowType = getDowType(targetDateStr);
   const transitions = learnedModel.transitions || {};
+  const dowTransitions = learnedModel.transitionsByDow?.[dowType] || {};
   const nightStays = learnedModel.nightStays || {};
   const routeFreq = learnedModel.routeFreq || {};
   const flightMeta = learnedModel.flightMeta || {};
@@ -1608,7 +1637,9 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
           });
 
           const scoredNext = nextCands.map(df => {
-            const transCount = transitions[curFn]?.[df.flightNo] || 0;
+            const baseTransCount = transitions[curFn]?.[df.flightNo] || 0;
+            const dowTransCount = dowTransitions[curFn]?.[df.flightNo] || 0;
+            const transCount = baseTransCount > 0 ? (baseTransCount * 0.7 + dowTransCount * 0.6) : 0;
             // レギュラー機材判定（確定枠 3.5 / 主力枠 1.8 / 代走枠 0.38 / 非767 0.1）
             let modelPrio = getAircraftModelPriority(df, learnedModel);
 
@@ -1676,15 +1707,17 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
             return { df, edgeScore };
           }).sort((a, b) => b.edgeScore - a.edgeScore).slice(0, 8);
 
-          const edgeSum = scoredNext.reduce((s, x) => s + x.edgeScore, 0) || 1;
+          // 分岐数バイアス（候補が多い羽田だけ極端にスコアが減衰し、候補1本の地方発が逆転する現象）を防ぐため最大エッジ基準で正規化
+          const maxEdge = scoredNext[0]?.edgeScore || 1;
           for (const nx of scoredNext) {
             const arrM = parseTimeToMinutes(nx.df.arrTime) ?? ((parseTimeToMinutes(nx.df.depTime) ?? 600) + 95);
+            const relScore = nx.edgeScore / maxEdge;
             nextBeam.push({
               flights: [...flights, nx.df],
               curAirport: nx.df.dest,
               curArrMin: arrM,
               curFn: nx.df.flightNo,
-              score: score * (nx.edgeScore / edgeSum)
+              score: score * (0.25 + 0.75 * relScore) * relScore
             });
           }
         }
@@ -1737,22 +1770,45 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
   const selectedRaw = [];
   const usedSignatures = new Set();
   const usedMidAndEnd = new Set();
+  const prefix3Counts = new Map();
 
-  // ① 確率（weight）が高い順に、経由地や宿泊先の異なる上位シナリオを優先選出
+  // ① 確率（weight）が高い順に、前半スジや経由地・宿泊先が異なる代表シナリオを優先選出（同一前半の3枠独占を防止）
   for (const cand of eligiblePlans) {
     if (selectedRaw.length >= 3) break;
     const sig = cand.rawFlights.map(f => f.flightNo).join('>');
     if (usedSignatures.has(sig)) continue;
 
+    const p3 = cand.rawFlights.slice(0, 3).map(f => f.flightNo).join('>');
+    const p3Count = prefix3Counts.get(p3) || 0;
     const midEndKey = `${cand.midAirport}_${cand.endAirport}`;
-    if (!usedMidAndEnd.has(midEndKey)) {
+
+    // 1位（selectedRaw.length === 0）は無条件採用。2枠目以降は同一前半プレフィックスを原則1つまでに制限して多様性を確保
+    if (!usedMidAndEnd.has(midEndKey) && (selectedRaw.length === 0 || p3Count === 0)) {
       selectedRaw.push(cand);
       usedSignatures.add(sig);
       usedMidAndEnd.add(midEndKey);
+      prefix3Counts.set(p3, p3Count + 1);
     }
   }
 
-  // ② まだ3プランに満たない場合は、純粋に確率（weight）順に未選出スジを補充
+  // ② 3プランに満たない場合は、同一前半プレフィックスでも宿泊先が異なる次点候補を補充（最大2件まで）
+  for (const cand of eligiblePlans) {
+    if (selectedRaw.length >= 3) break;
+    const sig = cand.rawFlights.map(f => f.flightNo).join('>');
+    if (usedSignatures.has(sig)) continue;
+
+    const p3 = cand.rawFlights.slice(0, 3).map(f => f.flightNo).join('>');
+    const p3Count = prefix3Counts.get(p3) || 0;
+    const midEndKey = `${cand.midAirport}_${cand.endAirport}`;
+    if (!usedMidAndEnd.has(midEndKey) && p3Count < 2) {
+      selectedRaw.push(cand);
+      usedSignatures.add(sig);
+      usedMidAndEnd.add(midEndKey);
+      prefix3Counts.set(p3, p3Count + 1);
+    }
+  }
+
+  // ③ それでも3プランに満たない場合は、純粋に確率（weight）順に未選出スジを補充
   for (const cand of eligiblePlans) {
     if (selectedRaw.length >= 3) break;
     const sig = cand.rawFlights.map(f => f.flightNo).join('>');
@@ -1761,6 +1817,20 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
     usedSignatures.add(sig);
   }
 
+  // 週間連鎖用: 候補プール全体（上位15件）から周辺宿泊確率分布を算出（枝切れ防止）
+  const stayWeightMap = new Map();
+  for (const cand of eligiblePlans.slice(0, 15)) {
+    const endAp = cand.endAirport || 'HND';
+    stayWeightMap.set(endAp, (stayWeightMap.get(endAp) || 0) + (cand.weight || 0));
+  }
+  const stayItems = [...stayWeightMap.entries()]
+    .map(([code, weight]) => ({ code, airport: AIRPORT_NAMES[code] || code, weight }))
+    .filter(x => x.weight > 0)
+    .sort((a, b) => b.weight - a.weight);
+  const fullStayPriors = stayItems.length > 0
+    ? normalizeTo100Percent(stayItems, 'weight', 5).map(it => ({ code: it.code, airport: it.airport, probability: it.probability }))
+    : null;
+
   // スコア順にソートしてHamilton法で合計100%に正規化
   selectedRaw.sort((a, b) => b.weight - a.weight);
   const normalizedPlans = normalizeTo100Percent(selectedRaw, 'weight', 10);
@@ -1768,7 +1838,7 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
   const planLetters = ['プランA', 'プランB', 'プランC', 'プランD'];
   const rankLabels = ['本命 ◎', '有力 ◯', '対抗 ▲', '注意 △'];
 
-  return normalizedPlans.map((item, idx) => {
+  const finalPlans = normalizedPlans.map((item, idx) => {
     const formattedFlights = item.rawFlights.map((df, fIdx) => {
       const origName = AIRPORT_NAMES[df.origin] || df.origin;
       const destName = AIRPORT_NAMES[df.dest] || df.dest;
@@ -1838,12 +1908,23 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
       flights: formattedFlights
     };
   });
+
+  if (fullStayPriors && fullStayPriors.length > 0) {
+    Object.defineProperty(finalPlans, '_fullStayPriors', {
+      value: fullStayPriors,
+      enumerable: false
+    });
+  }
+  return finalPlans;
 }
 
 /**
  * ある日のプラン群から、その日の夜の宿泊地周辺確率分布 P(Stay_d = S) を算出する（合計100%保証）
  */
 function computeNextDayStayPriorsFromPlans(plans) {
+  if (Array.isArray(plans) && Array.isArray(plans._fullStayPriors) && plans._fullStayPriors.length > 0) {
+    return plans._fullStayPriors;
+  }
   if (!Array.isArray(plans) || plans.length === 0) {
     return [{ code: 'HND', airport: '東京(羽田)', probability: 100 }];
   }
@@ -2678,11 +2759,11 @@ export async function generateWeeklyPrediction() {
       const dKey = day.dateStr.replace(/-/g, '');
       const dayScheduleFlights = Object.values(anaFleetData?.dates?.[dKey] || {});
 
-      const prevVisitedDests = tomorrowPlans[0]
-        ? new Set(tomorrowPlans[0].flights.map(f => f.dest).filter(Boolean))
+      const prevPlanForDay = (day.dayIndex === 2) ? tomorrowPlans[0] : weeklySchedule[weeklySchedule.length - 1]?.plans?.[0];
+      const prevVisitedDests = prevPlanForDay
+        ? new Set(prevPlanForDay.flights.map(f => f.dest).filter(Boolean))
         : null;
 
-      const prevPlanForDay = (day.dayIndex === 2) ? tomorrowPlans[0] : weeklySchedule[weeklySchedule.length - 1]?.plans?.[0];
       const prevPlanLastFlight = prevPlanForDay?.flights?.[prevPlanForDay.flights.length - 1];
       const rollingArrivalFlight = prevPlanLastFlight ? {
         orig: prevPlanLastFlight.orig || prevPlanLastFlight.origin,
