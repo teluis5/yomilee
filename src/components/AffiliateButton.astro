@@ -1,0 +1,164 @@
+---
+/**
+ * AffiliateButton.astro - 汎用アフィリエイト・CTAボタン (共通UIマスター)
+ * サービス紹介、ASP案件（一休、じゃらん、クレカ、格安SIM、公式サイトなど）への高CVRな誘導ボタン。
+ * Universal Design Rulesおよび景表法PR表記に準拠。
+ * 
+ * 使用例:
+ * <AffiliateButton 
+ *   url="https://..."
+ *   text="公式サイトで最新プランを見る"
+ *   subtext="※期間限定クーポン配布中"
+ *   color="red"
+ *   badge="PR"
+ * />
+ */
+
+interface Props {
+  url: string;
+  text: string;
+  subtext?: string;
+  color?: 'red' | 'orange' | 'blue' | 'dark' | 'green';
+  badge?: string; // 'PR', '公式', '限定' など
+  target?: string;
+  rel?: string;
+}
+
+const {
+  url,
+  text,
+  subtext,
+  color = 'red',
+  badge = 'PR',
+  target = '_blank',
+  rel = 'sponsored noopener noreferrer',
+} = Astro.props;
+---
+
+<div class="aff-btn-wrapper not-prose">
+  <a href={url} target={target} rel={rel} class={`aff-cta-btn btn-color-${color}`}>
+    <div class="btn-inner">
+      <div class="btn-main-row">
+        {badge && <span class="badge-label">{badge}</span>}
+        <span class="btn-text">{text}</span>
+        <svg class="arrow-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      {subtext && <div class="btn-subtext">{subtext}</div>}
+    </div>
+  </a>
+</div>
+
+<style>
+  .aff-btn-wrapper {
+    margin: 1.75rem auto;
+    text-align: center;
+    max-width: 480px;
+    width: 100%;
+  }
+
+  .aff-cta-btn {
+    display: block;
+    width: 100%;
+    padding: 0.85rem 1.25rem;
+    border-radius: 8px;
+    text-decoration: none !important;
+    box-sizing: border-box;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  }
+
+  .aff-cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+    opacity: 0.95;
+  }
+
+  .btn-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+
+  .btn-main-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .badge-label {
+    display: inline-block;
+    padding: 0.15rem 0.4rem;
+    font-size: 0.65rem;
+    font-weight: 800;
+    line-height: 1;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    flex-shrink: 0;
+  }
+
+  .btn-text {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff !important;
+    line-height: 1.3;
+    letter-spacing: 0.02em;
+  }
+
+  .arrow-icon {
+    width: 18px;
+    height: 18px;
+    color: #ffffff;
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+  }
+
+  .aff-cta-btn:hover .arrow-icon {
+    transform: translateX(3px);
+  }
+
+  .btn-subtext {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.88) !important;
+    line-height: 1.2;
+  }
+
+  /* カラーバリエーション */
+  .btn-color-red {
+    background: linear-gradient(135deg, #e11d48, #be123c);
+  }
+
+  .btn-color-orange {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+  }
+
+  .btn-color-blue {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  }
+
+  .btn-color-green {
+    background: linear-gradient(135deg, #10b981, #059669);
+  }
+
+  .btn-color-dark {
+    background: linear-gradient(135deg, #334155, #1e293b);
+  }
+
+  @media (max-width: 480px) {
+    .aff-btn-wrapper {
+      max-width: 100%;
+    }
+    .btn-text {
+      font-size: 0.92rem;
+    }
+    .aff-cta-btn {
+      padding: 0.75rem 1rem;
+    }
+  }
+</style>

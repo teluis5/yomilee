@@ -1,0 +1,500 @@
+---
+/**
+ * CampaignBanner.astro - リアルタイムセール・キャンペーン訴求バナー (共通UIマスター)
+ * 楽天市場（お買い物マラソン・スーパーSALE・ブラックフライデー・5と0のつく日）や
+ * Amazon（タイムセール祭り・ブラックフライデー・プライムデー）の開催状況に応じ、
+ * 「11月25日まで」「本日終了まで あと○時間○分」「まもなく終了」などを動的判定・リアルタイム描画します。
+ * Universal Design Rules 準拠。tavi-navi を除く全ブログ共通。
+ * 
+ * 使用例:
+ * <CampaignBanner provider="rakuten" />
+ * <CampaignBanner provider="amazon" />
+ * <CampaignBanner /> <!-- 現在開催中のセールを自動判定して表示 -->
+ */
+
+import campaignsData from '../data/campaigns.json';
+
+interface Props {
+  provider?: 'rakuten' | 'amazon' | 'auto';
+  customText?: string;
+  customUrl?: string;
+}
+
+const {
+  provider = 'auto',
+  customText,
+  customUrl,
+} = Astro.props;
+
+const RAKUTEN_AFF_ID = '593aa0ae.e4c58ccb.593aa0af.89b253c2';
+const AMAZON_TAG = 'teluis-22';
+
+// サーバーサイド（ビルド時）の初期フォールバック値
+const campaigns = campaignsData.campaigns || [];
+const rakutenData = campaigns.find(c => c.provider === 'rakuten');
+const amazonData = campaigns.find(c => c.provider === 'amazon');
+
+// 初期表示ターゲット
+let initialProvider = provider === 'auto' ? (rakutenData ? 'rakuten' : 'amazon') : provider;
+let initialData = initialProvider === 'rakuten' ? rakutenData : amazonData;
+
+// 楽天アフィリエイトURL生成
+function getRakutenUrl(rawUrl: string) {
+  const enc = encodeURIComponent(rawUrl);
+  return `https://hb.afl.rakuten.co.jp/hgc/${RAKUTEN_AFF_ID}/?pc=${enc}&m=${enc}`;
+}
+
+const initialUrl = customUrl || (initialProvider === 'rakuten'
+  ? (initialData ? getRakutenUrl(initialData.url) : getRakutenUrl('https://event.rakuten.co.jp/campaign/point-up/marathon/'))
+  : `https://www.amazon.co.jp/gp/goldbox?tag=${AMAZON_TAG}`);
+
+const initialBadge = initialProvider === 'rakuten' ? (initialData?.badge || 'ポイントアップ') : 'Amazon';
+const initialText = customText || (initialData?.name || (initialProvider === 'rakuten' ? '楽天市場 お買い物マラソン' : 'Amazon タイムセール祭り'));
+---
+
+<div
+  class="campaign-banner-card not-prose"
+  data-campaign-provider={provider}
+  data-campaigns={JSON.stringify(campaigns)}
+  data-rakuten-aff-id={RAKUTEN_AFF_ID}
+  data-amazon-tag={AMAZON_TAG}
+>
+  <div class="campaign-banner-inner">
+    <div class="campaign-badge-wrap">
+      <span class="campaign-badge-pill" data-role="badge">{initialBadge}</span>
+      <span class="campaign-pr-tag">PR</span>
+    </div>
+
+    <div class="campaign-content-wrap">
+      <div class="campaign-title-row">
+        <span class="campaign-urgency-tag" data-role="urgency">セール開催中</span>
+        <span class="campaign-title-text" data-role="title">{initialText}</span>
+      </div>
+      <div class="campaign-timing-row" data-role="timing">
+        {initialData?.endLabel ? `${initialData.endDateOnly}まで開催中！` : 'ポイントアップ＆特大割引中'}
+      </div>
+    </div>
+
+    <div class="campaign-action-wrap">
+      <a
+        href={initialUrl}
+        target="_blank"
+        rel="sponsored noopener noreferrer"
+        class="campaign-cta-btn"
+        data-role="link"
+      >
+        <span data-role="btn-text">会場へ行く</span>
+        <svg class="campaign-btn-arrow" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+          <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    function initCampaignBanners() {
+      const banners = document.querySelectorAll('.campaign-banner-card');
+      if (!banners.length) return;
+
+      const now = new Date();
+      const nowMs = now.getTime();
+      const currentDay = now.getDate();
+
+      banners.forEach(banner => {
+        try {
+          const providerMode = banner.getAttribute('data-campaign-provider') || 'auto';
+          const campaignsJson = banner.getAttribute('data-campaigns');
+          const rakutenAffId = banner.getAttribute('data-rakuten-aff-id');
+          const amazonTag = banner.getAttribute('data-amazon-tag');
+          const campaigns = campaignsJson ? JSON.parse(campaignsJson) : [];
+
+          const badgeEl = banner.querySelector('[data-role="badge"]');
+          const urgencyEl = banner.querySelector('[data-role="urgency"]');
+          const titleEl = banner.querySelector('[data-role="title"]');
+          const timingEl = banner.querySelector('[data-role="timing"]');
+          const linkEl = banner.querySelector('[data-role="link"]');
+          const btnTextEl = banner.querySelector('[data-role="btn-text"]');
+
+          // 有効なキャンペーンを探索
+          let activeCampaign = null;
+          let upcomingCampaign = null;
+
+          for (const c of campaigns) {
+            if (providerMode !== 'auto' && c.provider !== providerMode) continue;
+
+            const startMs = new Date(c.start).getTime();
+            const endMs = new Date(c.end).getTime();
+
+            if (nowMs >= startMs && nowMs <= endMs) {
+              activeCampaign = c;
+              break;
+            } else if (nowMs < startMs && (startMs - nowMs) <= 48 * 3600 * 1000) {
+              // 48時間以内の予告
+              if (!upcomingCampaign) upcomingCampaign = c;
+            }
+          }
+
+          if (activeCampaign) {
+            // 開催中！
+            const endMs = new Date(activeCampaign.end).getTime();
+            const diffMs = endMs - nowMs;
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+            const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+            if (badgeEl) badgeEl.textContent = activeCampaign.badge || 'SALE';
+            if (titleEl) titleEl.textContent = activeCampaign.name;
+
+            // 残り時間に応じた訴求
+            if (diffHours < 3) {
+              if (urgencyEl) {
+                urgencyEl.textContent = 'まもなく終了！';
+                urgencyEl.className = 'campaign-urgency-tag urgency-critical';
+              }
+              if (timingEl) timingEl.innerHTML = `🔥 ラストスパート！あと <strong class="time-highlight">${diffHours}時間${diffMinutes}分</strong> で終了`;
+            } else if (diffHours < 24) {
+              if (urgencyEl) {
+                urgencyEl.textContent = '本日終了';
+                urgencyEl.className = 'campaign-urgency-tag urgency-warning';
+              }
+              if (timingEl) timingEl.innerHTML = `本日終了まで あと <strong class="time-highlight">${diffHours}時間${diffMinutes}分</strong>`;
+            } else {
+              if (urgencyEl) {
+                urgencyEl.textContent = '開催中';
+                urgencyEl.className = 'campaign-urgency-tag urgency-normal';
+              }
+              if (timingEl) timingEl.innerHTML = `${activeCampaign.endDateOnly}まで開催中（あと <strong class="time-highlight">${diffDays}日</strong>）`;
+            }
+
+            if (btnTextEl) btnTextEl.textContent = 'セール会場へ';
+            if (linkEl) {
+              if (activeCampaign.provider === 'rakuten') {
+                const enc = encodeURIComponent(activeCampaign.url);
+                linkEl.href = `https://hb.afl.rakuten.co.jp/hgc/${rakutenAffId}/?pc=${enc}&m=${enc}`;
+                banner.setAttribute('data-theme', 'rakuten');
+              } else {
+                linkEl.href = `${activeCampaign.url}?tag=${amazonTag}`;
+                banner.setAttribute('data-theme', 'amazon');
+              }
+            }
+          } else if (upcomingCampaign) {
+            // 予告期間中
+            if (badgeEl) badgeEl.textContent = '事前告知';
+            if (urgencyEl) {
+              urgencyEl.textContent = '予告';
+              urgencyEl.className = 'campaign-urgency-tag urgency-info';
+            }
+            if (titleEl) titleEl.textContent = `${upcomingCampaign.name}`;
+            if (timingEl) timingEl.textContent = `【予告】${upcomingCampaign.startLabel}スタート！事前エントリー受付中`;
+            if (btnTextEl) btnTextEl.textContent = '事前エントリー';
+            if (linkEl) {
+              if (upcomingCampaign.provider === 'rakuten') {
+                const enc = encodeURIComponent(upcomingCampaign.url);
+                linkEl.href = `https://hb.afl.rakuten.co.jp/hgc/${rakutenAffId}/?pc=${enc}&m=${enc}`;
+                banner.setAttribute('data-theme', 'rakuten');
+              } else {
+                linkEl.href = `${upcomingCampaign.url}?tag=${amazonTag}`;
+                banner.setAttribute('data-theme', 'amazon');
+              }
+            }
+          } else {
+            // 定期イベント判定（楽天 5と0のつく日、1日、18日）
+            if (providerMode === 'rakuten' || providerMode === 'auto') {
+              if (currentDay === 5 || currentDay === 10 || currentDay === 15 || currentDay === 20 || currentDay === 25 || currentDay === 30) {
+                if (badgeEl) badgeEl.textContent = '本日限定';
+                if (urgencyEl) {
+                  urgencyEl.textContent = '本日ポイント4倍';
+                  urgencyEl.className = 'campaign-urgency-tag urgency-warning';
+                }
+                if (titleEl) titleEl.textContent = '楽天市場 5と0のつく日';
+                if (timingEl) timingEl.textContent = 'エントリー＆楽天カード利用で全ショップポイント4倍！';
+                if (btnTextEl) btnTextEl.textContent = '本日エントリー';
+                if (linkEl) {
+                  const rawUrl = 'https://event.rakuten.co.jp/campaign/point-up/card/';
+                  const enc = encodeURIComponent(rawUrl);
+                  linkEl.href = `https://hb.afl.rakuten.co.jp/hgc/${rakutenAffId}/?pc=${enc}&m=${enc}`;
+                }
+                banner.setAttribute('data-theme', 'rakuten');
+                return;
+              } else if (currentDay === 1) {
+                if (badgeEl) badgeEl.textContent = '毎月1日';
+                if (urgencyEl) {
+                  urgencyEl.textContent = '本日ポイント3倍';
+                  urgencyEl.className = 'campaign-urgency-tag urgency-warning';
+                }
+                if (titleEl) titleEl.textContent = '楽天市場 ワンダフルデー';
+                if (timingEl) timingEl.textContent = '全ショップポイント3倍＆リピート購入でさらにポイント2倍！';
+                if (btnTextEl) btnTextEl.textContent = 'エントリーする';
+                if (linkEl) {
+                  const rawUrl = 'https://event.rakuten.co.jp/campaign/point-up/wonderfulday/';
+                  const enc = encodeURIComponent(rawUrl);
+                  linkEl.href = `https://hb.afl.rakuten.co.jp/hgc/${rakutenAffId}/?pc=${enc}&m=${enc}`;
+                }
+                banner.setAttribute('data-theme', 'rakuten');
+                return;
+              } else if (currentDay === 18) {
+                if (badgeEl) badgeEl.textContent = '市場の日';
+                if (urgencyEl) {
+                  urgencyEl.textContent = '本日最大4倍';
+                  urgencyEl.className = 'campaign-urgency-tag urgency-warning';
+                }
+                if (titleEl) titleEl.textContent = '楽天市場 ご愛顧感謝デー';
+                if (timingEl) timingEl.textContent = 'ダイヤモンド会員ポイント4倍！保有ポイント払いも対象';
+                if (btnTextEl) btnTextEl.textContent = 'エントリーする';
+                if (linkEl) {
+                  const rawUrl = 'https://event.rakuten.co.jp/campaign/point-up/ichiba-day/';
+                  const enc = encodeURIComponent(rawUrl);
+                  linkEl.href = `https://hb.afl.rakuten.co.jp/hgc/${rakutenAffId}/?pc=${enc}&m=${enc}`;
+                }
+                banner.setAttribute('data-theme', 'rakuten');
+                return;
+              }
+            }
+
+            // 通常時フォールバック
+            if (providerMode === 'amazon') {
+              if (badgeEl) badgeEl.textContent = 'Amazon';
+              if (urgencyEl) {
+                urgencyEl.textContent = 'タイムセール';
+                urgencyEl.className = 'campaign-urgency-tag urgency-normal';
+              }
+              if (titleEl) titleEl.textContent = 'Amazon 毎日更新タイムセール';
+              if (timingEl) timingEl.textContent = '人気ガジェット・家電・日用品が特別価格！数量限定';
+              if (btnTextEl) btnTextEl.textContent = 'セール会場へ';
+              if (linkEl) linkEl.href = `https://www.amazon.co.jp/gp/goldbox?tag=${amazonTag}`;
+              banner.setAttribute('data-theme', 'amazon');
+            } else {
+              if (badgeEl) badgeEl.textContent = '楽天市場';
+              if (urgencyEl) {
+                urgencyEl.textContent = '買いまわり';
+                urgencyEl.className = 'campaign-urgency-tag urgency-normal';
+              }
+              if (titleEl) titleEl.textContent = '楽天市場 お買い物マラソン';
+              if (timingEl) timingEl.textContent = 'ショップ買いまわりでポイント最大10倍（最大46倍）！';
+              if (btnTextEl) btnTextEl.textContent = 'ポイント会場へ';
+              if (linkEl) {
+                const rawUrl = 'https://event.rakuten.co.jp/campaign/point-up/marathon/';
+                const enc = encodeURIComponent(rawUrl);
+                linkEl.href = `https://hb.afl.rakuten.co.jp/hgc/${rakutenAffId}/?pc=${enc}&m=${enc}`;
+              }
+              banner.setAttribute('data-theme', 'rakuten');
+            }
+          }
+        } catch (e) {
+          console.debug('[CampaignBanner] init error:', e);
+        }
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCampaignBanners);
+    } else {
+      initCampaignBanners();
+    }
+  })();
+</script>
+
+<style>
+  .campaign-banner-card {
+    margin: 1.5rem auto;
+    max-width: 100%;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0.85rem 1.15rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+
+  .campaign-banner-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .campaign-banner-card[data-theme="rakuten"] {
+    border-color: #fecdd3;
+    background-color: #fffafb;
+  }
+
+  .campaign-banner-card[data-theme="amazon"] {
+    border-color: #fed7aa;
+    background-color: #fffdfa;
+  }
+
+  .campaign-banner-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .campaign-badge-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+  }
+
+  .campaign-badge-pill {
+    background-color: #bf0000;
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+
+  .campaign-banner-card[data-theme="amazon"] .campaign-badge-pill {
+    background-color: #ff9900;
+  }
+
+  .campaign-pr-tag {
+    font-size: 0.65rem;
+    color: #94a3b8;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  .campaign-content-wrap {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .campaign-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+    flex-wrap: wrap;
+  }
+
+  .campaign-urgency-tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .urgency-critical {
+    background-color: #e11d48;
+    color: #ffffff;
+    animation: pulseGlow 1.5s infinite;
+  }
+
+  .urgency-warning {
+    background-color: #f97316;
+    color: #ffffff;
+  }
+
+  .urgency-normal {
+    background-color: #0284c7;
+    color: #ffffff;
+  }
+
+  .urgency-info {
+    background-color: #475569;
+    color: #ffffff;
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+  }
+
+  .campaign-title-text {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .campaign-timing-row {
+    font-size: 0.8rem;
+    color: #475569;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  :global(.time-highlight) {
+    color: #e11d48;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .campaign-action-wrap {
+    flex-shrink: 0;
+  }
+
+  .campaign-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1rem;
+    background-color: #bf0000;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: 0.82rem;
+    font-weight: 700;
+    border-radius: 6px;
+    white-space: nowrap;
+    transition: opacity 0.15s ease, transform 0.1s ease;
+  }
+
+  .campaign-banner-card[data-theme="amazon"] .campaign-cta-btn {
+    background-color: #f59e0b;
+  }
+
+  .campaign-cta-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .campaign-btn-arrow {
+    transition: transform 0.15s ease;
+  }
+
+  .campaign-cta-btn:hover .campaign-btn-arrow {
+    transform: translateX(2px);
+  }
+
+  @media (max-width: 640px) {
+    .campaign-banner-inner {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.65rem;
+    }
+    .campaign-badge-wrap {
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .campaign-title-text {
+      white-space: normal;
+      font-size: 0.9rem;
+    }
+    .campaign-timing-row {
+      white-space: normal;
+      font-size: 0.78rem;
+    }
+    .campaign-cta-btn {
+      width: 100%;
+      justify-content: center;
+      padding: 0.6rem 1rem;
+      box-sizing: border-box;
+    }
+  }
+</style>
