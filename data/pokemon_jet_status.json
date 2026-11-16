@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-16T05:30:37.925Z",
-  "updatedAtJst": "2026/11/16 14:30:37",
+  "updatedAt": "2026-11-16T08:00:26.686Z",
+  "updatedAtJst": "2026/11/16 17:00:26",
   "totalJets": 5,
   "jets": [
     {
@@ -17,23 +17,9 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "東京(羽田) (HND) ➔ 鹿児島 (KOJ)",
-      "currentFlight": {
-        "id": "4297be12",
-        "flightNo": "NH625",
-        "origin": "HND",
-        "originName": "東京(羽田) (HND)",
-        "destination": "KOJ",
-        "destinationName": "鹿児島 (KOJ)",
-        "depTimeJst": "2026-11-16 14:18",
-        "arrTimeJst": "2026-11-16 15:51",
-        "timeRange": "14:18 - 15:51",
-        "dateJst": "2026-11-16",
-        "status": "Estimated 15:51",
-        "isLive": true,
-        "isToday": true
-      },
+      "flightState": "着陸済み 🔵",
+      "currentLocation": "鹿児島 (KOJ)",
+      "currentFlight": null,
       "nextFlight": {
         "flightNo": "NH628",
         "origin": "KOJ",
@@ -43,10 +29,24 @@
         "depTimeJst": "16:35",
         "arrTimeJst": "18:15",
         "timeRange": "16:35 - 18:15",
-        "status": "予測枠 (★★★☆☆)",
+        "status": "予測枠 (★★★★★ (最有力・55分ターン))",
         "isPredicted": true
       },
-      "lastLandedFlight": null,
+      "lastLandedFlight": {
+        "id": "4297be12",
+        "flightNo": "NH625",
+        "origin": "HND",
+        "originName": "東京(羽田) (HND)",
+        "destination": "KOJ",
+        "destinationName": "鹿児島 (KOJ)",
+        "depTimeJst": "2026-11-16 14:18",
+        "arrTimeJst": "2026-11-16 15:46",
+        "timeRange": "14:18 - 15:46",
+        "dateJst": "2026-11-16",
+        "status": "Landed 15:46",
+        "isLive": false,
+        "isToday": true
+      },
       "nightStay": "鹿児島 (KOJ)",
       "domesticPrediction": {
         "nextCandidates": [
@@ -56,8 +56,8 @@
             "depTime": "16:35",
             "arrTime": "18:15",
             "model": "78P",
-            "turnAroundMin": 44,
-            "probability": "★★★☆☆"
+            "turnAroundMin": 49,
+            "probability": "★★★★★ (最有力・55分ターン)"
           }
         ],
         "predictedNightStay": "東京(羽田) (HND)"
@@ -72,11 +72,11 @@
           "destination": "KOJ",
           "destinationName": "鹿児島 (KOJ)",
           "depTimeJst": "2026-11-16 14:18",
-          "arrTimeJst": "2026-11-16 15:51",
-          "timeRange": "14:18 - 15:51",
+          "arrTimeJst": "2026-11-16 15:46",
+          "timeRange": "14:18 - 15:46",
           "dateJst": "2026-11-16",
-          "status": "Estimated 15:51",
-          "isLive": true,
+          "status": "Landed 15:46",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -134,11 +134,11 @@
           "destination": "KOJ",
           "destinationName": "鹿児島 (KOJ)",
           "depTimeJst": "2026-11-16 14:18",
-          "arrTimeJst": "2026-11-16 15:51",
-          "timeRange": "14:18 - 15:51",
+          "arrTimeJst": "2026-11-16 15:46",
+          "timeRange": "14:18 - 15:46",
           "dateJst": "2026-11-16",
-          "status": "Estimated 15:51",
-          "isLive": true,
+          "status": "Landed 15:46",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -217,7 +217,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-16T05:30:36.155Z"
+      "updatedAt": "2026-11-16T08:00:24.904Z"
     },
     {
       "id": "pikachu-nh",
@@ -243,10 +243,10 @@
         "destination": "DEL",
         "destinationName": "DEL",
         "depTimeJst": "2026-11-16 11:46",
-        "arrTimeJst": "2026-11-16 20:31",
-        "timeRange": "11:46 - 20:31",
+        "arrTimeJst": "2026-11-16 20:53",
+        "timeRange": "11:46 - 20:53",
         "dateJst": "2026-11-16",
-        "status": "Estimated 17:01",
+        "status": "Estimated 17:23",
         "isLive": true,
         "isToday": true
       },
@@ -264,10 +264,10 @@
           "destination": "DEL",
           "destinationName": "DEL",
           "depTimeJst": "2026-11-16 11:46",
-          "arrTimeJst": "2026-11-16 20:31",
-          "timeRange": "11:46 - 20:31",
+          "arrTimeJst": "2026-11-16 20:53",
+          "timeRange": "11:46 - 20:53",
           "dateJst": "2026-11-16",
-          "status": "Estimated 17:01",
+          "status": "Estimated 17:23",
           "isLive": true,
           "isToday": true
         }
@@ -281,10 +281,10 @@
           "destination": "DEL",
           "destinationName": "DEL",
           "depTimeJst": "2026-11-16 11:46",
-          "arrTimeJst": "2026-11-16 20:31",
-          "timeRange": "11:46 - 20:31",
+          "arrTimeJst": "2026-11-16 20:53",
+          "timeRange": "11:46 - 20:53",
           "dateJst": "2026-11-16",
-          "status": "Estimated 17:01",
+          "status": "Estimated 17:23",
           "isLive": true,
           "isToday": true
         },
@@ -364,7 +364,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-16T05:30:36.618Z"
+      "updatedAt": "2026-11-16T08:00:25.333Z"
     },
     {
       "id": "eevee-nh",
@@ -380,9 +380,11 @@
       "routesSummary": "羽田/成田 ➔ サンフランシスコ / シカゴ / ロンドン / ニューヨーク",
       "color": "#d97706",
       "serviceStart": "2023-08-31",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "サンフランシスコ (SFO) ➔ 東京(成田) (NRT)",
-      "currentFlight": {
+      "flightState": "着陸済み 🔵",
+      "currentLocation": "東京(成田) (NRT)",
+      "currentFlight": null,
+      "nextFlight": null,
+      "lastLandedFlight": {
         "id": "429667f1",
         "flightNo": "NH7",
         "origin": "SFO",
@@ -390,15 +392,13 @@
         "destination": "NRT",
         "destinationName": "東京(成田) (NRT)",
         "depTimeJst": "2026-11-16 04:32",
-        "arrTimeJst": "2026-11-16 15:24",
-        "timeRange": "04:32 - 15:24",
+        "arrTimeJst": "2026-11-16 15:45",
+        "timeRange": "04:32 - 15:45",
         "dateJst": "2026-11-16",
-        "status": "Estimated 15:24",
-        "isLive": true,
+        "status": "Landed 15:45",
+        "isLive": false,
         "isToday": true
       },
-      "nextFlight": null,
-      "lastLandedFlight": null,
       "nightStay": "東京(成田) (NRT)",
       "domesticPrediction": null,
       "todayFlightsCount": 1,
@@ -411,11 +411,11 @@
           "destination": "NRT",
           "destinationName": "東京(成田) (NRT)",
           "depTimeJst": "2026-11-16 04:32",
-          "arrTimeJst": "2026-11-16 15:24",
-          "timeRange": "04:32 - 15:24",
+          "arrTimeJst": "2026-11-16 15:45",
+          "timeRange": "04:32 - 15:45",
           "dateJst": "2026-11-16",
-          "status": "Estimated 15:24",
-          "isLive": true,
+          "status": "Landed 15:45",
+          "isLive": false,
           "isToday": true
         }
       ],
@@ -428,11 +428,11 @@
           "destination": "NRT",
           "destinationName": "東京(成田) (NRT)",
           "depTimeJst": "2026-11-16 04:32",
-          "arrTimeJst": "2026-11-16 15:24",
-          "timeRange": "04:32 - 15:24",
+          "arrTimeJst": "2026-11-16 15:45",
+          "timeRange": "04:32 - 15:45",
           "dateJst": "2026-11-16",
-          "status": "Estimated 15:24",
-          "isLive": true,
+          "status": "Landed 15:45",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -511,7 +511,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-16T05:30:37.056Z"
+      "updatedAt": "2026-11-16T08:00:25.778Z"
     },
     {
       "id": "pokemon-green",
@@ -642,7 +642,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-16T05:30:37.492Z"
+      "updatedAt": "2026-11-16T08:00:26.247Z"
     },
     {
       "id": "pikachu-legacy",
@@ -668,10 +668,10 @@
         "destination": "IAH",
         "destinationName": "IAH",
         "depTimeJst": "2026-11-16 11:36",
-        "arrTimeJst": "2026-11-16 22:52",
-        "timeRange": "11:36 - 22:52",
+        "arrTimeJst": "2026-11-16 22:58",
+        "timeRange": "11:36 - 22:58",
         "dateJst": "2026-11-16",
-        "status": "Estimated 07:52",
+        "status": "Estimated 07:58",
         "isLive": true,
         "isToday": true
       },
@@ -689,10 +689,10 @@
           "destination": "IAH",
           "destinationName": "IAH",
           "depTimeJst": "2026-11-16 11:36",
-          "arrTimeJst": "2026-11-16 22:52",
-          "timeRange": "11:36 - 22:52",
+          "arrTimeJst": "2026-11-16 22:58",
+          "timeRange": "11:36 - 22:58",
           "dateJst": "2026-11-16",
-          "status": "Estimated 07:52",
+          "status": "Estimated 07:58",
           "isLive": true,
           "isToday": true
         }
@@ -706,10 +706,10 @@
           "destination": "IAH",
           "destinationName": "IAH",
           "depTimeJst": "2026-11-16 11:36",
-          "arrTimeJst": "2026-11-16 22:52",
-          "timeRange": "11:36 - 22:52",
+          "arrTimeJst": "2026-11-16 22:58",
+          "timeRange": "11:36 - 22:58",
           "dateJst": "2026-11-16",
-          "status": "Estimated 07:52",
+          "status": "Estimated 07:58",
           "isLive": true,
           "isToday": true
         },
@@ -789,7 +789,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-16T05:30:37.924Z"
+      "updatedAt": "2026-11-16T08:00:26.686Z"
     }
   ]
 }
