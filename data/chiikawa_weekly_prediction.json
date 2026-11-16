@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月16日 15:15",
-  "updatedAtIso": "2026-11-16T06:15:04.762Z",
+  "updatedAt": "2026年11月16日 15:30",
+  "updatedAtIso": "2026-11-16T06:30:04.408Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "東京(羽田)",
-    "currentLocationCode": "HND",
+    "currentLocation": "飛行中 (東京(羽田) ➔ 広島)",
+    "currentLocationCode": "HIJ",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "広島(95%) / 東京(羽田)(5%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
@@ -1572,7 +1572,7 @@
           "route": "長崎 ➔ 東京(羽田)"
         }
       },
-      "currentAirport": "東京(羽田)",
+      "currentAirport": "飛行中 (東京(羽田) ➔ 広島)",
       "nightStay": "広島(95%) / 東京(羽田)(5%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH681 (東京(羽田) ➔ 広島) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
@@ -1632,7 +1632,7 @@
               "dest": "HIJ",
               "route": "東京(羽田) ➔ 広島",
               "time": "15:00発 - 16:30着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "④ 第4便"
             },
             {
@@ -1697,7 +1697,7 @@
               "dest": "HIJ",
               "route": "東京(羽田) ➔ 広島",
               "time": "15:00発 - 16:30着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "④ 第4便"
             },
             {
@@ -1810,7 +1810,14 @@
             "update": "当日機種：78G（767対象外）"
           },
           "planC": null,
-          "actual": null
+          "actual": {
+            "flightNo": "NH681",
+            "route": "東京(羽田) ➔ 広島",
+            "time": "15:23離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#5",
@@ -1882,9 +1889,9 @@
           "time": "15:00発 - 16:30着",
           "depGate": "48",
           "arrGate": null,
-          "status": "出発予定 (15:08)",
+          "status": "到着予定 (16:26)",
           "isLanded": false,
-          "isLive": false,
+          "isLive": true,
           "isPredicted": false
         },
         {
