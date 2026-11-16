@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月17日 01:00",
-  "updatedAtIso": "2026-11-16T16:00:07.647Z",
+  "updatedAt": "2026年11月17日 02:00",
+  "updatedAtIso": "2026-11-16T17:00:08.806Z",
   "totalJets": 5,
   "jets": [
     {
@@ -161,7 +161,7 @@
         "arrTime": "05:55",
         "timeRange": "23:05 - 05:55",
         "dateJst": "2026-11-16",
-        "status": "Estimated 06:00",
+        "status": "Estimated 05:46",
         "isLive": true,
         "isLanded": false,
         "isToday": false
@@ -181,7 +181,7 @@
           "arrTime": "05:55",
           "timeRange": "23:05 - 05:55",
           "dateJst": "2026-11-16",
-          "status": "Estimated 06:00",
+          "status": "Estimated 05:46",
           "isLive": true,
           "isLanded": false,
           "isToday": false
@@ -567,9 +567,26 @@
       "routesSummary": "羽田/成田 ➔ フランクフルト / パリ / ロサンゼルス / アジア",
       "color": "#f59e0b",
       "serviceStart": "2023-06-04",
-      "flightState": "確認中",
-      "currentLocation": "確認中",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "IAH ➔ 東京(羽田) (HND)",
+      "currentFlight": {
+        "flightNo": "NH113",
+        "origin": "IAH",
+        "dest": "HND",
+        "originName": "IAH",
+        "destinationName": "東京(羽田) (HND)",
+        "origCode": "IAH",
+        "destCode": "HND",
+        "route": "IAH ➔ 東京(羽田)",
+        "depTime": "01:41",
+        "arrTime": "15:25",
+        "timeRange": "01:41 - 15:25",
+        "dateJst": "2026-11-17",
+        "status": "Estimated 15:05",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH113",
@@ -580,12 +597,12 @@
           "origCode": "IAH",
           "destCode": "HND",
           "route": "IAH ➔ 東京(羽田)",
-          "depTime": "01:10",
+          "depTime": "01:41",
           "arrTime": "15:25",
-          "timeRange": "01:10 - 15:25",
+          "timeRange": "01:41 - 15:25",
           "dateJst": "2026-11-17",
-          "status": "Estimated dep 10:10",
-          "isLive": false,
+          "status": "Estimated 15:05",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         }
@@ -600,12 +617,12 @@
           "origCode": "IAH",
           "destCode": "HND",
           "route": "IAH ➔ 東京(羽田)",
-          "depTime": "01:10",
+          "depTime": "01:41",
           "arrTime": "15:25",
-          "timeRange": "01:10 - 15:25",
+          "timeRange": "01:41 - 15:25",
           "dateJst": "2026-11-17",
-          "status": "Estimated dep 10:10",
-          "isLive": false,
+          "status": "Estimated 15:05",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         },
