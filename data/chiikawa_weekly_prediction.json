@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月16日 13:00",
-  "updatedAtIso": "2026-11-16T04:00:19.932Z",
+  "updatedAt": "2026年11月16日 13:15",
+  "updatedAtIso": "2026-11-16T04:15:20.028Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
@@ -1575,8 +1575,8 @@
       "currentAirport": "大阪(伊丹)",
       "nightStay": "広島(95%) / 東京(羽田)(5%)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH21 (東京(羽田) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
-      "todayOutlook": "現在 NH21 (東京(羽田) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
+      "pendingNightStayNote": "現在 NH26 (大阪(伊丹) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
+      "todayOutlook": "現在 NH26 (大阪(伊丹) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
       "nightStayProbabilities": [
         {
           "airport": "広島",
@@ -1623,7 +1623,7 @@
               "dest": "HND",
               "route": "大阪(伊丹) ➔ 東京(羽田)",
               "time": "13:00発 - 14:10着",
-              "tag": "予想接続(76P)",
+              "tag": "本日確定枠",
               "step": "③ 第3便"
             },
             {
@@ -1688,7 +1688,7 @@
               "dest": "HND",
               "route": "大阪(伊丹) ➔ 東京(羽田)",
               "time": "13:00発 - 14:10着",
-              "tag": "予想接続(76P)",
+              "tag": "本日確定枠",
               "step": "③ 第3便"
             },
             {
@@ -1860,18 +1860,14 @@
         },
         {
           "flightNo": "NH26",
-          "origCode": "ITM",
-          "destCode": "HND",
           "route": "大阪(伊丹) ➔ 東京(羽田)",
-          "depTime": "13:00",
-          "arrTime": "14:10",
-          "time": "13:00発 - 14:10着 (予想)",
-          "status": "後続便候補",
+          "time": "13:00発 - 14:10着",
+          "depGate": null,
+          "arrGate": "1,2,3",
+          "status": "出発予定 (13:04)",
           "isLanded": false,
           "isLive": false,
-          "isPredicted": true,
-          "depGate": null,
-          "arrGate": "1,2,3"
+          "isPredicted": false
         },
         {
           "flightNo": "NH681",
@@ -1992,7 +1988,7 @@
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
       "expectedStart": "広島発 (NH672)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH21 (東京(羽田) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
+      "pendingNightStayNote": "現在 NH26 (大阪(伊丹) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
@@ -4569,7 +4565,7 @@
       "code": "ITM",
       "name": "大阪(伊丹)",
       "note": "羽田シャトル便（NH18/NH21/NH23/NH39等）と新千歳直行便が乗り入れ。",
-      "prob": 53,
+      "prob": 54,
       "level": "B (中確率)"
     },
     {
@@ -4686,7 +4682,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 663,
+    "totalFleetFlights": 664,
     "fleetCount": 11
   }
 }
