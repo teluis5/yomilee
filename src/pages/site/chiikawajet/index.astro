@@ -224,18 +224,6 @@ const pageSchema = {
 					</div>
 				)}
 
-				{tomorrowData.firstFlightCandidates?.length > 0 && (
-					<div class="first-flight-candidates">
-						<h3>明日の初便候補</h3>
-						<p>初便をまとめた候補順です。経路全体のプランとは順位が異なる場合があります。</p>
-						<ol>
-							{tomorrowData.firstFlightCandidates.map(f => (
-								<li><b>{f.flightNo}</b> {f.route} {f.depTime}発{f.modelSource === 'ANA運航状況' ? ` · ANA予定機種 ${f.model}` : ''}{f.depGate ? ` · 搭乗口 ${f.depGate}` : ''}</li>
-							))}
-						</ol>
-					</div>
-				)}
-
 				<div class="plans-stack">
 					{(tomorrowData.plans || []).map((plan, idx) => (
 						<details class="plan-box" open={idx === 0}>
@@ -667,17 +655,6 @@ const pageSchema = {
 		font-size: 0.75rem;
 		color: #64748b;
 	}
-
-	.first-flight-candidates {
-		margin: 16px 0;
-		padding: 16px;
-		background: #f1f5f9;
-		border-radius: 8px;
-		line-height: 1.6;
-	}
-	.first-flight-candidates p { margin: 8px 0; font-size: 0.875rem; color: #475569; }
-	.first-flight-candidates ol { margin: 8px 0 0; padding-left: 24px; }
-	.first-flight-candidates li { padding: 4px 0; }
 
 	.today-note,
 	.today-empty {
