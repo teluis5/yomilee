@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月16日 08:00",
-  "updatedAtIso": "2026-11-15T23:00:20.956Z",
+  "updatedAt": "2026年11月16日 09:00",
+  "updatedAtIso": "2026-11-16T00:00:20.791Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,26 +17,9 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "高松 (TAK) ➔ 東京(羽田) (HND)",
-      "currentFlight": {
-        "flightNo": "NH532",
-        "origin": "TAK",
-        "dest": "HND",
-        "originName": "高松 (TAK)",
-        "destinationName": "東京(羽田) (HND)",
-        "origCode": "TAK",
-        "destCode": "HND",
-        "route": "高松 ➔ 東京(羽田)",
-        "depTime": "07:25",
-        "arrTime": "08:25",
-        "timeRange": "07:25 - 08:25",
-        "dateJst": "2026-11-16",
-        "status": "Estimated 08:24",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": true
-      },
+      "flightState": "着陸済・駐機中 🟡",
+      "currentLocation": "東京(羽田) (HND)",
+      "currentFlight": null,
       "todayFlights": [
         {
           "flightNo": "NH532",
@@ -48,12 +31,12 @@
           "destCode": "HND",
           "route": "高松 ➔ 東京(羽田)",
           "depTime": "07:25",
-          "arrTime": "08:25",
-          "timeRange": "07:25 - 08:25",
+          "arrTime": "08:24",
+          "timeRange": "07:25 - 08:24",
           "dateJst": "2026-11-16",
-          "status": "Estimated 08:24",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 08:24",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         }
       ],
@@ -68,12 +51,12 @@
           "destCode": "HND",
           "route": "高松 ➔ 東京(羽田)",
           "depTime": "07:25",
-          "arrTime": "08:25",
-          "timeRange": "07:25 - 08:25",
+          "arrTime": "08:24",
+          "timeRange": "07:25 - 08:24",
           "dateJst": "2026-11-16",
-          "status": "Estimated 08:24",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 08:24",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         {
@@ -185,8 +168,45 @@
       "flightState": "確認中",
       "currentLocation": "確認中",
       "currentFlight": null,
-      "todayFlights": [],
+      "todayFlights": [
+        {
+          "flightNo": "NH837",
+          "origin": "HND",
+          "dest": "DEL",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "DEL",
+          "origCode": "HND",
+          "destCode": "DEL",
+          "route": "東京(羽田) ➔ DEL",
+          "depTime": "10:35",
+          "arrTime": "20:55",
+          "timeRange": "10:35 - 20:55",
+          "dateJst": "2026-11-16",
+          "status": "Estimated dep 10:35",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        }
+      ],
       "recentFlights": [
+        {
+          "flightNo": "NH837",
+          "origin": "HND",
+          "dest": "DEL",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "DEL",
+          "origCode": "HND",
+          "destCode": "DEL",
+          "route": "東京(羽田) ➔ DEL",
+          "depTime": "10:35",
+          "arrTime": "20:55",
+          "timeRange": "10:35 - 20:55",
+          "dateJst": "2026-11-16",
+          "status": "Estimated dep 10:35",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH838",
           "origin": "DEL",
@@ -276,24 +296,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH841",
-          "origin": "HND",
-          "dest": "SIN",
-          "originName": "東京(羽田) (HND)",
-          "destinationName": "シンガポール (SIN)",
-          "origCode": "HND",
-          "destCode": "SIN",
-          "route": "東京(羽田) ➔ シンガポール",
-          "depTime": "11:13",
-          "arrTime": "18:12",
-          "timeRange": "11:13 - 18:12",
-          "dateJst": "2026-11-13",
-          "status": "Landed 17:12",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -326,7 +328,7 @@
         "arrTime": "15:25",
         "timeRange": "04:32 - 15:25",
         "dateJst": "2026-11-16",
-        "status": "Estimated 14:54",
+        "status": "Estimated 15:10",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -345,7 +347,7 @@
           "arrTime": "15:25",
           "timeRange": "04:32 - 15:25",
           "dateJst": "2026-11-16",
-          "status": "Estimated 14:54",
+          "status": "Estimated 15:10",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -365,7 +367,7 @@
           "arrTime": "15:25",
           "timeRange": "04:32 - 15:25",
           "dateJst": "2026-11-16",
-          "status": "Estimated 14:54",
+          "status": "Estimated 15:10",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -605,26 +607,9 @@
       "routesSummary": "羽田/成田 ➔ フランクフルト / パリ / ロサンゼルス / アジア",
       "color": "#f59e0b",
       "serviceStart": "2023-06-04",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "フランクフルト (FRA) ➔ 東京(羽田) (HND)",
-      "currentFlight": {
-        "flightNo": "NH204",
-        "origin": "FRA",
-        "dest": "HND",
-        "originName": "フランクフルト (FRA)",
-        "destinationName": "東京(羽田) (HND)",
-        "origCode": "FRA",
-        "destCode": "HND",
-        "route": "フランクフルト ➔ 東京(羽田)",
-        "depTime": "19:55",
-        "arrTime": "08:45",
-        "timeRange": "19:55 - 08:45",
-        "dateJst": "2026-11-15",
-        "status": "Estimated 08:14",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": false
-      },
+      "flightState": "確認中",
+      "currentLocation": "確認中",
+      "currentFlight": null,
       "todayFlights": [],
       "recentFlights": [
         {
@@ -637,12 +622,12 @@
           "destCode": "HND",
           "route": "フランクフルト ➔ 東京(羽田)",
           "depTime": "19:55",
-          "arrTime": "08:45",
-          "timeRange": "19:55 - 08:45",
+          "arrTime": "08:17",
+          "timeRange": "19:55 - 08:17",
           "dateJst": "2026-11-15",
-          "status": "Estimated 08:14",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 08:17",
+          "isLive": false,
+          "isLanded": true,
           "isToday": false
         },
         {
@@ -841,8 +826,8 @@
             "orig": "TAK",
             "dest": "HND",
             "route": "高松 ➔ 東京(羽田)",
-            "time": "07:25発 - 08:25着",
-            "tag": "飛行中 🟢",
+            "time": "07:25発 - 08:24着",
+            "tag": "運航完了",
             "step": "第1便"
           },
           {
@@ -897,8 +882,8 @@
             "orig": "TAK",
             "dest": "HND",
             "route": "高松 ➔ 東京(羽田)",
-            "time": "07:25発 - 08:25着",
-            "tag": "飛行中 🟢",
+            "time": "07:25発 - 08:24着",
+            "tag": "運航完了",
             "step": "第1便"
           },
           {
@@ -953,8 +938,8 @@
             "orig": "TAK",
             "dest": "HND",
             "route": "高松 ➔ 東京(羽田)",
-            "time": "07:25発 - 08:25着",
-            "tag": "飛行中 🟢",
+            "time": "07:25発 - 08:24着",
+            "tag": "運航完了",
             "step": "第1便"
           },
           {
@@ -1168,12 +1153,12 @@
           "destCode": "HND",
           "route": "高松 ➔ 東京(羽田)",
           "depTime": "07:25",
-          "arrTime": "08:25",
-          "timeRange": "07:25 - 08:25",
+          "arrTime": "08:24",
+          "timeRange": "07:25 - 08:24",
           "dateJst": "2026-11-16",
-          "status": "Estimated 08:24",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 08:24",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         "update": null
