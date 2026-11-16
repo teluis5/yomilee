@@ -2644,17 +2644,23 @@ export async function generateWeeklyPrediction() {
   for (const day of weeklyDays) {
     if (day.dayIndex === 0) {
       // Day 0: 本日（昨晩時点の予想 vs 実際 比較テーブル ＆ 本日残り予測）
+      const todayKey = todayStr.replace(/-/g, '');
+      const todayAnaMap = anaFleetData?.dates?.[todayKey] || {};
       const combinedTodayFlights = [
         ...todayFlights.map(f => ({
           flightNo: f.flightNo,
           route: f.route,
           time: `${f.depTime}発 - ${f.arrTime}着`,
+          depGate: todayAnaMap[normalizeFlightNo(f.flightNo)]?.depGate || null,
           status: f.statusJa,
           isLanded: f.isLanded,
           isLive: f.isLive,
           isPredicted: false
         })),
-        ...predictedRemainingToday
+        ...predictedRemainingToday.map(pf => ({
+          ...pf,
+          depGate: pf.depGate || todayAnaMap[normalizeFlightNo(pf.flightNo)]?.depGate || null
+        }))
       ];
 
       const lastNightPlans = snapshots[day.dateStr] || [];

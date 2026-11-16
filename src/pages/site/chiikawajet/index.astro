@@ -143,6 +143,7 @@ const pageSchema = {
 										<b>{flight.flightNo}</b>
 										<span>{flight.arrTime ? `${flight.arrTime}着` : flight.time?.match(/-\s*(\d{1,2}:\d{2})/)?.[1] ? `${flight.time.match(/-\s*(\d{1,2}:\d{2})/)[1]}着` : ''}</span>
 										<span class="upcoming-label">{flight.isLive ? '飛行中' : flight.isPredicted ? '予想' : '運航予定'}</span>
+										{flight.depGate && <span class="upcoming-gate">搭乗口 {flight.depGate}</span>}
 									</div>
 								</div>
 							</div>
@@ -717,6 +718,16 @@ const pageSchema = {
 	}
 	.upcoming-label {
 		color: #075985;
+		font-weight: 700;
+	}
+	.upcoming-gate {
+		display: inline-block;
+		background: #e0f2fe;
+		color: #0369a1;
+		border: 1px solid #bae6fd;
+		border-radius: 4px;
+		padding: 1px 6px;
+		font-size: 0.78rem;
 		font-weight: 700;
 	}
 	.upcoming-row:first-child .upcoming-time b {
