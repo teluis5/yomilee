@@ -161,16 +161,15 @@ if (type === 'rakuten') {
   // AdSense無効ドメイン（teluis本家等）では楽天モーションウィジェットへ強制フォールバック
   renderType = isAdEnabled ? 'adsense' : 'rakuten';
 } else {
-  // mixed の場合: position やドメインに応じてバランスよく分配
+  // mixed の場合:
   if (!isAdEnabled) {
     // teluis本家等（AdSense未審査ドメイン）は楽天モーションウィジェットとAmazonを配置別に振り分け
     if (position === 'bottom') renderType = 'amazon';
     else if (position === 'sidebar') renderType = 'amazon';
     else renderType = 'rakuten';
   } else {
-    // AdSense合格ドメイン
-    if (position === 'bottom') renderType = 'amazon'; // 記事下は高CVRのAmazon
-    else renderType = 'adsense'; // ホーム上部・サイドバー等はAdSense
+    // AdSense合格ドメイン: 全ての広告枠を Google AdSense に統一
+    renderType = 'adsense';
   }
 }
 
@@ -488,8 +487,8 @@ const rakutenWidgetIframeUrl = `https://static.affiliate.rakuten.co.jp/widget/ht
 
           const isFirstH2Ad = idx === 1;
 
-          if ((isFirstH2Ad || (showYomileeFirstH2Ad && idx === 0)) && isAdEnabled) {
-            // 1つ目のH2前: Google AdSense（AdSense有効時）
+          if (isAdEnabled) {
+            // AdSense有効ドメイン: 全てのH2前広告を Google AdSense に統一
             adWrapper.innerHTML = `
               <div class="adsense-label" style="display:block; width:100%; text-align:center; font-size:0.7rem; color:#94a3b8; font-weight:500; letter-spacing:0.08em; margin-bottom:0.35rem;">広告</div>
               <div class="adsense-body" style="width:100%; margin:0 auto; text-align:center;">
@@ -508,8 +507,8 @@ const rakutenWidgetIframeUrl = `https://static.affiliate.rakuten.co.jp/widget/ht
             } catch (e) {
               console.debug('[AdSense] in-article push notice:', e);
             }
-          } else if (idx === 2 || (!isAdEnabled && isFirstH2Ad)) {
-            // 2つ目のH2前（またはAdSense未合格ドメインの1つ目）: 楽天モーションウィジェット ＋ 買いまわりイベント訴求帯
+          } else if (isFirstH2Ad || (!isAdEnabled && idx === 1)) {
+            // AdSense未合格ドメインの1つ目: 楽天モーションウィジェット ＋ 買いまわりイベント訴求帯
             adWrapper.innerHTML = `
               <div
                 class="rakuten-event-banner dynamic-campaign-banner"
@@ -541,7 +540,7 @@ const rakutenWidgetIframeUrl = `https://static.affiliate.rakuten.co.jp/widget/ht
             `;
             anchor.before(adWrapper);
           } else {
-            // その他: Amazonアソシエイト
+            // AdSense未合格ドメインのその他: Amazonアソシエイト
             const adData = amazonAds[Math.floor(Math.random() * amazonAds.length)];
             adWrapper.innerHTML = `
               <div
