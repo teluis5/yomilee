@@ -303,16 +303,35 @@ const rakutenWidgetIframeUrl = `https://static.affiliate.rakuten.co.jp/widget/ht
                 linkEl.href = `https://hb.afl.rakuten.co.jp/hgc/${affId}/?pc=${enc}&m=${enc}`;
               }
 
+              const endDateObj = new Date(rakutenSale.end);
+              const isSameDay = now.getFullYear() === endDateObj.getFullYear() &&
+                                now.getMonth() === endDateObj.getMonth() &&
+                                now.getDate() === endDateObj.getDate();
+              const endHour = endDateObj.getHours();
+              const endMin = String(endDateObj.getMinutes()).padStart(2, '0');
+              const endLabel = `${endHour}:${endMin}`;
+              const isLateNight = endHour >= 0 && endHour <= 4;
+
               if (diffHours < 3) {
                 if (badgeEl) badgeEl.textContent = 'まもなく終了';
-                if (textEl) textEl.innerHTML = `【🔥ラストスパート！あと${diffHours}時間${diffMinutes}分】${rakutenSale.name} 買い忘れはありませんか？`;
+                if (textEl) textEl.innerHTML = `【🔥ラストスパート！あと${diffHours}時間${diffMinutes}分】${rakutenSale.name} 買い忘れはありませんか？（${endLabel}まで）`;
                 if (ctaEl) ctaEl.textContent = '特設会場へ »';
               } else if (diffHours < 24) {
-                if (badgeEl) badgeEl.textContent = '本日終了';
-                if (textEl) textEl.innerHTML = `【本日終了まで あと${diffHours}時間${diffMinutes}分】${rakutenSale.name} ${rakutenSale.highlight}`;
-                if (ctaEl) ctaEl.textContent = 'ラストスパート »';
+                if (isSameDay) {
+                  if (badgeEl) badgeEl.textContent = '本日終了';
+                  if (textEl) textEl.innerHTML = `【本日終了（${endLabel}）まで あと${diffHours}時間${diffMinutes}分】${rakutenSale.name} ${rakutenSale.highlight}`;
+                  if (ctaEl) ctaEl.textContent = 'ラストスパート »';
+                } else if (isLateNight) {
+                  if (badgeEl) badgeEl.textContent = '今夜終了';
+                  if (textEl) textEl.innerHTML = `【今夜深夜（${rakutenSale.endDateOnly} ${endLabel}）まで あと${diffHours}時間${diffMinutes}分】${rakutenSale.name} ${rakutenSale.highlight}`;
+                  if (ctaEl) ctaEl.textContent = 'セール会場へ »';
+                } else {
+                  if (badgeEl) badgeEl.textContent = '終了間近';
+                  if (textEl) textEl.innerHTML = `【終了まで あと${diffHours}時間${diffMinutes}分】${rakutenSale.name}（${rakutenSale.endDateOnly} ${endLabel}まで）`;
+                  if (ctaEl) ctaEl.textContent = 'セール会場へ »';
+                }
               } else {
-                if (textEl) textEl.innerHTML = `【${rakutenSale.name}開催中】${rakutenSale.endDateOnly}まで！${rakutenSale.highlight}`;
+                if (textEl) textEl.innerHTML = `【${rakutenSale.name}開催中】${rakutenSale.endDateOnly} ${endLabel}まで！${rakutenSale.highlight}`;
               }
               return;
             } else if (nowMs < startMs && (startMs - nowMs) <= 48 * 3600 * 1000) {

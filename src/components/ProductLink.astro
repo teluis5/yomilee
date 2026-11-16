@@ -149,12 +149,27 @@ const campaigns = campaignsData.campaigns || [];
               const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
               const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
 
+              const endDateObj = new Date(rakutenSale.end);
+              const isSameDay = now.getFullYear() === endDateObj.getFullYear() &&
+                                now.getMonth() === endDateObj.getMonth() &&
+                                now.getDate() === endDateObj.getDate();
+              const endHour = endDateObj.getHours();
+              const endMin = String(endDateObj.getMinutes()).padStart(2, '0');
+              const endLabel = `${endHour}:${endMin}`;
+              const isLateNight = endHour >= 0 && endHour <= 4;
+
               if (diffHours < 3) {
-                ribbonTextEl.innerHTML = `<strong>まもなく終了！</strong> あと${diffHours}時間${diffMinutes}分で${rakutenSale.name}終了`;
+                ribbonTextEl.innerHTML = `<strong>まもなく終了！</strong> あと${diffHours}時間${diffMinutes}分で${rakutenSale.name}終了（${endLabel}まで）`;
               } else if (diffHours < 24) {
-                ribbonTextEl.innerHTML = `<strong>本日終了まで あと${diffHours}時間${diffMinutes}分！</strong> ${rakutenSale.name}開催中`;
+                if (isSameDay) {
+                  ribbonTextEl.innerHTML = `<strong>本日終了（${endLabel}）まで あと${diffHours}時間${diffMinutes}分！</strong> ${rakutenSale.name}ラストスパート`;
+                } else if (isLateNight) {
+                  ribbonTextEl.innerHTML = `<strong>今夜深夜（${rakutenSale.endDateOnly} ${endLabel}）終了まで あと${diffHours}時間${diffMinutes}分！</strong> ${rakutenSale.name}開催中`;
+                } else {
+                  ribbonTextEl.innerHTML = `<strong>終了まで あと${diffHours}時間${diffMinutes}分！</strong>（${rakutenSale.endDateOnly} ${endLabel}まで）${rakutenSale.name}`;
+                }
               } else {
-                ribbonTextEl.innerHTML = `<strong>${rakutenSale.name}開催中！</strong> ${rakutenSale.endDateOnly}までポイントアップ`;
+                ribbonTextEl.innerHTML = `<strong>${rakutenSale.name}開催中！</strong> ${rakutenSale.endDateOnly} ${endLabel}までポイントアップ`;
               }
               ribbonEl.style.display = 'flex';
               return;

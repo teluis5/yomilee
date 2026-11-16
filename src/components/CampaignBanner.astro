@@ -139,33 +139,59 @@ const initialText = customText || (initialData?.name || (initialProvider === 'ra
           if (activeCampaign) {
             // 開催中！
             const endMs = new Date(activeCampaign.end).getTime();
+            const endDateObj = new Date(activeCampaign.end);
             const diffMs = endMs - nowMs;
             const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
             const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
             const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
+            // 本日中に終了するか判定（カレンダー上の同一日）
+            const isSameDay = now.getFullYear() === endDateObj.getFullYear() &&
+                              now.getMonth() === endDateObj.getMonth() &&
+                              now.getDate() === endDateObj.getDate();
+
+            const endHour = endDateObj.getHours();
+            const endMin = String(endDateObj.getMinutes()).padStart(2, '0');
+            const endLabel = `${endHour}:${endMin}`;
+            const isLateNight = endHour >= 0 && endHour <= 4; // 深夜0時〜4時頃の終了（楽天01:59など）
+
             if (badgeEl) badgeEl.textContent = activeCampaign.badge || 'SALE';
             if (titleEl) titleEl.textContent = activeCampaign.name;
 
-            // 残り時間に応じた訴求
+            // 残り時間に応じた訴求（深夜終了・日またぎを正確に出し分け）
             if (diffHours < 3) {
               if (urgencyEl) {
                 urgencyEl.textContent = 'まもなく終了！';
                 urgencyEl.className = 'campaign-urgency-tag urgency-critical';
               }
-              if (timingEl) timingEl.innerHTML = `🔥 ラストスパート！あと <strong class="time-highlight">${diffHours}時間${diffMinutes}分</strong> で終了`;
+              if (timingEl) timingEl.innerHTML = `🔥 ラストスパート！あと <strong class="time-highlight">${diffHours}時間${diffMinutes}分</strong> で終了（${endLabel}まで）`;
             } else if (diffHours < 24) {
-              if (urgencyEl) {
-                urgencyEl.textContent = '本日終了';
-                urgencyEl.className = 'campaign-urgency-tag urgency-warning';
+              if (isSameDay) {
+                if (urgencyEl) {
+                  urgencyEl.textContent = '本日終了';
+                  urgencyEl.className = 'campaign-urgency-tag urgency-warning';
+                }
+                if (timingEl) timingEl.innerHTML = `本日終了（${endLabel}）まで あと <strong class="time-highlight">${diffHours}時間${diffMinutes}分</strong>`;
+              } else if (isLateNight) {
+                // 翌日未明（深夜1:59など）終了の場合
+                if (urgencyEl) {
+                  urgencyEl.textContent = '今夜終了';
+                  urgencyEl.className = 'campaign-urgency-tag urgency-warning';
+                }
+                if (timingEl) timingEl.innerHTML = `今夜深夜（${activeCampaign.endDateOnly} ${endLabel}）まで あと <strong class="time-highlight">${diffHours}時間${diffMinutes}分</strong>`;
+              } else {
+                if (urgencyEl) {
+                  urgencyEl.textContent = '終了間近';
+                  urgencyEl.className = 'campaign-urgency-tag urgency-warning';
+                }
+                if (timingEl) timingEl.innerHTML = `終了まで あと <strong class="time-highlight">${diffHours}時間${diffMinutes}分</strong>（${activeCampaign.endDateOnly} ${endLabel}まで）`;
               }
-              if (timingEl) timingEl.innerHTML = `本日終了まで あと <strong class="time-highlight">${diffHours}時間${diffMinutes}分</strong>`;
             } else {
               if (urgencyEl) {
                 urgencyEl.textContent = '開催中';
                 urgencyEl.className = 'campaign-urgency-tag urgency-normal';
               }
-              if (timingEl) timingEl.innerHTML = `${activeCampaign.endDateOnly}まで開催中（あと <strong class="time-highlight">${diffDays}日</strong>）`;
+              if (timingEl) timingEl.innerHTML = `${activeCampaign.endDateOnly} ${endLabel}まで開催中（あと <strong class="time-highlight">${diffDays}日</strong>）`;
             }
 
             if (btnTextEl) btnTextEl.textContent = 'セール会場へ';
