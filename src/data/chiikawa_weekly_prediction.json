@@ -1,32 +1,27 @@
 {
-  "updatedAt": "2026年11月16日 11:00",
-  "updatedAtIso": "2026-11-16T02:00:22.215Z",
+  "updatedAt": "2026年11月16日 11:54",
+  "updatedAtIso": "2026-11-16T02:54:25.592Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "東京(羽田)",
-    "currentLocationCode": "HND",
+    "currentLocation": "飛行中 (東京(羽田) ➔ 大阪(伊丹))",
+    "currentLocationCode": "ITM",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
-    "nightStay": "広島(90%) / 東京(羽田)(5%)",
+    "isAirborne": true,
+    "nightStay": "広島(95%) / 東京(羽田)(5%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
     "nightStayProbabilities": [
       {
         "airport": "広島",
         "code": "HIJ",
-        "probability": 90
+        "probability": 95
       },
       {
         "airport": "東京(羽田)",
         "code": "HND",
-        "probability": 5
-      },
-      {
-        "airport": "名古屋(中部)",
-        "code": "NGO",
         "probability": 5
       }
     ]
@@ -1577,25 +1572,20 @@
           "route": "長崎 ➔ 東京(羽田)"
         }
       },
-      "currentAirport": "東京(羽田)",
-      "nightStay": "広島(90%) / 東京(羽田)(5%)",
+      "currentAirport": "飛行中 (東京(羽田) ➔ 大阪(伊丹))",
+      "nightStay": "広島(95%) / 東京(羽田)(5%)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH662 (長崎 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 90% / 東京(羽田) 5% / 名古屋(中部) 5% と推定されます。",
-      "todayOutlook": "現在 NH662 (長崎 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 90% / 東京(羽田) 5% / 名古屋(中部) 5% と推定されます。",
+      "pendingNightStayNote": "現在 NH21 (東京(羽田) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
+      "todayOutlook": "現在 NH21 (東京(羽田) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
       "nightStayProbabilities": [
         {
           "airport": "広島",
           "code": "HIJ",
-          "probability": 90
+          "probability": 95
         },
         {
           "airport": "東京(羽田)",
           "code": "HND",
-          "probability": 5
-        },
-        {
-          "airport": "名古屋(中部)",
-          "code": "NGO",
           "probability": 5
         }
       ],
@@ -1605,7 +1595,7 @@
           "planName": "プランA (広島泊)",
           "stayCode": "HIJ",
           "rank": "本命 ◎",
-          "probability": 87,
+          "probability": 90,
           "title": "【今夜広島泊シナリオ】長崎 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
           "routeSummary": "長崎 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
           "flights": [
@@ -1624,7 +1614,7 @@
               "dest": "ITM",
               "route": "東京(羽田) ➔ 大阪(伊丹)",
               "time": "11:00発 - 12:10着",
-              "tag": "予想接続(76P)",
+              "tag": "飛行中",
               "step": "② 第2便"
             },
             {
@@ -1689,7 +1679,7 @@
               "dest": "ITM",
               "route": "東京(羽田) ➔ 大阪(伊丹)",
               "time": "11:00発 - 12:10着",
-              "tag": "予想接続(76P)",
+              "tag": "飛行中",
               "step": "② 第2便"
             },
             {
@@ -1718,53 +1708,6 @@
               "time": "17:20発 - 18:45着",
               "tag": "🌙羽田泊候補",
               "step": "⑤ 第5便"
-            }
-          ]
-        },
-        {
-          "planId": "today-plan-c",
-          "planName": "プランC (中部泊)",
-          "stayCode": "NGO",
-          "rank": "対抗 ▲",
-          "probability": 10,
-          "title": "【今夜中部泊シナリオ】長崎 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
-          "routeSummary": "長崎 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
-          "flights": [
-            {
-              "flightNo": "NH662",
-              "orig": "NGS",
-              "dest": "HND",
-              "route": "長崎 ➔ 東京(羽田)",
-              "time": "08:25発 - 10:00着",
-              "tag": "運航完了",
-              "step": "① 第1便"
-            },
-            {
-              "flightNo": "NH27",
-              "orig": "HND",
-              "dest": "ITM",
-              "route": "東京(羽田) ➔ 大阪(伊丹)",
-              "time": "14:00発 - 15:10着",
-              "tag": "予想接続(76P)",
-              "step": "② 第2便"
-            },
-            {
-              "flightNo": "NH777",
-              "orig": "ITM",
-              "dest": "CTS",
-              "route": "大阪(伊丹) ➔ 札幌(新千歳)",
-              "time": "16:00発 - 17:50着",
-              "tag": "予想接続(76P)",
-              "step": "③ 第3便"
-            },
-            {
-              "flightNo": "NH712",
-              "orig": "CTS",
-              "dest": "NGO",
-              "route": "札幌(新千歳) ➔ 名古屋(中部)",
-              "time": "18:35発 - 20:25着",
-              "tag": "🌙中部泊候補",
-              "step": "④ 第4便"
             }
           ]
         }
@@ -1819,7 +1762,14 @@
             "update": null
           },
           "planC": null,
-          "actual": null
+          "actual": {
+            "flightNo": "NH21",
+            "route": "東京(羽田) ➔ 大阪(伊丹)",
+            "time": "11:17離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#3",
@@ -1899,18 +1849,14 @@
         },
         {
           "flightNo": "NH21",
-          "origCode": "HND",
-          "destCode": "ITM",
           "route": "東京(羽田) ➔ 大阪(伊丹)",
-          "depTime": "11:00",
-          "arrTime": "12:10",
-          "time": "11:00発 - 12:10着 (予想)",
-          "status": "後続便候補",
-          "isLanded": false,
-          "isLive": false,
-          "isPredicted": true,
+          "time": "11:00発 - 12:10着",
           "depGate": "63",
-          "arrGate": null
+          "arrGate": null,
+          "status": "到着予定 (12:03)",
+          "isLanded": false,
+          "isLive": true,
+          "isPredicted": false
         },
         {
           "flightNo": "NH26",
@@ -1965,7 +1911,7 @@
           "depTime": "19:40",
           "arrTime": "21:10",
           "time": "19:40発 - 21:10着 (予想)",
-          "status": "本命予想 (90%・広島ステイ候補)",
+          "status": "本命予想 (95%・広島ステイ候補)",
           "isLanded": false,
           "isLive": false,
           "isPredicted": true,
@@ -1992,31 +1938,7 @@
           "depGate": null,
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-16T02:00:09.328Z"
-        },
-        {
-          "flightNo": "NH703",
-          "orig": "NGO",
-          "dest": "CTS",
-          "route": "名古屋(中部) ➔ 札幌(新千歳)",
-          "depTime": "08:40",
-          "arrTime": "10:25",
-          "depGate": null,
-          "model": "76P",
-          "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-16T02:00:10.012Z"
-        },
-        {
-          "flightNo": "NH303",
-          "orig": "NGO",
-          "dest": "OKA",
-          "route": "名古屋(中部) ➔ 沖縄(那覇)",
-          "depTime": "08:20",
-          "arrTime": "10:55",
-          "depGate": null,
-          "model": "76P",
-          "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-16T02:00:10.021Z"
+          "modelObservedAt": "2026-11-16T02:54:22.230Z"
         },
         {
           "flightNo": "NH245",
@@ -2028,7 +1950,7 @@
           "depGate": "57",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-16T02:00:09.400Z"
+          "modelObservedAt": "2026-11-16T02:54:22.330Z"
         },
         {
           "flightNo": "NH661",
@@ -2040,13 +1962,37 @@
           "depGate": "48",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-16T02:00:09.647Z"
+          "modelObservedAt": "2026-11-16T02:54:22.606Z"
+        },
+        {
+          "flightNo": "NH1077",
+          "orig": "HND",
+          "dest": "FUK",
+          "route": "東京(羽田) ➔ 福岡",
+          "depTime": "08:00",
+          "arrTime": "09:55",
+          "depGate": "58",
+          "model": "76P",
+          "modelSource": "ANA運航状況",
+          "modelObservedAt": "2026-11-16T02:54:22.330Z"
+        },
+        {
+          "flightNo": "NH21",
+          "orig": "HND",
+          "dest": "ITM",
+          "route": "東京(羽田) ➔ 大阪(伊丹)",
+          "depTime": "11:00",
+          "arrTime": "12:10",
+          "depGate": "63",
+          "model": "76P",
+          "modelSource": "ANA運航状況",
+          "modelObservedAt": "2026-11-16T02:54:22.420Z"
         }
       ],
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
       "expectedStart": "広島発 (NH672)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH662 (長崎 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 90% / 東京(羽田) 5% / 名古屋(中部) 5% と推定されます。",
+      "pendingNightStayNote": "現在 NH21 (東京(羽田) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
@@ -2056,7 +2002,7 @@
           "stayCode": "HND",
           "startAirportCode": "HIJ",
           "rank": "本命 ◎",
-          "probability": 85,
+          "probability": 87,
           "title": "【前夜広島泊(NH672始発)】広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
           "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
           "airports": [
@@ -2148,20 +2094,20 @@
         },
         {
           "planId": "plan-b",
-          "planName": "プランB (中部泊始発)",
-          "stayCode": "HND",
-          "startAirportCode": "NGO",
+          "planName": "プランB (羽田泊始発)",
+          "stayCode": "NGS",
+          "startAirportCode": "HND",
           "rank": "有力 ◯",
           "probability": 10,
-          "title": "【前夜中部泊(NH703始発)】中部 ➔ 新千歳 ➔ 中部 ➔ 新千歳 ➔ 伊丹 ➔ 羽田(泊)",
-          "routeSummary": "中部 ➔ 新千歳 ➔ 中部 ➔ 新千歳 ➔ 伊丹 ➔ 羽田(泊)",
+          "title": "【前夜羽田泊(NH245始発)】羽田 ➔ 福岡 ➔ 羽田 ➔ 松山 ➔ 羽田 ➔ 長崎(泊)",
+          "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 松山 ➔ 羽田 ➔ 長崎(泊)",
           "airports": [
-            "名古屋(中部)",
-            "札幌(新千歳)",
-            "大阪(伊丹)",
-            "東京(羽田)"
+            "東京(羽田)",
+            "福岡",
+            "松山",
+            "長崎"
           ],
-          "description": "前夜名古屋(中部)駐機シナリオから連動。朝一NH703(08:40発 - 10:25着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全5便を運航して夜に羽田泊となる予測スジ。 [フリート整合: 他機体6機スジ整合（76P確定枠カバー率100%）]",
+          "description": "前夜東京(羽田)駐機シナリオから連動。朝一NH245(08:55発 - 10:55着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全5便を運航して夜に長崎泊となる予測スジ。 [フリート整合: 他機体6機スジ整合（76P確定枠カバー率100%）]",
           "fleetConsistency": {
             "fleetScore": 4,
             "is100Percent": true,
@@ -2172,27 +2118,27 @@
           "flights": [
             {
               "step": "① 朝一便",
-              "time": "08:40発 - 10:25着",
-              "depTime": "08:40",
-              "arrTime": "10:25",
-              "flightNo": "NH703",
-              "orig": "NGO",
-              "dest": "CTS",
-              "route": "名古屋(中部) ➔ 札幌(新千歳)",
+              "time": "08:55発 - 10:55着",
+              "depTime": "08:55",
+              "arrTime": "10:55",
+              "flightNo": "NH245",
+              "orig": "HND",
+              "dest": "FUK",
+              "route": "東京(羽田) ➔ 福岡",
               "model": "76P",
               "is767Confirmed": true,
               "is767Strict": true,
-              "tag": "🔒中部始発・羽田帰還"
+              "tag": "767機種予定"
             },
             {
               "step": "② 午前便",
-              "time": "11:10発 - 13:00着",
-              "depTime": "11:10",
-              "arrTime": "13:00",
-              "flightNo": "NH710",
-              "orig": "CTS",
-              "dest": "NGO",
-              "route": "札幌(新千歳) ➔ 名古屋(中部)",
+              "time": "11:45発 - 13:25着",
+              "depTime": "11:45",
+              "arrTime": "13:25",
+              "flightNo": "NH250",
+              "orig": "FUK",
+              "dest": "HND",
+              "route": "福岡 ➔ 東京(羽田)",
               "model": "76P",
               "is767Confirmed": true,
               "is767Strict": true,
@@ -2200,13 +2146,13 @@
             },
             {
               "step": "③ 午後便",
-              "time": "13:50発 - 15:30着",
-              "depTime": "13:50",
-              "arrTime": "15:30",
-              "flightNo": "NH707",
-              "orig": "NGO",
-              "dest": "CTS",
-              "route": "名古屋(中部) ➔ 札幌(新千歳)",
+              "time": "14:15発 - 15:50着",
+              "depTime": "14:15",
+              "arrTime": "15:50",
+              "flightNo": "NH593",
+              "orig": "HND",
+              "dest": "MYJ",
+              "route": "東京(羽田) ➔ 松山",
               "model": "76P",
               "is767Confirmed": true,
               "is767Strict": true,
@@ -2214,13 +2160,13 @@
             },
             {
               "step": "④ 夕方便",
-              "time": "16:15発 - 18:15着",
-              "depTime": "16:15",
-              "arrTime": "18:15",
-              "flightNo": "NH778",
-              "orig": "CTS",
-              "dest": "ITM",
-              "route": "札幌(新千歳) ➔ 大阪(伊丹)",
+              "time": "16:40発 - 18:10着",
+              "depTime": "16:40",
+              "arrTime": "18:10",
+              "flightNo": "NH596",
+              "orig": "MYJ",
+              "dest": "HND",
+              "route": "松山 ➔ 東京(羽田)",
               "model": "76P",
               "is767Confirmed": true,
               "is767Strict": true,
@@ -2228,34 +2174,37 @@
             },
             {
               "step": "⑤ 夜最終",
-              "time": "19:00発 - 20:10着",
-              "depTime": "19:00",
-              "arrTime": "20:10",
-              "flightNo": "NH38",
-              "orig": "ITM",
-              "dest": "HND",
-              "route": "大阪(伊丹) ➔ 東京(羽田)",
+              "time": "19:15発 - 21:15着",
+              "depTime": "19:15",
+              "arrTime": "21:15",
+              "flightNo": "NH669",
+              "orig": "HND",
+              "dest": "NGS",
+              "route": "東京(羽田) ➔ 長崎",
               "model": "76P",
               "is767Confirmed": true,
               "is767Strict": true,
-              "tag": "🌙羽田帰還(泊)"
+              "tag": "🌙長崎ナイトステイ(泊)"
             }
           ]
         },
         {
           "planId": "plan-c",
-          "planName": "プランC (中部泊始発)",
+          "planName": "プランC (羽田泊始発)",
           "stayCode": "NGO",
-          "startAirportCode": "NGO",
+          "startAirportCode": "HND",
           "rank": "対抗 ▲",
           "probability": 10,
-          "title": "【前夜中部泊(NH303始発)】中部 ➔ 那覇 ➔ 中部 ➔ 那覇 ➔ 中部(泊)",
-          "routeSummary": "中部 ➔ 那覇 ➔ 中部 ➔ 那覇 ➔ 中部(泊)",
+          "title": "【前夜羽田泊(NH661始発)】羽田 ➔ 長崎 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
+          "routeSummary": "羽田 ➔ 長崎 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
           "airports": [
-            "名古屋(中部)",
-            "沖縄(那覇)"
+            "東京(羽田)",
+            "長崎",
+            "大阪(伊丹)",
+            "札幌(新千歳)",
+            "名古屋(中部)"
           ],
-          "description": "前夜名古屋(中部)駐機シナリオから連動。朝一NH303(08:20発 - 10:55着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全4便を運航して夜に中部泊となる予測スジ。 [フリート整合: 他機体6機スジ整合（76P確定枠カバー率100%）]",
+          "description": "前夜東京(羽田)駐機シナリオから連動。朝一NH661(08:30発 - 10:30着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全5便を運航して夜に中部泊となる予測スジ。 [フリート整合: 他機体6機スジ整合（76P確定枠カバー率100%）]",
           "fleetConsistency": {
             "fleetScore": 4,
             "is100Percent": true,
@@ -2266,27 +2215,27 @@
           "flights": [
             {
               "step": "① 朝一便",
-              "time": "08:20発 - 10:55着",
-              "depTime": "08:20",
-              "arrTime": "10:55",
-              "flightNo": "NH303",
-              "orig": "NGO",
-              "dest": "OKA",
-              "route": "名古屋(中部) ➔ 沖縄(那覇)",
+              "time": "08:30発 - 10:30着",
+              "depTime": "08:30",
+              "arrTime": "10:30",
+              "flightNo": "NH661",
+              "orig": "HND",
+              "dest": "NGS",
+              "route": "東京(羽田) ➔ 長崎",
               "model": "76P",
               "is767Confirmed": true,
               "is767Strict": true,
-              "tag": "🔒中部始発・羽田帰還"
+              "tag": "767機種予定"
             },
             {
               "step": "② 午前便",
-              "time": "11:45発 - 13:45着",
-              "depTime": "11:45",
-              "arrTime": "13:45",
-              "flightNo": "NH304",
-              "orig": "OKA",
-              "dest": "NGO",
-              "route": "沖縄(那覇) ➔ 名古屋(中部)",
+              "time": "11:20発 - 12:55着",
+              "depTime": "11:20",
+              "arrTime": "12:55",
+              "flightNo": "NH664",
+              "orig": "NGS",
+              "dest": "HND",
+              "route": "長崎 ➔ 東京(羽田)",
               "model": "76P",
               "is767Confirmed": true,
               "is767Strict": true,
@@ -2294,27 +2243,41 @@
             },
             {
               "step": "③ 午後便",
-              "time": "14:45発 - 17:10着",
-              "depTime": "14:45",
-              "arrTime": "17:10",
-              "flightNo": "NH309",
-              "orig": "NGO",
-              "dest": "OKA",
-              "route": "名古屋(中部) ➔ 沖縄(那覇)",
+              "time": "14:00発 - 15:10着",
+              "depTime": "14:00",
+              "arrTime": "15:10",
+              "flightNo": "NH27",
+              "orig": "HND",
+              "dest": "ITM",
+              "route": "東京(羽田) ➔ 大阪(伊丹)",
               "model": "76P",
               "is767Confirmed": true,
               "is767Strict": true,
               "tag": "767機種予定"
             },
             {
-              "step": "④ 夜最終",
-              "time": "18:00発 - 20:00着",
-              "depTime": "18:00",
-              "arrTime": "20:00",
-              "flightNo": "NH308",
-              "orig": "OKA",
+              "step": "④ 夕方便",
+              "time": "16:00発 - 17:50着",
+              "depTime": "16:00",
+              "arrTime": "17:50",
+              "flightNo": "NH777",
+              "orig": "ITM",
+              "dest": "CTS",
+              "route": "大阪(伊丹) ➔ 札幌(新千歳)",
+              "model": "76P",
+              "is767Confirmed": true,
+              "is767Strict": true,
+              "tag": "767機種予定"
+            },
+            {
+              "step": "⑤ 夜最終",
+              "time": "18:35発 - 20:25着",
+              "depTime": "18:35",
+              "arrTime": "20:25",
+              "flightNo": "NH712",
+              "orig": "CTS",
               "dest": "NGO",
-              "route": "沖縄(那覇) ➔ 名古屋(中部)",
+              "route": "札幌(新千歳) ➔ 名古屋(中部)",
               "model": "76P",
               "is767Confirmed": true,
               "is767Strict": true,
@@ -2328,35 +2291,35 @@
           "flightNo": "NH672",
           "route": "広島 ➔ 東京(羽田)",
           "time": "07:35発 - 08:55着",
-          "confidence": "85%",
+          "confidence": "87%",
           "reason": "今夜の最有力駐機先(広島)からの朝一始発便"
         },
         {
           "flightNo": "NH59",
           "route": "東京(羽田) ➔ 札幌(新千歳)",
           "time": "10:00発 - 11:35着",
-          "confidence": "85%",
+          "confidence": "87%",
           "reason": "マルコフ遷移・ODPTダイヤ連動便"
         },
         {
           "flightNo": "NH62",
           "route": "札幌(新千歳) ➔ 東京(羽田)",
           "time": "12:30発 - 14:10着",
-          "confidence": "85%",
+          "confidence": "87%",
           "reason": "マルコフ遷移・ODPTダイヤ連動便"
         },
         {
           "flightNo": "NH261",
           "route": "東京(羽田) ➔ 福岡",
           "time": "15:45発 - 17:45着",
-          "confidence": "85%",
+          "confidence": "87%",
           "reason": "マルコフ遷移・ODPTダイヤ連動便"
         },
         {
           "flightNo": "NH266",
           "route": "福岡 ➔ 東京(羽田)",
           "time": "18:30発 - 20:10着",
-          "confidence": "85%",
+          "confidence": "87%",
           "reason": "マルコフ遷移・ODPTダイヤ連動便"
         }
       ]
@@ -4723,7 +4686,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 658,
+    "totalFleetFlights": 662,
     "fleetCount": 11
   }
 }

@@ -94,12 +94,7 @@ const pageSchema = {
 			<div class="status-main-grid">
 				<div class="status-box">
 					<span class="status-label">現在の位置</span>
-					<div class="status-val-main">{aircraft.currentLocation}</div>
-					{lastObserved && (
-						<div style="font-size: 0.78rem; color: #0369a1; font-weight: 600;">
-							直近の確認便: {lastObserved.flightNo}
-						</div>
-					)}
+					<div class="status-val-main" id="current-location-val">{aircraft.currentLocation}</div>
 				</div>
 
 				<div class="status-box">
@@ -129,23 +124,27 @@ const pageSchema = {
 				<p class="today-note">最新の運航情報をもとにした予想です。便や機材は変更される場合があります。</p>
 				{liveFlights.length > 0 || upcomingFlights.length > 0 ? (
 					<div class="upcoming-list">
-						{[...liveFlights, ...upcomingFlights].map((flight, index) => (
-							<div class="upcoming-row">
-								<div class="upcoming-time">
-									<span>{flight.isLive ? '飛行中' : index === liveFlights.length ? '次の便' : '出発'}</span>
-									<b>{flight.depTime || flight.time?.match(/\d{1,2}:\d{2}/)?.[0] || '時刻未定'}</b>
-								</div>
-								<div class="upcoming-detail">
-									<div class="upcoming-route">{flight.route}</div>
-									<div class="upcoming-meta">
-										<b>{flight.flightNo}</b>
-										<span>{flight.arrTime ? `${flight.arrTime}着` : flight.time?.match(/-\s*(\d{1,2}:\d{2})/)?.[1] ? `${flight.time.match(/-\s*(\d{1,2}:\d{2})/)[1]}着` : ''}</span>
-										<span class="upcoming-label">{flight.isLive ? '飛行中' : flight.isPredicted ? '予想' : '運航予定'}</span>
-										{flight.depGate && <span class="upcoming-gate dep-gate">出発搭乗口: {flight.depGate}番</span>}
+						{[...liveFlights, ...upcomingFlights].map((flight, index) => {
+							const depT = flight.depTime || flight.time?.match(/\d{1,2}:\d{2}/)?.[0] || '';
+							const arrT = flight.arrTime || flight.time?.match(/-\s*(\d{1,2}:\d{2})/)?.[1] || '';
+							return (
+								<div class="upcoming-row flight-tracking-row" data-flight-no={flight.flightNo} data-route={flight.route} data-dep-time={depT} data-arr-time={arrT} data-is-live={flight.isLive ? 'true' : 'false'}>
+									<div class="upcoming-time">
+										<span class="flight-step-badge">{flight.isLive ? '飛行中' : index === liveFlights.length ? '次の便' : '出発'}</span>
+										<b>{depT || '時刻未定'}</b>
+									</div>
+									<div class="upcoming-detail">
+										<div class="upcoming-route">{flight.route}</div>
+										<div class="upcoming-meta">
+											<b>{flight.flightNo}</b>
+											<span>{arrT ? `${arrT}着` : ''}</span>
+											<span class="upcoming-label flight-state-label">{flight.isLive ? '飛行中' : flight.isPredicted ? '予想' : '運航予定'}</span>
+											{flight.depGate && <span class="upcoming-gate dep-gate">出発搭乗口: {flight.depGate}番</span>}
+										</div>
 									</div>
 								</div>
-							</div>
-						))}
+							);
+						})}
 
 						{/* 最終便の後にナイトステイ先の列を追加（他行と同一デザイン・到着ゲート表示） */}
 						{(() => {
@@ -439,6 +438,116 @@ const pageSchema = {
 			</a>
 		</div>
 	</div>
+
+	<!-- リアルタイムフライト現在位置＆予定時刻連動スクリプト -->
+	<script is:inline>
+		(function() {
+			function parseTimeToMin(timeStr) {
+				if (!timeStr) return null;
+				var m = timeStr.match(/(\d{1,2}):(\d{2})/);
+				if (!m) return null;
+				return parseInt(m[1], 10) * 60 + parseInt(m[2], 10);
+			}
+
+			function updateFlightStatusByCurrentTime() {
+				var now = new Date();
+				var jstStr = now.toLocaleTimeString('ja-JP', { timeZone: 'Asia/Tokyo', hour12: false });
+				var parts = jstStr.split(':');
+				var nowMin = parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+
+				var rows = Array.from(document.querySelectorAll('.flight-tracking-row'));
+				if (!rows.length) return;
+
+				var locEl = document.getElementById('current-location-val');
+				var hasActiveFlight = false;
+
+				for (var i = 0; i < rows.length; i++) {
+					var row = rows[i];
+					var depMin = parseTimeToMin(row.getAttribute('data-dep-time'));
+					var arrMin = parseTimeToMin(row.getAttribute('data-arr-time'));
+					var route = row.getAttribute('data-route') || '';
+					var isServerLive = row.getAttribute('data-is-live') === 'true';
+
+					var badgeEl = row.querySelector('.flight-step-badge');
+					var labelEl = row.querySelector('.flight-state-label');
+
+					if (depMin !== null && arrMin !== null) {
+						if (nowMin >= depMin && nowMin < arrMin) {
+							hasActiveFlight = true;
+							if (badgeEl) {
+								badgeEl.textContent = '飛行中';
+								badgeEl.style.background = '#16a34a';
+								badgeEl.style.color = '#fff';
+								badgeEl.style.padding = '0.15rem 0.45rem';
+								badgeEl.style.borderRadius = '4px';
+							}
+							if (labelEl) {
+								labelEl.textContent = '飛行中';
+								labelEl.style.background = '#dcfce7';
+								labelEl.style.color = '#15803d';
+							}
+							if (locEl && !isServerLive) {
+								locEl.textContent = '飛行中 (' + route + ')';
+							}
+						} else if (nowMin >= arrMin) {
+							if (badgeEl && badgeEl.textContent === '飛行中') {
+								badgeEl.textContent = '着陸済';
+								badgeEl.style.background = '#64748b';
+								badgeEl.style.color = '#fff';
+							}
+							if (labelEl && labelEl.textContent === '飛行中') {
+								labelEl.textContent = '着陸済';
+								labelEl.style.background = '#f1f5f9';
+								labelEl.style.color = '#475569';
+							}
+						}
+					}
+				}
+
+				if (!hasActiveFlight && locEl && !locEl.textContent.includes('飛行中')) {
+					for (var j = 0; j < rows.length; j++) {
+						var r = rows[j];
+						var aMin = parseTimeToMin(r.getAttribute('data-arr-time'));
+						var nextRow = rows[j + 1];
+						var nextDepMin = nextRow ? parseTimeToMin(nextRow.getAttribute('data-dep-time')) : 1440;
+
+						if (aMin !== null && nowMin >= aMin && (nextDepMin === null || nowMin < nextDepMin)) {
+							var rt = r.getAttribute('data-route') || '';
+							var rtParts = rt.split(/[➔→\-]/);
+							var dest = rtParts.length > 1 ? rtParts[1].trim() : '';
+							if (dest) {
+								locEl.textContent = dest;
+							}
+							break;
+						}
+					}
+				}
+			}
+
+			updateFlightStatusByCurrentTime();
+			setInterval(updateFlightStatusByCurrentTime, 15000);
+
+			async function syncJson() {
+				try {
+					var res = await fetch('/data/chiikawa_weekly_prediction.json?t=' + Date.now());
+					if (!res.ok) return;
+					var data = await res.json();
+					if (data && data.aircraft) {
+						var loc = document.getElementById('current-location-val');
+						if (loc && data.aircraft.currentLocation) {
+							loc.textContent = data.aircraft.currentLocation;
+						}
+						var updated = document.querySelector('.meta-updated');
+						if (updated && data.updatedAt) {
+							updated.textContent = '更新: ' + data.updatedAt;
+						}
+					}
+				} catch (e) {}
+			}
+			setTimeout(syncJson, 3000);
+			setInterval(syncJson, 60000);
+		})();
+	</script>
 </Layout>
 
 <style>
