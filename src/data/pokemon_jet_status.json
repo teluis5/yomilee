@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-16T11:00:22.906Z",
-  "updatedAtJst": "2026/11/16 20:00:22",
+  "updatedAt": "2026-11-16T13:00:22.081Z",
+  "updatedAtJst": "2026/11/16 22:00:22",
   "totalJets": 5,
   "jets": [
     {
@@ -17,9 +17,11 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "東京(羽田) (HND) ➔ 福岡 (FUK)",
-      "currentFlight": {
+      "flightState": "着陸済み 🔵",
+      "currentLocation": "福岡 (FUK)",
+      "currentFlight": null,
+      "nextFlight": null,
+      "lastLandedFlight": {
         "id": "42985f17",
         "flightNo": "NH271",
         "origin": "HND",
@@ -27,15 +29,13 @@
         "destination": "FUK",
         "destinationName": "福岡 (FUK)",
         "depTimeJst": "2026-11-16 19:52",
-        "arrTimeJst": "2026-11-16 21:21",
-        "timeRange": "19:52 - 21:21",
+        "arrTimeJst": "2026-11-16 21:24",
+        "timeRange": "19:52 - 21:24",
         "dateJst": "2026-11-16",
-        "status": "Estimated 21:21",
-        "isLive": true,
+        "status": "Landed 21:24",
+        "isLive": false,
         "isToday": true
       },
-      "nextFlight": null,
-      "lastLandedFlight": null,
       "nightStay": "福岡 (FUK)",
       "domesticPrediction": {
         "nextCandidates": [],
@@ -51,11 +51,11 @@
           "destination": "FUK",
           "destinationName": "福岡 (FUK)",
           "depTimeJst": "2026-11-16 19:52",
-          "arrTimeJst": "2026-11-16 21:21",
-          "timeRange": "19:52 - 21:21",
+          "arrTimeJst": "2026-11-16 21:24",
+          "timeRange": "19:52 - 21:24",
           "dateJst": "2026-11-16",
-          "status": "Estimated 21:21",
-          "isLive": true,
+          "status": "Landed 21:24",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -143,11 +143,11 @@
           "destination": "FUK",
           "destinationName": "福岡 (FUK)",
           "depTimeJst": "2026-11-16 19:52",
-          "arrTimeJst": "2026-11-16 21:21",
-          "timeRange": "19:52 - 21:21",
+          "arrTimeJst": "2026-11-16 21:24",
+          "timeRange": "19:52 - 21:24",
           "dateJst": "2026-11-16",
-          "status": "Estimated 21:21",
-          "isLive": true,
+          "status": "Landed 21:24",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -226,7 +226,7 @@
           "isToday": true
         }
       ],
-      "updatedAt": "2026-11-16T11:00:21.150Z"
+      "updatedAt": "2026-11-16T13:00:19.875Z"
     },
     {
       "id": "pikachu-nh",
@@ -243,28 +243,43 @@
       "color": "#eab308",
       "serviceStart": "2023-06-04",
       "flightState": "飛行中 🟢",
-      "currentLocation": "東京(羽田) (HND) ➔ DEL",
+      "currentLocation": "DEL ➔ 東京(羽田) (HND)",
       "currentFlight": {
-        "id": "429761fc",
-        "flightNo": "NH837",
-        "origin": "HND",
-        "originName": "東京(羽田) (HND)",
-        "destination": "DEL",
-        "destinationName": "DEL",
-        "depTimeJst": "2026-11-16 11:46",
-        "arrTimeJst": "2026-11-16 20:54",
-        "timeRange": "11:46 - 20:54",
+        "id": "JA894A-1794836100",
+        "flightNo": "NH838",
+        "origin": "DEL",
+        "originName": "DEL",
+        "destination": "HND",
+        "destinationName": "東京(羽田) (HND)",
+        "depTimeJst": "2026-11-16 22:35",
+        "arrTimeJst": "2026-11-17 05:55",
+        "timeRange": "22:35 - 05:55",
         "dateJst": "2026-11-16",
-        "status": "Estimated 17:24",
-        "isLive": true,
+        "status": "Estimated dep 19:05",
+        "isLive": false,
         "isToday": true
       },
       "nextFlight": null,
       "lastLandedFlight": null,
-      "nightStay": "DEL",
+      "nightStay": "東京(羽田) (HND)",
       "domesticPrediction": null,
-      "todayFlightsCount": 1,
+      "todayFlightsCount": 2,
       "todayFlights": [
+        {
+          "id": "JA894A-1794836100",
+          "flightNo": "NH838",
+          "origin": "DEL",
+          "originName": "DEL",
+          "destination": "HND",
+          "destinationName": "東京(羽田) (HND)",
+          "depTimeJst": "2026-11-16 22:35",
+          "arrTimeJst": "2026-11-17 05:55",
+          "timeRange": "22:35 - 05:55",
+          "dateJst": "2026-11-16",
+          "status": "Estimated dep 19:05",
+          "isLive": false,
+          "isToday": true
+        },
         {
           "id": "429761fc",
           "flightNo": "NH837",
@@ -273,16 +288,31 @@
           "destination": "DEL",
           "destinationName": "DEL",
           "depTimeJst": "2026-11-16 11:46",
-          "arrTimeJst": "2026-11-16 20:54",
-          "timeRange": "11:46 - 20:54",
+          "arrTimeJst": "2026-11-16 21:12",
+          "timeRange": "11:46 - 21:12",
           "dateJst": "2026-11-16",
-          "status": "Estimated 17:24",
-          "isLive": true,
+          "status": "Landed 17:42",
+          "isLive": false,
           "isToday": true
         }
       ],
       "recentFlights": [
         {
+          "id": "JA894A-1794836100",
+          "flightNo": "NH838",
+          "origin": "DEL",
+          "originName": "DEL",
+          "destination": "HND",
+          "destinationName": "東京(羽田) (HND)",
+          "depTimeJst": "2026-11-16 22:35",
+          "arrTimeJst": "2026-11-17 05:55",
+          "timeRange": "22:35 - 05:55",
+          "dateJst": "2026-11-16",
+          "status": "Estimated dep 19:05",
+          "isLive": false,
+          "isToday": true
+        },
+        {
           "id": "429761fc",
           "flightNo": "NH837",
           "origin": "HND",
@@ -290,11 +320,11 @@
           "destination": "DEL",
           "destinationName": "DEL",
           "depTimeJst": "2026-11-16 11:46",
-          "arrTimeJst": "2026-11-16 20:54",
-          "timeRange": "11:46 - 20:54",
+          "arrTimeJst": "2026-11-16 21:12",
+          "timeRange": "11:46 - 21:12",
           "dateJst": "2026-11-16",
-          "status": "Estimated 17:24",
-          "isLive": true,
+          "status": "Landed 17:42",
+          "isLive": false,
           "isToday": true
         },
         {
@@ -356,24 +386,9 @@
           "status": "Landed 17:24",
           "isLive": false,
           "isToday": false
-        },
-        {
-          "id": "428f07d0",
-          "flightNo": "NH844",
-          "origin": "SIN",
-          "originName": "シンガポール (SIN)",
-          "destination": "HND",
-          "destinationName": "東京(羽田) (HND)",
-          "depTimeJst": "2026-11-13 23:36",
-          "arrTimeJst": "2026-11-14 05:39",
-          "timeRange": "23:36 - 05:39",
-          "dateJst": "2026-11-13",
-          "status": "Landed 05:39",
-          "isLive": false,
-          "isToday": false
         }
       ],
-      "updatedAt": "2026-11-16T11:00:21.591Z"
+      "updatedAt": "2026-11-16T13:00:20.495Z"
     },
     {
       "id": "eevee-nh",
@@ -389,29 +404,44 @@
       "routesSummary": "羽田/成田 ➔ サンフランシスコ / シカゴ / ロンドン / ニューヨーク",
       "color": "#d97706",
       "serviceStart": "2023-08-31",
-      "flightState": "着陸済み 🔵",
-      "currentLocation": "東京(羽田) (HND)",
-      "currentFlight": null,
-      "nextFlight": null,
-      "lastLandedFlight": {
-        "id": "42981f4f",
-        "flightNo": "NH9371",
-        "origin": "NRT",
-        "originName": "東京(成田) (NRT)",
-        "destination": "HND",
-        "destinationName": "東京(羽田) (HND)",
-        "depTimeJst": "2026-11-16 17:56",
-        "arrTimeJst": "2026-11-16 18:45",
-        "timeRange": "17:56 - 18:45",
+      "flightState": "飛行中 🟢",
+      "currentLocation": "東京(羽田) (HND) ➔ ニューヨーク (JFK)",
+      "currentFlight": {
+        "id": "JA784A-1794837900",
+        "flightNo": "NH160",
+        "origin": "HND",
+        "originName": "東京(羽田) (HND)",
+        "destination": "JFK",
+        "destinationName": "ニューヨーク (JFK)",
+        "depTimeJst": "2026-11-16 23:05",
+        "arrTimeJst": "2026-11-17 11:55",
+        "timeRange": "23:05 - 11:55",
         "dateJst": "2026-11-16",
-        "status": "Landed 18:45",
+        "status": "Estimated dep 23:05",
         "isLive": false,
         "isToday": true
       },
-      "nightStay": "東京(羽田) (HND)",
+      "nextFlight": null,
+      "lastLandedFlight": null,
+      "nightStay": "ニューヨーク (JFK)",
       "domesticPrediction": null,
-      "todayFlightsCount": 2,
+      "todayFlightsCount": 3,
       "todayFlights": [
+        {
+          "id": "JA784A-1794837900",
+          "flightNo": "NH160",
+          "origin": "HND",
+          "originName": "東京(羽田) (HND)",
+          "destination": "JFK",
+          "destinationName": "ニューヨーク (JFK)",
+          "depTimeJst": "2026-11-16 23:05",
+          "arrTimeJst": "2026-11-17 11:55",
+          "timeRange": "23:05 - 11:55",
+          "dateJst": "2026-11-16",
+          "status": "Estimated dep 23:05",
+          "isLive": false,
+          "isToday": true
+        },
         {
           "id": "42981f4f",
           "flightNo": "NH9371",
@@ -444,6 +474,21 @@
         }
       ],
       "recentFlights": [
+        {
+          "id": "JA784A-1794837900",
+          "flightNo": "NH160",
+          "origin": "HND",
+          "originName": "東京(羽田) (HND)",
+          "destination": "JFK",
+          "destinationName": "ニューヨーク (JFK)",
+          "depTimeJst": "2026-11-16 23:05",
+          "arrTimeJst": "2026-11-17 11:55",
+          "timeRange": "23:05 - 11:55",
+          "dateJst": "2026-11-16",
+          "status": "Estimated dep 23:05",
+          "isLive": false,
+          "isToday": true
+        },
         {
           "id": "42981f4f",
           "flightNo": "NH9371",
@@ -518,24 +563,9 @@
           "status": "Landed 18:11",
           "isLive": false,
           "isToday": false
-        },
-        {
-          "id": "428d3271",
-          "flightNo": "NH211",
-          "origin": "HND",
-          "originName": "東京(羽田) (HND)",
-          "destination": "LHR",
-          "destinationName": "ロンドン(ヒースロー) (LHR)",
-          "depTimeJst": "2026-11-13 10:25",
-          "arrTimeJst": "2026-11-13 23:59",
-          "timeRange": "10:25 - 23:59",
-          "dateJst": "2026-11-13",
-          "status": "Landed 14:59",
-          "isLive": false,
-          "isToday": false
         }
       ],
-      "updatedAt": "2026-11-16T11:00:22.020Z"
+      "updatedAt": "2026-11-16T13:00:20.969Z"
     },
     {
       "id": "pokemon-green",
@@ -666,7 +696,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-16T11:00:22.455Z"
+      "updatedAt": "2026-11-16T13:00:21.512Z"
     },
     {
       "id": "pikachu-legacy",
@@ -692,10 +722,10 @@
         "destination": "IAH",
         "destinationName": "IAH",
         "depTimeJst": "2026-11-16 11:36",
-        "arrTimeJst": "2026-11-16 23:00",
-        "timeRange": "11:36 - 23:00",
+        "arrTimeJst": "2026-11-16 23:01",
+        "timeRange": "11:36 - 23:01",
         "dateJst": "2026-11-16",
-        "status": "Estimated 08:00",
+        "status": "Estimated 08:01",
         "isLive": true,
         "isToday": true
       },
@@ -713,10 +743,10 @@
           "destination": "IAH",
           "destinationName": "IAH",
           "depTimeJst": "2026-11-16 11:36",
-          "arrTimeJst": "2026-11-16 23:00",
-          "timeRange": "11:36 - 23:00",
+          "arrTimeJst": "2026-11-16 23:01",
+          "timeRange": "11:36 - 23:01",
           "dateJst": "2026-11-16",
-          "status": "Estimated 08:00",
+          "status": "Estimated 08:01",
           "isLive": true,
           "isToday": true
         }
@@ -730,10 +760,10 @@
           "destination": "IAH",
           "destinationName": "IAH",
           "depTimeJst": "2026-11-16 11:36",
-          "arrTimeJst": "2026-11-16 23:00",
-          "timeRange": "11:36 - 23:00",
+          "arrTimeJst": "2026-11-16 23:01",
+          "timeRange": "11:36 - 23:01",
           "dateJst": "2026-11-16",
-          "status": "Estimated 08:00",
+          "status": "Estimated 08:01",
           "isLive": true,
           "isToday": true
         },
@@ -813,7 +843,7 @@
           "isToday": false
         }
       ],
-      "updatedAt": "2026-11-16T11:00:22.905Z"
+      "updatedAt": "2026-11-16T13:00:22.080Z"
     }
   ]
 }

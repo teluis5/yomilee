@@ -114,9 +114,33 @@ const pageSchema = {
 			</div>
 		</div>
 
+		<!-- クイック目次ナビゲーション（横並びピルボタン） -->
+		<nav class="quick-nav" aria-label="ページ内目次">
+			<a href="#sec-today" class="quick-nav-link">
+				<span class="qn-icon">✈️</span>
+				<span>今日の運航</span>
+			</a>
+			{tomorrowData && (
+				<a href="#sec-tomorrow" class="quick-nav-link">
+					<span class="qn-icon">📅</span>
+					<span>明日の予想</span>
+				</a>
+			)}
+			{forecastDays.length > 0 && (
+				<a href="#sec-weekly" class="quick-nav-link">
+					<span class="qn-icon">📊</span>
+					<span>週間予想</span>
+				</a>
+			)}
+			<a href="#sec-faq" class="quick-nav-link">
+				<span class="qn-icon">❓</span>
+				<span>よくある質問</span>
+			</a>
+		</nav>
+
 		<!-- 本日の運航予定 -->
 		{todayData && (
-			<section class="dash-section today-upcoming">
+			<section class="dash-section today-upcoming" id="sec-today">
 				<div class="sec-head">
 					<h2 class="sec-title">今日のこれからの運航予想（{todayData.dateJa}）</h2>
 					<span class="sec-tag tag-today">最終更新 {updatedAt}</span>
@@ -204,9 +228,12 @@ const pageSchema = {
 			</section>
 		)}
 
+		<!-- タイムテーブル直下の広告枠（10秒離脱ユーザー向け視認エリア） -->
+		<Ad position="custom" />
+
 		<!-- ② 明日の予定 -->
 		{tomorrowData && (
-			<section class="dash-section">
+			<section class="dash-section" id="sec-tomorrow">
 				<div class="sec-head">
 					<h2 class="sec-title">明日の運航予想（{tomorrowData.dateJa}）</h2>
 					<span class="sec-sub-note">最新の運航情報をもとにした予想</span>
@@ -315,7 +342,7 @@ const pageSchema = {
 
 		<!-- ③ 明日以降の予定（週間タイムテーブル連鎖予想） -->
 		{forecastDays.length > 0 && (
-			<section class="dash-section">
+			<section class="dash-section" id="sec-weekly">
 				<div class="sec-head">
 					<h2 class="sec-title">明日以降の予定（週間連鎖タイムテーブル予想）</h2>
 					<span class="sec-sub-note">タップで各日のプランA〜C詳細フライトを展開</span>
@@ -395,7 +422,7 @@ const pageSchema = {
 		</section>
 
 		<!-- ❓ ちいかわジェット（ちいかわじぇっと）今日の運航・よくある質問（FAQ） -->
-		<section class="section-card faq-section">
+		<section class="section-card faq-section" id="sec-faq">
 			<div class="sc-head">
 				<h2 class="sc-title">❓ よくある質問：ちいかわジェット（ちいかわじぇっと）今日の運航・ダイヤ</h2>
 			</div>
@@ -661,7 +688,7 @@ const pageSchema = {
 		border: 1px solid #cbd5e1;
 		border-radius: 10px;
 		padding: 0.9rem 1.1rem;
-		margin-bottom: 1.5rem;
+		margin-bottom: 0.75rem;
 	}
 	.status-top-meta {
 		display: flex;
@@ -684,6 +711,52 @@ const pageSchema = {
 	}
 	.meta-updated {
 		margin-left: auto;
+	}
+
+	/* クイック目次ナビゲーション */
+	.quick-nav {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		overflow-x: auto;
+		padding: 0 0 0.85rem;
+		margin-bottom: 0.65rem;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+	}
+	.quick-nav::-webkit-scrollbar {
+		display: none;
+	}
+	.quick-nav-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		background: #ffffff;
+		border: 1px solid #cbd5e1;
+		border-radius: 9999px;
+		padding: 0.4rem 0.85rem;
+		font-size: 0.82rem;
+		font-weight: 700;
+		color: #334155;
+		text-decoration: none;
+		white-space: nowrap;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+		transition: all 0.15s ease;
+		flex-shrink: 0;
+	}
+	.quick-nav-link:hover {
+		background: #eff6ff;
+		border-color: #3b82f6;
+		color: #1d4ed8;
+		transform: translateY(-1px);
+		box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15);
+	}
+	.qn-icon {
+		font-size: 0.88rem;
+		line-height: 1;
+	}
+	.dash-section, .faq-section {
+		scroll-margin-top: 1.25rem;
 	}
 	.status-main-grid {
 		display: grid;
