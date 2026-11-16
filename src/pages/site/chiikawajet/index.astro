@@ -190,18 +190,6 @@ const pageSchema = {
 						))}
 					</details>
 				)}
-				{todayData.firstFlightHistory?.morning?.candidates?.length > 0 && (
-					<div class="first-flight-candidates">
-						<h3>本日の朝に更新した初便候補</h3>
-						<p>更新 {new Date(todayData.firstFlightHistory.morning.updatedAtIso).toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}</p>
-						<ol>{todayData.firstFlightHistory.morning.candidates.map(f => <li><b>{f.flightNo}</b> {f.route} {f.depTime}発</li>)}</ol>
-					</div>
-				)}
-				{todayData.firstFlightArrival && (
-					<p class="today-note">前夜の最終到着 {todayData.firstFlightArrival.flightNo} {todayData.firstFlightArrival.time}着
-						{todayData.firstFlightArrival.gate && ` · 到着ゲート ${todayData.firstFlightArrival.gate}`}
-					</p>
-				)}
 				{hasChangedPlan && (
 					<div class="change-reasons">
 						<b>前夜からの変更</b>
