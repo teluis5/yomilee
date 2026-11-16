@@ -1,6 +1,5 @@
 ---
 import Layout from '../../../layouts/BlogPost.astro';
-import Ad from '../../../components/Ad.astro';
 import predictionData from '../../../data/chiikawa_weekly_prediction.json';
 import heroImage from '../../../assets/images/chiikawajet_ogp.png';
 
@@ -229,9 +228,6 @@ const pageSchema = {
 			</section>
 		)}
 
-		<!-- タイムテーブル直下の広告枠（10秒離脱ユーザー向け視認エリア） -->
-		<Ad position="custom" />
-
 		<!-- ② 明日の予定 -->
 		{tomorrowData && (
 			<section class="dash-section" id="sec-tomorrow">
@@ -347,8 +343,6 @@ const pageSchema = {
 				</div>
 			</section>
 		)}
-
-		<Ad position="bottom" />
 
 		<section class="dash-section">
 			<div class="sec-head"><h2 class="sec-title">保存した初便予想の検証</h2></div>
