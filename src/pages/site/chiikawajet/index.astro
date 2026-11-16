@@ -283,68 +283,6 @@ const pageSchema = {
 			</section>
 		)}
 
-		<!-- 前夜予想と実績の比較 -->
-		{todayData && (
-			<section class="dash-section">
-				<div class="sec-head">
-					<h2 class="sec-title">前夜予想と確認済みの運航（{todayData.dateJa}）</h2>
-
-				</div>
-
-				{todayData.todayComparison && todayData.todayComparison.length > 0 ? (
-					<div class="simple-table-wrap">
-						<table class="simple-comp-table">
-							<thead>
-								<tr>
-									<th>便</th>
-									{todayData.todayPlanHeaders.map(h => <th>前夜 {h.name} ({h.prob}%)</th>)}
-									<th>運航実績</th>
-								</tr>
-							</thead>
-							<tbody>
-								{todayData.todayComparison.map((row, idx) => {
-									const fmt = (item) => {
-										if (!item) return null;
-										const rt = item.route ? item.route.replace(/東京\(羽田\)/g, '羽田').replace(/大阪\(伊丹\)/g, '伊丹').replace(/札幌\(新千歳\)/g, '新千歳').replace(/ ➔ /g, '➔') : '';
-										const tm = item.time ? item.time.replace(/発 - /g, '-').replace(/着/g, '') : '';
-										return { no: item.flightNo || '', rt, tm };
-									};
-									const plans = [row.planA, row.planB, row.planC].slice(0, todayData.todayPlanHeaders.length);
-									const actual = row.actual?.isLanded || row.actual?.isLive ? row.actual : null;
-									return (
-										<tr>
-											<td class="col-num">#{idx + 1}</td>
-											{plans.map(item => {
-												const plan = fmt(item);
-												return <td>{plan ? (
-													<>
-														<div><span class="fn-text">{plan.no}</span> {plan.rt}</div>
-														<div class="tm-text">{plan.tm}</div>
-														{item.update && <small>{item.update}</small>}
-													</>
-												) : '—'}</td>;
-											})}
-											<td class="col-act">
-												{actual ? (
-													<>
-														<div><span class="fn-text">{actual.flightNo}</span> {fmt(actual).rt}</div>
-														<div class="tm-text">{actual.isLanded ? '着陸済' : '飛行中'} {actual.time}</div>
-													</>
-												) : '未確認'}
-											</td>
-										</tr>
-									);
-								})}
-							</tbody>
-						</table>
-					</div>
-				) : <p>確認済みの運航はまだありません。</p>}
-				{!todayData.todayPlanHeaders?.length && <p>前夜予想の記録はありません。</p>}
-
-			</section>
-		)}
-
-
 		<!-- ③ 明日以降の予定（週間タイムテーブル連鎖予想） -->
 		{forecastDays.length > 0 && (
 			<section class="dash-section" id="sec-weekly">
