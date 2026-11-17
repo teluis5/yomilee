@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月17日 10:00",
-  "updatedAtIso": "2026-11-17T01:00:05.234Z",
+  "updatedAt": "2026年11月17日 10:15",
+  "updatedAtIso": "2026-11-17T01:15:04.977Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
@@ -10,19 +10,19 @@
     "currentSpot": null,
     "spotConfidenceNote": null,
     "isAirborne": false,
-    "nightStay": "広島(92%) / 東京(羽田)(8%)",
+    "nightStay": "広島(82%) / 東京(羽田)(18%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
     "nightStayProbabilities": [
       {
         "airport": "広島",
         "code": "HIJ",
-        "probability": 92
+        "probability": 82
       },
       {
         "airport": "東京(羽田)",
         "code": "HND",
-        "probability": 8
+        "probability": 18
       }
     ]
   },
@@ -1637,20 +1637,20 @@
         }
       },
       "currentAirport": "東京(羽田)",
-      "nightStay": "広島(92%) / 東京(羽田)(8%)",
+      "nightStay": "広島(82%) / 東京(羽田)(18%)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH672 (広島 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 92% / 東京(羽田) 8% と推定されます。",
-      "todayOutlook": "現在 NH672 (広島 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 92% / 東京(羽田) 8% と推定されます。",
+      "pendingNightStayNote": "現在 NH59 (東京(羽田) ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 82% / 東京(羽田) 18% と推定されます。",
+      "todayOutlook": "現在 NH59 (東京(羽田) ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 82% / 東京(羽田) 18% と推定されます。",
       "nightStayProbabilities": [
         {
           "airport": "広島",
           "code": "HIJ",
-          "probability": 92
+          "probability": 82
         },
         {
           "airport": "東京(羽田)",
           "code": "HND",
-          "probability": 8
+          "probability": 18
         }
       ],
       "plans": [
@@ -1659,7 +1659,7 @@
           "planName": "プランA (広島泊)",
           "stayCode": "HIJ",
           "rank": "本命 ◎",
-          "probability": 80,
+          "probability": 78,
           "title": "【今夜広島泊シナリオ】広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
           "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
           "flights": [
@@ -1678,7 +1678,7 @@
               "dest": "CTS",
               "route": "東京(羽田) ➔ 札幌(新千歳)",
               "time": "10:00発 - 11:35着",
-              "tag": "予想接続(76P)",
+              "tag": "本日確定枠",
               "step": "② 第2便"
             },
             {
@@ -1724,7 +1724,7 @@
           "planName": "プランB (羽田泊)",
           "stayCode": "HND",
           "rank": "有力 ◯",
-          "probability": 10,
+          "probability": 12,
           "title": "【今夜羽田泊シナリオ】広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
           "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
           "flights": [
@@ -1743,7 +1743,7 @@
               "dest": "CTS",
               "route": "東京(羽田) ➔ 札幌(新千歳)",
               "time": "10:00発 - 11:35着",
-              "tag": "予想接続(76P)",
+              "tag": "本日確定枠",
               "step": "② 第2便"
             },
             {
@@ -1777,12 +1777,12 @@
         },
         {
           "planId": "today-plan-c",
-          "planName": "プランC (広島泊)",
-          "stayCode": "HIJ",
+          "planName": "プランC (羽田泊)",
+          "stayCode": "HND",
           "rank": "対抗 ▲",
           "probability": 10,
-          "title": "【今夜広島泊シナリオ】広島 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
-          "routeSummary": "広島 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
+          "title": "【今夜羽田泊シナリオ】広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 広島 ➔ 羽田(泊)",
+          "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 広島 ➔ 羽田(泊)",
           "flights": [
             {
               "flightNo": "NH672",
@@ -1794,20 +1794,20 @@
               "step": "① 第1便"
             },
             {
-              "flightNo": "NH21",
+              "flightNo": "NH59",
               "orig": "HND",
-              "dest": "ITM",
-              "route": "東京(羽田) ➔ 大阪(伊丹)",
-              "time": "11:00発 - 12:10着",
-              "tag": "予想接続(76P)",
+              "dest": "CTS",
+              "route": "東京(羽田) ➔ 札幌(新千歳)",
+              "time": "10:00発 - 11:35着",
+              "tag": "本日確定枠",
               "step": "② 第2便"
             },
             {
-              "flightNo": "NH26",
-              "orig": "ITM",
+              "flightNo": "NH62",
+              "orig": "CTS",
               "dest": "HND",
-              "route": "大阪(伊丹) ➔ 東京(羽田)",
-              "time": "13:00発 - 14:10着",
+              "route": "札幌(新千歳) ➔ 東京(羽田)",
+              "time": "12:30発 - 14:10着",
               "tag": "予想接続(76P)",
               "step": "③ 第3便"
             },
@@ -1826,17 +1826,8 @@
               "dest": "HND",
               "route": "広島 ➔ 東京(羽田)",
               "time": "17:20発 - 18:45着",
-              "tag": "予想接続(76P)",
+              "tag": "🌙羽田泊候補",
               "step": "⑤ 第5便"
-            },
-            {
-              "flightNo": "NH685",
-              "orig": "HND",
-              "dest": "HIJ",
-              "route": "東京(羽田) ➔ 広島",
-              "time": "19:40発 - 21:10着",
-              "tag": "🌙広島泊候補",
-              "step": "⑥ 第6便"
             }
           ]
         }
@@ -1971,18 +1962,14 @@
         },
         {
           "flightNo": "NH59",
-          "origCode": "HND",
-          "destCode": "CTS",
           "route": "東京(羽田) ➔ 札幌(新千歳)",
-          "depTime": "10:00",
-          "arrTime": "11:35",
-          "time": "10:00発 - 11:35着 (予想)",
-          "status": "後続便候補",
+          "time": "10:00発 - 11:35着",
+          "depGate": "60",
+          "arrGate": null,
+          "status": "出発予定 (10:01)",
           "isLanded": false,
           "isLive": false,
-          "isPredicted": true,
-          "depGate": "60",
-          "arrGate": null
+          "isPredicted": false
         },
         {
           "flightNo": "NH62",
@@ -2037,7 +2024,7 @@
           "depTime": "19:40",
           "arrTime": "21:10",
           "time": "19:40発 - 21:10着 (予想)",
-          "status": "本命予想 (92%・広島ステイ候補)",
+          "status": "本命予想 (82%・広島ステイ候補)",
           "isLanded": false,
           "isLive": false,
           "isPredicted": true,
@@ -2118,7 +2105,7 @@
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
       "expectedStart": "広島発 (NH672)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH672 (広島 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 92% / 東京(羽田) 8% と推定されます。",
+      "pendingNightStayNote": "現在 NH59 (東京(羽田) ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 82% / 東京(羽田) 18% と推定されます。",
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
@@ -2128,7 +2115,7 @@
           "stayCode": "HND",
           "startAirportCode": "HIJ",
           "rank": "本命 ◎",
-          "probability": 86,
+          "probability": 81,
           "title": "【前夜広島泊(NH672始発)】広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
           "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
           "airports": [
@@ -2417,35 +2404,35 @@
           "flightNo": "NH672",
           "route": "広島 ➔ 東京(羽田)",
           "time": "07:35発 - 08:55着",
-          "confidence": "86%",
+          "confidence": "81%",
           "reason": "今夜の最有力駐機先(広島)からの朝一始発便"
         },
         {
           "flightNo": "NH59",
           "route": "東京(羽田) ➔ 札幌(新千歳)",
           "time": "10:00発 - 11:35着",
-          "confidence": "86%",
+          "confidence": "81%",
           "reason": "マルコフ遷移・ODPTダイヤ連動便"
         },
         {
           "flightNo": "NH62",
           "route": "札幌(新千歳) ➔ 東京(羽田)",
           "time": "12:30発 - 14:10着",
-          "confidence": "86%",
+          "confidence": "81%",
           "reason": "マルコフ遷移・ODPTダイヤ連動便"
         },
         {
           "flightNo": "NH261",
           "route": "東京(羽田) ➔ 福岡",
           "time": "15:45発 - 17:45着",
-          "confidence": "86%",
+          "confidence": "81%",
           "reason": "マルコフ遷移・ODPTダイヤ連動便"
         },
         {
           "flightNo": "NH266",
           "route": "福岡 ➔ 東京(羽田)",
           "time": "18:30発 - 20:10着",
-          "confidence": "86%",
+          "confidence": "81%",
           "reason": "マルコフ遷移・ODPTダイヤ連動便"
         }
       ]
@@ -4736,7 +4723,7 @@
       "code": "FUK",
       "name": "福岡空港",
       "note": "羽田幹線（NH245/NH250/NH265/NH270等）で連日高頻度運航。",
-      "prob": 39,
+      "prob": 38,
       "level": "B (中確率)"
     },
     {
@@ -4839,7 +4826,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 671,
+    "totalFleetFlights": 672,
     "fleetCount": 11
   }
 }
