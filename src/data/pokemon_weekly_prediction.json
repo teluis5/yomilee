@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月17日 10:00",
-  "updatedAtIso": "2026-11-17T01:00:07.776Z",
+  "updatedAt": "2026年11月17日 11:00",
+  "updatedAtIso": "2026-11-17T02:00:07.771Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,9 +17,26 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "着陸済・駐機中 🟡",
-      "currentLocation": "東京(羽田) (HND)",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "東京(羽田) (HND) ➔ 沖縄(那覇) (OKA)",
+      "currentFlight": {
+        "flightNo": "NH469",
+        "origin": "HND",
+        "dest": "OKA",
+        "originName": "東京(羽田) (HND)",
+        "destinationName": "沖縄(那覇) (OKA)",
+        "origCode": "HND",
+        "destCode": "OKA",
+        "route": "東京(羽田) ➔ 沖縄(那覇)",
+        "depTime": "10:49",
+        "arrTime": "13:25",
+        "timeRange": "10:49 - 13:25",
+        "dateJst": "2026-11-17",
+        "status": "Estimated 13:12",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH242",
@@ -38,9 +55,45 @@
           "isLive": false,
           "isLanded": true,
           "isToday": true
+        },
+        {
+          "flightNo": "NH469",
+          "origin": "HND",
+          "dest": "OKA",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "沖縄(那覇) (OKA)",
+          "origCode": "HND",
+          "destCode": "OKA",
+          "route": "東京(羽田) ➔ 沖縄(那覇)",
+          "depTime": "10:49",
+          "arrTime": "13:25",
+          "timeRange": "10:49 - 13:25",
+          "dateJst": "2026-11-17",
+          "status": "Estimated 13:12",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
         }
       ],
       "recentFlights": [
+        {
+          "flightNo": "NH469",
+          "origin": "HND",
+          "dest": "OKA",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "沖縄(那覇) (OKA)",
+          "origCode": "HND",
+          "destCode": "OKA",
+          "route": "東京(羽田) ➔ 沖縄(那覇)",
+          "depTime": "10:49",
+          "arrTime": "13:25",
+          "timeRange": "10:49 - 13:25",
+          "dateJst": "2026-11-17",
+          "status": "Estimated 13:12",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH242",
           "origin": "FUK",
@@ -127,24 +180,6 @@
           "timeRange": "11:48 - 13:06",
           "dateJst": "2026-11-16",
           "status": "Landed 13:06",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
-        },
-        {
-          "flightNo": "NH585",
-          "origin": "HND",
-          "dest": "MYJ",
-          "originName": "東京(羽田) (HND)",
-          "destinationName": "松山 (MYJ)",
-          "origCode": "HND",
-          "destCode": "MYJ",
-          "route": "東京(羽田) ➔ 松山",
-          "depTime": "09:43",
-          "arrTime": "10:49",
-          "timeRange": "09:43 - 10:49",
-          "dateJst": "2026-11-16",
-          "status": "Landed 10:49",
           "isLive": false,
           "isLanded": true,
           "isToday": false
@@ -309,7 +344,7 @@
         "arrTime": "11:55",
         "timeRange": "23:23 - 11:55",
         "dateJst": "2026-11-16",
-        "status": "Estimated 21:31",
+        "status": "Estimated 21:34",
         "isLive": true,
         "isLanded": false,
         "isToday": false
@@ -329,7 +364,7 @@
           "arrTime": "11:55",
           "timeRange": "23:23 - 11:55",
           "dateJst": "2026-11-16",
-          "status": "Estimated 21:31",
+          "status": "Estimated 21:34",
           "isLive": true,
           "isLanded": false,
           "isToday": false
@@ -455,7 +490,7 @@
         "arrTime": "18:15",
         "timeRange": "09:02 - 18:15",
         "dateJst": "2026-11-17",
-        "status": "Estimated 20:02",
+        "status": "Estimated 20:04",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -474,7 +509,7 @@
           "arrTime": "18:15",
           "timeRange": "09:02 - 18:15",
           "dateJst": "2026-11-17",
-          "status": "Estimated 20:02",
+          "status": "Estimated 20:04",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -494,7 +529,7 @@
           "arrTime": "18:15",
           "timeRange": "09:02 - 18:15",
           "dateJst": "2026-11-17",
-          "status": "Estimated 20:02",
+          "status": "Estimated 20:04",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -758,89 +793,78 @@
     }
   ],
   "domesticPrediction": {
-    "nightStayName": "羽田 (62%)",
+    "nightStayName": "羽田 (94%)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
     "nightStayProbabilities": [
       {
         "code": "HND",
         "airport": "羽田",
-        "weight": 5.443200000000001,
-        "floored": 62,
-        "remainder": 0.8025751072961427,
+        "weight": 18.079200000000004,
+        "floored": 94,
+        "remainder": 0.09780775716694734,
         "originalIndex": 0,
-        "probability": 62
-      },
-      {
-        "code": "MYJ",
-        "airport": "松山",
-        "weight": 1.3608,
-        "floored": 15,
-        "remainder": 0.4506437768240321,
-        "originalIndex": 1,
-        "probability": 15
-      },
-      {
-        "code": "TAK",
-        "airport": "高松",
-        "weight": 1.0584,
-        "floored": 12,
-        "remainder": 0.01716738197424661,
-        "originalIndex": 2,
-        "probability": 12
+        "probability": 94
       },
       {
         "code": "FUK",
         "airport": "福岡",
-        "weight": 0.945,
-        "floored": 11,
-        "remainder": 0.7296137339055768,
+        "weight": 0.378,
+        "floored": 5,
+        "remainder": -3.0326025857223167,
+        "originalIndex": 1,
+        "probability": 5
+      },
+      {
+        "code": "ITM",
+        "airport": "伊丹",
+        "weight": 0.378,
+        "floored": 5,
+        "remainder": -3.0326025857223167,
+        "originalIndex": 2,
+        "probability": 5
+      },
+      {
+        "code": "MYJ",
+        "airport": "松山",
+        "weight": 0.378,
+        "floored": 5,
+        "remainder": -3.0326025857223167,
         "originalIndex": 3,
-        "probability": 11
+        "probability": 5
       }
     ],
     "predictedRemainingToday": [
       {
-        "flightNo": "NH63",
-        "origCode": "HND",
-        "destCode": "CTS",
-        "route": "東京(羽田) ➔ 札幌(新千歳)",
-        "depTime": "12:00",
-        "arrTime": "13:35",
-        "time": "12:00発 - 13:35着 (予想)",
-        "status": "後続便候補",
-        "isPredicted": true
-      },
-      {
-        "flightNo": "NH66",
-        "origCode": "CTS",
+        "flightNo": "NH468",
+        "origCode": "OKA",
         "destCode": "HND",
-        "route": "札幌(新千歳) ➔ 東京(羽田)",
-        "depTime": "14:30",
-        "arrTime": "16:10",
-        "time": "14:30発 - 16:10着 (予想)",
+        "route": "沖縄(那覇) ➔ 東京(羽田)",
+        "depTime": "14:20",
+        "arrTime": "16:40",
+        "time": "14:20発 - 16:40着 (予想)",
         "status": "後続便候補",
         "isPredicted": true
       },
       {
-        "flightNo": "NH265",
+        "flightNo": "NH595",
         "origCode": "HND",
-        "destCode": "FUK",
-        "route": "東京(羽田) ➔ 福岡",
-        "depTime": "17:05",
-        "arrTime": "19:05",
-        "time": "17:05発 - 19:05着 (予想)",
+        "destCode": "MYJ",
+        "route": "東京(羽田) ➔ 松山",
+        "depTime": "17:25",
+        "arrTime": "19:00",
+        "time": "17:25発 - 19:00着 (予想)",
         "status": "後続便候補",
         "isPredicted": true
       },
       {
-        "flightNo": "NH270",
-        "origCode": "FUK",
+        "flightNo": "NH598",
+        "origCode": "MYJ",
         "destCode": "HND",
-        "route": "福岡 ➔ 東京(羽田)",
-        "depTime": "19:55",
-        "arrTime": "21:35",
-        "time": "19:55発 - 21:35着 (予想)",
+        "route": "松山 ➔ 東京(羽田)",
+        "depTime": "19:50",
+        "arrTime": "21:15",
+        "time": "19:50発 - 21:15着 (予想)",
         "status": "予想 (羽田泊候補)",
         "isPredicted": true
       }
@@ -851,9 +875,9 @@
         "planName": "プランA (羽田泊)",
         "stayCode": "HND",
         "rank": "本命 ◎",
-        "probability": 43,
-        "title": "【今夜羽田泊シナリオ】福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
-        "routeSummary": "福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
+        "probability": 95,
+        "title": "【今夜羽田泊シナリオ】福岡 ➔ 羽田 ➔ 那覇 ➔ 羽田 ➔ 松山 ➔ 羽田(泊)",
+        "routeSummary": "福岡 ➔ 羽田 ➔ 那覇 ➔ 羽田 ➔ 松山 ➔ 羽田(泊)",
         "flights": [
           {
             "flightNo": "NH242",
@@ -865,38 +889,38 @@
             "step": "第1便"
           },
           {
-            "flightNo": "NH63",
+            "flightNo": "NH469",
             "orig": "HND",
-            "dest": "CTS",
-            "route": "東京(羽田) ➔ 札幌(新千歳)",
-            "time": "12:00発 - 13:35着",
-            "tag": "予想接続 (78P)",
+            "dest": "OKA",
+            "route": "東京(羽田) ➔ 沖縄(那覇)",
+            "time": "10:49発 - 13:25着",
+            "tag": "飛行中 🟢",
             "step": "第2便"
           },
           {
-            "flightNo": "NH66",
-            "orig": "CTS",
+            "flightNo": "NH468",
+            "orig": "OKA",
             "dest": "HND",
-            "route": "札幌(新千歳) ➔ 東京(羽田)",
-            "time": "14:30発 - 16:10着",
+            "route": "沖縄(那覇) ➔ 東京(羽田)",
+            "time": "14:20発 - 16:40着",
             "tag": "予想接続 (78P)",
             "step": "第3便"
           },
           {
-            "flightNo": "NH265",
+            "flightNo": "NH595",
             "orig": "HND",
-            "dest": "FUK",
-            "route": "東京(羽田) ➔ 福岡",
-            "time": "17:05発 - 19:05着",
+            "dest": "MYJ",
+            "route": "東京(羽田) ➔ 松山",
+            "time": "17:25発 - 19:00着",
             "tag": "予想接続 (78P)",
             "step": "第4便"
           },
           {
-            "flightNo": "NH270",
-            "orig": "FUK",
+            "flightNo": "NH598",
+            "orig": "MYJ",
             "dest": "HND",
-            "route": "福岡 ➔ 東京(羽田)",
-            "time": "19:55発 - 21:35着",
+            "route": "松山 ➔ 東京(羽田)",
+            "time": "19:50発 - 21:15着",
             "tag": "🌙羽田泊候補",
             "step": "第5便"
           }
@@ -904,68 +928,12 @@
       },
       {
         "planId": "today-plan-2",
-        "planName": "プランB (羽田泊)",
-        "stayCode": "HND",
-        "rank": "有力 ◯",
-        "probability": 43,
-        "title": "【今夜羽田泊シナリオ】福岡 ➔ 羽田 ➔ 松山 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
-        "routeSummary": "福岡 ➔ 羽田 ➔ 松山 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
-        "flights": [
-          {
-            "flightNo": "NH242",
-            "orig": "FUK",
-            "dest": "HND",
-            "route": "福岡 ➔ 東京(羽田)",
-            "time": "07:54発 - 09:13着",
-            "tag": "運航完了",
-            "step": "第1便"
-          },
-          {
-            "flightNo": "NH589",
-            "orig": "HND",
-            "dest": "MYJ",
-            "route": "東京(羽田) ➔ 松山",
-            "time": "12:15発 - 13:50着",
-            "tag": "予想接続 (78P)",
-            "step": "第2便"
-          },
-          {
-            "flightNo": "NH592",
-            "orig": "MYJ",
-            "dest": "HND",
-            "route": "松山 ➔ 東京(羽田)",
-            "time": "14:35発 - 15:55着",
-            "tag": "予想接続 (78P)",
-            "step": "第3便"
-          },
-          {
-            "flightNo": "NH265",
-            "orig": "HND",
-            "dest": "FUK",
-            "route": "東京(羽田) ➔ 福岡",
-            "time": "17:05発 - 19:05着",
-            "tag": "予想接続 (78P)",
-            "step": "第4便"
-          },
-          {
-            "flightNo": "NH270",
-            "orig": "FUK",
-            "dest": "HND",
-            "route": "福岡 ➔ 東京(羽田)",
-            "time": "19:55発 - 21:35着",
-            "tag": "🌙羽田泊候補",
-            "step": "第5便"
-          }
-        ]
-      },
-      {
-        "planId": "today-plan-3",
-        "planName": "プランC (福岡泊)",
+        "planName": "プランB (福岡泊)",
         "stayCode": "FUK",
-        "rank": "対抗 ▲",
-        "probability": 14,
-        "title": "【今夜福岡泊シナリオ】福岡 ➔ 羽田 ➔ 石垣 ➔ 羽田 ➔ 福岡(泊)",
-        "routeSummary": "福岡 ➔ 羽田 ➔ 石垣 ➔ 羽田 ➔ 福岡(泊)",
+        "rank": "有力 ◯",
+        "probability": 10,
+        "title": "【今夜福岡泊シナリオ】福岡 ➔ 羽田 ➔ 那覇 ➔ 羽田 ➔ 福岡(泊)",
+        "routeSummary": "福岡 ➔ 羽田 ➔ 那覇 ➔ 羽田 ➔ 福岡(泊)",
         "flights": [
           {
             "flightNo": "NH242",
@@ -977,20 +945,20 @@
             "step": "第1便"
           },
           {
-            "flightNo": "NH91",
+            "flightNo": "NH469",
             "orig": "HND",
-            "dest": "ISG",
-            "route": "東京(羽田) ➔ 石垣",
-            "time": "11:40発 - 15:00着",
-            "tag": "予想接続 (78P)",
+            "dest": "OKA",
+            "route": "東京(羽田) ➔ 沖縄(那覇)",
+            "time": "10:49発 - 13:25着",
+            "tag": "飛行中 🟢",
             "step": "第2便"
           },
           {
-            "flightNo": "NH92",
-            "orig": "ISG",
+            "flightNo": "NH468",
+            "orig": "OKA",
             "dest": "HND",
-            "route": "石垣 ➔ 東京(羽田)",
-            "time": "15:50発 - 18:30着",
+            "route": "沖縄(那覇) ➔ 東京(羽田)",
+            "time": "14:20発 - 16:40着",
             "tag": "予想接続 (78P)",
             "step": "第3便"
           },
@@ -1001,6 +969,53 @@
             "route": "東京(羽田) ➔ 福岡",
             "time": "19:15発 - 21:20着",
             "tag": "🌙福岡泊候補",
+            "step": "第4便"
+          }
+        ]
+      },
+      {
+        "planId": "today-plan-3",
+        "planName": "プランC (伊丹泊)",
+        "stayCode": "ITM",
+        "rank": "対抗 ▲",
+        "probability": 10,
+        "title": "【今夜伊丹泊シナリオ】福岡 ➔ 羽田 ➔ 那覇 ➔ 羽田 ➔ 伊丹(泊)",
+        "routeSummary": "福岡 ➔ 羽田 ➔ 那覇 ➔ 羽田 ➔ 伊丹(泊)",
+        "flights": [
+          {
+            "flightNo": "NH242",
+            "orig": "FUK",
+            "dest": "HND",
+            "route": "福岡 ➔ 東京(羽田)",
+            "time": "07:54発 - 09:13着",
+            "tag": "運航完了",
+            "step": "第1便"
+          },
+          {
+            "flightNo": "NH469",
+            "orig": "HND",
+            "dest": "OKA",
+            "route": "東京(羽田) ➔ 沖縄(那覇)",
+            "time": "10:49発 - 13:25着",
+            "tag": "飛行中 🟢",
+            "step": "第2便"
+          },
+          {
+            "flightNo": "NH468",
+            "orig": "OKA",
+            "dest": "HND",
+            "route": "沖縄(那覇) ➔ 東京(羽田)",
+            "time": "14:20発 - 16:40着",
+            "tag": "予想接続 (78P)",
+            "step": "第3便"
+          },
+          {
+            "flightNo": "NH39",
+            "orig": "HND",
+            "dest": "ITM",
+            "route": "東京(羽田) ➔ 大阪(伊丹)",
+            "time": "19:00発 - 20:20着",
+            "tag": "🌙伊丹泊候補",
             "step": "第4便"
           }
         ]
@@ -1189,7 +1204,24 @@
           "time": "12:00発 - 15:15着",
           "tag": "予想"
         },
-        "actual": null,
+        "actual": {
+          "flightNo": "NH469",
+          "origin": "HND",
+          "dest": "OKA",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "沖縄(那覇) (OKA)",
+          "origCode": "HND",
+          "destCode": "OKA",
+          "route": "東京(羽田) ➔ 沖縄(那覇)",
+          "depTime": "10:49",
+          "arrTime": "13:25",
+          "timeRange": "10:49 - 13:25",
+          "dateJst": "2026-11-17",
+          "status": "Estimated 13:12",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
+        },
         "update": null
       },
       {
