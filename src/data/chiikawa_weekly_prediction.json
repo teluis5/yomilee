@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月17日 16:00",
-  "updatedAtIso": "2026-11-17T07:00:05.446Z",
+  "updatedAt": "2026年11月17日 16:15",
+  "updatedAtIso": "2026-11-17T07:15:05.098Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "東京(羽田)",
-    "currentLocationCode": "HND",
+    "currentLocation": "飛行中 (東京(羽田) ➔ 福岡)",
+    "currentLocationCode": "FUK",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "東京(羽田) (100%)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
@@ -1631,7 +1631,7 @@
           "route": "広島 ➔ 東京(羽田)"
         }
       },
-      "currentAirport": "東京(羽田)",
+      "currentAirport": "飛行中 (東京(羽田) ➔ 福岡)",
       "nightStay": "東京(羽田) (100%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH261 (東京(羽田) ➔ 福岡) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
@@ -1686,7 +1686,7 @@
               "dest": "FUK",
               "route": "東京(羽田) ➔ 福岡",
               "time": "15:45発 - 17:45着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "④ 第4便"
             },
             {
@@ -1799,7 +1799,14 @@
             "update": null
           },
           "planC": null,
-          "actual": null
+          "actual": {
+            "flightNo": "NH261",
+            "route": "東京(羽田) ➔ 福岡",
+            "time": "16:02離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#5",
@@ -1871,9 +1878,9 @@
           "time": "15:45発 - 17:45着",
           "depGate": "58",
           "arrGate": null,
-          "status": "出発予定 (15:45)",
+          "status": "到着予定 (17:34)",
           "isLanded": false,
-          "isLive": false,
+          "isLive": true,
           "isPredicted": false
         },
         {
