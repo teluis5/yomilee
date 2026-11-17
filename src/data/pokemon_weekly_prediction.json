@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月17日 14:00",
-  "updatedAtIso": "2026-11-17T05:00:08.197Z",
+  "updatedAt": "2026年11月17日 15:00",
+  "updatedAtIso": "2026-11-17T06:00:07.806Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,9 +17,26 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "着陸済・駐機中 🟡",
-      "currentLocation": "沖縄(那覇) (OKA)",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "沖縄(那覇) (OKA) ➔ 東京(羽田) (HND)",
+      "currentFlight": {
+        "flightNo": "NH468",
+        "origin": "OKA",
+        "dest": "HND",
+        "originName": "沖縄(那覇) (OKA)",
+        "destinationName": "東京(羽田) (HND)",
+        "origCode": "OKA",
+        "destCode": "HND",
+        "route": "沖縄(那覇) ➔ 東京(羽田)",
+        "depTime": "14:39",
+        "arrTime": "16:40",
+        "timeRange": "14:39 - 16:40",
+        "dateJst": "2026-11-17",
+        "status": "Estimated 16:38",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH242",
@@ -56,9 +73,45 @@
           "isLive": false,
           "isLanded": true,
           "isToday": true
+        },
+        {
+          "flightNo": "NH468",
+          "origin": "OKA",
+          "dest": "HND",
+          "originName": "沖縄(那覇) (OKA)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "OKA",
+          "destCode": "HND",
+          "route": "沖縄(那覇) ➔ 東京(羽田)",
+          "depTime": "14:39",
+          "arrTime": "16:40",
+          "timeRange": "14:39 - 16:40",
+          "dateJst": "2026-11-17",
+          "status": "Estimated 16:38",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
         }
       ],
       "recentFlights": [
+        {
+          "flightNo": "NH468",
+          "origin": "OKA",
+          "dest": "HND",
+          "originName": "沖縄(那覇) (OKA)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "OKA",
+          "destCode": "HND",
+          "route": "沖縄(那覇) ➔ 東京(羽田)",
+          "depTime": "14:39",
+          "arrTime": "16:40",
+          "timeRange": "14:39 - 16:40",
+          "dateJst": "2026-11-17",
+          "status": "Estimated 16:38",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH469",
           "origin": "HND",
@@ -145,24 +198,6 @@
           "timeRange": "14:18 - 15:46",
           "dateJst": "2026-11-16",
           "status": "Landed 15:46",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
-        },
-        {
-          "flightNo": "NH590",
-          "origin": "MYJ",
-          "dest": "HND",
-          "originName": "松山 (MYJ)",
-          "destinationName": "東京(羽田) (HND)",
-          "origCode": "MYJ",
-          "destCode": "HND",
-          "route": "松山 ➔ 東京(羽田)",
-          "depTime": "11:48",
-          "arrTime": "13:06",
-          "timeRange": "11:48 - 13:06",
-          "dateJst": "2026-11-16",
-          "status": "Landed 13:06",
           "isLive": false,
           "isLanded": true,
           "isToday": false
@@ -475,7 +510,7 @@
         "arrTime": "18:15",
         "timeRange": "09:02 - 18:15",
         "dateJst": "2026-11-17",
-        "status": "Estimated 20:05",
+        "status": "Estimated 20:07",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -494,13 +529,49 @@
           "arrTime": "18:15",
           "timeRange": "09:02 - 18:15",
           "dateJst": "2026-11-17",
-          "status": "Estimated 20:05",
+          "status": "Estimated 20:07",
           "isLive": true,
+          "isLanded": false,
+          "isToday": true
+        },
+        {
+          "flightNo": "NH880",
+          "origin": "SYD",
+          "dest": "HND",
+          "originName": "シドニー (SYD)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "SYD",
+          "destCode": "HND",
+          "route": "シドニー ➔ 東京(羽田)",
+          "depTime": "19:45",
+          "arrTime": "05:20",
+          "timeRange": "19:45 - 05:20",
+          "dateJst": "2026-11-17",
+          "status": "Estimated dep 21:45",
+          "isLive": false,
           "isLanded": false,
           "isToday": true
         }
       ],
       "recentFlights": [
+        {
+          "flightNo": "NH880",
+          "origin": "SYD",
+          "dest": "HND",
+          "originName": "シドニー (SYD)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "SYD",
+          "destCode": "HND",
+          "route": "シドニー ➔ 東京(羽田)",
+          "depTime": "19:45",
+          "arrTime": "05:20",
+          "timeRange": "19:45 - 05:20",
+          "dateJst": "2026-11-17",
+          "status": "Estimated dep 21:45",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH889",
           "origin": "HND",
@@ -514,7 +585,7 @@
           "arrTime": "18:15",
           "timeRange": "09:02 - 18:15",
           "dateJst": "2026-11-17",
-          "status": "Estimated 20:05",
+          "status": "Estimated 20:07",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -590,24 +661,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH848",
-          "origin": "BKK",
-          "dest": "HND",
-          "originName": "バンコク (BKK)",
-          "destinationName": "東京(羽田) (HND)",
-          "origCode": "BKK",
-          "destCode": "HND",
-          "route": "バンコク ➔ 東京(羽田)",
-          "depTime": "11:31",
-          "arrTime": "16:56",
-          "timeRange": "11:31 - 16:56",
-          "dateJst": "2026-11-13",
-          "status": "Landed 16:56",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -625,26 +678,9 @@
       "routesSummary": "羽田/成田 ➔ フランクフルト / パリ / ロサンゼルス / アジア",
       "color": "#f59e0b",
       "serviceStart": "2023-06-04",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "IAH ➔ 東京(羽田) (HND)",
-      "currentFlight": {
-        "flightNo": "NH113",
-        "origin": "IAH",
-        "dest": "HND",
-        "originName": "IAH",
-        "destinationName": "東京(羽田) (HND)",
-        "origCode": "IAH",
-        "destCode": "HND",
-        "route": "IAH ➔ 東京(羽田)",
-        "depTime": "01:41",
-        "arrTime": "15:25",
-        "timeRange": "01:41 - 15:25",
-        "dateJst": "2026-11-17",
-        "status": "Estimated 14:54",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": true
-      },
+      "flightState": "着陸済・駐機中 🟡",
+      "currentLocation": "東京(羽田) (HND)",
+      "currentFlight": null,
       "todayFlights": [
         {
           "flightNo": "NH113",
@@ -656,12 +692,12 @@
           "destCode": "HND",
           "route": "IAH ➔ 東京(羽田)",
           "depTime": "01:41",
-          "arrTime": "15:25",
-          "timeRange": "01:41 - 15:25",
+          "arrTime": "14:56",
+          "timeRange": "01:41 - 14:56",
           "dateJst": "2026-11-17",
-          "status": "Estimated 14:54",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 14:56",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         }
       ],
@@ -676,12 +712,12 @@
           "destCode": "HND",
           "route": "IAH ➔ 東京(羽田)",
           "depTime": "01:41",
-          "arrTime": "15:25",
-          "timeRange": "01:41 - 15:25",
+          "arrTime": "14:56",
+          "timeRange": "01:41 - 14:56",
           "dateJst": "2026-11-17",
-          "status": "Estimated 14:54",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 14:56",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         {
@@ -785,16 +821,16 @@
       {
         "code": "HND",
         "airport": "羽田",
-        "weight": 18.079200000000004,
+        "weight": 10.044,
         "floored": 94,
-        "remainder": 0.09780775716694734,
+        "remainder": 0.09780775716693313,
         "originalIndex": 0,
         "probability": 94
       },
       {
         "code": "FUK",
         "airport": "福岡",
-        "weight": 0.378,
+        "weight": 0.21,
         "floored": 5,
         "remainder": -3.0326025857223167,
         "originalIndex": 1,
@@ -803,7 +839,7 @@
       {
         "code": "ITM",
         "airport": "伊丹",
-        "weight": 0.378,
+        "weight": 0.21,
         "floored": 5,
         "remainder": -3.0326025857223167,
         "originalIndex": 2,
@@ -812,7 +848,7 @@
       {
         "code": "MYJ",
         "airport": "松山",
-        "weight": 0.378,
+        "weight": 0.21,
         "floored": 5,
         "remainder": -3.0326025857223167,
         "originalIndex": 3,
@@ -820,17 +856,6 @@
       }
     ],
     "predictedRemainingToday": [
-      {
-        "flightNo": "NH468",
-        "origCode": "OKA",
-        "destCode": "HND",
-        "route": "沖縄(那覇) ➔ 東京(羽田)",
-        "depTime": "14:20",
-        "arrTime": "16:40",
-        "time": "14:20発 - 16:40着 (予想)",
-        "status": "後続便候補",
-        "isPredicted": true
-      },
       {
         "flightNo": "NH595",
         "origCode": "HND",
@@ -887,8 +912,8 @@
             "orig": "OKA",
             "dest": "HND",
             "route": "沖縄(那覇) ➔ 東京(羽田)",
-            "time": "14:20発 - 16:40着",
-            "tag": "予想接続 (78P)",
+            "time": "14:39発 - 16:40着",
+            "tag": "飛行中 🟢",
             "step": "第3便"
           },
           {
@@ -943,8 +968,8 @@
             "orig": "OKA",
             "dest": "HND",
             "route": "沖縄(那覇) ➔ 東京(羽田)",
-            "time": "14:20発 - 16:40着",
-            "tag": "予想接続 (78P)",
+            "time": "14:39発 - 16:40着",
+            "tag": "飛行中 🟢",
             "step": "第3便"
           },
           {
@@ -990,8 +1015,8 @@
             "orig": "OKA",
             "dest": "HND",
             "route": "沖縄(那覇) ➔ 東京(羽田)",
-            "time": "14:20発 - 16:40着",
-            "tag": "予想接続 (78P)",
+            "time": "14:39発 - 16:40着",
+            "tag": "飛行中 🟢",
             "step": "第3便"
           },
           {
@@ -1219,7 +1244,24 @@
           "time": "16:15発 - 18:45着",
           "tag": "予想"
         },
-        "actual": null,
+        "actual": {
+          "flightNo": "NH468",
+          "origin": "OKA",
+          "dest": "HND",
+          "originName": "沖縄(那覇) (OKA)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "OKA",
+          "destCode": "HND",
+          "route": "沖縄(那覇) ➔ 東京(羽田)",
+          "depTime": "14:39",
+          "arrTime": "16:40",
+          "timeRange": "14:39 - 16:40",
+          "dateJst": "2026-11-17",
+          "status": "Estimated 16:38",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
+        },
         "update": null
       }
     ]
