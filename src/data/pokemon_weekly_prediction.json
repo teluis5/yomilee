@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月17日 13:00",
-  "updatedAtIso": "2026-11-17T04:00:07.907Z",
+  "updatedAt": "2026年11月17日 14:00",
+  "updatedAtIso": "2026-11-17T05:00:08.197Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,26 +17,9 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "東京(羽田) (HND) ➔ 沖縄(那覇) (OKA)",
-      "currentFlight": {
-        "flightNo": "NH469",
-        "origin": "HND",
-        "dest": "OKA",
-        "originName": "東京(羽田) (HND)",
-        "destinationName": "沖縄(那覇) (OKA)",
-        "origCode": "HND",
-        "destCode": "OKA",
-        "route": "東京(羽田) ➔ 沖縄(那覇)",
-        "depTime": "10:49",
-        "arrTime": "13:25",
-        "timeRange": "10:49 - 13:25",
-        "dateJst": "2026-11-17",
-        "status": "Estimated 13:10",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": true
-      },
+      "flightState": "着陸済・駐機中 🟡",
+      "currentLocation": "沖縄(那覇) (OKA)",
+      "currentFlight": null,
       "todayFlights": [
         {
           "flightNo": "NH242",
@@ -66,12 +49,12 @@
           "destCode": "OKA",
           "route": "東京(羽田) ➔ 沖縄(那覇)",
           "depTime": "10:49",
-          "arrTime": "13:25",
-          "timeRange": "10:49 - 13:25",
+          "arrTime": "13:10",
+          "timeRange": "10:49 - 13:10",
           "dateJst": "2026-11-17",
-          "status": "Estimated 13:10",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 13:10",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         }
       ],
@@ -86,12 +69,12 @@
           "destCode": "OKA",
           "route": "東京(羽田) ➔ 沖縄(那覇)",
           "depTime": "10:49",
-          "arrTime": "13:25",
-          "timeRange": "10:49 - 13:25",
+          "arrTime": "13:10",
+          "timeRange": "10:49 - 13:10",
           "dateJst": "2026-11-17",
-          "status": "Estimated 13:10",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 13:10",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         {
@@ -332,8 +315,45 @@
       "flightState": "確認中",
       "currentLocation": "確認中",
       "currentFlight": null,
-      "todayFlights": [],
+      "todayFlights": [
+        {
+          "flightNo": "NH159",
+          "origin": "JFK",
+          "dest": "HND",
+          "originName": "ニューヨーク (JFK)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "JFK",
+          "destCode": "HND",
+          "route": "ニューヨーク ➔ 東京(羽田)",
+          "depTime": "14:55",
+          "arrTime": "05:25",
+          "timeRange": "14:55 - 05:25",
+          "dateJst": "2026-11-17",
+          "status": "Estimated dep 01:06",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        }
+      ],
       "recentFlights": [
+        {
+          "flightNo": "NH159",
+          "origin": "JFK",
+          "dest": "HND",
+          "originName": "ニューヨーク (JFK)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "JFK",
+          "destCode": "HND",
+          "route": "ニューヨーク ➔ 東京(羽田)",
+          "depTime": "14:55",
+          "arrTime": "05:25",
+          "timeRange": "14:55 - 05:25",
+          "dateJst": "2026-11-17",
+          "status": "Estimated dep 01:06",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH160",
           "origin": "HND",
@@ -423,24 +443,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH212",
-          "origin": "LHR",
-          "dest": "HND",
-          "originName": "ロンドン (LHR)",
-          "destinationName": "東京(羽田) (HND)",
-          "origCode": "LHR",
-          "destCode": "HND",
-          "route": "ロンドン ➔ 東京(羽田)",
-          "depTime": "05:00",
-          "arrTime": "18:11",
-          "timeRange": "05:00 - 18:11",
-          "dateJst": "2026-11-14",
-          "status": "Landed 18:11",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -473,7 +475,7 @@
         "arrTime": "18:15",
         "timeRange": "09:02 - 18:15",
         "dateJst": "2026-11-17",
-        "status": "Estimated 20:11",
+        "status": "Estimated 20:05",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -492,7 +494,7 @@
           "arrTime": "18:15",
           "timeRange": "09:02 - 18:15",
           "dateJst": "2026-11-17",
-          "status": "Estimated 20:11",
+          "status": "Estimated 20:05",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -512,7 +514,7 @@
           "arrTime": "18:15",
           "timeRange": "09:02 - 18:15",
           "dateJst": "2026-11-17",
-          "status": "Estimated 20:11",
+          "status": "Estimated 20:05",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -638,7 +640,7 @@
         "arrTime": "15:25",
         "timeRange": "01:41 - 15:25",
         "dateJst": "2026-11-17",
-        "status": "Estimated 14:56",
+        "status": "Estimated 14:54",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -657,7 +659,7 @@
           "arrTime": "15:25",
           "timeRange": "01:41 - 15:25",
           "dateJst": "2026-11-17",
-          "status": "Estimated 14:56",
+          "status": "Estimated 14:54",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -677,7 +679,7 @@
           "arrTime": "15:25",
           "timeRange": "01:41 - 15:25",
           "dateJst": "2026-11-17",
-          "status": "Estimated 14:56",
+          "status": "Estimated 14:54",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -876,8 +878,8 @@
             "orig": "HND",
             "dest": "OKA",
             "route": "東京(羽田) ➔ 沖縄(那覇)",
-            "time": "10:49発 - 13:25着",
-            "tag": "飛行中 🟢",
+            "time": "10:49発 - 13:10着",
+            "tag": "運航完了",
             "step": "第2便"
           },
           {
@@ -932,8 +934,8 @@
             "orig": "HND",
             "dest": "OKA",
             "route": "東京(羽田) ➔ 沖縄(那覇)",
-            "time": "10:49発 - 13:25着",
-            "tag": "飛行中 🟢",
+            "time": "10:49発 - 13:10着",
+            "tag": "運航完了",
             "step": "第2便"
           },
           {
@@ -979,8 +981,8 @@
             "orig": "HND",
             "dest": "OKA",
             "route": "東京(羽田) ➔ 沖縄(那覇)",
-            "time": "10:49発 - 13:25着",
-            "tag": "飛行中 🟢",
+            "time": "10:49発 - 13:10着",
+            "tag": "運航完了",
             "step": "第2便"
           },
           {
@@ -1197,12 +1199,12 @@
           "destCode": "OKA",
           "route": "東京(羽田) ➔ 沖縄(那覇)",
           "depTime": "10:49",
-          "arrTime": "13:25",
-          "timeRange": "10:49 - 13:25",
+          "arrTime": "13:10",
+          "timeRange": "10:49 - 13:10",
           "dateJst": "2026-11-17",
-          "status": "Estimated 13:10",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 13:10",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         "update": null
