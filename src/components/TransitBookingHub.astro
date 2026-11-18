@@ -1,0 +1,354 @@
+---
+import {
+  RAKUTEN_AFFILIATE_ID,
+  RAKUTEN_RENTACAR_AFFILIATE_URL,
+  JALAN_RENTACAR_AFFILIATE_URL,
+  JALAN_RENTACAR_TRACKING_PIXEL,
+  BUDGET_RENTACAR_AFFILIATE_URL,
+  BUDGET_RENTACAR_TRACKING_PIXEL,
+  buildRakutenRentacarUrl,
+  buildJalanRentacarUrl,
+  buildBudgetRentacarUrl,
+} from '../utils/affiliate';
+import { PREFECTURES } from '../data/prefectures';
+
+export interface Props {
+  destination?: string;
+  station?: string;
+  transportType?: 'shinkansen' | 'rentacar' | 'all';
+  showExperience?: boolean;
+  title?: string;
+  pref?: string;
+  asoviewAreaId?: string;
+  asoviewUrl?: string;
+  rentacarUrl?: string;
+  jalanRentacarUrl?: string;
+  budgetRentacarUrl?: string;
+}
+
+const {
+  destination = '目的地',
+  station = '',
+  transportType = 'all',
+  showExperience = true,
+  title,
+  pref,
+  asoviewAreaId: propAsoviewAreaId,
+  asoviewUrl: propAsoviewUrl,
+  rentacarUrl: propRentacarUrl,
+  jalanRentacarUrl: propJalanRentacarUrl,
+  budgetRentacarUrl: propBudgetRentacarUrl,
+} = Astro.props;
+
+// アソビュー！エリアIDマッピング（主要観光エリアの公式destinationId）
+const ASOVIEW_AREA_MAP: Record<string, string> = {
+  // 秋田
+  '田沢湖': 'are0050300',
+  '角館': 'are0050300',
+  '大曲': 'are0050300',
+  '仙北': 'are0050300',
+  '横手': 'are0050300',
+  '秋田市': 'are0050100',
+  '男鹿': 'are0050200',
+  '白神': 'are0050200',
+  '十和田': 'are0050400',
+  '大館': 'are0050400',
+  '鹿角': 'are0050400',
+  // 青森
+  '青森': 'are0020100',
+  '弘前': 'are0020200',
+  '八戸': 'are0020300',
+  // 岩手
+  '盛岡': 'are0030100',
+  '花巻': 'are0030200',
+  '平泉': 'are0030400',
+  // 宮城
+  '仙台': 'are0040100',
+  '松島': 'are0040200',
+};
+
+// アソビュー！地域絞り込みURL解決
+let asoviewUrl = propAsoviewUrl || '';
+if (!asoviewUrl) {
+  let resolvedAreaId = propAsoviewAreaId;
+  if (!resolvedAreaId) {
+    const searchTarget = `${destination} ${station}`;
+    for (const [key, code] of Object.entries(ASOVIEW_AREA_MAP)) {
+      if (searchTarget.includes(key)) {
+        resolvedAreaId = code;
+        break;
+      }
+    }
+  }
+
+  if (resolvedAreaId) {
+    asoviewUrl = `https://www.asoview.com/search/?adultQuantity=1&destinationId=${resolvedAreaId}&destinationType=area`;
+  } else {
+    // 未設定時のフォールバック（田沢湖・角館エリア）
+    asoviewUrl = 'https://www.asoview.com/search/?adultQuantity=1&destinationId=are0050300&destinationType=area';
+  }
+}
+
+// 都道府県情報の取得（JISコード解決用）
+const prefObj = pref ? PREFECTURES.find((p) => p.id === pref) : undefined;
+const prefCode = prefObj?.code;
+
+// レンタカー公式アフィリエイトURL（駅・地区自動プレフィックス、店舗なし時nullで非表示）
+const rakutenRentacarUrl = propRentacarUrl || buildRakutenRentacarUrl({ station, pref });
+const jalanRentacarUrl = propJalanRentacarUrl || buildJalanRentacarUrl({ station, pref, prefCode });
+const budgetRentacarUrl = propBudgetRentacarUrl !== undefined
+  ? propBudgetRentacarUrl
+  : buildBudgetRentacarUrl({ station, pref });
+
+// JR東日本 / どこかにビューーン / ダイナミックレールパック
+const dokokaniByunUrl = 'https://dokokani-byun.com/';
+const jreDynamicRailUrl = 'https://www.jre-travel.com/';
+---
+
+<aside class="transit-booking-section" aria-labelledby="transit-booking">
+  <div class="transit-hub-section-header">
+    <h2 class="transit-hub-title" id="transit-booking">
+      <span class="transit-hub-badge">予約ハブ</span>
+      <span>{title || `${destination}への移動・現地チケットを予約する`}</span>
+    </h2>
+    <p class="transit-hub-desc">
+      新幹線チケットや駅前レンタカー、周辺の観光前売り券は事前予約がスムーズです。
+    </p>
+  </div>
+
+  <div class="transit-hub-grid">
+    {(transportType === 'all' || transportType === 'shinkansen') && (
+      <div class="transit-card">
+        <div class="card-body">
+          <span class="card-tag">新幹線・JRセット</span>
+          <h4 class="card-name">新幹線チケット・パック</h4>
+          <p class="card-text">どこかにビューーン！なら往復6,000 pt。列車＋宿のダイナミックレールパックもお得です。</p>
+        </div>
+        <div class="card-actions">
+          <a
+            href={dokokaniByunUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hub-btn btn-dokokani"
+            title="どこかにビューーン！公式ページへ"
+          >
+            どこかにビューーン！公式 →
+          </a>
+          <a
+            href={jreDynamicRailUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hub-btn btn-jr-pack"
+            title="JR東日本ダイナミックレールパックへ"
+          >
+            JR＋宿セット予約 →
+          </a>
+        </div>
+      </div>
+    )}
+
+    {(transportType === 'all' || transportType === 'rentacar') && (
+      <div class="transit-card">
+        <div class="card-body">
+          <span class="card-tag">駅前レンタカー</span>
+          <h4 class="card-name">レンタカー比較・予約</h4>
+          <p class="card-text">
+            {station ? `${station}周辺` : `${destination}周辺`}の各社レンタカーを最安値比較。{budgetRentacarUrl ? '楽天・じゃらん・バジェットの割引プランやポイントが使えます。' : '楽天トラベル・じゃらんの割引プランやポイントが使えます。'}
+          </p>
+        </div>
+        <div class="card-actions">
+          {rakutenRentacarUrl && (
+            <a
+              href={rakutenRentacarUrl}
+              target="_blank"
+              rel="noopener sponsored"
+              class="hub-btn btn-rentacar-rakuten"
+              title="楽天トラベルでレンタカーを最安値比較"
+            >
+              楽天トラベル レンタカー →
+            </a>
+          )}
+          {jalanRentacarUrl && (
+            <a
+              href={jalanRentacarUrl}
+              target="_blank"
+              rel="noopener sponsored"
+              class="hub-btn btn-rentacar-jalan"
+              title="じゃらんでレンタカーを最安値比較"
+            >
+              じゃらんレンタカー →
+            </a>
+          )}
+          {budgetRentacarUrl && (
+            <a
+              href={budgetRentacarUrl}
+              target="_blank"
+              rel="noopener sponsored"
+              class="hub-btn btn-rentacar-budget"
+              title="バジェット・レンタカーで最安値比較・予約"
+            >
+              バジェット・レンタカー →
+            </a>
+          )}
+          {jalanRentacarUrl && (
+            <img
+              src={JALAN_RENTACAR_TRACKING_PIXEL}
+              height="1"
+              width="1"
+              alt=""
+              style="display:none;"
+            />
+          )}
+          {budgetRentacarUrl && (
+            <img
+              src={BUDGET_RENTACAR_TRACKING_PIXEL}
+              height="1"
+              width="1"
+              alt=""
+              style="display:none;"
+            />
+          )}
+        </div>
+      </div>
+    )}
+
+    {(transportType === 'all' || showExperience) && (
+      <div class="transit-card">
+        <div class="card-body">
+          <span class="card-tag">遊び・体験・温泉チケット</span>
+          <h4 class="card-name">アソビュー！</h4>
+          <p class="card-text">
+            {destination ? `${destination}周辺` : '現地エリア'}の日帰り温泉・アクティビティ・前売り電子チケットを事前予約。
+          </p>
+        </div>
+        <div class="card-actions">
+          <a
+            href={asoviewUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hub-btn btn-asoview"
+            title="アソビューでレジャー・体験を探す"
+          >
+            前売りチケットを探す →
+          </a>
+        </div>
+      </div>
+    )}
+  </div>
+</aside>
+
+<style>
+  .transit-booking-section {
+    margin: 1rem 0 2rem;
+  }
+  .transit-hub-section-header {
+    margin-bottom: 1rem;
+  }
+  .transit-hub-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: #ffffff;
+    background: var(--theme-accent, #0284c7);
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    flex-shrink: 0;
+  }
+  .transit-hub-desc {
+    margin: -0.75rem 0 1rem 0 !important;
+    font-size: 0.85rem !important;
+    color: #64748b !important;
+    line-height: 1.45 !important;
+  }
+  .transit-hub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 0.85rem;
+  }
+  .transit-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    box-sizing: border-box;
+  }
+  .card-body {
+    flex: 1;
+    margin-bottom: 0.75rem;
+  }
+  .card-tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #475569;
+    background: #f1f5f9;
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    margin-bottom: 0.35rem;
+  }
+  .card-name {
+    margin: 0 0 0.35rem !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+  .card-text {
+    margin: 0 !important;
+    font-size: 0.76rem !important;
+    color: #64748b !important;
+    line-height: 1.45 !important;
+  }
+  .card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .hub-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 0.85rem;
+    border-radius: 6px;
+    text-decoration: none !important;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.2;
+    transition: opacity 0.15s ease;
+  }
+  .hub-btn:hover {
+    opacity: 0.9;
+  }
+  .btn-dokokani {
+    background: #0284c7;
+    color: #ffffff !important;
+  }
+  .btn-jr-pack {
+    background: #16a34a;
+    color: #ffffff !important;
+  }
+  .btn-rentacar-rakuten,
+  .btn-rentacar {
+    background: #bf0000;
+    color: #ffffff !important;
+  }
+  .btn-rentacar-jalan {
+    background: #ff5a00;
+    color: #ffffff !important;
+  }
+  .btn-rentacar-budget {
+    background: #002f6c;
+    color: #ffffff !important;
+  }
+  .btn-asoview {
+    background: #ea580c;
+    color: #ffffff !important;
+  }
+</style>

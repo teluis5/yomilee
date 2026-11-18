@@ -1,0 +1,334 @@
+---
+export interface BudgetItem {
+  category: string;
+  amount: number | string;
+  note?: string;
+}
+
+export interface Props {
+  total?: number | string;
+  personLabel?: string;
+  title?: string;
+  items?: BudgetItem[];
+  totalPerPerson?: string;
+  totalNote?: string;
+  // 簡易指定用プロパティ
+  shinkansen?: number | string;
+  hotel?: number | string;
+  localTransit?: number | string;
+  meals?: number | string;
+  // 各項目の注記カスタマイズ用
+  shinkansenNote?: string;
+  hotelNote?: string;
+  localTransitNote?: string;
+  mealsNote?: string;
+}
+
+const {
+  total: propTotal,
+  totalPerPerson,
+  totalNote,
+  personLabel = '大人1名あたり（2名1室利用時・概算目安）',
+  title = 'このコースの概算予算・費用内訳',
+  items: propItems,
+  shinkansen,
+  hotel,
+  localTransit,
+  meals,
+  shinkansenNote,
+  hotelNote,
+  localTransitNote,
+  mealsNote,
+} = Astro.props;
+
+let budgetItems: BudgetItem[] = propItems || [];
+
+if (!propItems || propItems.length === 0) {
+  const autoItems: BudgetItem[] = [];
+  if (shinkansen !== undefined) {
+    autoItems.push({
+      category: '往復交通（新幹線・特急等）',
+      amount: shinkansen,
+      note: shinkansenNote || (typeof shinkansen === 'string' && shinkansen.includes('pt') ? 'JRE POINT利用' : '通常期指定席目安'),
+    });
+  }
+  if (hotel !== undefined) {
+    autoItems.push({
+      category: '宿泊費（1泊）',
+      amount: hotel,
+      note: hotelNote || '1泊2食付（平日目安）',
+    });
+  }
+  if (localTransit !== undefined) {
+    autoItems.push({
+      category: '現地交通（バス・路線）',
+      amount: localTransit,
+      note: localTransitNote || '周遊バス・路線バス運賃',
+    });
+  }
+  if (meals !== undefined) {
+    autoItems.push({
+      category: '飲食・現地体験',
+      amount: meals,
+      note: mealsNote || 'ランチ・名物グルメ・入場料など',
+    });
+  }
+  budgetItems = autoItems;
+}
+
+// 合計金額の算出
+let displayTotal = totalPerPerson || propTotal;
+if (!displayTotal) {
+  const numSum = budgetItems.reduce((acc, item) => {
+    if (typeof item.amount === 'number') {
+      return acc + item.amount;
+    }
+    const parsed = parseInt(String(item.amount).replace(/[^0-9]/g, ''), 10);
+    return !isNaN(parsed) && !String(item.amount).includes('pt') ? acc + parsed : acc;
+  }, 0);
+
+  if (numSum > 0) {
+    displayTotal = `約${numSum.toLocaleString('ja-JP')}円〜`;
+  } else {
+    displayTotal = 'プランによる';
+  }
+} else if (typeof displayTotal === 'number') {
+  displayTotal = `約${displayTotal.toLocaleString('ja-JP')}円〜`;
+}
+
+const formatAmount = (val: number | string) => {
+  if (typeof val === 'number') {
+    return `${val.toLocaleString('ja-JP')}円`;
+  }
+  return String(val);
+};
+---
+
+<div class="course-budget-section" aria-labelledby="course-budget">
+  <div class="budget-section-header">
+    <h2 class="budget-title" id="course-budget">
+      <span class="budget-badge">費用目安</span>
+      <span>{title}</span>
+    </h2>
+  </div>
+
+  <div class="budget-content-wrap">
+    <div class="budget-summary-bar">
+      <div class="budget-total-box">
+        <span class="total-label">1人あたり合計目安</span>
+        <span class="total-value">{displayTotal}</span>
+      </div>
+      <span class="budget-person-label">{personLabel}</span>
+    </div>
+
+    <table class="budget-table">
+      <tbody>
+        {budgetItems.map((item) => (
+          <tr class="budget-row">
+            <th scope="row" class="budget-col-category">
+              <div class="category-text-group">
+                <span class="item-category-text">{item.category}</span>
+                {item.note && <span class="item-note-text">{item.note}</span>}
+              </div>
+            </th>
+            <td class="budget-col-amount">
+              <span class="amount-value">{formatAmount(item.amount)}</span>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+
+    {(totalNote || budgetItems.length > 0) && (
+      <div class="budget-footer-note">
+        <p>{totalNote || '※表示料金は調査時点の標準的な目安です。宿泊日・予約タイミング・利用プランにより変動します。'}</p>
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  .course-budget-section {
+    margin: 1rem 0 2rem;
+  }
+
+  .budget-section-header {
+    margin-bottom: 1rem;
+  }
+
+  .budget-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: #ffffff;
+    background: var(--theme-accent, #0284c7);
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    flex-shrink: 0;
+  }
+
+  .budget-content-wrap {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .budget-summary-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.35rem 1rem;
+    padding: 0.65rem 1.5rem 0.85rem;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 0.75rem;
+  }
+
+  .budget-total-box {
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+  }
+
+  .total-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #475569;
+  }
+
+  .total-value {
+    font-size: 1.45rem;
+    font-weight: 900;
+    color: #111827;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .budget-person-label {
+    font-size: 0.74rem;
+    color: #64748b;
+    line-height: 1.4;
+  }
+
+  .budget-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 0.75rem 0 !important;
+  }
+
+  .budget-row {
+    border-bottom: 1px solid #f1f5f9;
+    transition: background-color 0.15s ease;
+  }
+
+  .budget-row:hover {
+    background-color: #f8fafc;
+  }
+
+  .budget-row:last-child {
+    border-bottom: none;
+  }
+
+  /* PC版：項目名の左にしっかりとした余白（1.5rem）を確保 */
+  .budget-col-category {
+    text-align: left;
+    padding: 0.75rem 0.75rem 0.75rem 1.5rem;
+    vertical-align: middle;
+    font-weight: normal;
+  }
+
+  /* PC版：項目名と注記をベースラインで横並び（余白付き）にし、中央の間延び感を自然に解消 */
+  .category-text-group {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.75rem;
+  }
+
+  .item-category-text {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .item-note-text {
+    font-size: 0.76rem;
+    color: #64748b;
+    line-height: 1.4;
+  }
+
+  /* PC版：金額の右にしっかりとした余白（1.5rem）を確保 */
+  .budget-col-amount {
+    text-align: right;
+    padding: 0.75rem 1.5rem 0.75rem 0.75rem;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: auto;
+  }
+
+  .amount-value {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #111827;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .budget-footer-note {
+    border-top: 1px dashed #e2e8f0;
+    padding: 0.65rem 1.5rem 0;
+    margin-top: 0.25rem;
+  }
+
+  .budget-footer-note p {
+    margin: 0 !important;
+    font-size: 0.7rem !important;
+    color: #64748b !important;
+    line-height: 1.45 !important;
+  }
+
+  /* スマホ版（640px以下）：左右余白を控えめに調整（0.35rem）し、窮屈な不自然改行を完全防止 */
+  @media (max-width: 640px) {
+    .budget-summary-bar {
+      padding: 0.65rem 0.35rem 0.85rem;
+      gap: 0.35rem 0.75rem;
+    }
+
+    .budget-col-category {
+      padding: 0.65rem 0.35rem 0.65rem 0.35rem;
+    }
+
+    .category-text-group {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.12rem;
+    }
+
+    .item-category-text {
+      font-size: 0.84rem;
+      white-space: normal;
+    }
+
+    .item-note-text {
+      font-size: 0.72rem;
+      line-height: 1.35;
+    }
+
+    .budget-col-amount {
+      padding: 0.65rem 0.35rem 0.65rem 0.35rem;
+    }
+
+    .amount-value {
+      font-size: 0.92rem;
+    }
+
+    .budget-footer-note {
+      padding-left: 0.35rem;
+      padding-right: 0.35rem;
+    }
+  }
+</style>

@@ -296,6 +296,55 @@ async function fetchGoogleTrends() {
   }
 }
 
+// 5. Google News（GU・ユニクロ・アパレル人気コラボ特化）
+async function fetchGoogleNewsCollabs() {
+  console.log('📡 Google News（GU・ユニクロ・注目コラボ速報）を取得中...');
+  const queries = [
+    'GU コラボ OR ジーユー コラボ',
+    'ユニクロ コラボ OR UNIQLO コラボ',
+    'ユニクロ 特別コレクション OR GU コレクション',
+    'ユニクロ UT コラボ OR GU ちいかわ'
+  ];
+  const items = [];
+  for (const q of queries) {
+    try {
+      const url = `https://news.google.com/rss/search?q=${encodeURIComponent(q)}&hl=ja&gl=JP&ceid=JP:ja`;
+      const res = await fetch(url, { headers: FETCH_HEADERS, signal: AbortSignal.timeout(8000) });
+      if (!res.ok) continue;
+      const xml = await res.text();
+      const itemRegex = /<item\b[\s\S]*?<\/item>/g;
+      let match;
+      while ((match = itemRegex.exec(xml)) !== null) {
+        const content = match[0];
+        const title = decodeXml(content.match(/<title>(.*?)<\/title>/)?.[1] || '');
+        const link = decodeXml(content.match(/<link>(.*?)<\/link>/)?.[1] || '');
+        const pubDate = decodeXml(content.match(/<pubDate>(.*?)<\/pubDate>/)?.[1] || '');
+        const desc = decodeXml(content.match(/<description>([\s\S]*?)<\/description>/)?.[1] || '').replace(/<[^>]+>/g, '').trim();
+
+        if (title && link) {
+          // GUやユニクロのコラボに関連するタイトルを厳選
+          if (/GU|ジーユー|ユニクロ|UNIQLO|UT/i.test(title)) {
+            items.push({
+              sourceType: 'collab_news',
+              sourceName: 'Google News コラボ速報',
+              title,
+              link,
+              description: desc,
+              pubDate,
+              score: 250,
+              genreHint: 'product'
+            });
+          }
+        }
+      }
+    } catch (e) {
+      console.warn(`⚠️ Google News コラボ取得エラー [${q}]:`, e.message);
+    }
+  }
+  console.log(`✅ GU・ユニクロ・注目コラボ候補を ${items.length} 件取得しました`);
+  return items;
+}
+
 // -------------------------------------------------------------
 // カテゴリ自動判定ロジック（ヨミトク 5大カテゴリ体系）
 // -------------------------------------------------------------
@@ -446,6 +495,13 @@ ${webContent ? webContent.slice(0, 2000) : (topic.description || topic.news?.map
 1. **「事実（Fact）のまとめ」ではなく「評価・オピニオン（Review / Grade）」を必ず書く**:
    - 一次ニュースやスペックの丸写しは厳禁です。読者が個人・特化ブログに求めているのは「結局買いなのか？」「点数をつけるなら何点か？」「勝敗を分けた真因は何か？」という明確な白黒判定です。
    - **新商品・ガジェット**: 「コスパや完成度の採点（★5段階評価）」「従来機やライバル製品との決定的な違い」「買うべき人 vs 見送り推奨の人」を明記。
+   - **GU・ユニクロ等のファッション・コラボ記事**:
+     - タイトルには必ず【ブランド名×コラボ先】＋【発売時期・発売日】＋【注目アイテムや見どころ】を明記（例: 【GU×ちいかわ 2026冬】発売日はいつ？全アイテム一覧・即完売予想＆オンライン購入のコツ徹底解説）。
+     - 【発売日・オンライン販売開始時間（GUは午前中、ユニクロは午前7時〜等）】
+     - 【全アイテム価格表（アウター、トップス、ボトムス、小物グッズなど）】
+     - 【サイズ感・シルエットの注意点（メンズ/ウィメンズ/ユニセックス、オーバーサイズ感など）】
+     - 【取扱店舗・オンライン購入のコツ、整理券・購入制限情報】
+     - 「絶対に買うべきマストバイ3選」と「見送りでも良いアイテム」の本音ジャッジを明記。
    - **スポーツ・エンタメ**: 単なる勝敗や指名結果だけでなく、「独自の採点（A〜C評価）」「勝敗を分けたターニングポイント」「ファンの本音やOBの視点まとめ」。
    - **時事・生活・サービス**: 「私たちの家計や普段の暮らしへのリアルな損得」「知っておかないと損する注意点」。
 
@@ -620,6 +676,10 @@ async function main() {
   const candidatePool = [];
 
   // ジャンルに応じた情報収集
+  // GU・ユニクロ等の注目コラボ情報を常に収集してプールに投入
+  const collabNews = await fetchGoogleNewsCollabs();
+  candidatePool.push(...collabNews);
+
   if (genreArg === 'all' || genreArg === 'news') {
     const yahooTop = await fetchYahooNews('top-picks');
     const yahooEnt = await fetchYahooNews('entertainment');
@@ -664,6 +724,10 @@ async function main() {
     if (item.sourceType === 'prtimes') score += 150;       // 新商品・新サービス発表
     if (item.sourceType && item.sourceType.startsWith('yahoo_top')) score += 120; // Yahoo主要速報
     if (item.sourceType && item.sourceType.startsWith('yahoo_it')) score += 90;
+
+    // GU・ユニクロ等のアパレル大型コラボ（爆発的PV・SNSトレンド最優先）
+    const isCollabFashion = /GU|ジーユー|ユニクロ|UNIQLO/i.test(item.title) && /コラボ|コレクション|発売|ちいかわ|アンダーカバー|rokh|JW ANDERSON|マリメッコ|KAWS|UT|限定|即完売/i.test(item.title);
+    if (isCollabFashion) score += 350;
 
     // スポーツ・野球・大型イベント・福袋・セール等の検索ボリューム爆発キーワード
     const megaKeywords = /ドラフト|現役ドラフト|日本シリーズ|プロ野球|ストーブリーグ|FA|戦力外|新発売|福袋|ブラックフライデー|セール|コラボ|オープン|新店舗|iPhone|Android|Pixel|Apple|Google|ちいかわ|限定|先行予約/i;
