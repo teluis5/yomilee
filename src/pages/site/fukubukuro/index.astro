@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../layouts/BlogPost.astro';
+import heroImage from '../../../assets/images/fukubukuro_ogp.jpg';
 
 const title = "【2027年福袋特集】予約開始日・抽選日程・中身ネタバレ速報カレンダー【随時更新】";
 const description = "【毎日更新】2027年（2026-2027冬）の超人気福袋を完全網羅！スタバ、マクドナルド、カルディ、無印良品、ジェラピケ、ヨドバシなど人気ブランドの予約開始日、公式アプリ抽選日程、当選倍率、中身ネタバレ、元取れコスパを一覧表で徹底比較！";
@@ -170,7 +171,7 @@ const pageSchema = {
   title={title}
   description={description}
   pubDate={new Date('2026-11-18')}
-  heroImage={{ src: '/brand/fukubukuro_ogp.jpg' }}
+  heroImage={heroImage}
 >
   <script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
 
