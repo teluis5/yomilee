@@ -360,7 +360,7 @@
       "trialApplicable": true
     },
     "morning": {
-      "updatedAtIso": "2026-11-17T23:00:04.285Z",
+      "updatedAtIso": "2026-11-17T23:15:03.955Z",
       "arrival": {
         "airport": "HND",
         "arrivalMin": 1202,
@@ -394,18 +394,6 @@
           "modelObservedAt": null
         },
         {
-          "flightNo": "NH1077",
-          "orig": "HND",
-          "dest": "FUK",
-          "route": "東京(羽田) ➔ 福岡",
-          "depTime": "08:00",
-          "arrTime": "09:55",
-          "depGate": "58",
-          "model": "76P",
-          "modelSource": null,
-          "modelObservedAt": null
-        },
-        {
           "flightNo": "NH21",
           "orig": "HND",
           "dest": "ITM",
@@ -425,6 +413,18 @@
           "depTime": "14:00",
           "arrTime": "15:10",
           "depGate": "64",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH685",
+          "orig": "HND",
+          "dest": "HIJ",
+          "route": "東京(羽田) ➔ 広島",
+          "depTime": "19:40",
+          "arrTime": "21:10",
+          "depGate": "506",
           "model": "76P",
           "modelSource": null,
           "modelObservedAt": null
@@ -456,18 +456,6 @@
           "modelObservedAt": null
         },
         {
-          "flightNo": "NH1077",
-          "orig": "HND",
-          "dest": "FUK",
-          "route": "東京(羽田) ➔ 福岡",
-          "depTime": "08:00",
-          "arrTime": "09:55",
-          "depGate": "58",
-          "model": "76P",
-          "modelSource": null,
-          "modelObservedAt": null
-        },
-        {
           "flightNo": "NH21",
           "orig": "HND",
           "dest": "ITM",
@@ -490,9 +478,25 @@
           "model": "76P",
           "modelSource": null,
           "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH685",
+          "orig": "HND",
+          "dest": "HIJ",
+          "route": "東京(羽田) ➔ 広島",
+          "depTime": "19:40",
+          "arrTime": "21:10",
+          "depGate": "506",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
         }
       ],
       "trialApplicable": true
+    },
+    "actual": {
+      "flightNo": "NH1077",
+      "route": "東京(羽田) ➔ 福岡"
     }
   }
 }
