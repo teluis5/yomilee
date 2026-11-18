@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../layouts/BlogPost.astro';
 import predictionData from '../../../data/chiikawa_weekly_prediction.json';
+import dailyPredictionsSnapshot from '../../../../data/daily_predictions_snapshot.json';
 import heroImage from '../../../assets/images/chiikawajet_ogp.png';
 
 const title = "毎日更新【今日の運行状況】ちいかわジェット本日のフライト予定＆週間予想【JA609A】";
@@ -34,6 +35,22 @@ const previousPlan = (todayData?.todayComparison || []).map(row => row.planA?.fl
 const currentPlan = (todayData?.flights || []).map(flight => flight.flightNo).filter(Boolean);
 const hasChangedPlan = previousPlan.length > 0 && currentPlan.length > 0 &&
 	previousPlan.join('|') !== currentPlan.join('|');
+
+// 前夜の代替予想（プランB/C等）と実運航を照合
+const prevNightAllPlans = (todayData?.dateStr && (dailyPredictionsSnapshot as Record<string, any>)[todayData.dateStr]) || [];
+const observedFnoList = observedFlights.map(f => f.flightNo).filter(Boolean);
+const offPlanA = observedFnoList.some(fno => !previousPlan.includes(fno));
+let matchedAltPlanName = '';
+if (offPlanA && prevNightAllPlans.length > 1 && observedFnoList.length > 0) {
+	for (let i = 1; i < prevNightAllPlans.length; i++) {
+		const p = prevNightAllPlans[i];
+		const pFnos = (p.flights || []).map((f: any) => f.flightNo).filter(Boolean);
+		if (pFnos.length > 0 && observedFnoList.every(fno => pFnos.includes(fno))) {
+			matchedAltPlanName = (p.planName || '').replace(/\s*\([^)]*\)/g, '').trim() || `プラン${String.fromCharCode(65 + i)}`;
+			break;
+		}
+	}
+}
 const tomorrowData = weeklySchedule.find((d) => d.statusType === 'tomorrow');
 const tomorrowFirstCandidates = tomorrowData?.firstFlightCandidates || [];
 const forecastDays = weeklySchedule.filter((d) => d.statusType === 'forecast');
@@ -222,14 +239,20 @@ const pageSchema = {
 				{hasChangedPlan && (
 					<div class="change-reasons">
 						<b>前夜からの変更</b>
-						{changedFlights.map(flight => (
-							<p>{flight.flightNo}は前夜の本命候補でした。当日の情報では{flight.update}です。</p>
-						))}
-						{changedActualFlights.map(row => (
-							<p>前夜は{row.planA.flightNo}を予想していましたが、{row.actual.flightNo}の運航を確認しました。</p>
-						))}
-						{changedFlights.length === 0 && changedActualFlights.length === 0 && (
-							<p>最新の運航情報に合わせて本命予想を更新しました。</p>
+						{matchedAltPlanName ? (
+							<p>前夜の本命（プランA）から変更となり、本日は<strong>【{matchedAltPlanName}】</strong>のルートで運航中のようです。</p>
+						) : (
+							<>
+								{changedFlights.map(flight => (
+									<p>{flight.flightNo}は前夜の本命候補でした。当日の情報では{flight.update}です。</p>
+								))}
+								{changedActualFlights.map(row => (
+									<p>前夜は{row.planA.flightNo}を予想していましたが、{row.actual.flightNo}の運航を確認しました。</p>
+								))}
+								{changedFlights.length === 0 && changedActualFlights.length === 0 && (
+									<p>最新の運航情報に合わせて本命予想を更新しました。</p>
+								)}
+							</>
 						)}
 					</div>
 				)}
