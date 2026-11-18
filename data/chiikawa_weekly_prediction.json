@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月18日 11:15",
-  "updatedAtIso": "2026-11-18T02:15:04.553Z",
+  "updatedAt": "2026年11月18日 11:30",
+  "updatedAtIso": "2026-11-18T02:30:04.526Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "福岡",
-    "currentLocationCode": "FUK",
+    "currentLocation": "飛行中 (福岡 ➔ 札幌(新千歳))",
+    "currentLocationCode": "CTS",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "東京(羽田) (100%)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
@@ -1879,7 +1879,7 @@
           "route": "東京(羽田) ➔ 福岡"
         }
       },
-      "currentAirport": "福岡",
+      "currentAirport": "飛行中 (福岡 ➔ 札幌(新千歳))",
       "nightStay": "東京(羽田) (100%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH1279 (福岡 ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
@@ -1916,7 +1916,7 @@
               "dest": "CTS",
               "route": "福岡 ➔ 札幌(新千歳)",
               "time": "10:40発 - 13:00着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "② 第2便"
             },
             {
@@ -1963,7 +1963,7 @@
               "dest": "CTS",
               "route": "福岡 ➔ 札幌(新千歳)",
               "time": "10:40発 - 13:00着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "② 第2便"
             },
             {
@@ -2051,7 +2051,14 @@
             "time": "10:40発 - 13:00着",
             "update": null
           },
-          "actual": null
+          "actual": {
+            "flightNo": "NH1279",
+            "route": "福岡 ➔ 札幌(新千歳)",
+            "time": "11:18離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#3",
@@ -2133,9 +2140,9 @@
           "time": "10:40発 - 13:00着",
           "depGate": "9",
           "arrGate": null,
-          "status": "出発予定 (10:52)",
+          "status": "到着予定 (13:09)",
           "isLanded": false,
-          "isLive": false,
+          "isLive": true,
           "isPredicted": false
         },
         {
