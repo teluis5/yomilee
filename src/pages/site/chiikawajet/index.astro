@@ -202,12 +202,20 @@ const pageSchema = {
 				)}
 				{alternativePlans.length > 0 && (
 					<details class="today-alternatives">
-						<summary>今日の別の候補を見る</summary>
+						<summary><span>今日の別の候補を見る</span><span class="alternatives-count">{alternativePlans.length}件</span></summary>
+						<p class="alternatives-note">本命以外の運航予想です。実際の運航とは異なる場合があります。</p>
 						{alternativePlans.map(plan => (
-							<div class="alternative-plan">
-								<b>{plan.planName}</b>
-								<span>{plan.remainingFlights.map(f => `${f.flightNo} ${f.route}（${f.time}）`).join(' → ')}</span>
-							</div>
+							<section class="alternative-plan">
+								<h3>{plan.planName}</h3>
+								<ol class="alternative-flights">
+									{plan.remainingFlights.map(flight => (
+										<li class="alternative-flight">
+											<span class="alternative-time">{flight.depTime ? `${flight.depTime}発` : (flight.time || '時刻未定')}{flight.depTime && flight.arrTime && <small>{flight.arrTime}着</small>}</span>
+											<span class="alternative-flight-info"><b>{flight.flightNo}</b><span>{flight.route}</span></span>
+										</li>
+									))}
+								</ol>
+							</section>
 						))}
 					</details>
 				)}
@@ -848,18 +856,38 @@ const pageSchema = {
 		margin-top: 16px;
 	}
 	.today-alternatives summary {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 16px;
+		background: #f1f7fa;
+		border-radius: 8px;
 		color: #075985;
 		cursor: pointer;
 		font-weight: 700;
+		list-style: none;
 	}
+	.today-alternatives summary::-webkit-details-marker { display: none; }
+	.today-alternatives summary::after { content: '+'; margin-left: auto; font-size: 1.25rem; line-height: 1; }
+	.today-alternatives[open] summary::after { content: '−'; }
+	.today-alternatives summary:focus-visible { outline: 3px solid #0369a1; outline-offset: 3px; }
+	.alternatives-count { color: #475569; font-size: 0.875rem; font-weight: 400; }
+	.alternatives-note { margin: 16px 0 0; color: #475569; font-size: 0.875rem; line-height: 1.6; }
 	.alternative-plan {
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-		padding: 12px 0;
-		border-bottom: 1px solid #e2e8f0;
-		line-height: 1.6;
+		margin-top: 16px;
+		padding: 16px;
+		background: #f8fafc;
+		border-radius: 8px;
 	}
+	.alternative-plan h3 { margin: 0; color: #1e293b; font-size: 1rem; line-height: 1.3; }
+	.alternative-flights { list-style: none; margin: 8px 0 0; padding: 0; }
+	.alternative-flight { display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 12px; padding: 12px 0; border-bottom: 1px solid #dbe4eb; }
+	.alternative-flight:last-child { border-bottom: 0; padding-bottom: 0; }
+	.alternative-time { color: #334155; font-size: 0.875rem; font-variant-numeric: tabular-nums; line-height: 1.6; }
+	.alternative-time small { display: block; color: #475569; font-size: 0.8125rem; }
+	.alternative-flight-info { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; min-width: 0; line-height: 1.6; }
+	.alternative-flight-info b { color: #075985; }
+	.alternative-flight-info span { color: #1e293b; overflow-wrap: anywhere; }
 	.change-reasons {
 		margin-top: 16px;
 		padding: 16px;
