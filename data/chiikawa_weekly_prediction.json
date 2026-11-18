@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月18日 14:30",
-  "updatedAtIso": "2026-11-18T05:30:04.585Z",
+  "updatedAt": "2026年11月18日 14:45",
+  "updatedAtIso": "2026-11-18T05:45:04.571Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "札幌(新千歳)",
-    "currentLocationCode": "CTS",
+    "currentLocation": "飛行中 (札幌(新千歳) ➔ 福岡)",
+    "currentLocationCode": "FUK",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "東京(羽田) (100%)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
@@ -1879,11 +1879,11 @@
           "route": "東京(羽田) ➔ 福岡"
         }
       },
-      "currentAirport": "札幌(新千歳)",
+      "currentAirport": "飛行中 (札幌(新千歳) ➔ 福岡)",
       "nightStay": "東京(羽田) (100%)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH1279 (福岡 ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
-      "todayOutlook": "現在 NH1279 (福岡 ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "pendingNightStayNote": "現在 NH1278 (札幌(新千歳) ➔ 福岡) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "todayOutlook": "現在 NH1278 (札幌(新千歳) ➔ 福岡) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
       "nightStayProbabilities": [
         {
           "airport": "東京(羽田)",
@@ -1925,7 +1925,7 @@
               "dest": "FUK",
               "route": "札幌(新千歳) ➔ 福岡",
               "time": "14:20発 - 17:05着",
-              "tag": "予想接続(76P)",
+              "tag": "飛行中",
               "step": "③ 第3便"
             },
             {
@@ -1972,7 +1972,7 @@
               "dest": "FUK",
               "route": "札幌(新千歳) ➔ 福岡",
               "time": "14:20発 - 17:05着",
-              "tag": "予想接続(76P)",
+              "tag": "飛行中",
               "step": "③ 第3便"
             },
             {
@@ -2080,7 +2080,14 @@
             "time": "14:20発 - 17:05着",
             "update": null
           },
-          "actual": null
+          "actual": {
+            "flightNo": "NH1278",
+            "route": "札幌(新千歳) ➔ 福岡",
+            "time": "14:43離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#4",
@@ -2147,18 +2154,14 @@
         },
         {
           "flightNo": "NH1278",
-          "origCode": "CTS",
-          "destCode": "FUK",
           "route": "札幌(新千歳) ➔ 福岡",
-          "depTime": "14:20",
-          "arrTime": "17:05",
-          "time": "14:20発 - 17:05着 (予想)",
-          "status": "後続便候補",
-          "isLanded": false,
-          "isLive": false,
-          "isPredicted": true,
+          "time": "14:20発 - 17:05着",
           "depGate": null,
-          "arrGate": null
+          "arrGate": null,
+          "status": "到着予定 (17:03)",
+          "isLanded": false,
+          "isLive": true,
+          "isPredicted": false
         },
         {
           "flightNo": "NH1078",
@@ -2249,7 +2252,7 @@
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
       "expectedStart": "羽田発 (NH21)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH1279 (福岡 ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "pendingNightStayNote": "現在 NH1278 (札幌(新千歳) ➔ 福岡) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
@@ -2812,7 +2815,7 @@
           ],
           "description": "前夜長崎駐機シナリオから連動。朝一NH662(08:25発 - 10:00着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全6便を運航して夜に広島泊となる予測スジ。 [フリート整合: 他機体16機スジ整合（76P確定枠カバー率100%）]",
           "fleetConsistency": {
-            "fleetScore": 3.875,
+            "fleetScore": 3.883928571428571,
             "is100Percent": true,
             "strictCoverageRate": 100,
             "otherLinesCount": 16,
@@ -3519,7 +3522,7 @@
           ],
           "description": "前夜大阪(関空)駐機シナリオから連動。朝一NH96(09:45発 - 10:50着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全4便を運航して夜に広島泊となる予測スジ。 [フリート整合: 他機体14機スジ整合（76P確定枠カバー率100%）]",
           "fleetConsistency": {
-            "fleetScore": 3.9107142857142856,
+            "fleetScore": 3.919642857142857,
             "is100Percent": true,
             "strictCoverageRate": 100,
             "otherLinesCount": 14,
@@ -3601,7 +3604,7 @@
           ],
           "description": "前夜東京(羽田)駐機シナリオから連動。朝一NH245(08:55発 - 10:55着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全5便を運航して夜に長崎泊となる予測スジ。 [フリート整合: 他機体14機スジ整合（76P確定枠カバー率100%）]",
           "fleetConsistency": {
-            "fleetScore": 3.7232142857142856,
+            "fleetScore": 3.732142857142857,
             "is100Percent": true,
             "strictCoverageRate": 100,
             "otherLinesCount": 14,
@@ -3698,7 +3701,7 @@
           ],
           "description": "前夜東京(羽田)駐機シナリオから連動。朝一NH661(08:30発 - 10:30着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全5便を運航して夜に中部泊となる予測スジ。 [フリート整合: 他機体14機スジ整合（76P確定枠カバー率100%）]",
           "fleetConsistency": {
-            "fleetScore": 3.7232142857142856,
+            "fleetScore": 3.732142857142857,
             "is100Percent": true,
             "strictCoverageRate": 100,
             "otherLinesCount": 14,
@@ -4774,7 +4777,7 @@
       "code": "NGO",
       "name": "名古屋(中部)",
       "note": "新千歳便（NH703/NH712等）や羽田便の夜間ステイ拠点。",
-      "prob": 61,
+      "prob": 60,
       "level": "A (高確率)"
     },
     {
@@ -4788,14 +4791,14 @@
       "code": "FUK",
       "name": "福岡空港",
       "note": "羽田幹線（NH245/NH250/NH265/NH270等）で連日高頻度運航。",
-      "prob": 40,
+      "prob": 41,
       "level": "B (中確率)"
     },
     {
       "code": "HIJ",
       "name": "広島空港",
       "note": "昼往復便（NH679/NH680）および夜間ステイ便（NH685/NH672）の主要拠点。",
-      "prob": 38,
+      "prob": 37,
       "level": "B (中確率)"
     },
     {
@@ -4809,7 +4812,7 @@
       "code": "OKA",
       "name": "沖縄(那覇)",
       "note": "羽田・伊丹・中部から飛来する大型幹線。",
-      "prob": 34,
+      "prob": 33,
       "level": "C (注目)"
     },
     {
@@ -4898,7 +4901,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 706,
+    "totalFleetFlights": 707,
     "fleetCount": 11
   }
 }
