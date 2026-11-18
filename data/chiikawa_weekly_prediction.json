@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月19日 07:15",
-  "updatedAtIso": "2026-11-18T22:19:18.416Z",
+  "updatedAt": "2026年11月19日 07:30",
+  "updatedAtIso": "2026-11-18T22:31:21.419Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
@@ -1650,8 +1650,75 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "firstFlightCandidates": [],
-      "firstFlightArrival": null,
+      "firstFlightCandidates": [
+        {
+          "flightNo": "NH661",
+          "orig": "HND",
+          "dest": "NGS",
+          "route": "東京(羽田) ➔ 長崎",
+          "depTime": "08:30",
+          "arrTime": "10:30",
+          "depGate": "48",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH21",
+          "orig": "HND",
+          "dest": "ITM",
+          "route": "東京(羽田) ➔ 大阪(伊丹)",
+          "depTime": "11:00",
+          "arrTime": "12:10",
+          "depGate": "63",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH27",
+          "orig": "HND",
+          "dest": "ITM",
+          "route": "東京(羽田) ➔ 大阪(伊丹)",
+          "depTime": "14:00",
+          "arrTime": "15:10",
+          "depGate": "64",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH685",
+          "orig": "HND",
+          "dest": "HIJ",
+          "route": "東京(羽田) ➔ 広島",
+          "depTime": "19:40",
+          "arrTime": "21:10",
+          "depGate": "506",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH593",
+          "orig": "HND",
+          "dest": "MYJ",
+          "route": "東京(羽田) ➔ 松山",
+          "depTime": "14:15",
+          "arrTime": "15:50",
+          "depGate": "63",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        }
+      ],
+      "firstFlightArrival": {
+        "airport": "HND",
+        "arrivalMin": 1210,
+        "gate": null,
+        "flightNo": "NH1078",
+        "time": "20:10"
+      },
       "firstFlightHistory": {
         "previousNight": {
           "updatedAtIso": "2026-11-18T14:45:05.142Z",
@@ -1782,7 +1849,7 @@
           "trialApplicable": true
         },
         "morning": {
-          "updatedAtIso": "2026-11-18T22:00:05.182Z",
+          "updatedAtIso": "2026-11-18T22:31:20.724Z",
           "arrival": {
             "airport": "HND",
             "arrivalMin": 1210,
@@ -1804,18 +1871,6 @@
               "modelObservedAt": null
             },
             {
-              "flightNo": "NH619",
-              "orig": "HND",
-              "dest": "KOJ",
-              "route": "東京(羽田) ➔ 鹿児島",
-              "depTime": "06:35",
-              "arrTime": "08:30",
-              "depGate": "50B",
-              "model": "76P",
-              "modelSource": null,
-              "modelObservedAt": null
-            },
-            {
               "flightNo": "NH21",
               "orig": "HND",
               "dest": "ITM",
@@ -1847,6 +1902,18 @@
               "depTime": "19:40",
               "arrTime": "21:10",
               "depGate": "506",
+              "model": "76P",
+              "modelSource": null,
+              "modelObservedAt": null
+            },
+            {
+              "flightNo": "NH593",
+              "orig": "HND",
+              "dest": "MYJ",
+              "route": "東京(羽田) ➔ 松山",
+              "depTime": "14:15",
+              "arrTime": "15:50",
+              "depGate": "63",
               "model": "76P",
               "modelSource": null,
               "modelObservedAt": null
@@ -1866,18 +1933,6 @@
               "modelObservedAt": null
             },
             {
-              "flightNo": "NH619",
-              "orig": "HND",
-              "dest": "KOJ",
-              "route": "東京(羽田) ➔ 鹿児島",
-              "depTime": "06:35",
-              "arrTime": "08:30",
-              "depGate": "50B",
-              "model": "76P",
-              "modelSource": null,
-              "modelObservedAt": null
-            },
-            {
               "flightNo": "NH21",
               "orig": "HND",
               "dest": "ITM",
@@ -1909,6 +1964,18 @@
               "depTime": "19:40",
               "arrTime": "21:10",
               "depGate": "506",
+              "model": "76P",
+              "modelSource": null,
+              "modelObservedAt": null
+            },
+            {
+              "flightNo": "NH593",
+              "orig": "HND",
+              "dest": "MYJ",
+              "route": "東京(羽田) ➔ 松山",
+              "depTime": "14:15",
+              "arrTime": "15:50",
+              "depGate": "63",
               "model": "76P",
               "modelSource": null,
               "modelObservedAt": null
