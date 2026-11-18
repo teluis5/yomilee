@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月18日 18:30",
-  "updatedAtIso": "2026-11-18T09:30:18.333Z",
+  "updatedAt": "2026年11月18日 18:45",
+  "updatedAtIso": "2026-11-18T09:45:04.915Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "福岡",
-    "currentLocationCode": "FUK",
+    "currentLocation": "飛行中 (福岡 ➔ 東京(羽田))",
+    "currentLocationCode": "HND",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "東京(羽田) (確定)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": true,
@@ -1879,7 +1879,7 @@
           "route": "東京(羽田) ➔ 福岡"
         }
       },
-      "currentAirport": "福岡",
+      "currentAirport": "飛行中 (福岡 ➔ 東京(羽田))",
       "nightStay": "東京(羽田) (確定)",
       "isNightStayConfirmed": true,
       "pendingNightStayNote": "",
@@ -2289,7 +2289,14 @@
             "time": "18:00発 - 19:40着",
             "update": null
           },
-          "actual": null
+          "actual": {
+            "flightNo": "NH1078",
+            "route": "福岡 ➔ 東京(羽田)",
+            "time": "18:43離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#5",
@@ -2349,9 +2356,9 @@
           "time": "18:00発 - 19:40着",
           "depGate": "8",
           "arrGate": "1,2,3",
-          "status": "出発予定 (18:15)",
+          "status": "遅延 (20:10予定)",
           "isLanded": false,
-          "isLive": false,
+          "isLive": true,
           "isPredicted": false
         }
       ]
