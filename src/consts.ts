@@ -1,6 +1,7 @@
 // Global site configurations for ヨミトク (YomiToku)
 export const SITE_TITLE = 'ヨミトク';
 export const SITE_DESCRIPTION = '読んで得する！スポーツ、注目の新商品、ガジェット、暮らしの気になる話題を等身大で深掘りする情報メディア「ヨミトク」。';
+export const SHOW_SIDEBAR_PROFILE = false;
 
 // Author / Profile configurations for Sidebar & Author Box
 export const AUTHOR = {

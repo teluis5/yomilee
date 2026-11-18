@@ -39,7 +39,7 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 
 <aside class="layout-sidebar">
 	<!-- プロフィールウィジェット -->
-	<div class="sidebar-widget box">
+	{siteConsts.SHOW_SIDEBAR_PROFILE !== false && <div class="sidebar-widget box">
 		<div class="widget-header">
 			<Icon name="heroicons:user" class="icon-inline" />
 			<span>運営者プロフィール</span>
@@ -62,7 +62,7 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 				詳しいプロフィール・運営情報を見る &raquo;
 			</a>
 		</div>
-	</div>
+	</div>}
 
 	<!-- カテゴリ一覧ウィジェット -->
 	{categories.length > 0 && (
