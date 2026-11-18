@@ -268,29 +268,12 @@ const pageSchema = {
 				</div>
 				<p class="tomorrow-disclaimer">掲載便は予想です。機材変更などで実際の運航と異なる場合があります。</p>
 				{tomorrowData.pendingNightStayNote && <p class="tomorrow-note">{tomorrowData.pendingNightStayNote}</p>}
-				{tomorrowFirstCandidates.length > 0 ? (
-					<div class="tomorrow-first">
-						<h3>初便の候補</h3>
-						<ol class="first-candidates">
-							{tomorrowFirstCandidates.map((flight, idx) => (
-								<li class="first-candidate">
-									<span class="candidate-rank">{idx === 0 ? '第1候補' : `第${idx + 1}候補`}</span>
-									<div class="candidate-info"><b>{flight.flightNo}</b><span>{flight.route}</span></div>
-									<span class="candidate-time">{flight.depTime ? `${flight.depTime}発` : ''}{flight.arrTime ? ` · ${flight.arrTime}着` : ''}</span>
-								</li>
-							))}
-						</ol>
-						<p class="candidate-note">初便の候補順と、1日全体のプランの順位は異なる場合があります。</p>
-					</div>
-				) : tomorrowData.confirmedFirstFlight ? (
-					<div class="tomorrow-first"><h3>初便の予想</h3><p class="fallback-first"><b>{tomorrowData.confirmedFirstFlight.flightNo}</b> {tomorrowData.confirmedFirstFlight.route}　{tomorrowData.confirmedFirstFlight.time}</p></div>
-				) : <p class="tomorrow-note">初便の候補を確認中です。</p>}
 
 				<h3 class="tomorrow-plans-heading">1日の運航プラン</h3>
 				{(tomorrowData.plans || []).length ? (
 					<div class="tomorrow-plans">
 						{tomorrowData.plans.map((plan, idx) => (
-							<details class="tomorrow-plan" open={idx === 0}>
+							<details class="tomorrow-plan" open>
 								<summary class="tomorrow-plan-head">
 									<span class="tomorrow-plan-label">{idx === 0 ? '本命プラン' : `別案 ${idx}`}</span>
 									<span class="tomorrow-plan-route">{plan.routeSummary || plan.title || '運航ルート'}</span>
