@@ -11,6 +11,8 @@ interface Props {
 	authorTitle?: string;
 	authorBio?: string;
 	authorAvatar?: string;
+	currentCategories?: string[];
+	currentSlug?: string;
 }
 
 const siteConsts = consts as Record<string, any>;
@@ -20,12 +22,17 @@ const {
 	authorTitle = siteConsts.AUTHOR_TITLE ?? siteConsts.AUTHOR?.title ?? '',
 	authorBio = siteConsts.AUTHOR_BIO ?? siteConsts.AUTHOR?.bio ?? '',
 	authorAvatar = siteConsts.AUTHOR_AVATAR ?? siteConsts.AUTHOR?.avatar ?? '/brand/teluis_avatar.webp',
+	currentCategories,
+	currentSlug,
 } = Astro.props;
 
 // 全記事の取得（ドラフト除外）
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const recentPosts = sortedPosts.slice(0, 5);
+const recentPosts = sortedPosts.filter((post) =>
+	post.id !== currentSlug && (currentCategories === undefined ||
+		post.data.categories?.some((category: string) => currentCategories.includes(category)))
+).slice(0, 5);
 
 // カテゴリ別記事件数の集計
 const categoryCounts: Record<string, number> = {};
@@ -92,7 +99,7 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 		<div class="sidebar-widget box">
 			<div class="widget-header">
 				<Icon name="heroicons:sparkles" class="icon-inline" />
-				<span>新着記事</span>
+				<span>{currentCategories === undefined ? '新着記事' : '同じカテゴリーの新着記事'}</span>
 			</div>
 			<div class="recent-posts">
 				{recentPosts.map((post) => (

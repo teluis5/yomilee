@@ -168,7 +168,7 @@ posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 					</section>
 				</div>
 
-				<Sidebar />
+				<Sidebar currentCategories={category ? [category] : []} />
 			</div>
 		</main>
 		<Footer />
