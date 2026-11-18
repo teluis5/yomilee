@@ -462,10 +462,12 @@ function predictDomesticTodayRemainder(todayFlights, todayStr, odptData) {
     };
   });
 
+  const isNightStayConfirmed = nightStayProbabilities.length === 1 && topStay.probability === 100 && (uniquePaths[0]?.remFlights?.length || 0) === 0;
+
   return {
-    nightStayName: `${topStay.airport} (${topStay.probability}%)`,
+    nightStayName: isNightStayConfirmed ? `${topStay.airport} (確定)` : `${topStay.airport} (${topStay.probability}%)`,
     nightStayCode: topStay.code,
-    isNightStayConfirmed: false,
+    isNightStayConfirmed,
     nightStayProbabilities,
     predictedRemainingToday,
     todayPlans

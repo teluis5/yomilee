@@ -5,6 +5,7 @@ import { execSync } from 'node:child_process';
 import { generateWeeklyPrediction } from './weekly_chiikawa_predictor.mjs';
 import { generatePokemonWeeklyPrediction } from './weekly_pokemon_predictor.mjs';
 import { generateDailyChiikawaArticle } from './generate_daily_chiikawa_article.mjs';
+import { generateDailyPokemonArticle } from './generate_daily_pokemon_article.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,6 +35,9 @@ function performAutoPush(updatedAt) {
     } else {
       execSync('git add data/chiikawa_weekly_prediction.json src/data/chiikawa_weekly_prediction.json data/ana_fleet_status.json src/data/ana_fleet_status.json data/daily_predictions_snapshot.json scripts/ src/pages/site/chiikawajet/ src/assets/images/chiikawajet_ogp.png public/brand/chiikawajet_ogp.png src/content/blog', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
       execSync('git add data/pokemon_weekly_prediction.json src/data/pokemon_weekly_prediction.json', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+      if (fs.existsSync(path.join(YOMILEE_ROOT, 'src', 'assets', 'images', 'pokemonjet_ogp.png'))) {
+        execSync('git add src/assets/images/pokemonjet_ogp.png public/brand/pokemonjet_ogp.png public/brand/pokemonjet_ogp.jpg', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
+      }
       if (fs.existsSync(path.join(YOMILEE_ROOT, 'data', 'pokemon_prediction_snapshots.json'))) {
         execSync('git add data/pokemon_prediction_snapshots.json', { cwd: YOMILEE_ROOT, stdio: 'inherit' });
       }
@@ -73,9 +77,16 @@ async function main() {
       console.warn('⚠️ 日次スケジュール記事の生成に失敗しました:', err.message);
     }
     try {
-      await generatePokemonWeeklyPrediction();
+      const pokemonResult = await generatePokemonWeeklyPrediction();
+      if (pokemonResult) {
+        generateDailyPokemonArticle(pokemonResult);
+      }
+      const pokemonCardScript = path.resolve(YOMILEE_ROOT, '..', '..', '5_script', 'generate_pokemon_tweet_card.py');
+      if (fs.existsSync(pokemonCardScript)) {
+        execSync(`python "${pokemonCardScript}"`, { stdio: 'inherit' });
+      }
     } catch (err) {
-      console.warn('⚠️ ポケモンジェットの予想更新に失敗しました:', err.message);
+      console.warn('⚠️ ポケモンジェットの予想・記事・画像更新に失敗しました:', err.message);
     }
 
     // 運行予想インフォグラフィック画像（Twitterカード/OGP）を最新データで自動生成
