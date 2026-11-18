@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月18日 10:00",
-  "updatedAtIso": "2026-11-18T01:00:04.972Z",
+  "updatedAt": "2026年11月18日 10:15",
+  "updatedAtIso": "2026-11-18T01:15:04.730Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (東京(羽田) ➔ 福岡)",
+    "currentLocation": "福岡",
     "currentLocationCode": "FUK",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "長崎(56%) / 名古屋(中部)(24%)",
     "nightStayCode": "NGS",
     "isNightStayConfirmed": false,
@@ -1894,7 +1894,7 @@
           "route": "東京(羽田) ➔ 福岡"
         }
       },
-      "currentAirport": "飛行中 (東京(羽田) ➔ 福岡)",
+      "currentAirport": "福岡",
       "nightStay": "長崎(56%) / 名古屋(中部)(24%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH1077 (東京(羽田) ➔ 福岡) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 長崎 56% / 名古屋(中部) 24% / 広島 11% / 東京(羽田) 9% と推定されます。",
@@ -1937,7 +1937,7 @@
               "dest": "FUK",
               "route": "東京(羽田) ➔ 福岡",
               "time": "08:00発 - 09:55着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "① 第1便"
             },
             {
@@ -1993,7 +1993,7 @@
               "dest": "FUK",
               "route": "東京(羽田) ➔ 福岡",
               "time": "08:00発 - 09:55着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "① 第1便"
             },
             {
@@ -2049,7 +2049,7 @@
               "dest": "FUK",
               "route": "東京(羽田) ➔ 福岡",
               "time": "08:00発 - 09:55着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "① 第1便"
             },
             {
@@ -2129,10 +2129,10 @@
           "actual": {
             "flightNo": "NH1077",
             "route": "東京(羽田) ➔ 福岡",
-            "time": "08:28離陸",
-            "status": "飛行中",
-            "isLanded": false,
-            "isLive": true
+            "time": "08:28離陸 / 10:01着陸",
+            "status": "着陸済",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -2226,9 +2226,9 @@
           "time": "08:00発 - 09:55着",
           "depGate": "500",
           "arrGate": null,
-          "status": "到着予定 (10:02)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (10:01)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
