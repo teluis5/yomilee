@@ -786,41 +786,41 @@
     ]
   },
   "2026-11-20": {
-    "updatedAtIso": "2026-11-19T01:00:07.404Z",
+    "updatedAtIso": "2026-11-19T02:00:07.576Z",
     "plans": [
       {
         "planId": "tomorrow-plan-1",
         "planName": "プランA",
         "stayCode": "HND",
         "rank": "本命",
-        "probability": 34,
-        "routeSummary": "伊丹 ➔ 新千歳 ➔ 伊丹 ➔ 新千歳 ➔ 羽田",
+        "probability": 37,
+        "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田",
         "flights": [
           {
             "step": "第1便",
-            "flightNo": "NH771",
-            "orig": "ITM",
-            "dest": "CTS",
-            "route": "大阪(伊丹) ➔ 札幌(新千歳)",
-            "time": "08:30発 - 10:20着",
+            "flightNo": "NH247",
+            "orig": "HND",
+            "dest": "FUK",
+            "route": "東京(羽田) ➔ 福岡",
+            "time": "09:30発 - 11:30着",
             "tag": "予想"
           },
           {
             "step": "第2便",
-            "flightNo": "NH774",
-            "orig": "CTS",
-            "dest": "ITM",
-            "route": "札幌(新千歳) ➔ 大阪(伊丹)",
-            "time": "11:10発 - 13:10着",
+            "flightNo": "NH252",
+            "orig": "FUK",
+            "dest": "HND",
+            "route": "福岡 ➔ 東京(羽田)",
+            "time": "12:15発 - 13:55着",
             "tag": "予想"
           },
           {
             "step": "第3便",
-            "flightNo": "NH983",
-            "orig": "ITM",
+            "flightNo": "NH69",
+            "orig": "HND",
             "dest": "CTS",
-            "route": "大阪(伊丹) ➔ 札幌(新千歳)",
-            "time": "14:00発 - 15:50着",
+            "route": "東京(羽田) ➔ 札幌(新千歳)",
+            "time": "15:00発 - 16:35着",
             "tag": "予想"
           },
           {
@@ -837,82 +837,36 @@
       {
         "planId": "tomorrow-plan-2",
         "planName": "プランB",
-        "stayCode": "ITM",
-        "rank": "候補",
-        "probability": 33,
-        "routeSummary": "伊丹 ➔ 新千歳 ➔ 伊丹 ➔ 新千歳 ➔ 伊丹",
-        "flights": [
-          {
-            "step": "第1便",
-            "flightNo": "NH771",
-            "orig": "ITM",
-            "dest": "CTS",
-            "route": "大阪(伊丹) ➔ 札幌(新千歳)",
-            "time": "08:30発 - 10:20着",
-            "tag": "予想"
-          },
-          {
-            "step": "第2便",
-            "flightNo": "NH774",
-            "orig": "CTS",
-            "dest": "ITM",
-            "route": "札幌(新千歳) ➔ 大阪(伊丹)",
-            "time": "11:10発 - 13:10着",
-            "tag": "予想"
-          },
-          {
-            "step": "第3便",
-            "flightNo": "NH983",
-            "orig": "ITM",
-            "dest": "CTS",
-            "route": "大阪(伊丹) ➔ 札幌(新千歳)",
-            "time": "14:00発 - 15:50着",
-            "tag": "予想"
-          },
-          {
-            "step": "第4便",
-            "flightNo": "NH780",
-            "orig": "CTS",
-            "dest": "ITM",
-            "route": "札幌(新千歳) ➔ 大阪(伊丹)",
-            "time": "17:50発 - 19:50着",
-            "tag": "予想"
-          }
-        ]
-      },
-      {
-        "planId": "tomorrow-plan-3",
-        "planName": "プランC",
         "stayCode": "TAK",
         "rank": "候補",
-        "probability": 33,
-        "routeSummary": "伊丹 ➔ 新千歳 ➔ 伊丹 ➔ 新千歳 ➔ 羽田 ➔ 高松",
+        "probability": 37,
+        "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 高松",
         "flights": [
           {
             "step": "第1便",
-            "flightNo": "NH771",
-            "orig": "ITM",
-            "dest": "CTS",
-            "route": "大阪(伊丹) ➔ 札幌(新千歳)",
-            "time": "08:30発 - 10:20着",
+            "flightNo": "NH247",
+            "orig": "HND",
+            "dest": "FUK",
+            "route": "東京(羽田) ➔ 福岡",
+            "time": "09:30発 - 11:30着",
             "tag": "予想"
           },
           {
             "step": "第2便",
-            "flightNo": "NH774",
-            "orig": "CTS",
-            "dest": "ITM",
-            "route": "札幌(新千歳) ➔ 大阪(伊丹)",
-            "time": "11:10発 - 13:10着",
+            "flightNo": "NH252",
+            "orig": "FUK",
+            "dest": "HND",
+            "route": "福岡 ➔ 東京(羽田)",
+            "time": "12:15発 - 13:55着",
             "tag": "予想"
           },
           {
             "step": "第3便",
-            "flightNo": "NH983",
-            "orig": "ITM",
+            "flightNo": "NH69",
+            "orig": "HND",
             "dest": "CTS",
-            "route": "大阪(伊丹) ➔ 札幌(新千歳)",
-            "time": "14:00発 - 15:50着",
+            "route": "東京(羽田) ➔ 札幌(新千歳)",
+            "time": "15:00発 - 16:35着",
             "tag": "予想"
           },
           {
@@ -931,6 +885,43 @@
             "dest": "TAK",
             "route": "東京(羽田) ➔ 高松",
             "time": "20:05発 - 21:25着",
+            "tag": "予想"
+          }
+        ]
+      },
+      {
+        "planId": "tomorrow-plan-3",
+        "planName": "プランC",
+        "stayCode": "MYJ",
+        "rank": "候補",
+        "probability": 26,
+        "routeSummary": "羽田 ➔ 那覇 ➔ 羽田 ➔ 松山",
+        "flights": [
+          {
+            "step": "第1便",
+            "flightNo": "NH469",
+            "orig": "HND",
+            "dest": "OKA",
+            "route": "東京(羽田) ➔ 沖縄(那覇)",
+            "time": "10:30発 - 13:25着",
+            "tag": "予想"
+          },
+          {
+            "step": "第2便",
+            "flightNo": "NH468",
+            "orig": "OKA",
+            "dest": "HND",
+            "route": "沖縄(那覇) ➔ 東京(羽田)",
+            "time": "14:20発 - 16:40着",
+            "tag": "予想"
+          },
+          {
+            "step": "第3便",
+            "flightNo": "NH595",
+            "orig": "HND",
+            "dest": "MYJ",
+            "route": "東京(羽田) ➔ 松山",
+            "time": "17:25発 - 19:00着",
             "tag": "予想"
           }
         ]
