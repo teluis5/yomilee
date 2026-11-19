@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月20日 05:00",
-  "updatedAtIso": "2026-11-19T20:00:08.394Z",
+  "updatedAt": "2026年11月20日 06:00",
+  "updatedAtIso": "2026-11-19T21:00:08.344Z",
   "totalJets": 5,
   "jets": [
     {
@@ -569,9 +569,26 @@
       "routesSummary": "羽田/成田 ➔ フランクフルト / パリ / ロサンゼルス / アジア",
       "color": "#f59e0b",
       "serviceStart": "2023-06-04",
-      "flightState": "確認中",
-      "currentLocation": "確認中",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "フランクフルト (FRA) ➔ 東京(羽田) (HND)",
+      "currentFlight": {
+        "flightNo": "NH224",
+        "origin": "FRA",
+        "dest": "HND",
+        "originName": "フランクフルト (FRA)",
+        "destinationName": "東京(羽田) (HND)",
+        "origCode": "FRA",
+        "destCode": "HND",
+        "route": "フランクフルト ➔ 東京(羽田)",
+        "depTime": "05:01",
+        "arrTime": "17:55",
+        "timeRange": "05:01 - 17:55",
+        "dateJst": "2026-11-20",
+        "status": "Estimated 17:35",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH224",
@@ -582,12 +599,12 @@
           "origCode": "FRA",
           "destCode": "HND",
           "route": "フランクフルト ➔ 東京(羽田)",
-          "depTime": "04:45",
+          "depTime": "05:01",
           "arrTime": "17:55",
-          "timeRange": "04:45 - 17:55",
+          "timeRange": "05:01 - 17:55",
           "dateJst": "2026-11-20",
-          "status": "Estimated dep 20:46",
-          "isLive": false,
+          "status": "Estimated 17:35",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         }
@@ -602,12 +619,12 @@
           "origCode": "FRA",
           "destCode": "HND",
           "route": "フランクフルト ➔ 東京(羽田)",
-          "depTime": "04:45",
+          "depTime": "05:01",
           "arrTime": "17:55",
-          "timeRange": "04:45 - 17:55",
+          "timeRange": "05:01 - 17:55",
           "dateJst": "2026-11-20",
-          "status": "Estimated dep 20:46",
-          "isLive": false,
+          "status": "Estimated 17:35",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         },
@@ -726,7 +743,7 @@
           "tag": "予想"
         },
         "actual": null,
-        "update": null
+        "update": "当日の機種は78K"
       },
       {
         "predicted": {
@@ -739,7 +756,7 @@
           "tag": "予想"
         },
         "actual": null,
-        "update": null
+        "update": "当日の機種は78K"
       },
       {
         "predicted": {
