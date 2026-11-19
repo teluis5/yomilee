@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月19日 13:00",
-  "updatedAtIso": "2026-11-19T04:00:07.498Z",
+  "updatedAt": "2026年11月19日 14:00",
+  "updatedAtIso": "2026-11-19T05:00:14.035Z",
   "totalJets": 5,
   "jets": [
     {
@@ -32,7 +32,7 @@
         "arrTime": "13:50",
         "timeRange": "12:47 - 13:50",
         "dateJst": "2026-11-19",
-        "status": "Estimated 14:01",
+        "status": "Delayed 14:07",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -87,7 +87,7 @@
           "arrTime": "13:50",
           "timeRange": "12:47 - 13:50",
           "dateJst": "2026-11-19",
-          "status": "Estimated 14:01",
+          "status": "Delayed 14:07",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -107,7 +107,7 @@
           "arrTime": "13:50",
           "timeRange": "12:47 - 13:50",
           "dateJst": "2026-11-19",
-          "status": "Estimated 14:01",
+          "status": "Delayed 14:07",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -233,7 +233,7 @@
         "arrTime": "19:15",
         "timeRange": "08:56 - 19:15",
         "dateJst": "2026-11-19",
-        "status": "Estimated 18:50",
+        "status": "Estimated 18:47",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -252,7 +252,7 @@
           "arrTime": "19:15",
           "timeRange": "08:56 - 19:15",
           "dateJst": "2026-11-19",
-          "status": "Estimated 18:50",
+          "status": "Estimated 18:47",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -272,7 +272,7 @@
           "arrTime": "19:15",
           "timeRange": "08:56 - 19:15",
           "dateJst": "2026-11-19",
-          "status": "Estimated 18:50",
+          "status": "Estimated 18:47",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -398,7 +398,7 @@
         "arrTime": "17:55",
         "timeRange": "04:24 - 17:55",
         "dateJst": "2026-11-19",
-        "status": "Estimated 17:32",
+        "status": "Estimated 17:26",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -417,7 +417,7 @@
           "arrTime": "17:55",
           "timeRange": "04:24 - 17:55",
           "dateJst": "2026-11-19",
-          "status": "Estimated 17:32",
+          "status": "Estimated 17:26",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -437,7 +437,7 @@
           "arrTime": "17:55",
           "timeRange": "04:24 - 17:55",
           "dateJst": "2026-11-19",
-          "status": "Estimated 17:32",
+          "status": "Estimated 17:26",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -551,8 +551,81 @@
       "flightState": "確認中",
       "currentLocation": "確認中",
       "currentFlight": null,
-      "todayFlights": [],
+      "todayFlights": [
+        {
+          "flightNo": "NH865",
+          "origin": "HND",
+          "dest": "GMP",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "GMP",
+          "origCode": "HND",
+          "destCode": "GMP",
+          "route": "東京(羽田) ➔ GMP",
+          "depTime": "15:55",
+          "arrTime": "18:35",
+          "timeRange": "15:55 - 18:35",
+          "dateJst": "2026-11-19",
+          "status": "Estimated dep 15:55",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
+        {
+          "flightNo": "NH118",
+          "origin": "HND",
+          "dest": "SEA",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "シアトル (SEA)",
+          "origCode": "HND",
+          "destCode": "SEA",
+          "route": "東京(羽田) ➔ シアトル",
+          "depTime": "21:15",
+          "arrTime": "06:20",
+          "timeRange": "21:15 - 06:20",
+          "dateJst": "2026-11-19",
+          "status": "Estimated dep 21:15",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        }
+      ],
       "recentFlights": [
+        {
+          "flightNo": "NH118",
+          "origin": "HND",
+          "dest": "SEA",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "シアトル (SEA)",
+          "origCode": "HND",
+          "destCode": "SEA",
+          "route": "東京(羽田) ➔ シアトル",
+          "depTime": "21:15",
+          "arrTime": "06:20",
+          "timeRange": "21:15 - 06:20",
+          "dateJst": "2026-11-19",
+          "status": "Estimated dep 21:15",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
+        {
+          "flightNo": "NH865",
+          "origin": "HND",
+          "dest": "GMP",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "GMP",
+          "origCode": "HND",
+          "destCode": "GMP",
+          "route": "東京(羽田) ➔ GMP",
+          "depTime": "15:55",
+          "arrTime": "18:35",
+          "timeRange": "15:55 - 18:35",
+          "dateJst": "2026-11-19",
+          "status": "Estimated dep 15:55",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH880",
           "origin": "SYD",
@@ -624,42 +697,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH890",
-          "origin": "SYD",
-          "dest": "HND",
-          "originName": "シドニー (SYD)",
-          "destinationName": "東京(羽田) (HND)",
-          "origCode": "SYD",
-          "destCode": "HND",
-          "route": "シドニー ➔ 東京(羽田)",
-          "depTime": "11:17",
-          "arrTime": "20:44",
-          "timeRange": "11:17 - 20:44",
-          "dateJst": "2026-11-14",
-          "status": "Landed 20:44",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
-        },
-        {
-          "flightNo": "NH879",
-          "origin": "HND",
-          "dest": "SYD",
-          "originName": "東京(羽田) (HND)",
-          "destinationName": "シドニー (SYD)",
-          "origCode": "HND",
-          "destCode": "SYD",
-          "route": "東京(羽田) ➔ シドニー",
-          "depTime": "23:11",
-          "arrTime": "08:02",
-          "timeRange": "23:11 - 08:02",
-          "dateJst": "2026-11-13",
-          "status": "Landed 10:02",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -692,7 +729,7 @@
         "arrTime": "01:30",
         "timeRange": "10:56 - 01:30",
         "dateJst": "2026-11-19",
-        "status": "Estimated 16:44",
+        "status": "Estimated 16:43",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -711,7 +748,7 @@
           "arrTime": "01:30",
           "timeRange": "10:56 - 01:30",
           "dateJst": "2026-11-19",
-          "status": "Estimated 16:44",
+          "status": "Estimated 16:43",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -749,7 +786,7 @@
           "arrTime": "01:30",
           "timeRange": "10:56 - 01:30",
           "dateJst": "2026-11-19",
-          "status": "Estimated 16:44",
+          "status": "Estimated 16:43",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -1311,7 +1348,7 @@
           "arrTime": "13:50",
           "timeRange": "12:47 - 13:50",
           "dateJst": "2026-11-19",
-          "status": "Estimated 14:01",
+          "status": "Delayed 14:07",
           "isLive": true,
           "isLanded": false,
           "isToday": true
