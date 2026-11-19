@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月19日 15:00",
-  "updatedAtIso": "2026-11-19T06:00:07.709Z",
+  "updatedAt": "2026年11月19日 16:00",
+  "updatedAtIso": "2026-11-19T07:00:07.424Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,9 +17,26 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "着陸済・駐機中 🟡",
-      "currentLocation": "松山 (MYJ)",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "松山 (MYJ) ➔ 東京(羽田) (HND)",
+      "currentFlight": {
+        "flightNo": "NH592",
+        "origin": "MYJ",
+        "dest": "HND",
+        "originName": "松山 (MYJ)",
+        "destinationName": "東京(羽田) (HND)",
+        "origCode": "MYJ",
+        "destCode": "HND",
+        "route": "松山 ➔ 東京(羽田)",
+        "depTime": "15:14",
+        "arrTime": "15:55",
+        "timeRange": "15:14 - 15:55",
+        "dateJst": "2026-11-19",
+        "status": "Delayed 16:16",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH1075",
@@ -74,9 +91,45 @@
           "isLive": false,
           "isLanded": true,
           "isToday": true
+        },
+        {
+          "flightNo": "NH592",
+          "origin": "MYJ",
+          "dest": "HND",
+          "originName": "松山 (MYJ)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "MYJ",
+          "destCode": "HND",
+          "route": "松山 ➔ 東京(羽田)",
+          "depTime": "15:14",
+          "arrTime": "15:55",
+          "timeRange": "15:14 - 15:55",
+          "dateJst": "2026-11-19",
+          "status": "Delayed 16:16",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
         }
       ],
       "recentFlights": [
+        {
+          "flightNo": "NH592",
+          "origin": "MYJ",
+          "dest": "HND",
+          "originName": "松山 (MYJ)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "MYJ",
+          "destCode": "HND",
+          "route": "松山 ➔ 東京(羽田)",
+          "depTime": "15:14",
+          "arrTime": "15:55",
+          "timeRange": "15:14 - 15:55",
+          "dateJst": "2026-11-19",
+          "status": "Delayed 16:16",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH589",
           "origin": "HND",
@@ -166,24 +219,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH592",
-          "origin": "MYJ",
-          "dest": "HND",
-          "originName": "松山 (MYJ)",
-          "destinationName": "東京(羽田) (HND)",
-          "origCode": "MYJ",
-          "destCode": "HND",
-          "route": "松山 ➔ 東京(羽田)",
-          "depTime": "15:16",
-          "arrTime": "16:28",
-          "timeRange": "15:16 - 16:28",
-          "dateJst": "2026-11-18",
-          "status": "Landed 16:28",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -216,7 +251,7 @@
         "arrTime": "19:15",
         "timeRange": "08:56 - 19:15",
         "dateJst": "2026-11-19",
-        "status": "Estimated 18:56",
+        "status": "Estimated 19:01",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -235,7 +270,7 @@
           "arrTime": "19:15",
           "timeRange": "08:56 - 19:15",
           "dateJst": "2026-11-19",
-          "status": "Estimated 18:56",
+          "status": "Estimated 19:01",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -255,7 +290,7 @@
           "arrTime": "19:15",
           "timeRange": "08:56 - 19:15",
           "dateJst": "2026-11-19",
-          "status": "Estimated 18:56",
+          "status": "Estimated 19:01",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -381,7 +416,7 @@
         "arrTime": "17:55",
         "timeRange": "04:24 - 17:55",
         "dateJst": "2026-11-19",
-        "status": "Estimated 17:34",
+        "status": "Estimated 17:26",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -400,7 +435,7 @@
           "arrTime": "17:55",
           "timeRange": "04:24 - 17:55",
           "dateJst": "2026-11-19",
-          "status": "Estimated 17:34",
+          "status": "Estimated 17:26",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -420,7 +455,7 @@
           "arrTime": "17:55",
           "timeRange": "04:24 - 17:55",
           "dateJst": "2026-11-19",
-          "status": "Estimated 17:34",
+          "status": "Estimated 17:26",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -712,7 +747,7 @@
         "arrTime": "01:30",
         "timeRange": "10:56 - 01:30",
         "dateJst": "2026-11-19",
-        "status": "Estimated 16:26",
+        "status": "Estimated 16:38",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -731,7 +766,7 @@
           "arrTime": "01:30",
           "timeRange": "10:56 - 01:30",
           "dateJst": "2026-11-19",
-          "status": "Estimated 16:26",
+          "status": "Estimated 16:38",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -769,7 +804,7 @@
           "arrTime": "01:30",
           "timeRange": "10:56 - 01:30",
           "dateJst": "2026-11-19",
-          "status": "Estimated 16:26",
+          "status": "Estimated 16:38",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -857,16 +892,16 @@
       {
         "code": "HND",
         "airport": "羽田",
-        "weight": 10.797300000000002,
+        "weight": 11.997,
         "floored": 96,
-        "remainder": 0.6175404687122494,
+        "remainder": 0.6175404687122352,
         "originalIndex": 0,
         "probability": 96
       },
       {
         "code": "FUK",
         "airport": "福岡",
-        "weight": 0.189,
+        "weight": 0.21,
         "floored": 5,
         "remainder": -3.3087702343561247,
         "originalIndex": 1,
@@ -875,7 +910,7 @@
       {
         "code": "ITM",
         "airport": "伊丹",
-        "weight": 0.189,
+        "weight": 0.21,
         "floored": 5,
         "remainder": -3.3087702343561247,
         "originalIndex": 2,
@@ -883,17 +918,6 @@
       }
     ],
     "predictedRemainingToday": [
-      {
-        "flightNo": "NH592",
-        "origCode": "MYJ",
-        "destCode": "HND",
-        "route": "松山 ➔ 東京(羽田)",
-        "depTime": "14:35",
-        "arrTime": "15:55",
-        "time": "14:35発 - 15:55着 (予想)",
-        "status": "後続便候補",
-        "isPredicted": true
-      },
       {
         "flightNo": "NH265",
         "origCode": "HND",
@@ -959,8 +983,8 @@
             "orig": "MYJ",
             "dest": "HND",
             "route": "松山 ➔ 東京(羽田)",
-            "time": "14:35発 - 15:55着",
-            "tag": "予想接続 (78P)",
+            "time": "15:14発 - 15:55着",
+            "tag": "飛行中 🟢",
             "step": "第4便"
           },
           {
@@ -1024,8 +1048,8 @@
             "orig": "MYJ",
             "dest": "HND",
             "route": "松山 ➔ 東京(羽田)",
-            "time": "14:35発 - 15:55着",
-            "tag": "予想接続 (78P)",
+            "time": "15:14発 - 15:55着",
+            "tag": "飛行中 🟢",
             "step": "第4便"
           },
           {
@@ -1089,8 +1113,8 @@
             "orig": "MYJ",
             "dest": "HND",
             "route": "松山 ➔ 東京(羽田)",
-            "time": "14:35発 - 15:55着",
-            "tag": "予想接続 (78P)",
+            "time": "15:14発 - 15:55着",
+            "tag": "飛行中 🟢",
             "step": "第4便"
           },
           {
@@ -1348,7 +1372,24 @@
           "time": "17:30発 - 19:10着",
           "tag": "予想"
         },
-        "actual": null,
+        "actual": {
+          "flightNo": "NH592",
+          "origin": "MYJ",
+          "dest": "HND",
+          "originName": "松山 (MYJ)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "MYJ",
+          "destCode": "HND",
+          "route": "松山 ➔ 東京(羽田)",
+          "depTime": "15:14",
+          "arrTime": "15:55",
+          "timeRange": "15:14 - 15:55",
+          "dateJst": "2026-11-19",
+          "status": "Delayed 16:16",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
+        },
         "update": null
       }
     ]
