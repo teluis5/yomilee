@@ -847,7 +847,8 @@ async function main() {
       }
     }
 
-    // ファイル書き出し
+    // ファイル書き出し（MDX自己終了タグ正規化を実施）
+    articleMdx = articleMdx.replace(/<(br|hr)\s*>/gi, '<$1 />');
     const mdxPath = path.join(targetDir, 'index.mdx');
     fs.writeFileSync(mdxPath, articleMdx, 'utf-8');
     console.log(`💾 記事を保存しました: ${mdxPath}`);
