@@ -629,7 +629,7 @@
       "trialApplicable": true
     },
     "morning": {
-      "updatedAtIso": "2026-11-18T23:00:04.343Z",
+      "updatedAtIso": "2026-11-18T23:45:04.077Z",
       "arrival": {
         "airport": "HND",
         "arrivalMin": 1210,
@@ -638,18 +638,6 @@
         "time": "20:10"
       },
       "candidates": [
-        {
-          "flightNo": "NH661",
-          "orig": "HND",
-          "dest": "NGS",
-          "route": "東京(羽田) ➔ 長崎",
-          "depTime": "08:30",
-          "arrTime": "10:30",
-          "depGate": "48",
-          "model": "76P",
-          "modelSource": null,
-          "modelObservedAt": null
-        },
         {
           "flightNo": "NH21",
           "orig": "HND",
@@ -701,18 +689,6 @@
       ],
       "trialCandidates": [
         {
-          "flightNo": "NH661",
-          "orig": "HND",
-          "dest": "NGS",
-          "route": "東京(羽田) ➔ 長崎",
-          "depTime": "08:30",
-          "arrTime": "10:30",
-          "depGate": "48",
-          "model": "76P",
-          "modelSource": null,
-          "modelObservedAt": null
-        },
-        {
           "flightNo": "NH21",
           "orig": "HND",
           "dest": "ITM",
@@ -762,6 +738,10 @@
         }
       ],
       "trialApplicable": true
+    },
+    "actual": {
+      "flightNo": "NH661",
+      "route": "東京(羽田) ➔ 長崎"
     }
   }
 }

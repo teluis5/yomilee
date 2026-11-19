@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月19日 08:45",
-  "updatedAtIso": "2026-11-18T23:45:04.720Z",
+  "updatedAt": "2026年11月19日 09:00",
+  "updatedAtIso": "2026-11-19T00:00:05.079Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "東京(羽田)",
-    "currentLocationCode": "HND",
+    "currentLocation": "飛行中 (東京(羽田) ➔ 長崎)",
+    "currentLocationCode": "NGS",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "名古屋(中部)(85%) / 長崎(5%)",
     "nightStayCode": "NGO",
     "isNightStayConfirmed": false,
@@ -48,19 +48,19 @@
   },
   "firstFlightStats": {
     "previousNight": {
-      "total": 4,
-      "firstHits": 3,
-      "candidateHits": 4
+      "total": 5,
+      "firstHits": 4,
+      "candidateHits": 5
     },
     "morning": {
-      "total": 4,
+      "total": 5,
       "firstHits": 3,
       "candidateHits": 3
     }
   },
   "pairedFirstFlightStats": {
-    "total": 4,
-    "previousNightHits": 3,
+    "total": 5,
+    "previousNightHits": 4,
     "morningHits": 3
   },
   "overnightTrialStats": {
@@ -74,9 +74,9 @@
       "chiikawaBaselineHits": 2,
       "chiikawaModelHits": 2
     },
-    "savedComparisons": 8,
-    "baselineHits": 6,
-    "trialHits": 6
+    "savedComparisons": 10,
+    "baselineHits": 7,
+    "trialHits": 7
   },
   "pastPredictions": [
     {
@@ -1665,56 +1665,7 @@
       "isWeekend": false,
       "statusType": "today",
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
-      "firstFlightCandidates": [
-        {
-          "flightNo": "NH21",
-          "orig": "HND",
-          "dest": "ITM",
-          "route": "東京(羽田) ➔ 大阪(伊丹)",
-          "depTime": "11:00",
-          "arrTime": "12:10",
-          "depGate": "63",
-          "model": "76P",
-          "modelSource": null,
-          "modelObservedAt": null
-        },
-        {
-          "flightNo": "NH27",
-          "orig": "HND",
-          "dest": "ITM",
-          "route": "東京(羽田) ➔ 大阪(伊丹)",
-          "depTime": "14:00",
-          "arrTime": "15:10",
-          "depGate": "64",
-          "model": "76P",
-          "modelSource": null,
-          "modelObservedAt": null
-        },
-        {
-          "flightNo": "NH685",
-          "orig": "HND",
-          "dest": "HIJ",
-          "route": "東京(羽田) ➔ 広島",
-          "depTime": "19:40",
-          "arrTime": "21:10",
-          "depGate": "506",
-          "model": "76P",
-          "modelSource": null,
-          "modelObservedAt": null
-        },
-        {
-          "flightNo": "NH593",
-          "orig": "HND",
-          "dest": "MYJ",
-          "route": "東京(羽田) ➔ 松山",
-          "depTime": "14:15",
-          "arrTime": "15:50",
-          "depGate": "63",
-          "model": "76P",
-          "modelSource": null,
-          "modelObservedAt": null
-        }
-      ],
+      "firstFlightCandidates": [],
       "firstFlightArrival": {
         "airport": "HND",
         "arrivalMin": 1210,
@@ -1961,9 +1912,13 @@
             }
           ],
           "trialApplicable": true
+        },
+        "actual": {
+          "flightNo": "NH661",
+          "route": "東京(羽田) ➔ 長崎"
         }
       },
-      "currentAirport": "東京(羽田)",
+      "currentAirport": "飛行中 (東京(羽田) ➔ 長崎)",
       "nightStay": "名古屋(中部)(85%) / 長崎(5%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH661 (東京(羽田) ➔ 長崎) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 名古屋(中部) 85% / 長崎 5% / 広島 5% / 東京(羽田) 5% と推定されます。",
@@ -2006,7 +1961,7 @@
               "dest": "NGS",
               "route": "東京(羽田) ➔ 長崎",
               "time": "08:30発 - 10:30着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "① 第1便"
             },
             {
@@ -2062,7 +2017,7 @@
               "dest": "NGS",
               "route": "東京(羽田) ➔ 長崎",
               "time": "08:30発 - 10:30着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "① 第1便"
             },
             {
@@ -2118,7 +2073,7 @@
               "dest": "NGS",
               "route": "東京(羽田) ➔ 長崎",
               "time": "08:30発 - 10:30着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "① 第1便"
             },
             {
@@ -2195,7 +2150,14 @@
             "time": "06:35発 - 08:30着",
             "update": null
           },
-          "actual": null
+          "actual": {
+            "flightNo": "NH661",
+            "route": "東京(羽田) ➔ 長崎",
+            "time": "08:45離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#2",
@@ -2293,9 +2255,9 @@
           "time": "08:30発 - 10:30着",
           "depGate": "48",
           "arrGate": null,
-          "status": "出発予定 (08:34)",
+          "status": "到着予定 (10:25)",
           "isLanded": false,
-          "isLive": false,
+          "isLive": true,
           "isPredicted": false
         },
         {
