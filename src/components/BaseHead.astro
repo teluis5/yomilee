@@ -63,6 +63,29 @@ const websiteSchema = {
   if (isAdmin) {
     w[l] = w[l] || [];
     console.info('[Admin Mode] GTMの読み込みをスキップしました (自アクセス除外中)');
+    function showAdminBadge() {
+      if (d.getElementById('admin-badge')) return;
+      var b = d.createElement('div');
+      b.id = 'admin-badge';
+      b.innerHTML = '🛡️ 計測停止中';
+      b.title = '管理者除外中。タップで解除できます';
+      b.style.cssText = 'position:fixed;top:10px;left:10px;z-index:999999;background:rgba(220,38,38,0.92);color:#fff;font-size:11px;font-weight:700;padding:4px 10px;border-radius:9999px;box-shadow:0 2px 8px rgba(0,0,0,0.25);pointer-events:auto;cursor:pointer;user-select:none;backdrop-filter:blur(4px);letter-spacing:0.02em;';
+      b.onclick = function() {
+        if (confirm('計測停止モード（管理者除外）を解除しますか？\n（解除すると通常通りアクセスが計測されます）')) {
+          w.location.href = w.location.pathname + '?admin=false';
+        }
+      };
+      if (d.body) {
+        d.body.appendChild(b);
+      } else {
+        d.addEventListener('DOMContentLoaded', function(){ if (!d.getElementById('admin-badge') && d.body) d.body.appendChild(b); });
+      }
+    }
+    if (d.readyState === 'loading') {
+      d.addEventListener('DOMContentLoaded', showAdminBadge);
+    } else {
+      showAdminBadge();
+    }
     return;
   }
 
