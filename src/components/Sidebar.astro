@@ -10,6 +10,8 @@ interface Props {
 	authorTitle?: string;
 	authorBio?: string;
 	authorAvatar?: string;
+	currentCategory?: string;
+	currentPostId?: string;
 }
 
 const siteConsts = consts as Record<string, any>;
@@ -19,6 +21,8 @@ const {
 	authorTitle = siteConsts.AUTHOR_TITLE ?? siteConsts.AUTHOR?.title ?? '',
 	authorBio = siteConsts.AUTHOR_BIO ?? siteConsts.AUTHOR?.bio ?? '',
 	authorAvatar = siteConsts.AUTHOR_AVATAR ?? siteConsts.AUTHOR?.avatar ?? '/brand/teluis_avatar.webp',
+	currentCategory: propCategory,
+	currentPostId: propPostId,
 } = Astro.props;
 
 // 全記事の取得（ドラフト除外）
@@ -35,6 +39,41 @@ allPosts.forEach((post) => {
 	});
 });
 const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
+
+// 現在のURLまたはPropsから記事・カテゴリを自動特定
+const pathname = Astro.url.pathname.replace(/\/$/, '');
+
+// 1. 表示中記事の特定 (props or URL)
+let currentPost = propPostId ? allPosts.find((p) => p.id === propPostId) : undefined;
+if (!currentPost && pathname.includes('/blog/')) {
+	const slugFromUrl = pathname.replace(/^.*\/blog\//, '').replace(/\/$/, '');
+	currentPost = allPosts.find((p) => p.id === slugFromUrl || p.id.endsWith(slugFromUrl) || slugFromUrl.endsWith(p.id));
+}
+
+// 2. 現在のカテゴリーの特定
+let targetCategory = propCategory;
+if (!targetCategory && currentPost?.data.categories && currentPost.data.categories.length > 0) {
+	targetCategory = currentPost.data.categories[0];
+}
+if (!targetCategory && pathname.includes('/category/')) {
+	const catMatch = pathname.match(/\/category\/([^/]+)/);
+	if (catMatch) {
+		targetCategory = decodeURIComponent(catMatch[1]);
+	}
+}
+// 3. カテゴリが定まらない場合（トップページなど）は最も記事数が多いカテゴリを自動選定
+if (!targetCategory && categories.length > 0) {
+	targetCategory = categories[0][0];
+}
+
+// 同じカテゴリの最新記事を取得（現在表示中の記事は除外、最大5件）
+const categoryPosts = targetCategory
+	? sortedPosts
+			.filter((post) => post.data.categories?.includes(targetCategory))
+			.filter((post) => !currentPost || post.id !== currentPost.id)
+			.slice(0, 5)
+	: [];
+const categoryTotalCount = targetCategory ? (categoryCounts[targetCategory] || 0) : 0;
 ---
 
 <aside class="layout-sidebar">
@@ -131,6 +170,50 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 			<div class="widget-footer-action">
 				<a href="/category/" class="widget-more-link">
 					カテゴリー一覧を見る &raquo;
+				</a>
+			</div>
+		</div>
+	)}
+
+	<!-- 同一カテゴリーの最新記事ウィジェット（広告削除枠に配置・回遊性向上） -->
+	{categoryPosts.length > 0 && targetCategory && (
+		<div class="sidebar-widget box">
+			<div class="widget-header">
+				<Icon name="heroicons:folder-open" class="icon-inline" />
+				<span>「{targetCategory}」の最新記事</span>
+			</div>
+			<div class="recent-posts">
+				{categoryPosts.map((post) => (
+					<a href={`/blog/${post.id}/`} class="recent-post-card">
+						<div class="recent-thumb">
+							{post.data.heroImage ? (
+								<Image
+									width={160}
+									height={90}
+									src={post.data.heroImage}
+									alt={post.data.title}
+									loading="lazy"
+									decoding="async"
+								/>
+							) : (
+								<div class="thumb-placeholder">
+									<Icon name="heroicons:photo" class="placeholder-icon" />
+								</div>
+							)}
+						</div>
+						<div class="recent-content">
+							<h4 class="recent-title">{post.data.title}</h4>
+							<span class="recent-date">
+								<Icon name="heroicons:calendar" class="date-icon" />
+								<FormattedDate date={post.data.pubDate} />
+							</span>
+						</div>
+					</a>
+				))}
+			</div>
+			<div class="widget-footer-action">
+				<a href={`/category/${encodeURIComponent(targetCategory)}/`} class="widget-more-link">
+					「{targetCategory}」の記事をもっと見る（全{categoryTotalCount}件） &raquo;
 				</a>
 			</div>
 		</div>
