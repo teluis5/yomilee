@@ -1,0 +1,208 @@
+---
+/**
+ * AmazonAdSlot.astro - Amazon アソシエイト セール・キャンペーン広告枠コンポーネント
+ */
+interface Props {
+  campaigns: unknown[];
+  amazonTag: string;
+  title?: string;
+  desc?: string;
+  btnText?: string;
+  url?: string;
+  badge?: string;
+  badgeColor?: string;
+  btnBg?: string;
+}
+
+const {
+  campaigns,
+  amazonTag,
+  title = 'Amazon 毎日更新 タイムセール祭り',
+  desc = '人気ガジェット・家電・日用品が特別価格！数量限定セール開催中',
+  btnText = 'タイムセール会場を見る',
+  url = `https://www.amazon.co.jp/gp/goldbox?tag=${amazonTag}`,
+  badge = 'Amazon',
+  badgeColor = '#ff9900',
+  btnBg = '#f59e0b',
+} = Astro.props;
+---
+
+<div
+  class="affiliate-banner-card dynamic-amazon-banner"
+  data-campaign-provider="amazon"
+  data-campaigns={JSON.stringify(campaigns)}
+  data-amazon-tag={amazonTag}
+>
+  <div class="aff-badge-wrap">
+    <span class="aff-badge" style={`background-color: ${badgeColor};`} data-role="amazon-badge">
+      {badge}
+    </span>
+    <span class="aff-pr-label">PR</span>
+  </div>
+  <div class="aff-content">
+    <div class="aff-title" data-role="amazon-title">{title}</div>
+    <div class="aff-desc" data-role="amazon-desc">{desc}</div>
+  </div>
+  <div class="aff-action">
+    <a href={url} target="_blank" rel="sponsored noopener noreferrer" class="aff-btn" style={`background-color: ${btnBg};`} data-role="amazon-link">
+      <span data-role="amazon-btn-text">{btnText}</span>
+      <svg class="aff-arrow" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+        <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+      </svg>
+    </a>
+  </div>
+</div>
+
+<style is:global>
+  .affiliate-banner-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 1.15rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    text-align: left;
+    box-sizing: border-box;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+  .affiliate-banner-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: #cbd5e1;
+  }
+  .aff-badge-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+  }
+  .aff-badge {
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+  }
+  .aff-pr-label {
+    font-size: 0.65rem;
+    color: #94a3b8;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .aff-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .aff-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.2rem;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .aff-desc {
+    font-size: 0.78rem;
+    color: #64748b;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .aff-action {
+    flex-shrink: 0;
+  }
+  .aff-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.55rem 1rem;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    font-size: 0.82rem;
+    font-weight: 700;
+    border-radius: 6px;
+    white-space: nowrap;
+    transition: opacity 0.2s ease, transform 0.15s ease;
+  }
+  .aff-btn:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+  .aff-arrow {
+    transition: transform 0.2s ease;
+  }
+  .aff-btn:hover .aff-arrow {
+    transform: translateX(2px);
+  }
+
+  @media (max-width: 640px) {
+    .affiliate-banner-card {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.65rem;
+      padding: 0.85rem 1rem;
+    }
+    .aff-badge-wrap {
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .aff-title {
+      white-space: normal;
+      font-size: 0.92rem;
+    }
+    .aff-desc {
+      white-space: normal;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+    .aff-btn {
+      width: 100%;
+      justify-content: center;
+      padding: 0.65rem 1rem;
+      box-sizing: border-box;
+    }
+  }
+
+  .ad-pos-sidebar .affiliate-banner-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+    padding: 0.85rem 0.9rem;
+  }
+  .ad-pos-sidebar .aff-badge-wrap {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .ad-pos-sidebar .aff-title {
+    white-space: normal;
+    font-size: 0.88rem;
+  }
+  .ad-pos-sidebar .aff-desc {
+    white-space: normal;
+    font-size: 0.75rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  .ad-pos-sidebar .aff-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
+    box-sizing: border-box;
+  }
+</style>

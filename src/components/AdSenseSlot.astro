@@ -1,0 +1,54 @@
+---
+/**
+ * AdSenseSlot.astro - Google AdSense 広告枠コンポーネント
+ */
+interface Props {
+  client?: string;
+  slot: string;
+  format?: 'auto' | 'autorelaxed';
+  autoPush?: boolean;
+}
+
+const {
+  client = 'ca-pub-8011635154814608',
+  slot,
+  format = 'auto',
+  autoPush = true,
+} = Astro.props;
+---
+
+<div class="adsense-label">広告</div>
+<div class="adsense-body">
+  <ins class="adsbygoogle"
+       style="display:block; text-align:center;"
+       data-ad-client={client}
+       data-ad-slot={slot}
+       data-ad-format={format}
+       data-full-width-responsive={format === 'auto' ? 'true' : undefined}></ins>
+  {autoPush && (
+    <script is:inline>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  )}
+</div>
+
+<style is:global>
+  .adsense-label {
+    display: block;
+    width: 100%;
+    font-size: 0.7rem;
+    color: #94a3b8;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    margin: 0 auto 0.35rem auto;
+    text-align: center;
+    font-weight: 500;
+  }
+  .adsense-body {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    background: transparent;
+    overflow: hidden;
+  }
+</style>

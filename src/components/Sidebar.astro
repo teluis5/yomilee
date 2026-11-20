@@ -3,7 +3,6 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
 import FormattedDate from './FormattedDate.astro';
-import Ad from './Ad.astro';
 import * as consts from '../consts';
 
 interface Props {
@@ -11,8 +10,6 @@ interface Props {
 	authorTitle?: string;
 	authorBio?: string;
 	authorAvatar?: string;
-	currentCategories?: string[];
-	currentSlug?: string;
 }
 
 const siteConsts = consts as Record<string, any>;
@@ -22,17 +19,13 @@ const {
 	authorTitle = siteConsts.AUTHOR_TITLE ?? siteConsts.AUTHOR?.title ?? '',
 	authorBio = siteConsts.AUTHOR_BIO ?? siteConsts.AUTHOR?.bio ?? '',
 	authorAvatar = siteConsts.AUTHOR_AVATAR ?? siteConsts.AUTHOR?.avatar ?? '/brand/teluis_avatar.webp',
-	currentCategories,
-	currentSlug,
 } = Astro.props;
 
 // 全記事の取得（ドラフト除外）
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const recentPosts = sortedPosts.filter((post) =>
-	post.id !== currentSlug && (currentCategories === undefined ||
-		post.data.categories?.some((category: string) => currentCategories.includes(category)))
-).slice(0, 5);
+const recentPosts = sortedPosts.slice(0, 5);
+const totalArticlesCount = allPosts.length;
 
 // カテゴリ別記事件数の集計
 const categoryCounts: Record<string, number> = {};
@@ -46,7 +39,7 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 
 <aside class="layout-sidebar">
 	<!-- プロフィールウィジェット -->
-	{siteConsts.SHOW_SIDEBAR_PROFILE !== false && <div class="sidebar-widget box">
+	<div class="sidebar-widget box">
 		<div class="widget-header">
 			<Icon name="heroicons:user" class="icon-inline" />
 			<span>運営者プロフィール</span>
@@ -64,42 +57,19 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 			</div>
 		</div>
 
-		<div style="padding: 0 1.15rem 1.15rem;">
-			<a href="/about/" style="display: block; text-align: center; padding: 0.55rem 0.8rem; background-color: #f0f9ff; color: #0369a1; border: 1px solid #bae6fd; border-radius: 6px; font-size: 0.82rem; font-weight: 700; text-decoration: none;">
+		<div class="profile-action">
+			<a href="/about/" class="profile-btn">
 				詳しいプロフィール・運営情報を見る &raquo;
 			</a>
 		</div>
-	</div>}
+	</div>
 
-	<!-- カテゴリ一覧ウィジェット -->
-	{categories.length > 0 && (
-		<div class="sidebar-widget box">
-			<div class="widget-header">
-				<Icon name="heroicons:tag" class="icon-inline" />
-				<span>カテゴリー</span>
-			</div>
-			<ul class="category-list">
-				{categories.map(([category, count]) => (
-					<li>
-						<a href={`/category/${category}/`} class="category-item">
-							<span class="category-name">
-								<Icon name="heroicons:folder" class="cat-icon" />
-								{category}
-							</span>
-							<span class="category-count">{count}</span>
-						</a>
-					</li>
-				))}
-			</ul>
-		</div>
-	)}
-
-	<!-- 新着記事ウィジェット（サムネイル付き） -->
+	<!-- 新着記事ウィジェット（回遊性重視・サムネイル付き） -->
 	{recentPosts.length > 0 && (
 		<div class="sidebar-widget box">
 			<div class="widget-header">
 				<Icon name="heroicons:sparkles" class="icon-inline" />
-				<span>{currentCategories === undefined ? '新着記事' : '同じカテゴリーの新着記事'}</span>
+				<span>新着記事</span>
 			</div>
 			<div class="recent-posts">
 				{recentPosts.map((post) => (
@@ -130,14 +100,44 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 					</a>
 				))}
 			</div>
+			<div class="widget-footer-action">
+				<a href="/blog/" class="widget-more-link">
+					すべての記事を見る（全{totalArticlesCount}件） &raquo;
+				</a>
+			</div>
+		</div>
+	)}
+
+	<!-- カテゴリ一覧ウィジェット -->
+	{categories.length > 0 && (
+		<div class="sidebar-widget box">
+			<div class="widget-header">
+				<Icon name="heroicons:tag" class="icon-inline" />
+				<span>カテゴリー</span>
+			</div>
+			<ul class="category-list">
+				{categories.map(([category, count]) => (
+					<li>
+						<a href={`/category/${category}/`} class="category-item">
+							<span class="category-name">
+								<Icon name="heroicons:folder" class="cat-icon" />
+								{category}
+							</span>
+							<span class="category-count">{count}</span>
+						</a>
+					</li>
+				))}
+			</ul>
+			<div class="widget-footer-action">
+				<a href="/category/" class="widget-more-link">
+					カテゴリー一覧を見る &raquo;
+				</a>
+			</div>
 		</div>
 	)}
 
 	<!-- ブログ固有カスタムウィジェット用スロット（各メディアで独自拡張可能） -->
 	<slot name="sidebar-custom" />
-
-	<!-- サイドバー手動広告スロット（PC追従・最下部） -->
-	<Ad position="sidebar" />
 </aside>
 
 <style>
@@ -245,6 +245,29 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 		text-align: left;
 	}
 
+	.profile-action {
+		margin-top: 1rem;
+	}
+
+	.profile-btn {
+		display: block;
+		text-align: center;
+		padding: 0.55rem 0.8rem;
+		background-color: #f0f9ff;
+		color: #0369a1 !important;
+		border: 1px solid #bae6fd;
+		border-radius: 6px;
+		font-size: 0.82rem;
+		font-weight: 700;
+		text-decoration: none !important;
+		transition: background-color 0.15s ease, border-color 0.15s ease;
+	}
+
+	.profile-btn:hover {
+		background-color: #e0f2fe;
+		border-color: #7dd3fc;
+	}
+
 	/* カテゴリ一覧 */
 	.category-list {
 		list-style: none;
@@ -261,15 +284,15 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 		justify-content: space-between;
 		padding: 0.5rem 0.6rem;
 		border-radius: 6px;
-		text-decoration: none;
-		color: var(--text-main, #334155);
+		text-decoration: none !important;
+		color: var(--text-main, #334155) !important;
 		font-size: 0.9rem;
 		transition: background-color 0.2s, color 0.2s;
 	}
 
 	.category-item:hover {
 		background-color: #f0f9ff;
-		color: var(--theme-accent, #0284c7);
+		color: var(--theme-accent, #0284c7) !important;
 	}
 
 	.category-name {
@@ -295,6 +318,7 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 		padding: 0.1rem 0.5rem;
 		border-radius: 9999px;
 		flex-shrink: 0;
+		font-variant-numeric: tabular-nums;
 	}
 
 	.category-item:hover .category-count {
@@ -312,8 +336,8 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 	.recent-post-card {
 		display: flex;
 		gap: 0.75rem;
-		text-decoration: none;
-		color: inherit;
+		text-decoration: none !important;
+		color: inherit !important;
 		padding-bottom: 0.85rem;
 		border-bottom: 1px dashed var(--border-color, #e2e8f0);
 		transition: transform 0.15s ease;
@@ -394,5 +418,29 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 
 	.date-icon {
 		font-size: 0.85rem;
+	}
+
+	/* ウィジェット下部リンク（回遊促進） */
+	.widget-footer-action {
+		margin-top: 1rem;
+		padding-top: 0.75rem;
+		border-top: 1px solid var(--border-color, #f1f5f9);
+		text-align: right;
+	}
+
+	.widget-more-link {
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: var(--theme-accent, #0284c7) !important;
+		text-decoration: none !important;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.2rem;
+		transition: color 0.15s ease, transform 0.15s ease;
+	}
+
+	.widget-more-link:hover {
+		color: #0369a1 !important;
+		transform: translateX(2px);
 	}
 </style>

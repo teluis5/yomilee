@@ -1,0 +1,142 @@
+---
+/**
+ * RakutenAdSlot.astro - 楽天市場 セール訴求帯 ＋ モーションウィジェット広告枠コンポーネント
+ */
+interface Props {
+  campaigns: unknown[];
+  rakutenAffId: string;
+  badge: string;
+  text: string;
+  url: string;
+  iframeUrl: string;
+}
+
+const {
+  campaigns,
+  rakutenAffId,
+  badge,
+  text,
+  url,
+  iframeUrl,
+} = Astro.props;
+---
+
+<div
+  class="rakuten-event-banner dynamic-campaign-banner"
+  data-campaign-provider="rakuten"
+  data-campaigns={JSON.stringify(campaigns)}
+  data-rakuten-aff-id={rakutenAffId}
+>
+  <a href={url} target="_blank" rel="sponsored noopener noreferrer" class="rakuten-event-link" data-role="event-link">
+    <span class="rakuten-event-badge" data-role="event-badge">{badge}</span>
+    <span class="rakuten-event-text" data-role="event-text">{text}</span>
+    <span class="rakuten-event-cta" data-role="event-cta">エントリー &raquo;</span>
+  </a>
+</div>
+
+<div class="rakuten-motion-widget-wrapper">
+  <div class="rakuten-widget-container">
+    <iframe
+      src={iframeUrl}
+      width="468"
+      height="160"
+      frameborder="0"
+      scrolling="no"
+      loading="lazy"
+      title="楽天市場 おすすめ商品"
+      style="border:0; display:block; margin:0 auto;"
+    ></iframe>
+  </div>
+  <div class="adsense-label" style="margin-top:0.35rem; margin-bottom:0;">PR 楽天市場</div>
+</div>
+
+<style is:global>
+  .rakuten-event-banner {
+    margin: 0 auto 0.65rem auto;
+    max-width: 468px;
+    background: #fff5f5;
+    border: 1px solid #fecdd3;
+    border-radius: 6px;
+    padding: 0.45rem 0.75rem;
+    box-sizing: border-box;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+  .rakuten-event-banner:hover {
+    background: #ffe4e6;
+    border-color: #fda4af;
+  }
+  .rakuten-event-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    text-decoration: none !important;
+    color: #1e293b !important;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+  .rakuten-event-badge {
+    background: #bf0000;
+    color: #ffffff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .rakuten-event-text {
+    flex: 1;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+  .rakuten-event-cta {
+    font-size: 0.72rem;
+    color: #bf0000;
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .rakuten-motion-widget-wrapper {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    overflow: hidden;
+  }
+  .rakuten-widget-container {
+    width: 468px;
+    height: 160px;
+    margin: 0 auto;
+    transform-origin: top center;
+  }
+
+  @media (max-width: 500px) {
+    .rakuten-event-banner {
+      max-width: 100%;
+      padding: 0.4rem 0.6rem;
+    }
+    .rakuten-event-text {
+      font-size: 0.74rem;
+    }
+    .rakuten-widget-container {
+      transform: scale(calc((100vw - 32px) / 468));
+      margin-bottom: calc(160px * (calc((100vw - 32px) / 468) - 1));
+    }
+  }
+
+  .ad-pos-sidebar .rakuten-event-banner {
+    max-width: 100%;
+    padding: 0.35rem 0.5rem;
+  }
+  .ad-pos-sidebar .rakuten-event-text {
+    font-size: 0.72rem;
+  }
+  .ad-pos-sidebar .rakuten-widget-container {
+    transform: scale(calc(290 / 468));
+    margin-bottom: calc(160px * (calc(290 / 468) - 1));
+  }
+</style>
