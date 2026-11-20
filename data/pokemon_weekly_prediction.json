@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月21日 06:00",
-  "updatedAtIso": "2026-11-20T21:00:07.636Z",
+  "updatedAt": "2026年11月21日 07:00",
+  "updatedAtIso": "2026-11-20T22:00:09.258Z",
   "totalJets": 5,
   "jets": [
     {
@@ -326,7 +326,7 @@
         "arrTime": "17:40",
         "timeRange": "03:18 - 17:40",
         "dateJst": "2026-11-21",
-        "status": "Estimated 17:03",
+        "status": "Estimated 17:09",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -345,7 +345,7 @@
           "arrTime": "17:40",
           "timeRange": "03:18 - 17:40",
           "dateJst": "2026-11-21",
-          "status": "Estimated 17:03",
+          "status": "Estimated 17:09",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -365,7 +365,7 @@
           "arrTime": "17:40",
           "timeRange": "03:18 - 17:40",
           "dateJst": "2026-11-21",
-          "status": "Estimated 17:03",
+          "status": "Estimated 17:09",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -608,8 +608,45 @@
       "flightState": "確認中",
       "currentLocation": "確認中",
       "currentFlight": null,
-      "todayFlights": [],
+      "todayFlights": [
+        {
+          "flightNo": "NH203",
+          "origin": "HND",
+          "dest": "FRA",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "フランクフルト (FRA)",
+          "origCode": "HND",
+          "destCode": "FRA",
+          "route": "東京(羽田) ➔ フランクフルト",
+          "depTime": "22:45",
+          "arrTime": "13:30",
+          "timeRange": "22:45 - 13:30",
+          "dateJst": "2026-11-21",
+          "status": "Estimated dep 22:45",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        }
+      ],
       "recentFlights": [
+        {
+          "flightNo": "NH203",
+          "origin": "HND",
+          "dest": "FRA",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "フランクフルト (FRA)",
+          "origCode": "HND",
+          "destCode": "FRA",
+          "route": "東京(羽田) ➔ フランクフルト",
+          "depTime": "22:45",
+          "arrTime": "13:30",
+          "timeRange": "22:45 - 13:30",
+          "dateJst": "2026-11-21",
+          "status": "Estimated dep 22:45",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH224",
           "origin": "FRA",
@@ -696,24 +733,6 @@
           "timeRange": "01:41 - 14:56",
           "dateJst": "2026-11-17",
           "status": "Landed 14:56",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
-        },
-        {
-          "flightNo": "NH114",
-          "origin": "HND",
-          "dest": "IAH",
-          "originName": "東京(羽田) (HND)",
-          "destinationName": "IAH",
-          "origCode": "HND",
-          "destCode": "IAH",
-          "route": "東京(羽田) ➔ IAH",
-          "depTime": "11:36",
-          "arrTime": "23:00",
-          "timeRange": "11:36 - 23:00",
-          "dateJst": "2026-11-16",
-          "status": "Landed 08:00",
           "isLive": false,
           "isLanded": true,
           "isToday": false
