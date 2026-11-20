@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月21日 01:00",
-  "updatedAtIso": "2026-11-20T16:00:07.487Z",
+  "updatedAt": "2026年11月21日 02:00",
+  "updatedAtIso": "2026-11-20T17:00:11.363Z",
   "totalJets": 5,
   "jets": [
     {
@@ -146,9 +146,26 @@
       "routesSummary": "羽田/成田 ➔ シンガポール / バンクーバー / ホノルル / シドニー / マニラ / ジャカルタ",
       "color": "#eab308",
       "serviceStart": "2023-06-04",
-      "flightState": "確認中",
-      "currentLocation": "確認中",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "東京(羽田) (HND) ➔ バンコク (BKK)",
+      "currentFlight": {
+        "flightNo": "NH849",
+        "origin": "HND",
+        "dest": "BKK",
+        "originName": "東京(羽田) (HND)",
+        "destinationName": "バンコク (BKK)",
+        "origCode": "HND",
+        "destCode": "BKK",
+        "route": "東京(羽田) ➔ バンコク",
+        "depTime": "01:13",
+        "arrTime": "07:10",
+        "timeRange": "01:13 - 07:10",
+        "dateJst": "2026-11-21",
+        "status": "Delayed 05:43",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH849",
@@ -159,12 +176,12 @@
           "origCode": "HND",
           "destCode": "BKK",
           "route": "東京(羽田) ➔ バンコク",
-          "depTime": "00:05",
+          "depTime": "01:13",
           "arrTime": "07:10",
-          "timeRange": "00:05 - 07:10",
+          "timeRange": "01:13 - 07:10",
           "dateJst": "2026-11-21",
-          "status": "Estimated dep 00:15*",
-          "isLive": false,
+          "status": "Delayed 05:43",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         }
@@ -179,12 +196,12 @@
           "origCode": "HND",
           "destCode": "BKK",
           "route": "東京(羽田) ➔ バンコク",
-          "depTime": "00:05",
+          "depTime": "01:13",
           "arrTime": "07:10",
-          "timeRange": "00:05 - 07:10",
+          "timeRange": "01:13 - 07:10",
           "dateJst": "2026-11-21",
-          "status": "Estimated dep 00:15*",
-          "isLive": false,
+          "status": "Delayed 05:43",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         },
