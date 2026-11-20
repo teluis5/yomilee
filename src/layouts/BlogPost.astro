@@ -354,6 +354,18 @@ const articleSchema = {
 		<Footer />
 		<TableEnhancer />
 		<CodeEnhancer />
+		<script is:inline>
+			(() => {
+				try {
+					var isAdmin = document.cookie.indexOf('teluis_admin=true') !== -1 || localStorage.getItem('teluis_admin') === 'true';
+					if (!isAdmin) return;
+					var s = document.createElement('script');
+					s.defer = true;
+					s.src = '/assets/admin-source-panel.js?v=1';
+					document.body.appendChild(s);
+				} catch (e) {}
+			})();
+		</script>
 		<script>
 			document.addEventListener('DOMContentLoaded', () => {
 				const toc = document.getElementById('toc-wrapper');

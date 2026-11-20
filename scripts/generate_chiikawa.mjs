@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { execSync } from 'node:child_process';
+import { execSync, execFileSync } from 'node:child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -612,6 +612,43 @@ function performAutoPush(createdSlugs) {
   }
 }
 
+function recordChiikawaArticleSource(slug, topic, articleMdx) {
+  try {
+    const titleMatch = articleMdx.match(/^title:\s*"?(.+?)"?\s*$/m);
+    const title = titleMatch ? titleMatch[1] : topic.title;
+    const isPrTimes = topic.sourceType === 'prtimes_chiikawa';
+    const evidenceType = isPrTimes ? 'official_primary' : 'news_secondary';
+    const kind = isPrTimes ? 'official' : 'news';
+
+    const payload = {
+      site: 'yomilee',
+      slug,
+      title,
+      evidenceType,
+      summary: `${topic.sourceName || 'ちいかわニュース収集源'}をもとに generate_chiikawa.mjs で自動執筆。`,
+      sources: [
+        {
+          kind,
+          name: topic.sourceName || topic.rawTitle || topic.title,
+          url: topic.link || '',
+          note: 'ちいかわ最新情報フィードから自動取得した参照元。',
+        },
+      ],
+      unverifiedPoints: [],
+      generator: 'generate_chiikawa',
+    };
+
+    const recordScript = path.join(WORKSPACE_ROOT, '5_script', 'record_article_source.py');
+    execFileSync('python', [recordScript, '--payload-json', JSON.stringify(payload)], {
+      cwd: WORKSPACE_ROOT,
+      stdio: 'inherit',
+      timeout: 15000,
+    });
+  } catch (err) {
+    console.warn('⚠️ ちいかわ記事情報源のFirestore記録をスキップしました:', err.message);
+  }
+}
+
 // -------------------------------------------------------------
 // メイン処理
 // -------------------------------------------------------------
@@ -695,6 +732,8 @@ async function main() {
     const mdxPath = path.join(targetDir, 'index.mdx');
     fs.writeFileSync(mdxPath, articleMdx, 'utf-8');
     console.log(`💾 記事を保存しました: ${mdxPath}`);
+
+    recordChiikawaArticleSource(slug, topic, articleMdx);
 
     // 履歴更新
     history.links.push(topic.link);

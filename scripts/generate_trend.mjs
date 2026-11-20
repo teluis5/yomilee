@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { execSync } from 'node:child_process';
+import { execSync, execFileSync } from 'node:child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -664,6 +664,68 @@ function performAutoPush(createdSlugs) {
   }
 }
 
+function recordTrendArticleSource(slug, topic, articleMdx) {
+  try {
+    const titleMatch = articleMdx.match(/^title:\s*"?(.+?)"?\s*$/m);
+    const title = titleMatch ? titleMatch[1] : topic.title;
+
+    let evidenceType = 'news_secondary';
+    let primaryKind = 'news';
+    if (topic.sourceType === 'prtimes') {
+      evidenceType = 'official_primary';
+      primaryKind = 'official';
+    } else if (topic.sourceType && topic.sourceType.startsWith('hatena_')) {
+      evidenceType = 'external_blog';
+      primaryKind = 'blog';
+    }
+
+    const sources = [];
+    const seenUrls = new Set();
+    if (topic.link) {
+      seenUrls.add(topic.link);
+      sources.push({
+        kind: primaryKind,
+        name: topic.sourceName || topic.title,
+        url: topic.link,
+        note: 'トレンド自動収集フィードから取得した元記事URL。',
+      });
+    }
+    if (Array.isArray(topic.news)) {
+      for (const n of topic.news) {
+        if (!n || (!n.url && !n.title)) continue;
+        if (n.url && seenUrls.has(n.url)) continue;
+        if (n.url) seenUrls.add(n.url);
+        sources.push({
+          kind: 'news',
+          name: n.source ? `${n.source}：${n.title || ''}` : (n.title || '関連ニュース'),
+          url: n.url || '',
+          note: 'Google急上昇トレンドに関連づけられた参照報道。',
+        });
+      }
+    }
+
+    const payload = {
+      site: 'yomilee',
+      slug,
+      title,
+      evidenceType,
+      summary: `${topic.sourceName || 'トレンド情報源'}をもとに generate_trend.mjs で自動執筆。`,
+      sources,
+      unverifiedPoints: ['記事内の独自採点（★評価）や買い判定は編集部ルールによるAI評価'],
+      generator: 'generate_trend',
+    };
+
+    const recordScript = path.join(WORKSPACE_ROOT, '5_script', 'record_article_source.py');
+    execFileSync('python', [recordScript, '--payload-json', JSON.stringify(payload)], {
+      cwd: WORKSPACE_ROOT,
+      stdio: 'inherit',
+      timeout: 15000,
+    });
+  } catch (err) {
+    console.warn('⚠️ 記事情報源のFirestore記録をスキップしました:', err.message);
+  }
+}
+
 // -------------------------------------------------------------
 // メイン処理
 // -------------------------------------------------------------
@@ -852,6 +914,8 @@ async function main() {
     const mdxPath = path.join(targetDir, 'index.mdx');
     fs.writeFileSync(mdxPath, articleMdx, 'utf-8');
     console.log(`💾 記事を保存しました: ${mdxPath}`);
+
+    recordTrendArticleSource(slug, topic, articleMdx);
 
     createdSlugs.push(slug);
   }
