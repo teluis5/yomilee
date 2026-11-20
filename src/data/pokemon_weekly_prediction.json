@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月20日 22:00",
-  "updatedAtIso": "2026-11-20T13:00:08.348Z",
+  "updatedAt": "2026年11月20日 23:00",
+  "updatedAtIso": "2026-11-20T14:00:07.837Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,26 +17,9 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "福岡 (FUK) ➔ 東京(羽田) (HND)",
-      "currentFlight": {
-        "flightNo": "NH270",
-        "origin": "FUK",
-        "dest": "HND",
-        "originName": "福岡 (FUK)",
-        "destinationName": "東京(羽田) (HND)",
-        "origCode": "FUK",
-        "destCode": "HND",
-        "route": "福岡 ➔ 東京(羽田)",
-        "depTime": "21:33",
-        "arrTime": "21:35",
-        "timeRange": "21:33 - 21:35",
-        "dateJst": "2026-11-20",
-        "status": "Delayed 22:50",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": true
-      },
+      "flightState": "着陸済・駐機中 🟡",
+      "currentLocation": "東京(羽田) (HND)",
+      "currentFlight": null,
       "todayFlights": [
         {
           "flightNo": "NH1075",
@@ -138,12 +121,12 @@
           "destCode": "HND",
           "route": "福岡 ➔ 東京(羽田)",
           "depTime": "21:33",
-          "arrTime": "21:35",
-          "timeRange": "21:33 - 21:35",
+          "arrTime": "22:46",
+          "timeRange": "21:33 - 22:46",
           "dateJst": "2026-11-20",
-          "status": "Delayed 22:50",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 22:46",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         }
       ],
@@ -158,12 +141,12 @@
           "destCode": "HND",
           "route": "福岡 ➔ 東京(羽田)",
           "depTime": "21:33",
-          "arrTime": "21:35",
-          "timeRange": "21:33 - 21:35",
+          "arrTime": "22:46",
+          "timeRange": "21:33 - 22:46",
           "dateJst": "2026-11-20",
-          "status": "Delayed 22:50",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 22:46",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         {
@@ -416,7 +399,7 @@
         "arrTime": "00:30",
         "timeRange": "12:25 - 00:30",
         "dateJst": "2026-11-20",
-        "status": "Estimated 10:26",
+        "status": "Estimated 10:25",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -435,7 +418,7 @@
           "arrTime": "00:30",
           "timeRange": "12:25 - 00:30",
           "dateJst": "2026-11-20",
-          "status": "Estimated 10:26",
+          "status": "Estimated 10:25",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -455,7 +438,7 @@
           "arrTime": "00:30",
           "timeRange": "12:25 - 00:30",
           "dateJst": "2026-11-20",
-          "status": "Estimated 10:26",
+          "status": "Estimated 10:25",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -943,8 +926,8 @@
             "orig": "FUK",
             "dest": "HND",
             "route": "福岡 ➔ 東京(羽田)",
-            "time": "21:33発 - 21:35着",
-            "tag": "飛行中 🟢",
+            "time": "21:33発 - 22:46着",
+            "tag": "運航完了",
             "step": "第6便"
           }
         ]
