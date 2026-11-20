@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月21日 00:00",
-  "updatedAtIso": "2026-11-20T15:00:07.648Z",
+  "updatedAt": "2026年11月21日 01:00",
+  "updatedAtIso": "2026-11-20T16:00:07.487Z",
   "totalJets": 5,
   "jets": [
     {
@@ -149,8 +149,45 @@
       "flightState": "確認中",
       "currentLocation": "確認中",
       "currentFlight": null,
-      "todayFlights": [],
+      "todayFlights": [
+        {
+          "flightNo": "NH849",
+          "origin": "HND",
+          "dest": "BKK",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "バンコク (BKK)",
+          "origCode": "HND",
+          "destCode": "BKK",
+          "route": "東京(羽田) ➔ バンコク",
+          "depTime": "00:05",
+          "arrTime": "07:10",
+          "timeRange": "00:05 - 07:10",
+          "dateJst": "2026-11-21",
+          "status": "Estimated dep 00:15*",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        }
+      ],
       "recentFlights": [
+        {
+          "flightNo": "NH849",
+          "origin": "HND",
+          "dest": "BKK",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "バンコク (BKK)",
+          "origCode": "HND",
+          "destCode": "BKK",
+          "route": "東京(羽田) ➔ バンコク",
+          "depTime": "00:05",
+          "arrTime": "07:10",
+          "timeRange": "00:05 - 07:10",
+          "dateJst": "2026-11-21",
+          "status": "Estimated dep 00:15*",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH117",
           "origin": "SEA",
@@ -240,24 +277,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH837",
-          "origin": "HND",
-          "dest": "DEL",
-          "originName": "東京(羽田) (HND)",
-          "destinationName": "DEL",
-          "origCode": "HND",
-          "destCode": "DEL",
-          "route": "東京(羽田) ➔ DEL",
-          "depTime": "11:46",
-          "arrTime": "21:12",
-          "timeRange": "11:46 - 21:12",
-          "dateJst": "2026-11-16",
-          "status": "Landed 17:42",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -275,26 +294,9 @@
       "routesSummary": "羽田/成田 ➔ サンフランシスコ / シカゴ / ロンドン / ニューヨーク",
       "color": "#d97706",
       "serviceStart": "2023-08-31",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "東京(羽田) (HND) ➔ ニューヨーク (JFK)",
-      "currentFlight": {
-        "flightNo": "NH110",
-        "origin": "HND",
-        "dest": "JFK",
-        "originName": "東京(羽田) (HND)",
-        "destinationName": "ニューヨーク (JFK)",
-        "origCode": "HND",
-        "destCode": "JFK",
-        "route": "東京(羽田) ➔ ニューヨーク",
-        "depTime": "12:25",
-        "arrTime": "00:30",
-        "timeRange": "12:25 - 00:30",
-        "dateJst": "2026-11-20",
-        "status": "Estimated 10:30",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": false
-      },
+      "flightState": "確認中",
+      "currentLocation": "確認中",
+      "currentFlight": null,
       "todayFlights": [],
       "recentFlights": [
         {
@@ -307,12 +309,12 @@
           "destCode": "JFK",
           "route": "東京(羽田) ➔ ニューヨーク",
           "depTime": "12:25",
-          "arrTime": "00:30",
-          "timeRange": "12:25 - 00:30",
+          "arrTime": "00:32",
+          "timeRange": "12:25 - 00:32",
           "dateJst": "2026-11-20",
-          "status": "Estimated 10:30",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 10:32",
+          "isLive": false,
+          "isLanded": true,
           "isToday": false
         },
         {
