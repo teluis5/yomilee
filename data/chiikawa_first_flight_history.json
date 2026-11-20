@@ -973,6 +973,141 @@
         }
       ],
       "trialApplicable": true
+    },
+    "morning": {
+      "updatedAtIso": "2026-11-20T20:00:04.399Z",
+      "arrival": {
+        "airport": "HND",
+        "arrivalMin": 1221,
+        "gate": null,
+        "flightNo": "NH38",
+        "time": "20:21"
+      },
+      "candidates": [
+        {
+          "flightNo": "NH245",
+          "orig": "HND",
+          "dest": "FUK",
+          "route": "東京(羽田) ➔ 福岡",
+          "depTime": "08:55",
+          "arrTime": "10:55",
+          "depGate": "57",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH661",
+          "orig": "HND",
+          "dest": "NGS",
+          "route": "東京(羽田) ➔ 長崎",
+          "depTime": "08:30",
+          "arrTime": "10:30",
+          "depGate": "48",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH1077",
+          "orig": "HND",
+          "dest": "FUK",
+          "route": "東京(羽田) ➔ 福岡",
+          "depTime": "08:00",
+          "arrTime": "09:55",
+          "depGate": "58",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH21",
+          "orig": "HND",
+          "dest": "ITM",
+          "route": "東京(羽田) ➔ 大阪(伊丹)",
+          "depTime": "11:00",
+          "arrTime": "12:10",
+          "depGate": "63",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH27",
+          "orig": "HND",
+          "dest": "ITM",
+          "route": "東京(羽田) ➔ 大阪(伊丹)",
+          "depTime": "14:00",
+          "arrTime": "15:10",
+          "depGate": "64",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        }
+      ],
+      "trialCandidates": [
+        {
+          "flightNo": "NH661",
+          "orig": "HND",
+          "dest": "NGS",
+          "route": "東京(羽田) ➔ 長崎",
+          "depTime": "08:30",
+          "arrTime": "10:30",
+          "depGate": "48",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH245",
+          "orig": "HND",
+          "dest": "FUK",
+          "route": "東京(羽田) ➔ 福岡",
+          "depTime": "08:55",
+          "arrTime": "10:55",
+          "depGate": "57",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH1077",
+          "orig": "HND",
+          "dest": "FUK",
+          "route": "東京(羽田) ➔ 福岡",
+          "depTime": "08:00",
+          "arrTime": "09:55",
+          "depGate": "58",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH21",
+          "orig": "HND",
+          "dest": "ITM",
+          "route": "東京(羽田) ➔ 大阪(伊丹)",
+          "depTime": "11:00",
+          "arrTime": "12:10",
+          "depGate": "63",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH27",
+          "orig": "HND",
+          "dest": "ITM",
+          "route": "東京(羽田) ➔ 大阪(伊丹)",
+          "depTime": "14:00",
+          "arrTime": "15:10",
+          "depGate": "64",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        }
+      ],
+      "trialApplicable": true
     }
   }
 }
