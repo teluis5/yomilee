@@ -2,7 +2,7 @@
  * 旅行アフィリエイトリンク生成ユーティリティ（楽天トラベル / Yahoo!トラベル / じゃらんnet / レンタカー3社）
  */
 
-export const RAKUTEN_AFFILIATE_ID = '5953a273.5cc8e490.5953a274.81eca08c';
+export const RAKUTEN_AFFILIATE_ID = '59cee293.4a6c5500.59cee294.af50e2ea';
 export const RAKUTEN_RENTACAR_AFFILIATE_ID = '59996df7.62348333.59996df9.f8832ab8';
 export const RAKUTEN_RENTACAR_AFFILIATE_URL =
   'https://hb.afl.rakuten.co.jp/hgc/59996df7.62348333.59996df9.f8832ab8/?pc=https%3A%2F%2Ftravel.rakuten.co.jp%2Fcars%2F&link_type=hybrid_url&ut=eyJwYWdlIjoidXJsIiwidHlwZSI6Imh5YnJpZF91cmwiLCJjb2wiOjF9';
