@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月23日 00:00",
-  "updatedAtIso": "2026-11-22T15:00:08.641Z",
+  "updatedAt": "2026年11月23日 01:00",
+  "updatedAtIso": "2026-11-22T16:00:09.254Z",
   "totalJets": 5,
   "jets": [
     {
@@ -161,7 +161,7 @@
         "arrTime": "01:45",
         "timeRange": "18:22 - 01:45",
         "dateJst": "2026-11-22",
-        "status": "Estimated 00:20",
+        "status": "Estimated 00:21",
         "isLive": true,
         "isLanded": false,
         "isToday": false
@@ -181,7 +181,7 @@
           "arrTime": "01:45",
           "timeRange": "18:22 - 01:45",
           "dateJst": "2026-11-22",
-          "status": "Estimated 00:20",
+          "status": "Estimated 00:21",
           "isLive": true,
           "isLanded": false,
           "isToday": false
@@ -295,8 +295,45 @@
       "flightState": "確認中",
       "currentLocation": "確認中",
       "currentFlight": null,
-      "todayFlights": [],
+      "todayFlights": [
+        {
+          "flightNo": "NH11",
+          "origin": "ORD",
+          "dest": "NRT",
+          "originName": "シカゴ (ORD)",
+          "destinationName": "東京(成田) (NRT)",
+          "origCode": "ORD",
+          "destCode": "NRT",
+          "route": "シカゴ ➔ 東京(成田)",
+          "depTime": "01:30",
+          "arrTime": "15:00",
+          "timeRange": "01:30 - 15:00",
+          "dateJst": "2026-11-23",
+          "status": "Estimated dep 10:58",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        }
+      ],
       "recentFlights": [
+        {
+          "flightNo": "NH11",
+          "origin": "ORD",
+          "dest": "NRT",
+          "originName": "シカゴ (ORD)",
+          "destinationName": "東京(成田) (NRT)",
+          "origCode": "ORD",
+          "destCode": "NRT",
+          "route": "シカゴ ➔ 東京(成田)",
+          "depTime": "01:30",
+          "arrTime": "15:00",
+          "timeRange": "01:30 - 15:00",
+          "dateJst": "2026-11-23",
+          "status": "Estimated dep 10:58",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH112",
           "origin": "HND",
@@ -386,24 +423,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH159",
-          "origin": "JFK",
-          "dest": "HND",
-          "originName": "ニューヨーク (JFK)",
-          "destinationName": "東京(羽田) (HND)",
-          "origCode": "JFK",
-          "destCode": "HND",
-          "route": "ニューヨーク ➔ 東京(羽田)",
-          "depTime": "15:09",
-          "arrTime": "05:11",
-          "timeRange": "15:09 - 05:11",
-          "dateJst": "2026-11-17",
-          "status": "Landed 05:11",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -421,10 +440,46 @@
       "routesSummary": "羽田/成田 ➔ シアトル / 欧州 / 北米 / バンコク / アジア幹線",
       "color": "#22c55e",
       "serviceStart": "2026-09-18",
-      "flightState": "確認中",
-      "currentLocation": "確認中",
-      "currentFlight": null,
-      "todayFlights": [],
+      "flightState": "飛行中 🟢",
+      "currentLocation": "ジャカルタ (CGK) ➔ 東京(羽田) (HND)",
+      "currentFlight": {
+        "flightNo": "NH856",
+        "origin": "CGK",
+        "dest": "HND",
+        "originName": "ジャカルタ (CGK)",
+        "destinationName": "東京(羽田) (HND)",
+        "origCode": "CGK",
+        "destCode": "HND",
+        "route": "ジャカルタ ➔ 東京(羽田)",
+        "depTime": "00:12",
+        "arrTime": "06:50",
+        "timeRange": "00:12 - 06:50",
+        "dateJst": "2026-11-23",
+        "status": "Estimated 06:49",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
+      "todayFlights": [
+        {
+          "flightNo": "NH856",
+          "origin": "CGK",
+          "dest": "HND",
+          "originName": "ジャカルタ (CGK)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "CGK",
+          "destCode": "HND",
+          "route": "ジャカルタ ➔ 東京(羽田)",
+          "depTime": "00:12",
+          "arrTime": "06:50",
+          "timeRange": "00:12 - 06:50",
+          "dateJst": "2026-11-23",
+          "status": "Estimated 06:49",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
+        }
+      ],
       "recentFlights": [
         {
           "flightNo": "NH856",
@@ -435,14 +490,14 @@
           "origCode": "CGK",
           "destCode": "HND",
           "route": "ジャカルタ ➔ 東京(羽田)",
-          "depTime": "23:45",
+          "depTime": "00:12",
           "arrTime": "06:50",
-          "timeRange": "23:45 - 06:50",
-          "dateJst": "2026-11-22",
-          "status": "Estimated dep 21:50",
-          "isLive": false,
+          "timeRange": "00:12 - 06:50",
+          "dateJst": "2026-11-23",
+          "status": "Estimated 06:49",
+          "isLive": true,
           "isLanded": false,
-          "isToday": false
+          "isToday": true
         },
         {
           "flightNo": "NH855",
