@@ -579,6 +579,21 @@ ${topicData}
 
   generatedText = generatedText.replace(/^```(?:mdx|markdown)?\s*\n/, '').replace(/\n```\s*$/, '').trim();
 
+  // <ProblemBox> / <ConclusionBox> 使用時の import 欠落を自動補完
+  const missingImports = [];
+  if (/<ProblemBox[\s>]/.test(generatedText) && !/import\s+ProblemBox\s+from/.test(generatedText)) {
+    missingImports.push("import ProblemBox from '../../../components/ProblemBox.astro';");
+  }
+  if (/<ConclusionBox[\s>]/.test(generatedText) && !/import\s+ConclusionBox\s+from/.test(generatedText)) {
+    missingImports.push("import ConclusionBox from '../../../components/ConclusionBox.astro';");
+  }
+  if (missingImports.length > 0) {
+    generatedText = generatedText.replace(
+      /^(---\r?\n[\s\S]*?\r?\n---)\s*/,
+      `$1\n\n${missingImports.join('\n')}\n\n`
+    );
+  }
+
   // 品質バリデーション検査（低品質・AIポエム・表欠落の検知）
   validateArticleQuality(generatedText);
 
