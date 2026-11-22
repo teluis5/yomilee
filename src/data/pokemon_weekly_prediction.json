@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月23日 02:00",
-  "updatedAtIso": "2026-11-22T17:00:08.563Z",
+  "updatedAt": "2026年11月23日 03:00",
+  "updatedAtIso": "2026-11-22T18:00:14.261Z",
   "totalJets": 5,
   "jets": [
     {
@@ -275,9 +275,26 @@
       "routesSummary": "羽田/成田 ➔ サンフランシスコ / シカゴ / ロンドン / ニューヨーク",
       "color": "#d97706",
       "serviceStart": "2023-08-31",
-      "flightState": "確認中",
-      "currentLocation": "確認中",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "シカゴ (ORD) ➔ 東京(成田) (NRT)",
+      "currentFlight": {
+        "flightNo": "NH11",
+        "origin": "ORD",
+        "dest": "NRT",
+        "originName": "シカゴ (ORD)",
+        "destinationName": "東京(成田) (NRT)",
+        "origCode": "ORD",
+        "destCode": "NRT",
+        "route": "シカゴ ➔ 東京(成田)",
+        "depTime": "02:14",
+        "arrTime": "15:00",
+        "timeRange": "02:14 - 15:00",
+        "dateJst": "2026-11-23",
+        "status": "Estimated 14:30",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH11",
@@ -288,12 +305,12 @@
           "origCode": "ORD",
           "destCode": "NRT",
           "route": "シカゴ ➔ 東京(成田)",
-          "depTime": "01:30",
+          "depTime": "02:14",
           "arrTime": "15:00",
-          "timeRange": "01:30 - 15:00",
+          "timeRange": "02:14 - 15:00",
           "dateJst": "2026-11-23",
-          "status": "Estimated dep 10:58",
-          "isLive": false,
+          "status": "Estimated 14:30",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         }
@@ -308,12 +325,12 @@
           "origCode": "ORD",
           "destCode": "NRT",
           "route": "シカゴ ➔ 東京(成田)",
-          "depTime": "01:30",
+          "depTime": "02:14",
           "arrTime": "15:00",
-          "timeRange": "01:30 - 15:00",
+          "timeRange": "02:14 - 15:00",
           "dateJst": "2026-11-23",
-          "status": "Estimated dep 10:58",
-          "isLive": false,
+          "status": "Estimated 14:30",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         },
@@ -438,7 +455,7 @@
         "arrTime": "06:50",
         "timeRange": "00:12 - 06:50",
         "dateJst": "2026-11-23",
-        "status": "Estimated 06:49",
+        "status": "Estimated 06:43",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -457,7 +474,7 @@
           "arrTime": "06:50",
           "timeRange": "00:12 - 06:50",
           "dateJst": "2026-11-23",
-          "status": "Estimated 06:49",
+          "status": "Estimated 06:43",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -477,7 +494,7 @@
           "arrTime": "06:50",
           "timeRange": "00:12 - 06:50",
           "dateJst": "2026-11-23",
-          "status": "Estimated 06:49",
+          "status": "Estimated 06:43",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -603,7 +620,7 @@
         "arrTime": "08:45",
         "timeRange": "19:48 - 08:45",
         "dateJst": "2026-11-22",
-        "status": "Estimated 07:47",
+        "status": "Estimated 07:55",
         "isLive": true,
         "isLanded": false,
         "isToday": false
@@ -623,7 +640,7 @@
           "arrTime": "08:45",
           "timeRange": "19:48 - 08:45",
           "dateJst": "2026-11-22",
-          "status": "Estimated 07:47",
+          "status": "Estimated 07:55",
           "isLive": true,
           "isLanded": false,
           "isToday": false
