@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月23日 21:00",
-  "updatedAtIso": "2026-11-23T12:00:13.961Z",
+  "updatedAt": "2026年11月23日 22:00",
+  "updatedAtIso": "2026-11-23T13:00:09.726Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,26 +17,9 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "長崎 (NGS) ➔ 東京(羽田) (HND)",
-      "currentFlight": {
-        "flightNo": "NH670",
-        "origin": "NGS",
-        "dest": "HND",
-        "originName": "長崎 (NGS)",
-        "destinationName": "東京(羽田) (HND)",
-        "origCode": "NGS",
-        "destCode": "HND",
-        "route": "長崎 ➔ 東京(羽田)",
-        "depTime": "19:51",
-        "arrTime": "21:00",
-        "timeRange": "19:51 - 21:00",
-        "dateJst": "2026-11-23",
-        "status": "Estimated 21:13",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": true
-      },
+      "flightState": "着陸済・駐機中 🟡",
+      "currentLocation": "東京(羽田) (HND)",
+      "currentFlight": null,
       "todayFlights": [
         {
           "flightNo": "NH18",
@@ -120,12 +103,12 @@
           "destCode": "HND",
           "route": "長崎 ➔ 東京(羽田)",
           "depTime": "19:51",
-          "arrTime": "21:00",
-          "timeRange": "19:51 - 21:00",
+          "arrTime": "21:13",
+          "timeRange": "19:51 - 21:13",
           "dateJst": "2026-11-23",
-          "status": "Estimated 21:13",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 21:13",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         }
       ],
@@ -140,12 +123,12 @@
           "destCode": "HND",
           "route": "長崎 ➔ 東京(羽田)",
           "depTime": "19:51",
-          "arrTime": "21:00",
-          "timeRange": "19:51 - 21:00",
+          "arrTime": "21:13",
+          "timeRange": "19:51 - 21:13",
           "dateJst": "2026-11-23",
-          "status": "Estimated 21:13",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 21:13",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         {
@@ -269,7 +252,7 @@
         "arrTime": "00:40",
         "timeRange": "17:53 - 00:40",
         "dateJst": "2026-11-23",
-        "status": "Estimated 23:46",
+        "status": "Estimated 23:39",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -306,7 +289,7 @@
           "arrTime": "00:40",
           "timeRange": "17:53 - 00:40",
           "dateJst": "2026-11-23",
-          "status": "Estimated 23:46",
+          "status": "Estimated 23:39",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -326,7 +309,7 @@
           "arrTime": "00:40",
           "timeRange": "17:53 - 00:40",
           "dateJst": "2026-11-23",
-          "status": "Estimated 23:46",
+          "status": "Estimated 23:39",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -635,7 +618,7 @@
         "arrTime": "05:20",
         "timeRange": "20:20 - 05:20",
         "dateJst": "2026-11-23",
-        "status": "Estimated 05:33",
+        "status": "Estimated 05:21",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -690,7 +673,7 @@
           "arrTime": "05:20",
           "timeRange": "20:20 - 05:20",
           "dateJst": "2026-11-23",
-          "status": "Estimated 05:33",
+          "status": "Estimated 05:21",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -710,7 +693,7 @@
           "arrTime": "05:20",
           "timeRange": "20:20 - 05:20",
           "dateJst": "2026-11-23",
-          "status": "Estimated 05:33",
+          "status": "Estimated 05:21",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -1023,8 +1006,8 @@
             "orig": "NGS",
             "dest": "HND",
             "route": "長崎 ➔ 東京(羽田)",
-            "time": "19:51発 - 21:00着",
-            "tag": "飛行中 🟢",
+            "time": "19:51発 - 21:13着",
+            "tag": "運航完了",
             "step": "第5便"
           }
         ]
