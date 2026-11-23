@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月23日 19:00",
-  "updatedAtIso": "2026-11-23T10:00:08.672Z",
+  "updatedAt": "2026年11月23日 20:00",
+  "updatedAtIso": "2026-11-23T11:00:08.656Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,9 +17,26 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "着陸済・駐機中 🟡",
-      "currentLocation": "長崎 (NGS)",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "長崎 (NGS) ➔ 東京(羽田) (HND)",
+      "currentFlight": {
+        "flightNo": "NH670",
+        "origin": "NGS",
+        "dest": "HND",
+        "originName": "長崎 (NGS)",
+        "destinationName": "東京(羽田) (HND)",
+        "origCode": "NGS",
+        "destCode": "HND",
+        "route": "長崎 ➔ 東京(羽田)",
+        "depTime": "19:51",
+        "arrTime": "21:00",
+        "timeRange": "19:51 - 21:00",
+        "dateJst": "2026-11-23",
+        "status": "Estimated 21:14",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH18",
@@ -92,9 +109,45 @@
           "isLive": false,
           "isLanded": true,
           "isToday": true
+        },
+        {
+          "flightNo": "NH670",
+          "origin": "NGS",
+          "dest": "HND",
+          "originName": "長崎 (NGS)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "NGS",
+          "destCode": "HND",
+          "route": "長崎 ➔ 東京(羽田)",
+          "depTime": "19:51",
+          "arrTime": "21:00",
+          "timeRange": "19:51 - 21:00",
+          "dateJst": "2026-11-23",
+          "status": "Estimated 21:14",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
         }
       ],
       "recentFlights": [
+        {
+          "flightNo": "NH670",
+          "origin": "NGS",
+          "dest": "HND",
+          "originName": "長崎 (NGS)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "NGS",
+          "destCode": "HND",
+          "route": "長崎 ➔ 東京(羽田)",
+          "depTime": "19:51",
+          "arrTime": "21:00",
+          "timeRange": "19:51 - 21:00",
+          "dateJst": "2026-11-23",
+          "status": "Estimated 21:14",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH667",
           "origin": "HND",
@@ -184,24 +237,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH983",
-          "origin": "ITM",
-          "dest": "CTS",
-          "originName": "大阪(伊丹) (ITM)",
-          "destinationName": "札幌(新千歳) (CTS)",
-          "origCode": "ITM",
-          "destCode": "CTS",
-          "route": "大阪(伊丹) ➔ 札幌(新千歳)",
-          "depTime": "14:17",
-          "arrTime": "15:42",
-          "timeRange": "14:17 - 15:42",
-          "dateJst": "2026-11-22",
-          "status": "Landed 15:42",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -234,7 +269,7 @@
         "arrTime": "00:40",
         "timeRange": "17:53 - 00:40",
         "dateJst": "2026-11-23",
-        "status": "Delayed 00:01",
+        "status": "Estimated 23:43",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -271,7 +306,7 @@
           "arrTime": "00:40",
           "timeRange": "17:53 - 00:40",
           "dateJst": "2026-11-23",
-          "status": "Delayed 00:01",
+          "status": "Estimated 23:43",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -291,7 +326,7 @@
           "arrTime": "00:40",
           "timeRange": "17:53 - 00:40",
           "dateJst": "2026-11-23",
-          "status": "Delayed 00:01",
+          "status": "Estimated 23:43",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -638,7 +673,7 @@
           "arrTime": "05:20",
           "timeRange": "19:45 - 05:20",
           "dateJst": "2026-11-23",
-          "status": "Estimated dep 22:00",
+          "status": "Estimated dep 22:08",
           "isLive": false,
           "isLanded": false,
           "isToday": true
@@ -658,7 +693,7 @@
           "arrTime": "05:20",
           "timeRange": "19:45 - 05:20",
           "dateJst": "2026-11-23",
-          "status": "Estimated dep 22:00",
+          "status": "Estimated dep 22:08",
           "isLive": false,
           "isLanded": false,
           "isToday": true
@@ -886,33 +921,21 @@
     }
   ],
   "domesticPrediction": {
-    "nightStayName": "羽田 (100%)",
+    "nightStayName": "羽田 (確定)",
     "nightStayCode": "HND",
-    "isNightStayConfirmed": false,
+    "isNightStayConfirmed": true,
     "nightStayProbabilities": [
       {
         "code": "HND",
         "airport": "羽田",
-        "weight": 2.79,
+        "weight": 3.1,
         "floored": 100,
         "remainder": 0,
         "originalIndex": 0,
         "probability": 100
       }
     ],
-    "predictedRemainingToday": [
-      {
-        "flightNo": "NH670",
-        "origCode": "NGS",
-        "destCode": "HND",
-        "route": "長崎 ➔ 東京(羽田)",
-        "depTime": "19:25",
-        "arrTime": "21:00",
-        "time": "19:25発 - 21:00着 (予想)",
-        "status": "予想 (羽田泊候補)",
-        "isPredicted": true
-      }
-    ],
+    "predictedRemainingToday": [],
     "todayPlans": [
       {
         "planId": "today-plan-1",
@@ -964,8 +987,8 @@
             "orig": "NGS",
             "dest": "HND",
             "route": "長崎 ➔ 東京(羽田)",
-            "time": "19:25発 - 21:00着",
-            "tag": "🌙羽田泊候補",
+            "time": "19:51発 - 21:00着",
+            "tag": "飛行中 🟢",
             "step": "第5便"
           }
         ]
