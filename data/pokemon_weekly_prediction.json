@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月24日 02:00",
-  "updatedAtIso": "2026-11-23T17:00:08.538Z",
+  "updatedAt": "2026年11月24日 03:00",
+  "updatedAtIso": "2026-11-23T18:00:08.295Z",
   "totalJets": 5,
   "jets": [
     {
@@ -146,9 +146,26 @@
       "routesSummary": "羽田/成田 ➔ シンガポール / バンクーバー / ホノルル / シドニー / マニラ / ジャカルタ",
       "color": "#eab308",
       "serviceStart": "2023-06-04",
-      "flightState": "確認中",
-      "currentLocation": "確認中",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "シンガポール (SIN) ➔ 東京(成田) (NRT)",
+      "currentFlight": {
+        "flightNo": "NH804",
+        "origin": "SIN",
+        "dest": "NRT",
+        "originName": "シンガポール (SIN)",
+        "destinationName": "東京(成田) (NRT)",
+        "origCode": "SIN",
+        "destCode": "NRT",
+        "route": "シンガポール ➔ 東京(成田)",
+        "depTime": "02:14",
+        "arrTime": "08:40",
+        "timeRange": "02:14 - 08:40",
+        "dateJst": "2026-11-24",
+        "status": "Estimated 08:25",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH804",
@@ -159,12 +176,12 @@
           "origCode": "SIN",
           "destCode": "NRT",
           "route": "シンガポール ➔ 東京(成田)",
-          "depTime": "01:55",
+          "depTime": "02:14",
           "arrTime": "08:40",
-          "timeRange": "01:55 - 08:40",
+          "timeRange": "02:14 - 08:40",
           "dateJst": "2026-11-24",
-          "status": "Estimated dep 00:55",
-          "isLive": false,
+          "status": "Estimated 08:25",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         }
@@ -179,12 +196,12 @@
           "origCode": "SIN",
           "destCode": "NRT",
           "route": "シンガポール ➔ 東京(成田)",
-          "depTime": "01:55",
+          "depTime": "02:14",
           "arrTime": "08:40",
-          "timeRange": "01:55 - 08:40",
+          "timeRange": "02:14 - 08:40",
           "dateJst": "2026-11-24",
-          "status": "Estimated dep 00:55",
-          "isLive": false,
+          "status": "Estimated 08:25",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         },
@@ -294,26 +311,9 @@
       "routesSummary": "羽田/成田 ➔ サンフランシスコ / シカゴ / ロンドン / ニューヨーク",
       "color": "#d97706",
       "serviceStart": "2023-08-31",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "東京(成田) (NRT) ➔ サンフランシスコ (SFO)",
-      "currentFlight": {
-        "flightNo": "NH8",
-        "origin": "NRT",
-        "dest": "SFO",
-        "originName": "東京(成田) (NRT)",
-        "destinationName": "サンフランシスコ (SFO)",
-        "origCode": "NRT",
-        "destCode": "SFO",
-        "route": "東京(成田) ➔ サンフランシスコ",
-        "depTime": "17:22",
-        "arrTime": "02:20",
-        "timeRange": "17:22 - 02:20",
-        "dateJst": "2026-11-23",
-        "status": "Estimated 09:12",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": false
-      },
+      "flightState": "確認中",
+      "currentLocation": "確認中",
+      "currentFlight": null,
       "todayFlights": [],
       "recentFlights": [
         {
@@ -329,9 +329,9 @@
           "arrTime": "02:20",
           "timeRange": "17:22 - 02:20",
           "dateJst": "2026-11-23",
-          "status": "Estimated 09:12",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 09:20",
+          "isLive": false,
+          "isLanded": true,
           "isToday": false
         },
         {
@@ -455,7 +455,7 @@
         "arrTime": "05:20",
         "timeRange": "20:20 - 05:20",
         "dateJst": "2026-11-23",
-        "status": "Estimated 05:10",
+        "status": "Estimated 05:06",
         "isLive": true,
         "isLanded": false,
         "isToday": false
@@ -512,7 +512,7 @@
           "arrTime": "05:20",
           "timeRange": "20:20 - 05:20",
           "dateJst": "2026-11-23",
-          "status": "Estimated 05:10",
+          "status": "Estimated 05:06",
           "isLive": true,
           "isLanded": false,
           "isToday": false
@@ -620,7 +620,7 @@
         "arrTime": "14:00",
         "timeRange": "00:13 - 14:00",
         "dateJst": "2026-11-24",
-        "status": "Estimated 04:25",
+        "status": "Estimated 05:33",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -639,7 +639,7 @@
           "arrTime": "14:00",
           "timeRange": "00:13 - 14:00",
           "dateJst": "2026-11-24",
-          "status": "Estimated 04:25",
+          "status": "Estimated 05:33",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -659,7 +659,7 @@
           "arrTime": "14:00",
           "timeRange": "00:13 - 14:00",
           "dateJst": "2026-11-24",
-          "status": "Estimated 04:25",
+          "status": "Estimated 05:33",
           "isLive": true,
           "isLanded": false,
           "isToday": true
