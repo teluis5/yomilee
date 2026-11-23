@@ -362,20 +362,20 @@ const isSaleSwitchableBottom = renderType === 'adsense' && selectedType === 'mix
 
               if (diffHours < 3) {
                 if (badgeEl) badgeEl.textContent = 'まもなく終了';
-                if (textEl) textEl.innerHTML = `【🔥ラストスパート！あと${diffHours}時間${diffMinutes}分】${rakutenSale.name} 買い忘れはありませんか？（${endLabel}まで）`;
+                if (textEl) textEl.innerHTML = `【🔥ラストスパート！あと <strong class="rakuten-time-highlight">${diffHours}時間${diffMinutes}分</strong>】${rakutenSale.name} 買い忘れはありませんか？（${endLabel}まで）`;
                 if (ctaEl) ctaEl.textContent = '特設会場へ »';
               } else if (diffHours < 24) {
                 if (isSameDay) {
                   if (badgeEl) badgeEl.textContent = '本日終了';
-                  if (textEl) textEl.innerHTML = `【本日終了（${endLabel}）まで あと${diffHours}時間${diffMinutes}分】${rakutenSale.name} ${rakutenSale.highlight}`;
+                  if (textEl) textEl.innerHTML = `【本日終了（${endLabel}）まで あと <strong class="rakuten-time-highlight">${diffHours}時間${diffMinutes}分</strong>】${rakutenSale.name} ${rakutenSale.highlight}`;
                   if (ctaEl) ctaEl.textContent = 'ラストスパート »';
                 } else if (isLateNight) {
                   if (badgeEl) badgeEl.textContent = '今夜終了';
-                  if (textEl) textEl.innerHTML = `【今夜深夜（${rakutenSale.endDateOnly} ${endLabel}）まで あと${diffHours}時間${diffMinutes}分】${rakutenSale.name} ${rakutenSale.highlight}`;
+                  if (textEl) textEl.innerHTML = `【今夜深夜（${rakutenSale.endDateOnly} ${endLabel}）まで あと <strong class="rakuten-time-highlight">${diffHours}時間${diffMinutes}分</strong>】${rakutenSale.name} ${rakutenSale.highlight}`;
                   if (ctaEl) ctaEl.textContent = 'セール会場へ »';
                 } else {
                   if (badgeEl) badgeEl.textContent = '終了間近';
-                  if (textEl) textEl.innerHTML = `【終了まで あと${diffHours}時間${diffMinutes}分】${rakutenSale.name}（${rakutenSale.endDateOnly} ${endLabel}まで）`;
+                  if (textEl) textEl.innerHTML = `【終了まで あと <strong class="rakuten-time-highlight">${diffHours}時間${diffMinutes}分</strong>】${rakutenSale.name}（${rakutenSale.endDateOnly} ${endLabel}まで）`;
                   if (ctaEl) ctaEl.textContent = 'セール会場へ »';
                 }
               } else {
@@ -437,7 +437,7 @@ const isSaleSwitchableBottom = renderType === 'adsense' && selectedType === 'mix
             if (linkEl) linkEl.href = `${amazonSale.url}?tag=${tag}`;
 
             if (diffHours < 24) {
-              if (descEl) descEl.textContent = `本日終了まで あと${diffHours}時間${diffMinutes}分！年間最大級の特大セールラストスパート`;
+              if (descEl) descEl.innerHTML = `本日終了まで あと <strong class="amazon-time-highlight">${diffHours}時間${diffMinutes}分</strong>！年間最大級の特大セールラストスパート`;
               if (btnTextEl) btnTextEl.textContent = '特設会場へ急ぐ';
             } else {
               if (descEl) descEl.textContent = `${amazonSale.endDateOnly}まで開催中！${amazonSale.highlight}`;
