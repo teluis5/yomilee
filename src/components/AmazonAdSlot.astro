@@ -12,6 +12,13 @@ interface Props {
   badge?: string;
   badgeColor?: string;
   btnBg?: string;
+  items?: Array<{
+    name: string;
+    highlight?: string;
+    badge?: string;
+    url: string;
+    image?: string;
+  }>;
 }
 
 const {
@@ -24,7 +31,12 @@ const {
   badge = 'Amazon',
   badgeColor = '#ff9900',
   btnBg = '#f59e0b',
+  items: propItems,
 } = Astro.props;
+
+const campaignList = Array.isArray(campaigns) ? (campaigns as any[]) : [];
+const amazonCampaign = campaignList.find(c => c.provider === 'amazon');
+const productItems = propItems || (amazonCampaign?.items as any[]) || [];
 ---
 
 <div
@@ -33,45 +45,87 @@ const {
   data-campaigns={JSON.stringify(campaigns)}
   data-amazon-tag={amazonTag}
 >
-  <div class="aff-badge-wrap">
-    <span class="aff-badge" style={`background-color: ${badgeColor};`} data-role="amazon-badge">
-      {badge}
-    </span>
-    <span class="aff-pr-label">PR</span>
+  <div class="aff-main-row">
+    <div class="aff-badge-wrap">
+      <span class="aff-badge" style={`background-color: ${badgeColor};`} data-role="amazon-badge">
+        {badge}
+      </span>
+      <span class="aff-pr-label">PR</span>
+    </div>
+    <div class="aff-content">
+      <div class="aff-title" data-role="amazon-title">{title}</div>
+      <div class="aff-desc" data-role="amazon-desc">{desc}</div>
+    </div>
+    <div class="aff-action">
+      <a href={url} target="_blank" rel="sponsored noopener noreferrer" class="aff-btn" style={`background-color: ${btnBg};`} data-role="amazon-link">
+        <span data-role="amazon-btn-text">{btnText}</span>
+        <svg class="aff-arrow" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+          <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
   </div>
-  <div class="aff-content">
-    <div class="aff-title" data-role="amazon-title">{title}</div>
-    <div class="aff-desc" data-role="amazon-desc">{desc}</div>
-  </div>
-  <div class="aff-action">
-    <a href={url} target="_blank" rel="sponsored noopener noreferrer" class="aff-btn" style={`background-color: ${btnBg};`} data-role="amazon-link">
-      <span data-role="amazon-btn-text">{btnText}</span>
-      <svg class="aff-arrow" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-        <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
-      </svg>
-    </a>
-  </div>
+
+  {productItems.length > 0 && (
+    <div class="aff-products-section">
+      <div class="aff-products-header">
+        <span class="aff-products-title">🔥 ブラックフライデー注目の目玉セール商品</span>
+        <span class="aff-products-sub">数量限定・セール特価</span>
+      </div>
+      <div class="aff-products-grid">
+        {productItems.map((item) => (
+          <a
+            href={item.url.includes('tag=') ? item.url : `${item.url}?tag=${amazonTag}`}
+            target="_blank"
+            rel="sponsored noopener noreferrer"
+            class="aff-product-card"
+          >
+            <div class="aff-product-img-wrap">
+              <img
+                src={item.image || 'https://m.media-amazon.com/images/I/41K-sZ01rDL._AC_SL1000_.jpg'}
+                alt={item.name}
+                loading="lazy"
+                decoding="async"
+                class="aff-product-img"
+              />
+              {item.badge && <span class="aff-product-badge">{item.badge}</span>}
+            </div>
+            <div class="aff-product-info">
+              <div class="aff-product-name">{item.name}</div>
+              <div class="aff-product-highlight">{item.highlight}</div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
 </div>
 
 <style is:global>
   .affiliate-banner-card {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0.85rem 1.15rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.85rem;
+    padding: 0.95rem 1.15rem;
     background: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
     text-align: left;
     box-sizing: border-box;
-    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    transition: box-shadow 0.15s ease, border-color 0.15s ease;
   }
   .affiliate-banner-card:hover {
-    transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     border-color: #cbd5e1;
+  }
+  .aff-main-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
   }
   .aff-badge-wrap {
     display: flex;
@@ -147,12 +201,115 @@ const {
     transform: translateX(2px);
   }
 
+  /* 目玉商品紹介セクション */
+  .aff-products-section {
+    padding-top: 0.75rem;
+    border-top: 1px solid #f1f5f9;
+  }
+  .aff-products-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .aff-products-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #1e293b;
+  }
+  .aff-products-sub {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    font-weight: 500;
+  }
+  .aff-products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.65rem;
+  }
+  .aff-product-card {
+    display: flex;
+    flex-direction: column;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 0.55rem;
+    text-decoration: none !important;
+    color: inherit !important;
+    box-sizing: border-box;
+    transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .aff-product-card:hover {
+    background: #ffffff;
+    border-color: #f59e0b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.15);
+  }
+  .aff-product-img-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #ffffff;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.45rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .aff-product-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    padding: 0.25rem;
+    box-sizing: border-box;
+  }
+  .aff-product-badge {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    background: #e11d48;
+    color: #ffffff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+  }
+  .aff-product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+  }
+  .aff-product-name {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  .aff-product-card:hover .aff-product-name {
+    color: #b45309;
+  }
+  .aff-product-highlight {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #e11d48;
+    line-height: 1.3;
+  }
+
   @media (max-width: 640px) {
-    .affiliate-banner-card {
+    .aff-main-row {
       flex-direction: column;
       align-items: stretch;
       gap: 0.65rem;
-      padding: 0.85rem 1rem;
     }
     .aff-badge-wrap {
       flex-direction: row;
@@ -176,6 +333,19 @@ const {
       padding: 0.65rem 1rem;
       box-sizing: border-box;
     }
+    .aff-products-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+    }
+    .aff-product-card {
+      padding: 0.45rem;
+    }
+    .aff-product-name {
+      font-size: 0.72rem;
+    }
+    .aff-product-highlight {
+      font-size: 0.68rem;
+    }
   }
 
   .ad-pos-sidebar .affiliate-banner-card {
@@ -183,6 +353,10 @@ const {
     align-items: stretch;
     gap: 0.65rem;
     padding: 0.85rem 0.9rem;
+  }
+  .ad-pos-sidebar .aff-main-row {
+    flex-direction: column;
+    align-items: stretch;
   }
   .ad-pos-sidebar .aff-badge-wrap {
     flex-direction: row;
@@ -207,5 +381,8 @@ const {
     padding: 0.6rem 0.8rem;
     font-size: 0.8rem;
     box-sizing: border-box;
+  }
+  .ad-pos-sidebar .aff-products-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 </style>
