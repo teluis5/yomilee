@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月23日 08:00",
-  "updatedAtIso": "2026-11-22T23:00:08.765Z",
+  "updatedAt": "2026年11月23日 09:00",
+  "updatedAtIso": "2026-11-23T00:00:09.151Z",
   "totalJets": 5,
   "jets": [
     {
@@ -20,8 +20,45 @@
       "flightState": "確認中",
       "currentLocation": "確認中",
       "currentFlight": null,
-      "todayFlights": [],
+      "todayFlights": [
+        {
+          "flightNo": "NH18",
+          "origin": "ITM",
+          "dest": "HND",
+          "originName": "大阪(伊丹) (ITM)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "ITM",
+          "destCode": "HND",
+          "route": "大阪(伊丹) ➔ 東京(羽田)",
+          "depTime": "09:00",
+          "arrTime": "10:10",
+          "timeRange": "09:00 - 10:10",
+          "dateJst": "2026-11-23",
+          "status": "Estimated dep 09:00",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        }
+      ],
       "recentFlights": [
+        {
+          "flightNo": "NH18",
+          "origin": "ITM",
+          "dest": "HND",
+          "originName": "大阪(伊丹) (ITM)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "ITM",
+          "destCode": "HND",
+          "route": "大阪(伊丹) ➔ 東京(羽田)",
+          "depTime": "09:00",
+          "arrTime": "10:10",
+          "timeRange": "09:00 - 10:10",
+          "dateJst": "2026-11-23",
+          "status": "Estimated dep 09:00",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH780",
           "origin": "CTS",
@@ -111,24 +148,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH680",
-          "origin": "HIJ",
-          "dest": "HND",
-          "originName": "広島 (HIJ)",
-          "destinationName": "東京(羽田) (HND)",
-          "origCode": "HIJ",
-          "destCode": "HND",
-          "route": "広島 ➔ 東京(羽田)",
-          "depTime": "16:41",
-          "arrTime": "17:55",
-          "timeRange": "16:41 - 17:55",
-          "dateJst": "2026-11-21",
-          "status": "Landed 17:55",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -161,7 +180,7 @@
         "arrTime": "14:30",
         "timeRange": "07:54 - 14:30",
         "dateJst": "2026-11-23",
-        "status": "Estimated 14:20",
+        "status": "Estimated 14:11",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -180,7 +199,7 @@
           "arrTime": "14:30",
           "timeRange": "07:54 - 14:30",
           "dateJst": "2026-11-23",
-          "status": "Estimated 14:20",
+          "status": "Estimated 14:11",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -200,7 +219,7 @@
           "arrTime": "14:30",
           "timeRange": "07:54 - 14:30",
           "dateJst": "2026-11-23",
-          "status": "Estimated 14:20",
+          "status": "Estimated 14:11",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -326,7 +345,7 @@
         "arrTime": "15:00",
         "timeRange": "02:14 - 15:00",
         "dateJst": "2026-11-23",
-        "status": "Estimated 14:18",
+        "status": "Estimated 14:24",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -345,7 +364,7 @@
           "arrTime": "15:00",
           "timeRange": "02:14 - 15:00",
           "dateJst": "2026-11-23",
-          "status": "Estimated 14:18",
+          "status": "Estimated 14:24",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -365,7 +384,7 @@
           "arrTime": "15:00",
           "timeRange": "02:14 - 15:00",
           "dateJst": "2026-11-23",
-          "status": "Estimated 14:18",
+          "status": "Estimated 14:24",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -511,7 +530,7 @@
           "arrTime": "18:15",
           "timeRange": "08:35 - 18:15",
           "dateJst": "2026-11-23",
-          "status": "Estimated dep 09:00",
+          "status": "Estimated dep 08:35*",
           "isLive": false,
           "isLanded": false,
           "isToday": true
@@ -531,7 +550,7 @@
           "arrTime": "18:15",
           "timeRange": "08:35 - 18:15",
           "dateJst": "2026-11-23",
-          "status": "Estimated dep 09:00",
+          "status": "Estimated dep 08:35*",
           "isLive": false,
           "isLanded": false,
           "isToday": true
