@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月23日 15:30",
-  "updatedAtIso": "2026-11-23T06:30:06.180Z",
+  "updatedAt": "2026年11月23日 15:45",
+  "updatedAtIso": "2026-11-23T06:45:06.025Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "東京(羽田)",
-    "currentLocationCode": "HND",
+    "currentLocation": "飛行中 (東京(羽田) ➔ 広島)",
+    "currentLocationCode": "HIJ",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "広島(95%) / 東京(羽田)(5%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
@@ -1956,11 +1956,11 @@
           "route": "長崎 ➔ 東京(羽田)"
         }
       },
-      "currentAirport": "東京(羽田)",
+      "currentAirport": "飛行中 (東京(羽田) ➔ 広島)",
       "nightStay": "広島(95%) / 東京(羽田)(5%)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH26 (大阪(伊丹) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
-      "todayOutlook": "現在 NH26 (大阪(伊丹) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
+      "pendingNightStayNote": "現在 NH681 (東京(羽田) ➔ 広島) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
+      "todayOutlook": "現在 NH681 (東京(羽田) ➔ 広島) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
       "nightStayProbabilities": [
         {
           "airport": "広島",
@@ -1979,7 +1979,7 @@
           "planName": "プランA (広島泊)",
           "stayCode": "HIJ",
           "rank": "本命 ◎",
-          "probability": 84,
+          "probability": 90,
           "title": "【今夜広島泊シナリオ】長崎 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
           "routeSummary": "長崎 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
           "flights": [
@@ -2016,7 +2016,7 @@
               "dest": "HIJ",
               "route": "東京(羽田) ➔ 広島",
               "time": "15:00発 - 16:30着",
-              "tag": "予想接続(76P)",
+              "tag": "飛行中",
               "step": "④ 第4便"
             },
             {
@@ -2081,7 +2081,7 @@
               "dest": "HIJ",
               "route": "東京(羽田) ➔ 広島",
               "time": "15:00発 - 16:30着",
-              "tag": "予想接続(76P)",
+              "tag": "飛行中",
               "step": "④ 第4便"
             },
             {
@@ -2090,62 +2090,6 @@
               "dest": "HND",
               "route": "広島 ➔ 東京(羽田)",
               "time": "17:20発 - 18:45着",
-              "tag": "🌙羽田泊候補",
-              "step": "⑤ 第5便"
-            }
-          ]
-        },
-        {
-          "planId": "today-plan-c",
-          "planName": "プランC (羽田泊)",
-          "stayCode": "HND",
-          "rank": "対抗 ▲",
-          "probability": 10,
-          "title": "【今夜羽田泊シナリオ】長崎 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
-          "routeSummary": "長崎 ➔ 羽田 ➔ 伊丹 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
-          "flights": [
-            {
-              "flightNo": "NH662",
-              "orig": "NGS",
-              "dest": "HND",
-              "route": "長崎 ➔ 東京(羽田)",
-              "time": "08:25発 - 10:00着",
-              "tag": "運航完了",
-              "step": "① 第1便"
-            },
-            {
-              "flightNo": "NH21",
-              "orig": "HND",
-              "dest": "ITM",
-              "route": "東京(羽田) ➔ 大阪(伊丹)",
-              "time": "11:00発 - 12:10着",
-              "tag": "運航完了",
-              "step": "② 第2便"
-            },
-            {
-              "flightNo": "NH26",
-              "orig": "ITM",
-              "dest": "HND",
-              "route": "大阪(伊丹) ➔ 東京(羽田)",
-              "time": "13:00発 - 14:10着",
-              "tag": "運航完了",
-              "step": "③ 第3便"
-            },
-            {
-              "flightNo": "NH261",
-              "orig": "HND",
-              "dest": "FUK",
-              "route": "東京(羽田) ➔ 福岡",
-              "time": "15:45発 - 17:45着",
-              "tag": "予想接続(76P)",
-              "step": "④ 第4便"
-            },
-            {
-              "flightNo": "NH266",
-              "orig": "FUK",
-              "dest": "HND",
-              "route": "福岡 ➔ 東京(羽田)",
-              "time": "18:30発 - 20:10着",
               "tag": "🌙羽田泊候補",
               "step": "⑤ 第5便"
             }
@@ -2250,7 +2194,14 @@
             "update": null
           },
           "planC": null,
-          "actual": null
+          "actual": {
+            "flightNo": "NH681",
+            "route": "東京(羽田) ➔ 広島",
+            "time": "15:42離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#5",
@@ -2318,18 +2269,14 @@
         },
         {
           "flightNo": "NH681",
-          "origCode": "HND",
-          "destCode": "HIJ",
           "route": "東京(羽田) ➔ 広島",
-          "depTime": "15:00",
-          "arrTime": "16:30",
-          "time": "15:00発 - 16:30着 (予想)",
-          "status": "後続便候補",
-          "isLanded": false,
-          "isLive": false,
-          "isPredicted": true,
+          "time": "15:00発 - 16:30着",
           "depGate": "49",
-          "arrGate": null
+          "arrGate": null,
+          "status": "遅延 (16:46予定)",
+          "isLanded": false,
+          "isLive": true,
+          "isPredicted": false
         },
         {
           "flightNo": "NH682",
@@ -2435,7 +2382,7 @@
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
       "expectedStart": "広島発 (NH672)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH26 (大阪(伊丹) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
+      "pendingNightStayNote": "現在 NH681 (東京(羽田) ➔ 広島) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
@@ -4991,16 +4938,16 @@
       "level": "B (中確率)"
     },
     {
-      "code": "NGS",
-      "name": "長崎空港",
-      "note": "朝一便（NH661/NH664）および夜間ステイ便（NH669/NH662）で高頻度投入。",
-      "prob": 36,
-      "level": "B (中確率)"
-    },
-    {
       "code": "HIJ",
       "name": "広島空港",
       "note": "昼往復便（NH679/NH680）および夜間ステイ便（NH685/NH672）の主要拠点。",
+      "prob": 37,
+      "level": "B (中確率)"
+    },
+    {
+      "code": "NGS",
+      "name": "長崎空港",
+      "note": "朝一便（NH661/NH664）および夜間ステイ便（NH669/NH662）で高頻度投入。",
       "prob": 36,
       "level": "B (中確率)"
     },
@@ -5097,7 +5044,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 731,
+    "totalFleetFlights": 732,
     "fleetCount": 11
   }
 }
