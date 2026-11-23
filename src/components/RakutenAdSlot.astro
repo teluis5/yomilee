@@ -4,98 +4,53 @@
  */
 interface Props {
   campaigns: unknown[];
-  rakutenAffId: string;
-  badge: string;
-  text: string;
-  url: string;
-  iframeUrl: string;
-  items?: Array<{
-    name: string;
-    highlight?: string;
-    badge?: string;
-    url: string;
-    image?: string;
-  }>;
+  rakutenAffId?: string;
+  badge?: string;
+  text?: string;
+  url?: string;
+  iframeUrl?: string;
 }
 
 const {
   campaigns,
-  rakutenAffId,
-  badge,
-  text,
-  url,
+  rakutenAffId = '302ef99f.f5c905be.302ef9a0.b3121be5',
+  badge = '楽天 BLACK FRIDAY',
+  text = '楽天ブラックフライデー開催中！ポイント最大47.5倍',
+  url = 'https://event.rakuten.co.jp/campaign/point-up/blackfriday/',
   iframeUrl,
-  items: propItems,
 } = Astro.props;
 
-const campaignList = Array.isArray(campaigns) ? (campaigns as any[]) : [];
-const rakutenCampaign = campaignList.find(c => c.provider === 'rakuten');
-const productItems = propItems || (rakutenCampaign?.items as any[]) || [];
+// ユーザー指定のモーションウィジェットパラメータ（最新アフィリエイトID）
+const widgetAffiliateId = rakutenAffId || '302ef99f.f5c905be.302ef9a0.b3121be5';
+const widgetTs = '1795477745492';
+const defaultIframeUrl = `https://static.affiliate.rakuten.co.jp/widget/html/smartphone_pcview_468x160.html?rakuten_design=slide&rakuten_affiliateId=${widgetAffiliateId}&rakuten_items=ctsmatch&rakuten_genreId=0&rakuten_size=468x160&rakuten_target=_blank&rakuten_theme=gray&rakuten_border=off&rakuten_auto_mode=on&rakuten_genre_title=off&rakuten_recommend=on&rakuten_ts=${widgetTs}`;
+const targetIframeUrl = iframeUrl || defaultIframeUrl;
 
-const formatRakutenUrl = (itemUrl: string) => {
-  if (!itemUrl) return url;
-  if (itemUrl.includes('hb.afl.rakuten.co.jp')) return itemUrl;
-  const enc = encodeURIComponent(itemUrl);
-  return `https://hb.afl.rakuten.co.jp/hgc/${rakutenAffId}/?pc=${enc}&m=${enc}`;
-};
+// 指定された公式モーションウィジェットスクリプトをiframe内で実行（document.writeのブロックを回避）
+const widgetSrcdoc = `<!DOCTYPE html><html><head><meta charset="utf-8"><style>html,body{margin:0;padding:0;overflow:hidden;background:transparent;text-align:center;}</style></head><body><script type="text/javascript">rakuten_design="slide";rakuten_affiliateId="${widgetAffiliateId}";rakuten_items="ctsmatch";rakuten_genreId="0";rakuten_size="468x160";rakuten_target="_blank";rakuten_theme="gray";rakuten_border="off";rakuten_auto_mode="on";rakuten_genre_title="off";rakuten_recommend="on";rakuten_ts="${widgetTs}";<\/script><script type="text/javascript" src="https://xml.affiliate.rakuten.co.jp/widget/js/rakuten_widget.js?20230106"><\/script></body></html>`;
 ---
 
 <div
   class="rakuten-event-banner dynamic-campaign-banner"
   data-campaign-provider="rakuten"
   data-campaigns={JSON.stringify(campaigns)}
-  data-rakuten-aff-id={rakutenAffId}
+  data-rakuten-aff-id={widgetAffiliateId}
 >
-  <div class="rakuten-banner-main">
-    <a href={url} target="_blank" rel="sponsored noopener noreferrer" class="rakuten-event-link" data-role="event-link">
-      <div class="rakuten-event-meta">
-        <span class="rakuten-event-badge" data-role="event-badge">{badge}</span>
-        <span class="rakuten-pr-label">PR</span>
-      </div>
-      <div class="rakuten-event-text" data-role="event-text">{text}</div>
-      <div class="rakuten-event-cta" data-role="event-cta">エントリー &raquo;</div>
-    </a>
-  </div>
-
-  {productItems.length > 0 && (
-    <div class="rakuten-products-section">
-      <div class="rakuten-products-header">
-        <span class="rakuten-products-title">🔥 楽天ブラックフライデー注目の目玉アイテム</span>
-        <span class="rakuten-products-sub">ポイント還元・特価</span>
-      </div>
-      <div class="rakuten-products-grid">
-        {productItems.map((item) => (
-          <a
-            href={formatRakutenUrl(item.url)}
-            target="_blank"
-            rel="sponsored noopener noreferrer"
-            class="rakuten-product-card"
-          >
-            <div class="rakuten-product-img-wrap">
-              <img
-                src={item.image || 'https://thumbnail.image.rakuten.co.jp/@0_sub/itunes-gift-cards/img/top/giftcard_apple.png'}
-                alt={item.name}
-                loading="lazy"
-                decoding="async"
-                class="rakuten-product-img"
-              />
-              {item.badge && <span class="rakuten-product-badge">{item.badge}</span>}
-            </div>
-            <div class="rakuten-product-info">
-              <div class="rakuten-product-name">{item.name}</div>
-              <div class="rakuten-product-highlight">{item.highlight}</div>
-            </div>
-          </a>
-        ))}
-      </div>
+  <a href={url} target="_blank" rel="sponsored noopener noreferrer" class="rakuten-event-link" data-role="event-link">
+    <div class="rakuten-event-meta">
+      <span class="rakuten-event-badge" data-role="event-badge">{badge}</span>
+      <span class="rakuten-pr-label">PR</span>
     </div>
-  )}
+    <div class="rakuten-event-text" data-role="event-text">{text}</div>
+    <div class="rakuten-event-cta" data-role="event-cta">エントリー &raquo;</div>
+  </a>
 </div>
 
 <div class="rakuten-motion-widget-wrapper">
   <div class="rakuten-widget-container">
     <iframe
-      src={iframeUrl}
+      src={targetIframeUrl}
+      srcdoc={widgetSrcdoc}
       width="468"
       height="160"
       frameborder="0"
@@ -109,24 +64,17 @@ const formatRakutenUrl = (itemUrl: string) => {
 </div>
 
 <style is:global>
+  /* ユーザー要望: rakuten-event-banner自体は個別の赤枠にせず、すっきりしたヘッダー帯に */
   .rakuten-event-banner {
-    margin: 0 auto 0.75rem auto;
+    margin: 0 auto 0.65rem auto;
     max-width: 680px;
-    background: linear-gradient(135deg, #fff7f7 0%, #ffffff 100%);
-    border: 1px solid #fecdd3;
-    border-radius: 8px;
-    padding: 0.75rem 1rem;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0.25rem 0.5rem 0.5rem 0.5rem;
     box-sizing: border-box;
-    box-shadow: 0 1px 3px rgba(191, 0, 0, 0.04);
-    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-  }
-  .rakuten-event-banner:hover {
-    background: #fff1f2;
-    border-color: #fda4af;
-    box-shadow: 0 3px 8px rgba(191, 0, 0, 0.08);
-  }
-  .rakuten-banner-main {
-    width: 100%;
+    box-shadow: none;
+    border-bottom: 1px dashed #fecdd3;
   }
   .rakuten-event-link {
     display: flex;
@@ -135,8 +83,8 @@ const formatRakutenUrl = (itemUrl: string) => {
     gap: 0.75rem;
     text-decoration: none !important;
     color: #1e293b !important;
-    font-size: 0.84rem;
-    line-height: 1.45;
+    font-size: 0.88rem;
+    line-height: 1.4;
   }
   .rakuten-event-meta {
     display: flex;
@@ -147,12 +95,12 @@ const formatRakutenUrl = (itemUrl: string) => {
   .rakuten-event-badge {
     background: #bf0000;
     color: #ffffff;
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 0.2rem 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.2rem 0.55rem;
     border-radius: 4px;
     white-space: nowrap;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
   }
   .rakuten-pr-label {
     font-size: 0.65rem;
@@ -163,26 +111,27 @@ const formatRakutenUrl = (itemUrl: string) => {
   .rakuten-event-text {
     flex: 1;
     min-width: 0;
-    font-weight: 600;
+    font-weight: 700;
     white-space: normal;
     word-break: break-word;
     text-align: left;
     color: #1e293b;
-    line-height: 1.45;
+    font-size: 0.92rem;
+    line-height: 1.4;
   }
   :global(.rakuten-time-highlight) {
     color: #bf0000;
-    font-weight: 700;
+    font-weight: 800;
     font-variant-numeric: tabular-nums;
   }
   .rakuten-event-cta {
-    font-size: 0.75rem;
+    font-size: 0.78rem;
     color: #ffffff !important;
     background: #bf0000;
     font-weight: 700;
     white-space: nowrap;
     flex-shrink: 0;
-    padding: 0.35rem 0.75rem;
+    padding: 0.35rem 0.85rem;
     border-radius: 5px;
     display: inline-flex;
     align-items: center;
@@ -192,111 +141,6 @@ const formatRakutenUrl = (itemUrl: string) => {
   .rakuten-event-banner:hover .rakuten-event-cta {
     background: #990000;
     transform: translateY(-1px);
-  }
-
-  /* 楽天ブラックフライデー 目玉商品セクション */
-  .rakuten-products-section {
-    margin-top: 0.75rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid #fecdd3;
-  }
-  .rakuten-products-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
-    margin-bottom: 0.6rem;
-    flex-wrap: wrap;
-  }
-  .rakuten-products-title {
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: #1e293b;
-  }
-  .rakuten-products-sub {
-    font-size: 0.7rem;
-    color: #94a3b8;
-    font-weight: 500;
-  }
-  .rakuten-products-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.65rem;
-  }
-  .rakuten-product-card {
-    display: flex;
-    flex-direction: column;
-    background: #ffffff;
-    border: 1px solid #fed7aa;
-    border-radius: 6px;
-    padding: 0.55rem;
-    text-decoration: none !important;
-    color: inherit !important;
-    box-sizing: border-box;
-    transition: transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-  }
-  .rakuten-product-card:hover {
-    background: #fff7ed;
-    border-color: #bf0000;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(191, 0, 0, 0.12);
-  }
-  .rakuten-product-img-wrap {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    background: #ffffff;
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 0.45rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .rakuten-product-img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    padding: 0.25rem;
-    box-sizing: border-box;
-  }
-  .rakuten-product-badge {
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    background: #bf0000;
-    color: #ffffff;
-    font-size: 0.6rem;
-    font-weight: 700;
-    padding: 0.1rem 0.35rem;
-    border-radius: 3px;
-    letter-spacing: 0.02em;
-    line-height: 1.2;
-  }
-  .rakuten-product-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    flex: 1;
-  }
-  .rakuten-product-name {
-    font-size: 0.74rem;
-    font-weight: 600;
-    color: #1e293b;
-    line-height: 1.35;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-  }
-  .rakuten-product-card:hover .rakuten-product-name {
-    color: #bf0000;
-  }
-  .rakuten-product-highlight {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #bf0000;
-    line-height: 1.3;
   }
 
   .rakuten-motion-widget-wrapper {
@@ -315,60 +159,44 @@ const formatRakutenUrl = (itemUrl: string) => {
   @media (max-width: 640px) {
     .rakuten-event-banner {
       max-width: 100%;
-      padding: 0.65rem 0.8rem;
+      padding: 0.25rem 0.25rem 0.5rem 0.25rem;
     }
     .rakuten-event-link {
       flex-direction: column;
       align-items: stretch;
-      gap: 0.5rem;
+      gap: 0.45rem;
     }
     .rakuten-event-meta {
       justify-content: space-between;
       width: 100%;
     }
     .rakuten-event-text {
-      font-size: 0.82rem;
-      line-height: 1.45;
+      font-size: 0.86rem;
+      line-height: 1.4;
     }
     .rakuten-event-cta {
       width: 100%;
       text-align: center;
       padding: 0.45rem 0.8rem;
       box-sizing: border-box;
-      font-size: 0.78rem;
-    }
-    .rakuten-products-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.5rem;
-    }
-    .rakuten-product-card {
-      padding: 0.45rem;
-    }
-    .rakuten-product-name {
-      font-size: 0.72rem;
-    }
-    .rakuten-product-highlight {
-      font-size: 0.68rem;
+      font-size: 0.8rem;
     }
     .rakuten-widget-container {
-      transform: scale(calc((100vw - 32px) / 468));
-      margin-bottom: calc(160px * (calc((100vw - 32px) / 468) - 1));
+      transform: scale(calc((100vw - 48px) / 468));
+      margin-bottom: calc(160px * (calc((100vw - 48px) / 468) - 1));
     }
   }
 
   .ad-pos-sidebar .rakuten-event-banner {
     max-width: 100%;
-    padding: 0.5rem 0.65rem;
+    padding: 0.35rem 0.4rem;
   }
   .ad-pos-sidebar .rakuten-event-text {
-    font-size: 0.74rem;
-    line-height: 1.4;
-  }
-  .ad-pos-sidebar .rakuten-products-grid {
-    grid-template-columns: repeat(2, 1fr);
+    font-size: 0.78rem;
+    line-height: 1.35;
   }
   .ad-pos-sidebar .rakuten-widget-container {
-    transform: scale(calc(290 / 468));
-    margin-bottom: calc(160px * (calc(290 / 468) - 1));
+    transform: scale(calc(280 / 468));
+    margin-bottom: calc(160px * (calc(280 / 468) - 1));
   }
 </style>
