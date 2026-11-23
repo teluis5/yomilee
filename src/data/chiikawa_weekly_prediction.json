@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月23日 12:30",
-  "updatedAtIso": "2026-11-23T03:30:06.220Z",
+  "updatedAt": "2026年11月23日 12:45",
+  "updatedAtIso": "2026-11-23T03:45:06.053Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (東京(羽田) ➔ 大阪(伊丹))",
+    "currentLocation": "大阪(伊丹)",
     "currentLocationCode": "ITM",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "広島(95%) / 東京(羽田)(5%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
@@ -1956,7 +1956,7 @@
           "route": "長崎 ➔ 東京(羽田)"
         }
       },
-      "currentAirport": "飛行中 (東京(羽田) ➔ 大阪(伊丹))",
+      "currentAirport": "大阪(伊丹)",
       "nightStay": "広島(95%) / 東京(羽田)(5%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH21 (東京(羽田) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
@@ -1998,7 +1998,7 @@
               "dest": "ITM",
               "route": "東京(羽田) ➔ 大阪(伊丹)",
               "time": "11:00発 - 12:10着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -2063,7 +2063,7 @@
               "dest": "ITM",
               "route": "東京(羽田) ➔ 大阪(伊丹)",
               "time": "11:00発 - 12:10着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -2119,7 +2119,7 @@
               "dest": "ITM",
               "route": "東京(羽田) ➔ 大阪(伊丹)",
               "time": "11:00発 - 12:10着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -2205,10 +2205,10 @@
           "actual": {
             "flightNo": "NH21",
             "route": "東京(羽田) ➔ 大阪(伊丹)",
-            "time": "11:42離陸",
-            "status": "飛行中",
-            "isLanded": false,
-            "isLive": true
+            "time": "11:42離陸 / 12:30着陸",
+            "status": "着陸済",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -2293,9 +2293,9 @@
           "time": "11:00発 - 12:10着",
           "depGate": "64",
           "arrGate": null,
-          "status": "遅延 (12:30予定)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (12:30)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
