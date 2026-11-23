@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月23日 16:45",
-  "updatedAtIso": "2026-11-23T07:45:06.186Z",
+  "updatedAt": "2026年11月23日 17:00",
+  "updatedAtIso": "2026-11-23T08:00:06.579Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (東京(羽田) ➔ 広島)",
+    "currentLocation": "広島",
     "currentLocationCode": "HIJ",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "広島(95%) / 東京(羽田)(5%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
@@ -1956,7 +1956,7 @@
           "route": "長崎 ➔ 東京(羽田)"
         }
       },
-      "currentAirport": "飛行中 (東京(羽田) ➔ 広島)",
+      "currentAirport": "広島",
       "nightStay": "広島(95%) / 東京(羽田)(5%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH681 (東京(羽田) ➔ 広島) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 95% / 東京(羽田) 5% と推定されます。",
@@ -2016,7 +2016,7 @@
               "dest": "HIJ",
               "route": "東京(羽田) ➔ 広島",
               "time": "15:00発 - 16:30着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "④ 第4便"
             },
             {
@@ -2081,7 +2081,7 @@
               "dest": "HIJ",
               "route": "東京(羽田) ➔ 広島",
               "time": "15:00発 - 16:30着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "④ 第4便"
             },
             {
@@ -2197,10 +2197,10 @@
           "actual": {
             "flightNo": "NH681",
             "route": "東京(羽田) ➔ 広島",
-            "time": "15:42離陸",
-            "status": "飛行中",
-            "isLanded": false,
-            "isLive": true
+            "time": "15:42離陸 / 16:50着陸",
+            "status": "着陸済",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -2273,9 +2273,9 @@
           "time": "15:00発 - 16:30着",
           "depGate": "49",
           "arrGate": null,
-          "status": "遅延 (16:50予定)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (16:50)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
