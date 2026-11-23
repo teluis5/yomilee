@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月23日 15:00",
-  "updatedAtIso": "2026-11-23T06:00:09.082Z",
+  "updatedAt": "2026年11月23日 16:00",
+  "updatedAtIso": "2026-11-23T07:00:09.581Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,26 +17,9 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "長崎 (NGS) ➔ 東京(羽田) (HND)",
-      "currentFlight": {
-        "flightNo": "NH666",
-        "origin": "NGS",
-        "dest": "HND",
-        "originName": "長崎 (NGS)",
-        "destinationName": "東京(羽田) (HND)",
-        "origCode": "NGS",
-        "destCode": "HND",
-        "route": "長崎 ➔ 東京(羽田)",
-        "depTime": "13:57",
-        "arrTime": "15:20",
-        "timeRange": "13:57 - 15:20",
-        "dateJst": "2026-11-23",
-        "status": "Estimated 15:15",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": true
-      },
+      "flightState": "着陸済・駐機中 🟡",
+      "currentLocation": "東京(羽田) (HND)",
+      "currentFlight": null,
       "todayFlights": [
         {
           "flightNo": "NH18",
@@ -87,9 +70,9 @@
           "arrTime": "15:20",
           "timeRange": "13:57 - 15:20",
           "dateJst": "2026-11-23",
-          "status": "Estimated 15:15",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 15:20",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         }
       ],
@@ -107,9 +90,9 @@
           "arrTime": "15:20",
           "timeRange": "13:57 - 15:20",
           "dateJst": "2026-11-23",
-          "status": "Estimated 15:15",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 15:20",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         {
@@ -529,7 +512,7 @@
         "arrTime": "18:15",
         "timeRange": "09:27 - 18:15",
         "dateJst": "2026-11-23",
-        "status": "Estimated 20:26",
+        "status": "Estimated 20:23",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -566,7 +549,7 @@
           "arrTime": "18:15",
           "timeRange": "09:27 - 18:15",
           "dateJst": "2026-11-23",
-          "status": "Estimated 20:26",
+          "status": "Estimated 20:23",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -586,7 +569,7 @@
           "arrTime": "18:15",
           "timeRange": "09:27 - 18:15",
           "dateJst": "2026-11-23",
-          "status": "Estimated 20:26",
+          "status": "Estimated 20:23",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -904,7 +887,7 @@
             "dest": "HND",
             "route": "長崎 ➔ 東京(羽田)",
             "time": "13:57発 - 15:20着",
-            "tag": "飛行中 🟢",
+            "tag": "運航完了",
             "step": "第3便"
           },
           {
@@ -960,7 +943,7 @@
             "dest": "HND",
             "route": "長崎 ➔ 東京(羽田)",
             "time": "13:57発 - 15:20着",
-            "tag": "飛行中 🟢",
+            "tag": "運航完了",
             "step": "第3便"
           },
           {
@@ -1016,7 +999,7 @@
             "dest": "HND",
             "route": "長崎 ➔ 東京(羽田)",
             "time": "13:57発 - 15:20着",
-            "tag": "飛行中 🟢",
+            "tag": "運航完了",
             "step": "第3便"
           },
           {
@@ -1257,9 +1240,9 @@
           "arrTime": "15:20",
           "timeRange": "13:57 - 15:20",
           "dateJst": "2026-11-23",
-          "status": "Estimated 15:15",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 15:20",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         "update": "当日の機種は78G"
