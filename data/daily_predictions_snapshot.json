@@ -6914,19 +6914,18 @@
     {
       "planId": "plan-a",
       "planName": "プランA (広島泊始発)",
-      "stayCode": "HND",
+      "stayCode": "HIJ",
       "startAirportCode": "HIJ",
       "rank": "本命 ◎",
-      "probability": 88,
-      "title": "【前夜広島泊(NH672始発)】広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
-      "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 福岡 ➔ 羽田(泊)",
+      "probability": 86,
+      "title": "【前夜広島泊(NH672始発)】広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
+      "routeSummary": "広島 ➔ 羽田 ➔ 新千歳 ➔ 羽田 ➔ 広島 ➔ 羽田 ➔ 広島(泊)",
       "airports": [
         "広島",
         "東京(羽田)",
-        "札幌(新千歳)",
-        "福岡"
+        "札幌(新千歳)"
       ],
-      "description": "前夜広島駐機シナリオから連動。朝一NH672(07:35発 - 08:55着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全5便を運航して夜に羽田泊となる予測スジ。 [フリート整合: 他機体6機スジ整合（76P確定枠カバー率100%）]",
+      "description": "前夜広島駐機シナリオから連動。朝一NH672(07:35発 - 08:55着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全6便を運航して夜に広島泊となる予測スジ。 [フリート整合: 他機体6機スジ整合（76P確定枠カバー率100%）]",
       "fleetConsistency": {
         "fleetScore": 4,
         "is100Percent": true,
@@ -6978,32 +6977,46 @@
           "tag": "767機種予定"
         },
         {
-          "step": "④ 夕方便",
-          "time": "15:45発 - 17:45着",
-          "depTime": "15:45",
-          "arrTime": "17:45",
-          "flightNo": "NH261",
+          "step": "④ 午後便",
+          "time": "15:00発 - 16:30着",
+          "depTime": "15:00",
+          "arrTime": "16:30",
+          "flightNo": "NH681",
           "orig": "HND",
-          "dest": "FUK",
-          "route": "東京(羽田) ➔ 福岡",
+          "dest": "HIJ",
+          "route": "東京(羽田) ➔ 広島",
           "model": "76P",
           "is767Confirmed": true,
           "is767Strict": true,
           "tag": "767機種予定"
         },
         {
-          "step": "⑤ 夜最終",
-          "time": "18:30発 - 20:10着",
-          "depTime": "18:30",
-          "arrTime": "20:10",
-          "flightNo": "NH266",
-          "orig": "FUK",
+          "step": "⑤ 夕方便",
+          "time": "17:20発 - 18:45着",
+          "depTime": "17:20",
+          "arrTime": "18:45",
+          "flightNo": "NH682",
+          "orig": "HIJ",
           "dest": "HND",
-          "route": "福岡 ➔ 東京(羽田)",
+          "route": "広島 ➔ 東京(羽田)",
           "model": "76P",
           "is767Confirmed": true,
           "is767Strict": true,
-          "tag": "🌙羽田帰還(泊)"
+          "tag": "767機種予定"
+        },
+        {
+          "step": "⑥ 夜最終",
+          "time": "19:40発 - 21:10着",
+          "depTime": "19:40",
+          "arrTime": "21:10",
+          "flightNo": "NH685",
+          "orig": "HND",
+          "dest": "HIJ",
+          "route": "東京(羽田) ➔ 広島",
+          "model": "76P",
+          "is767Confirmed": true,
+          "is767Strict": true,
+          "tag": "🌙広島ナイトステイ(泊)"
         }
       ]
     },
@@ -7119,13 +7132,13 @@
         "札幌(新千歳)",
         "名古屋(中部)"
       ],
-      "description": "前夜東京(羽田)駐機シナリオから連動。朝一NH661(08:30発 - 10:30着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全5便を運航して夜に中部泊となる予測スジ。 [フリート整合: 他機体6機スジ整合（76P確定枠カバー率100%）]",
+      "description": "前夜東京(羽田)駐機シナリオから連動。朝一NH661(08:30発 - 10:30着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全5便を運航して夜に中部泊となる予測スジ。 [フリート整合: 他機体5機スジ整合（76P確定枠カバー率100%）]",
       "fleetConsistency": {
         "fleetScore": 4,
         "is100Percent": true,
         "strictCoverageRate": 100,
-        "otherLinesCount": 6,
-        "summary": "他機体6機スジ整合（76P確定枠カバー率100%）"
+        "otherLinesCount": 5,
+        "summary": "他機体5機スジ整合（76P確定枠カバー率100%）"
       },
       "flights": [
         {
