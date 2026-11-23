@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月23日 20:00",
-  "updatedAtIso": "2026-11-23T11:00:08.656Z",
+  "updatedAt": "2026年11月23日 21:00",
+  "updatedAtIso": "2026-11-23T12:00:13.961Z",
   "totalJets": 5,
   "jets": [
     {
@@ -32,7 +32,7 @@
         "arrTime": "21:00",
         "timeRange": "19:51 - 21:00",
         "dateJst": "2026-11-23",
-        "status": "Estimated 21:14",
+        "status": "Estimated 21:13",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -123,7 +123,7 @@
           "arrTime": "21:00",
           "timeRange": "19:51 - 21:00",
           "dateJst": "2026-11-23",
-          "status": "Estimated 21:14",
+          "status": "Estimated 21:13",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -143,7 +143,7 @@
           "arrTime": "21:00",
           "timeRange": "19:51 - 21:00",
           "dateJst": "2026-11-23",
-          "status": "Estimated 21:14",
+          "status": "Estimated 21:13",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -269,7 +269,7 @@
         "arrTime": "00:40",
         "timeRange": "17:53 - 00:40",
         "dateJst": "2026-11-23",
-        "status": "Estimated 23:43",
+        "status": "Estimated 23:46",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -306,7 +306,7 @@
           "arrTime": "00:40",
           "timeRange": "17:53 - 00:40",
           "dateJst": "2026-11-23",
-          "status": "Estimated 23:43",
+          "status": "Estimated 23:46",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -326,7 +326,7 @@
           "arrTime": "00:40",
           "timeRange": "17:53 - 00:40",
           "dateJst": "2026-11-23",
-          "status": "Estimated 23:43",
+          "status": "Estimated 23:46",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -620,9 +620,26 @@
       "routesSummary": "羽田/成田 ➔ シアトル / 欧州 / 北米 / バンコク / アジア幹線",
       "color": "#22c55e",
       "serviceStart": "2026-09-18",
-      "flightState": "着陸済・駐機中 🟡",
-      "currentLocation": "シドニー (SYD)",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "シドニー (SYD) ➔ 東京(羽田) (HND)",
+      "currentFlight": {
+        "flightNo": "NH880",
+        "origin": "SYD",
+        "dest": "HND",
+        "originName": "シドニー (SYD)",
+        "destinationName": "東京(羽田) (HND)",
+        "origCode": "SYD",
+        "destCode": "HND",
+        "route": "シドニー ➔ 東京(羽田)",
+        "depTime": "20:20",
+        "arrTime": "05:20",
+        "timeRange": "20:20 - 05:20",
+        "dateJst": "2026-11-23",
+        "status": "Estimated 05:33",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH856",
@@ -669,12 +686,12 @@
           "origCode": "SYD",
           "destCode": "HND",
           "route": "シドニー ➔ 東京(羽田)",
-          "depTime": "19:45",
+          "depTime": "20:20",
           "arrTime": "05:20",
-          "timeRange": "19:45 - 05:20",
+          "timeRange": "20:20 - 05:20",
           "dateJst": "2026-11-23",
-          "status": "Estimated dep 22:08",
-          "isLive": false,
+          "status": "Estimated 05:33",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         }
@@ -689,12 +706,12 @@
           "origCode": "SYD",
           "destCode": "HND",
           "route": "シドニー ➔ 東京(羽田)",
-          "depTime": "19:45",
+          "depTime": "20:20",
           "arrTime": "05:20",
-          "timeRange": "19:45 - 05:20",
+          "timeRange": "20:20 - 05:20",
           "dateJst": "2026-11-23",
-          "status": "Estimated dep 22:08",
-          "isLive": false,
+          "status": "Estimated 05:33",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         },
@@ -807,8 +824,45 @@
       "flightState": "確認中",
       "currentLocation": "確認中",
       "currentFlight": null,
-      "todayFlights": [],
+      "todayFlights": [
+        {
+          "flightNo": "NH205",
+          "origin": "HND",
+          "dest": "VIE",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "VIE",
+          "origCode": "HND",
+          "destCode": "VIE",
+          "route": "東京(羽田) ➔ VIE",
+          "depTime": "22:55",
+          "arrTime": "14:00",
+          "timeRange": "22:55 - 14:00",
+          "dateJst": "2026-11-23",
+          "status": "Estimated dep 23:05",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        }
+      ],
       "recentFlights": [
+        {
+          "flightNo": "NH205",
+          "origin": "HND",
+          "dest": "VIE",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "VIE",
+          "origCode": "HND",
+          "destCode": "VIE",
+          "route": "東京(羽田) ➔ VIE",
+          "depTime": "22:55",
+          "arrTime": "14:00",
+          "timeRange": "22:55 - 14:00",
+          "dateJst": "2026-11-23",
+          "status": "Estimated dep 23:05",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH204",
           "origin": "FRA",
@@ -895,24 +949,6 @@
           "timeRange": "05:01 - 17:17",
           "dateJst": "2026-11-20",
           "status": "Landed 17:17",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
-        },
-        {
-          "flightNo": "NH223",
-          "origin": "HND",
-          "dest": "FRA",
-          "originName": "東京(羽田) (HND)",
-          "destinationName": "フランクフルト (FRA)",
-          "origCode": "HND",
-          "destCode": "FRA",
-          "route": "東京(羽田) ➔ フランクフルト",
-          "depTime": "10:56",
-          "arrTime": "00:44",
-          "timeRange": "10:56 - 00:44",
-          "dateJst": "2026-11-19",
-          "status": "Landed 16:44",
           "isLive": false,
           "isLanded": true,
           "isToday": false
