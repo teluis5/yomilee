@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月24日 09:00",
-  "updatedAtIso": "2026-11-24T00:00:08.794Z",
+  "updatedAt": "2026年11月24日 10:00",
+  "updatedAtIso": "2026-11-24T01:00:08.907Z",
   "totalJets": 5,
   "jets": [
     {
@@ -32,7 +32,7 @@
         "arrTime": "11:05",
         "timeRange": "08:22 - 11:05",
         "dateJst": "2026-11-24",
-        "status": "Estimated 11:11",
+        "status": "Estimated 11:08",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -51,7 +51,7 @@
           "arrTime": "11:05",
           "timeRange": "08:22 - 11:05",
           "dateJst": "2026-11-24",
-          "status": "Estimated 11:11",
+          "status": "Estimated 11:08",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -71,7 +71,7 @@
           "arrTime": "11:05",
           "timeRange": "08:22 - 11:05",
           "dateJst": "2026-11-24",
-          "status": "Estimated 11:11",
+          "status": "Estimated 11:08",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -203,9 +203,45 @@
           "isLive": false,
           "isLanded": true,
           "isToday": true
+        },
+        {
+          "flightNo": "NH829",
+          "origin": "NRT",
+          "dest": "BOM",
+          "originName": "東京(成田) (NRT)",
+          "destinationName": "BOM",
+          "origCode": "NRT",
+          "destCode": "BOM",
+          "route": "東京(成田) ➔ BOM",
+          "depTime": "11:45",
+          "arrTime": "22:05",
+          "timeRange": "11:45 - 22:05",
+          "dateJst": "2026-11-24",
+          "status": "Estimated dep 11:55",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
         }
       ],
       "recentFlights": [
+        {
+          "flightNo": "NH829",
+          "origin": "NRT",
+          "dest": "BOM",
+          "originName": "東京(成田) (NRT)",
+          "destinationName": "BOM",
+          "origCode": "NRT",
+          "destCode": "BOM",
+          "route": "東京(成田) ➔ BOM",
+          "depTime": "11:45",
+          "arrTime": "22:05",
+          "timeRange": "11:45 - 22:05",
+          "dateJst": "2026-11-24",
+          "status": "Estimated dep 11:55",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH804",
           "origin": "SIN",
@@ -295,24 +331,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH835",
-          "origin": "NRT",
-          "dest": "CGK",
-          "originName": "東京(成田) (NRT)",
-          "destinationName": "ジャカルタ (CGK)",
-          "origCode": "NRT",
-          "destCode": "CGK",
-          "route": "東京(成田) ➔ ジャカルタ",
-          "depTime": "18:36",
-          "arrTime": "01:56",
-          "timeRange": "18:36 - 01:56",
-          "dateJst": "2026-11-21",
-          "status": "Landed 23:56",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -345,7 +363,7 @@
         "arrTime": "15:25",
         "timeRange": "04:40 - 15:25",
         "dateJst": "2026-11-24",
-        "status": "Estimated 15:17",
+        "status": "Estimated 15:29",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -364,7 +382,7 @@
           "arrTime": "15:25",
           "timeRange": "04:40 - 15:25",
           "dateJst": "2026-11-24",
-          "status": "Estimated 15:17",
+          "status": "Estimated 15:29",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -384,7 +402,7 @@
           "arrTime": "15:25",
           "timeRange": "04:40 - 15:25",
           "dateJst": "2026-11-24",
-          "status": "Estimated 15:17",
+          "status": "Estimated 15:29",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -495,9 +513,26 @@
       "routesSummary": "羽田/成田 ➔ シアトル / 欧州 / 北米 / バンコク / アジア幹線",
       "color": "#22c55e",
       "serviceStart": "2026-09-18",
-      "flightState": "確認中",
-      "currentLocation": "確認中",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "東京(羽田) (HND) ➔ シドニー (SYD)",
+      "currentFlight": {
+        "flightNo": "NH889",
+        "origin": "HND",
+        "dest": "SYD",
+        "originName": "東京(羽田) (HND)",
+        "destinationName": "シドニー (SYD)",
+        "origCode": "HND",
+        "destCode": "SYD",
+        "route": "東京(羽田) ➔ シドニー",
+        "depTime": "09:08",
+        "arrTime": "18:15",
+        "timeRange": "09:08 - 18:15",
+        "dateJst": "2026-11-24",
+        "status": "Estimated 20:10",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH889",
@@ -508,12 +543,12 @@
           "origCode": "HND",
           "destCode": "SYD",
           "route": "東京(羽田) ➔ シドニー",
-          "depTime": "08:35",
+          "depTime": "09:08",
           "arrTime": "18:15",
-          "timeRange": "08:35 - 18:15",
+          "timeRange": "09:08 - 18:15",
           "dateJst": "2026-11-24",
-          "status": "Estimated dep 08:49",
-          "isLive": false,
+          "status": "Estimated 20:10",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         }
@@ -528,12 +563,12 @@
           "origCode": "HND",
           "destCode": "SYD",
           "route": "東京(羽田) ➔ シドニー",
-          "depTime": "08:35",
+          "depTime": "09:08",
           "arrTime": "18:15",
-          "timeRange": "08:35 - 18:15",
+          "timeRange": "09:08 - 18:15",
           "dateJst": "2026-11-24",
-          "status": "Estimated dep 08:49",
-          "isLive": false,
+          "status": "Estimated 20:10",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         },
@@ -658,7 +693,7 @@
         "arrTime": "14:00",
         "timeRange": "00:13 - 14:00",
         "dateJst": "2026-11-24",
-        "status": "Delayed 06:27",
+        "status": "Delayed 06:28",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -677,7 +712,7 @@
           "arrTime": "14:00",
           "timeRange": "00:13 - 14:00",
           "dateJst": "2026-11-24",
-          "status": "Delayed 06:27",
+          "status": "Delayed 06:28",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -697,7 +732,7 @@
           "arrTime": "14:00",
           "timeRange": "00:13 - 14:00",
           "dateJst": "2026-11-24",
-          "status": "Delayed 06:27",
+          "status": "Delayed 06:28",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -1174,7 +1209,7 @@
           "arrTime": "11:05",
           "timeRange": "08:22 - 11:05",
           "dateJst": "2026-11-24",
-          "status": "Estimated 11:11",
+          "status": "Estimated 11:08",
           "isLive": true,
           "isLanded": false,
           "isToday": true
