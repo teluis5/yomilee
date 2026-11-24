@@ -170,6 +170,19 @@ const description =
 				return AIRPORT_JA[clean.toUpperCase()] || clean;
 			}
 
+			const AIRPORT_COORDS = {
+				HND: [35.5494, 139.7798], NRT: [35.7720, 140.3929], ITM: [34.7855, 135.4382],
+				KIX: [34.4320, 135.2304], UKB: [34.6328, 135.2239], NGO: [34.8584, 136.8054],
+				CTS: [42.7752, 141.6923], FUK: [33.5859, 130.4507], OKA: [26.1958, 127.6459],
+				SDJ: [38.1397, 140.9169], HIJ: [34.4361, 132.9194], KOJ: [31.8034, 130.7194],
+				KMJ: [32.8373, 130.8551], NGS: [32.9169, 129.9136], OIT: [33.4794, 131.7372],
+				KMI: [31.8772, 131.4486], MYJ: [33.8272, 132.6997], TAK: [34.2142, 134.0156],
+				KCZ: [33.5461, 133.6694], OKJ: [34.7569, 133.8553], KMQ: [36.3946, 136.4065],
+				HKD: [41.7700, 140.8219], AKJ: [43.6708, 142.4475], AOJ: [40.7347, 140.6908],
+				ISG: [24.3964, 124.2450], MMY: [24.7828, 125.2951]
+			};
+			let hoverRouteLine = null;
+
 			function render() {
 				// マーカークリア
 				for (const marker of markersByReg.values()) {
@@ -204,6 +217,29 @@ const description =
 							</div>`,
 							{ direction: 'top', offset: [0, -14], opacity: 0.96 }
 						);
+
+						// マウスオーバーで到着空港へ向けて点線を描画
+						marker.on('mouseover', () => {
+							if (hoverRouteLine) {
+								map.removeLayer(hoverRouteLine);
+								hoverRouteLine = null;
+							}
+							const destCoord = ac.destination ? AIRPORT_COORDS[String(ac.destination).toUpperCase()] : null;
+							if (destCoord) {
+								hoverRouteLine = L.polyline([[ac.lat, ac.lon], destCoord], {
+									color: ac.color || '#1d4ed8',
+									weight: 2.5,
+									dashArray: '6, 6',
+									opacity: 0.85
+								}).addTo(map);
+							}
+						});
+						marker.on('mouseout', () => {
+							if (hoverRouteLine) {
+								map.removeLayer(hoverRouteLine);
+								hoverRouteLine = null;
+							}
+						});
 
 						marker.bindPopup(`
 							<div class="livery-popup">
