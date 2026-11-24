@@ -74,12 +74,15 @@ const description =
 			let onlyActive = false;
 			const markersByReg = new Map();
 
-			// 地図初期化（日本中心・海は青単一色）
+			// 地図初期化（日本中心・海は淡い青単一色・移動範囲を日本周辺に制限）
+			const japanBounds = L.latLngBounds([20.0, 120.0], [48.0, 152.0]);
 			const map = L.map('livery-map', {
 				center: [36.2, 137.9],
 				zoom: 5,
 				minZoom: 4,
 				maxZoom: 14,
+				maxBounds: japanBounds,
+				maxBoundsViscosity: 1.0,
 				zoomControl: true
 			});
 
