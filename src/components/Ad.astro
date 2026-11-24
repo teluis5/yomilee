@@ -43,7 +43,7 @@ const POSITION_SLOTS: Record<string, string> = {
 const targetSlot = slot || POSITION_SLOTS[position] || '4644769398';
 
 const AMAZON_TAG = 'teluis-22';
-const RAKUTEN_AFF_ID = '302ef99f.f5c905be.302ef9a0.b3121be5';
+const RAKUTEN_AFF_ID = '59cee293.4a6c5500.59cee294.af50e2ea';
 
 const campaigns = campaignsData.campaigns || [];
 const rakutenSale = campaigns.find(c => c.provider === 'rakuten');
@@ -62,8 +62,8 @@ function getRakutenCampaign(customText?: string, customLink?: string) {
   if (rakutenSale) {
     const enc = encodeURIComponent(rakutenSale.url);
     return {
-      badge: rakutenSale.badge || '楽天 BF',
-      text: `楽天ブラックフライデー開催中！ ポイント最大47.5倍${rakutenSale.endDateOnly ? `（${rakutenSale.endDateOnly}まで）` : ''}`,
+      badge: rakutenSale.badge || 'SALE',
+      text: `【${rakutenSale.name}】${rakutenSale.endDateOnly ? `${rakutenSale.endDateOnly}まで開催！` : ''}${rakutenSale.highlight}`,
       url: `https://hb.afl.rakuten.co.jp/hgc/${RAKUTEN_AFF_ID}/?pc=${enc}&m=${enc}`,
     };
   }
@@ -161,7 +161,7 @@ if (selectedType === 'rakuten') {
 }
 
 const selectedAmazon = AMAZON_DATA[0];
-const rakutenWidgetIframeUrl = `https://static.affiliate.rakuten.co.jp/widget/html/smartphone_pcview_468x160.html?rakuten_design=slide&rakuten_affiliateId=${RAKUTEN_AFF_ID}&rakuten_items=ctsmatch&rakuten_genreId=0&rakuten_size=468x160&rakuten_target=_blank&rakuten_theme=gray&rakuten_border=off&rakuten_auto_mode=on&rakuten_genre_title=off&rakuten_recommend=on&rakuten_ts=1795477745492`;
+const rakutenWidgetIframeUrl = `https://static.affiliate.rakuten.co.jp/widget/html/smartphone_pcview_468x160.html?rakuten_design=slide&rakuten_affiliateId=${RAKUTEN_AFF_ID}&rakuten_items=ctsmatch&rakuten_genreId=0&rakuten_size=468x160&rakuten_target=_blank&rakuten_theme=gray&rakuten_border=off&rakuten_auto_mode=on&rakuten_genre_title=off&rakuten_recommend=on&rakuten_ts=1794185538992`;
 
 // セール期間中に AdSense から楽天・Amazon へ一部切り替える対象枠かどうか
 const isSaleSwitchableBottom = renderType === 'adsense' && selectedType === 'mixed' && position === 'bottom';
@@ -362,17 +362,24 @@ const isSaleSwitchableBottom = renderType === 'adsense' && selectedType === 'mix
 
               if (diffHours < 3) {
                 if (badgeEl) badgeEl.textContent = 'まもなく終了';
-                if (textEl) textEl.innerHTML = `<strong>楽天ブラックフライデー開催中！</strong> 残り<span class="rakuten-time-highlight">${diffHours}時間${diffMinutes}分</span>（${endLabel}まで）`;
+                if (textEl) textEl.innerHTML = `【🔥ラストスパート！あと <strong class="rakuten-time-highlight">${diffHours}時間${diffMinutes}分</strong>】${rakutenSale.name} 買い忘れはありませんか？（${endLabel}まで）`;
                 if (ctaEl) ctaEl.textContent = '特設会場へ »';
               } else if (diffHours < 24) {
-                if (badgeEl) badgeEl.textContent = isSameDay ? '本日終了' : '楽天 BF';
-                const timePrefix = isSameDay ? `本日${endLabel}まで あと` : (isLateNight ? `今夜深夜${endLabel}まで あと` : `残り`);
-                if (textEl) textEl.innerHTML = `<strong>楽天ブラックフライデー開催中！</strong> ${timePrefix}<span class="rakuten-time-highlight">${diffHours}時間${diffMinutes}分</span> ポイント最大47.5倍`;
-                if (ctaEl) ctaEl.textContent = 'エントリー »';
+                if (isSameDay) {
+                  if (badgeEl) badgeEl.textContent = '本日終了';
+                  if (textEl) textEl.innerHTML = `【本日終了（${endLabel}）まで あと <strong class="rakuten-time-highlight">${diffHours}時間${diffMinutes}分</strong>】${rakutenSale.name} ${rakutenSale.highlight}`;
+                  if (ctaEl) ctaEl.textContent = 'ラストスパート »';
+                } else if (isLateNight) {
+                  if (badgeEl) badgeEl.textContent = '今夜終了';
+                  if (textEl) textEl.innerHTML = `【今夜深夜（${rakutenSale.endDateOnly} ${endLabel}）まで あと <strong class="rakuten-time-highlight">${diffHours}時間${diffMinutes}分</strong>】${rakutenSale.name} ${rakutenSale.highlight}`;
+                  if (ctaEl) ctaEl.textContent = 'セール会場へ »';
+                } else {
+                  if (badgeEl) badgeEl.textContent = '終了間近';
+                  if (textEl) textEl.innerHTML = `【終了まで あと <strong class="rakuten-time-highlight">${diffHours}時間${diffMinutes}分</strong>】${rakutenSale.name}（${rakutenSale.endDateOnly} ${endLabel}まで）`;
+                  if (ctaEl) ctaEl.textContent = 'セール会場へ »';
+                }
               } else {
-                if (badgeEl) badgeEl.textContent = '楽天 BF';
-                if (textEl) textEl.innerHTML = `<strong>楽天ブラックフライデー開催中！</strong> ポイント最大47.5倍（${rakutenSale.endDateOnly || ''}まで）`;
-                if (ctaEl) ctaEl.textContent = 'エントリー »';
+                if (textEl) textEl.innerHTML = `【${rakutenSale.name}開催中】${rakutenSale.endDateOnly} ${endLabel}まで！${rakutenSale.highlight}`;
               }
               return;
             } else if (nowMs < startMs && (startMs - nowMs) <= 48 * 3600 * 1000) {
@@ -580,12 +587,6 @@ const isSaleSwitchableBottom = renderType === 'adsense' && selectedType === 'mix
   .ad-pos-home-top {
     margin: 1.25rem auto 1.75rem auto;
     max-width: 728px;
-    border: 2px solid #bf0000;
-    border-radius: 8px;
-    background: #ffffff;
-    padding: 0.75rem 0.5rem 0.65rem 0.5rem;
-    box-sizing: border-box;
-    box-shadow: 0 2px 8px rgba(191, 0, 0, 0.08);
   }
   .ad-pos-in-article {
     margin: 2rem auto;
