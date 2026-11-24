@@ -360,32 +360,36 @@ const isSaleSwitchableBottom = renderType === 'adsense' && selectedType === 'mix
               const endLabel = `${endHour}:${endMin}`;
               const isLateNight = endHour >= 0 && endHour <= 4;
 
+              const shortHighlight = (rakutenSale.highlight || '').includes('47.5') ? '最大47.5倍' : (rakutenSale.highlight || '').split('！')[0];
+              const titleLine = `<strong>${rakutenSale.name}</strong>${shortHighlight ? `（${shortHighlight}）` : ''}`;
+
               if (diffHours < 3) {
                 if (badgeEl) badgeEl.textContent = 'まもなく終了';
-                if (textEl) textEl.innerHTML = `【🔥ラストスパート！あと <strong class="rakuten-time-highlight">${diffHours}時間${diffMinutes}分</strong>】${rakutenSale.name} 買い忘れはありませんか？（${endLabel}まで）`;
-                if (ctaEl) ctaEl.textContent = '特設会場へ »';
+                if (textEl) textEl.innerHTML = `${titleLine}<br><span class="rakuten-event-sub">${endLabel}まで <strong class="rakuten-time-highlight">あと${diffHours}時間${diffMinutes}分</strong></span>`;
+                if (ctaEl) ctaEl.textContent = '会場へ »';
               } else if (diffHours < 24) {
                 if (isSameDay) {
                   if (badgeEl) badgeEl.textContent = '本日終了';
-                  if (textEl) textEl.innerHTML = `【本日終了（${endLabel}）まで あと <strong class="rakuten-time-highlight">${diffHours}時間${diffMinutes}分</strong>】${rakutenSale.name} ${rakutenSale.highlight}`;
-                  if (ctaEl) ctaEl.textContent = 'ラストスパート »';
+                  if (textEl) textEl.innerHTML = `${titleLine}<br><span class="rakuten-event-sub">本日${endLabel}まで <strong class="rakuten-time-highlight">あと${diffHours}時間${diffMinutes}分</strong></span>`;
+                  if (ctaEl) ctaEl.textContent = '会場へ »';
                 } else if (isLateNight) {
                   if (badgeEl) badgeEl.textContent = '今夜終了';
-                  if (textEl) textEl.innerHTML = `【今夜深夜（${rakutenSale.endDateOnly} ${endLabel}）まで あと <strong class="rakuten-time-highlight">${diffHours}時間${diffMinutes}分</strong>】${rakutenSale.name} ${rakutenSale.highlight}`;
-                  if (ctaEl) ctaEl.textContent = 'セール会場へ »';
+                  if (textEl) textEl.innerHTML = `${titleLine}<br><span class="rakuten-event-sub">深夜${endLabel}まで <strong class="rakuten-time-highlight">あと${diffHours}時間${diffMinutes}分</strong></span>`;
+                  if (ctaEl) ctaEl.textContent = '会場へ »';
                 } else {
                   if (badgeEl) badgeEl.textContent = '終了間近';
-                  if (textEl) textEl.innerHTML = `【終了まで あと <strong class="rakuten-time-highlight">${diffHours}時間${diffMinutes}分</strong>】${rakutenSale.name}（${rakutenSale.endDateOnly} ${endLabel}まで）`;
-                  if (ctaEl) ctaEl.textContent = 'セール会場へ »';
+                  if (textEl) textEl.innerHTML = `${titleLine}<br><span class="rakuten-event-sub">${rakutenSale.endDateOnly} ${endLabel}まで <strong class="rakuten-time-highlight">あと${diffHours}時間${diffMinutes}分</strong></span>`;
+                  if (ctaEl) ctaEl.textContent = '会場へ »';
                 }
               } else {
-                if (textEl) textEl.innerHTML = `【${rakutenSale.name}開催中】${rakutenSale.endDateOnly} ${endLabel}まで！${rakutenSale.highlight}`;
+                if (textEl) textEl.innerHTML = `${titleLine}<br><span class="rakuten-event-sub">${rakutenSale.endDateOnly} ${endLabel}まで開催中</span>`;
+                if (ctaEl) ctaEl.textContent = '会場へ »';
               }
               return;
             } else if (nowMs < startMs && (startMs - nowMs) <= 48 * 3600 * 1000) {
               if (badgeEl) badgeEl.textContent = '事前告知';
-              if (textEl) textEl.innerHTML = `【予告】${rakutenSale.startLabel}〜 ${rakutenSale.name} 開催！事前エントリー受付中`;
-              if (ctaEl) ctaEl.textContent = '事前エントリー »';
+              if (textEl) textEl.innerHTML = `<strong>${rakutenSale.name}</strong><br><span class="rakuten-event-sub">${rakutenSale.startLabel}〜 事前エントリー受付中</span>`;
+              if (ctaEl) ctaEl.textContent = '会場へ »';
               if (linkEl) {
                 const enc = encodeURIComponent(rakutenSale.url);
                 linkEl.href = `https://hb.afl.rakuten.co.jp/hgc/${affId}/?pc=${enc}&m=${enc}`;
