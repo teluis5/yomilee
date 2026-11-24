@@ -184,12 +184,21 @@ const description =
 
 						const altText = typeof ac.altFt === 'number' ? `${ac.altFt.toLocaleString()} ft` : '-';
 						const spdText = typeof ac.speedKt === 'number' ? `${ac.speedKt} kt` : '-';
-						const lastSeenText = ac.lastSeenAt
-							? new Date(ac.lastSeenAt).toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-							: '-';
+						const routeText = ac.origin && ac.destination ? `${ac.origin} → ${ac.destination}` : (ac.nearestAirport || '-');
+						const timeText = ac.depTime ? `${ac.depTime}発${ac.arrTime ? ` → ${ac.arrTime}着` : ''}` : '-';
 						const airportRow = ac.nearestAirport
 							? `<tr><th>最寄空港</th><td>${ac.nearestAirport}</td></tr>`
 							: '';
+
+						// ホバー時のツールチップ（出発地・行き先・出発時刻のみシンプル表示）
+						marker.bindTooltip(
+							`<div class="livery-tooltip">
+								<div class="tt-title">${ac.name} (${ac.flight || ac.reg})</div>
+								<div class="tt-route">🛫 ${routeText}</div>
+								${ac.depTime ? `<div class="tt-time">🕒 ${timeText}</div>` : ''}
+							</div>`,
+							{ direction: 'top', offset: [0, -14], opacity: 0.96 }
+						);
 
 						marker.bindPopup(`
 							<div class="livery-popup">
@@ -201,10 +210,11 @@ const description =
 								<div class="popup-meta">${ac.model} / ${formatStatusBadge(ac.status)}</div>
 								<table class="popup-table">
 									<tr><th>便名</th><td>${ac.flight || '未設定'}</td></tr>
+									<tr><th>区間</th><td>${routeText}</td></tr>
+									<tr><th>時刻</th><td>${timeText}</td></tr>
 									${airportRow}
 									<tr><th>高度</th><td>${altText}</td></tr>
 									<tr><th>速度</th><td>${spdText}</td></tr>
-									<tr><th>確認時刻</th><td>${lastSeenText}</td></tr>
 								</table>
 								<p class="popup-note">${ac.note || ''}</p>
 							</div>
@@ -629,6 +639,23 @@ const description =
 				transform: scale(1.5);
 				opacity: 0;
 			}
+		}
+		:global(.livery-tooltip) {
+			font-family: system-ui, -apple-system, sans-serif;
+			font-size: 0.8rem;
+			line-height: 1.45;
+		}
+		:global(.tt-title) {
+			font-weight: 700;
+			color: #0f172a;
+			margin-bottom: 2px;
+		}
+		:global(.tt-route) {
+			font-weight: 600;
+			color: #1e40af;
+		}
+		:global(.tt-time) {
+			color: #475569;
 		}
 		:global(.livery-popup) {
 			min-width: 210px;
