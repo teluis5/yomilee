@@ -93,14 +93,40 @@ const description =
 			let onlyActive = false;
 			const markersByReg = new Map();
 
-			// 地図初期化（日本中心）
+			// 地図初期化（日本中心・海は青単一色）
 			const map = L.map('livery-map', {
 				center: [36.2, 137.9],
 				zoom: 5,
-				minZoom: 5,
+				minZoom: 4,
 				maxZoom: 14,
 				zoomControl: true
 			});
+
+			const vectorLandLayer = L.layerGroup();
+			let japanGeoJsonLayer = null;
+
+			const THEMES = {
+				default: { sea: '#60a5fa', land: '#4ade80', border: '#22c55e' },
+				radar: { sea: '#0f172a', land: '#1e293b', border: '#38bdf8' },
+				ocean: { sea: '#1e3a8a', land: '#0f766e', border: '#2dd4bf' },
+				sepia: { sea: '#d6d3d1', land: '#a8a29e', border: '#78716c' }
+			};
+
+			// 日本の陸地GeoJSONを読み込み（緑単一色）
+			fetch('/data/japan.geojson')
+				.then((r) => r.json())
+				.then((geo) => {
+					japanGeoJsonLayer = L.geoJSON(geo, {
+						style: {
+							fillColor: THEMES.default.land,
+							fillOpacity: 1,
+							color: THEMES.default.border,
+							weight: 1
+						}
+					});
+					japanGeoJsonLayer.addTo(vectorLandLayer);
+				})
+				.catch((e) => console.warn('GeoJSON load error:', e));
 
 			const gsiStd = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
 				attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院（標準地図）</a>',
@@ -114,21 +140,15 @@ const description =
 				maxZoom: 18
 			});
 
-			const gsiBlank = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/blank/{z}/{x}/{y}.png', {
-				attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院（白地図）</a>',
-				minZoom: 5,
-				maxZoom: 14
-			});
-
-			// デフォルトは海が青・陸が緑の標準地図
-			gsiStd.addTo(map);
+			// デフォルトは「陸：緑単一色 / 海：青単一色」のベクター地図
+			vectorLandLayer.addTo(map);
 
 			// 右上に地図切替コントロールを追加
 			L.control.layers(
 				{
-					'標準地図（海青・陸緑）': gsiStd,
-					'淡色地図（すっきり）': gsiPale,
-					'白地図（シンプル）': gsiBlank
+					'シンプル地図（陸緑・海青）': vectorLandLayer,
+					'国土地理院（標準地図）': gsiStd,
+					'国土地理院（淡色地図）': gsiPale
 				},
 				{},
 				{ position: 'topright' }
@@ -315,19 +335,24 @@ const description =
 			let currentTheme = 'default';
 
 			function applyMapFilter() {
-				const tilePane = mapEl?.querySelector('.leaflet-tile-pane');
-				if (!tilePane) return;
-				const hue = Number(hueInput?.value || 0);
-				let baseFilter = '';
-				if (currentTheme === 'radar') {
-					baseFilter = 'invert(92%) hue-rotate(180deg) brightness(95%) contrast(105%)';
-				} else if (currentTheme === 'ocean') {
-					baseFilter = 'invert(88%) hue-rotate(195deg) saturate(160%) brightness(90%)';
-				} else if (currentTheme === 'sepia') {
-					baseFilter = 'sepia(75%) contrast(95%) brightness(98%)';
+				const t = THEMES[currentTheme] || THEMES.default;
+				if (mapEl) {
+					mapEl.style.backgroundColor = t.sea;
 				}
-				const extraHue = hue > 0 ? ` hue-rotate(${hue}deg)` : '';
-				tilePane.style.filter = `${baseFilter}${extraHue}`.trim() || 'none';
+				if (japanGeoJsonLayer) {
+					japanGeoJsonLayer.setStyle({
+						fillColor: t.land,
+						fillOpacity: 1,
+						color: t.border,
+						weight: 1
+					});
+				}
+				const tilePane = mapEl?.querySelector('.leaflet-tile-pane');
+				const vectorPane = mapEl?.querySelector('.leaflet-overlay-pane');
+				const hue = Number(hueInput?.value || 0);
+				const hueFilter = hue > 0 ? `hue-rotate(${hue}deg)` : 'none';
+				if (tilePane) tilePane.style.filter = hueFilter;
+				if (vectorPane) vectorPane.style.filter = hueFilter;
 			}
 
 			document.getElementById('theme-bar')?.addEventListener('click', (e) => {
@@ -484,6 +509,7 @@ const description =
 		.map-container {
 			width: 100%;
 			height: 520px;
+			background-color: #60a5fa;
 			border-radius: 14px;
 			border: 1px solid #cbd5e1;
 			overflow: hidden;
