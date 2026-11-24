@@ -183,6 +183,20 @@ const description =
 			};
 			let hoverRouteLine = null;
 
+			// マップに主要空港アイコンを表示（飛行機より背面に配置）
+			for (const [code, coords] of Object.entries(AIRPORT_COORDS)) {
+				const apName = AIRPORT_JA[code] || code;
+				const apIcon = L.divIcon({
+					className: 'airport-marker',
+					html: `<div class="ap-pin" title="${apName}空港"><span class="ap-dot"></span><span class="ap-label">${apName}</span></div>`,
+					iconSize: [50, 20],
+					iconAnchor: [25, 10]
+				});
+				L.marker(coords, { icon: apIcon, zIndexOffset: -500, interactive: true })
+					.bindTooltip(`${apName}空港`, { direction: 'top', offset: [0, -6] })
+					.addTo(map);
+			}
+
 			function render() {
 				// マーカークリア
 				for (const marker of markersByReg.values()) {
@@ -710,6 +724,27 @@ const description =
 				transform: scale(1.5);
 				opacity: 0;
 			}
+		}
+		:global(.ap-pin) {
+			display: inline-flex;
+			align-items: center;
+			gap: 3px;
+			pointer-events: auto;
+			white-space: nowrap;
+		}
+		:global(.ap-dot) {
+			width: 7px;
+			height: 7px;
+			border-radius: 50%;
+			background: #ffffff;
+			border: 2px solid #0f172a;
+			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+		}
+		:global(.ap-label) {
+			font-size: 10px;
+			font-weight: 700;
+			color: #0f172a;
+			text-shadow: 0 0 3px #ffffff, 0 0 3px #ffffff;
 		}
 		:global(.livery-tooltip) {
 			font-family: system-ui, -apple-system, sans-serif;
