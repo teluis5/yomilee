@@ -136,19 +136,21 @@ const description =
 
 			function createPlaneIcon(ac) {
 				const angle = typeof ac.track === 'number' ? ac.track : 0;
-				const color = ac.color || '#005BAC';
+				const isOffline = ac.status === 'offline';
+				const color = isOffline ? '#64748b' : (ac.color || '#005BAC');
 				const isAirborne = ac.status === 'airborne';
 				const pulseHtml = isAirborne ? `<span class="plane-pulse" style="border-color:${color}"></span>` : '';
+				const opacityStyle = isOffline ? 'opacity: 0.72;' : '';
 
 				return L.divIcon({
 					className: 'custom-plane-marker',
 					html: `
-						<div class="plane-wrapper" title="${ac.name} (${ac.reg})">
+						<div class="plane-wrapper" style="${opacityStyle}" title="${ac.name} (${ac.reg})">
 							${pulseHtml}
 							<svg viewBox="0 0 24 24" width="28" height="28" style="transform: rotate(${angle}deg); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));">
 								<path fill="${color}" stroke="#ffffff" stroke-width="1.2" d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
 							</svg>
-							<span class="plane-tag" style="background:${color}">${ac.flight || ac.reg}</span>
+							<span class="plane-tag" style="background:${color}">${isOffline ? `🅿️ ${ac.reg}` : (ac.flight || ac.reg)}</span>
 						</div>
 					`,
 					iconSize: [36, 36],
@@ -185,6 +187,12 @@ const description =
 
 						const altText = typeof ac.altFt === 'number' ? `${ac.altFt.toLocaleString()} ft` : '-';
 						const spdText = typeof ac.speedKt === 'number' ? `${ac.speedKt} kt` : '-';
+						const lastSeenText = ac.lastSeenAt
+							? new Date(ac.lastSeenAt).toLocaleString('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+							: '-';
+						const airportRow = ac.nearestAirport
+							? `<tr><th>最寄空港</th><td>${ac.nearestAirport}</td></tr>`
+							: '';
 
 						marker.bindPopup(`
 							<div class="livery-popup">
@@ -196,9 +204,10 @@ const description =
 								<div class="popup-meta">${ac.model} / ${formatStatusBadge(ac.status)}</div>
 								<table class="popup-table">
 									<tr><th>便名</th><td>${ac.flight || '未設定'}</td></tr>
+									${airportRow}
 									<tr><th>高度</th><td>${altText}</td></tr>
 									<tr><th>速度</th><td>${spdText}</td></tr>
-									<tr><th>方位</th><td>${ac.track ?? '-'}°</td></tr>
+									<tr><th>確認時刻</th><td>${lastSeenText}</td></tr>
 								</table>
 								<p class="popup-note">${ac.note || ''}</p>
 							</div>
@@ -222,6 +231,7 @@ const description =
 						const hasPos = typeof ac.lat === 'number' && typeof ac.lon === 'number';
 						const altText = typeof ac.altFt === 'number' ? `${ac.altFt.toLocaleString()} ft` : '-';
 						const spdText = typeof ac.speedKt === 'number' ? `${ac.speedKt} kt` : '-';
+						const airportInfo = ac.nearestAirport ? `<span>📍 <strong>${ac.nearestAirport}</strong></span>` : '';
 						return `
 							<div class="aircraft-card ${hasPos ? 'is-clickable' : 'is-offline'}" data-reg="${ac.reg}">
 								<div class="card-top">
@@ -233,6 +243,7 @@ const description =
 								<div class="card-sub">${ac.model} ・ ${ac.category}</div>
 								<div class="card-telemetry">
 									<span>便名: <strong>${ac.flight || '-'}</strong></span>
+									${airportInfo}
 									<span>高度: <strong>${altText}</strong></span>
 									<span>速度: <strong>${spdText}</strong></span>
 								</div>
