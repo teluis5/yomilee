@@ -25,33 +25,14 @@ const description =
 			ANA・JAL・スカイマーク・AIRDO・ソラシドエアなど、国内主要航空会社の<strong>特別塗装機</strong>が「今どこにいるのか」を地図上で確認できるトラッカーです。飛行中の機体は進行方向を向いたアイコンで表示され、クリックすると便名・高度・速度を確認できます。
 		</p>
 
-		<div class="stats-bar" id="stats-bar">
-			<div class="stat-card">
-				<span class="stat-label">監視対象</span>
-				<span class="stat-value" id="stat-total">--</span>
-			</div>
-			<div class="stat-card stat-airborne">
-				<span class="stat-label">✈️ 飛行中</span>
-				<span class="stat-value" id="stat-airborne">--</span>
-			</div>
-			<div class="stat-card stat-ground">
-				<span class="stat-label">🛬 地上/待機</span>
-				<span class="stat-value" id="stat-ground">--</span>
-			</div>
-			<div class="stat-card">
-				<span class="stat-label">最終更新</span>
-				<span class="stat-value stat-time" id="stat-updated">読込中...</span>
-			</div>
-		</div>
-
 		<div class="controls-bar">
-			<div class="filter-group" id="airline-filters">
-				<button class="filter-btn active" data-airline="ALL">すべて</button>
-				<button class="filter-btn" data-airline="ANA">ANA</button>
-				<button class="filter-btn" data-airline="JAL">JAL</button>
-				<button class="filter-btn" data-airline="SKY">スカイマーク</button>
-				<button class="filter-btn" data-airline="ADO">AIRDO</button>
-				<button class="filter-btn" data-airline="SNA">ソラシドエア</button>
+			<div class="filter-group" id="genre-filters" aria-label="ジャンル別マルチセレクト">
+				<button type="button" class="filter-btn active" data-genre="ALL">すべて</button>
+				<button type="button" class="filter-btn" data-genre="pokemon">⚡ ポケモン</button>
+				<button type="button" class="filter-btn" data-genre="chiikawa">🎀 ちいかわ</button>
+				<button type="button" class="filter-btn" data-genre="disney">🏰 ディズニー</button>
+				<button type="button" class="filter-btn" data-genre="kimetsu">⚔️ 鬼滅の刃</button>
+				<button type="button" class="filter-btn" data-genre="other">✨ その他</button>
 			</div>
 			<label class="toggle-airborne">
 				<input type="checkbox" id="only-active-checkbox" />
@@ -80,7 +61,16 @@ const description =
 			const LIVE_PROXY_URL = 'https://teluis-adsb-proxy.expo-price-cache.workers.dev';
 			const REFRESH_INTERVAL_MS = 30000;
 			let allAircraft = [];
-			let selectedAirline = 'ALL';
+			const selectedGenres = new Set();
+
+			function getAircraftGenre(ac) {
+				const text = `${ac.name || ''} ${ac.description || ''}`.toLowerCase();
+				if (/ポケモン|ピカチュウ|ロコン|イーブイ|ナッシー|ミジュマル/.test(text)) return 'pokemon';
+				if (/ちいかわ/.test(text)) return 'chiikawa';
+				if (/ディズニー|ファンタジア|ファンタジースプリングス|ミッキー/.test(text)) return 'disney';
+				if (/鬼滅/.test(text)) return 'kimetsu';
+				return 'other';
+			}
 			let onlyActive = false;
 			const markersByReg = new Map();
 
@@ -161,7 +151,7 @@ const description =
 				markersByReg.clear();
 
 				const filtered = allAircraft.filter((ac) => {
-					if (selectedAirline !== 'ALL' && ac.airline !== selectedAirline) return false;
+					if (selectedGenres.size > 0 && !selectedGenres.has(getAircraftGenre(ac))) return false;
 					if (onlyActive && ac.status === 'offline') return false;
 					return true;
 				});
@@ -270,35 +260,36 @@ const description =
 					if (!res.ok) throw new Error(`HTTP ${res.status}`);
 					const data = await res.json();
 					allAircraft = Array.isArray(data.aircraft) ? data.aircraft : [];
-
-					document.getElementById('stat-total').textContent = `${data.totalCount ?? allAircraft.length}機`;
-					document.getElementById('stat-airborne').textContent = `${data.airborneCount ?? 0}機`;
-					const groundCount = allAircraft.filter((a) => a.status === 'ground').length;
-					document.getElementById('stat-ground').textContent = `${groundCount}機`;
-
-					if (data.updatedAt) {
-						const d = new Date(data.updatedAt);
-						document.getElementById('stat-updated').textContent = d.toLocaleString('ja-JP', {
-							month: 'numeric',
-							day: 'numeric',
-							hour: '2-digit',
-							minute: '2-digit'
-						});
-					}
-
 					render();
 				} catch (err) {
 					console.error('Failed to load special liveries data:', err);
-					document.getElementById('stat-updated').textContent = '取得エラー';
 				}
 			}
 
-			document.getElementById('airline-filters')?.addEventListener('click', (e) => {
+			document.getElementById('genre-filters')?.addEventListener('click', (e) => {
 				const btn = e.target.closest('.filter-btn');
 				if (!btn) return;
-				document.querySelectorAll('.filter-btn').forEach((b) => b.classList.remove('active'));
-				btn.classList.add('active');
-				selectedAirline = btn.getAttribute('data-airline') || 'ALL';
+				const genre = btn.getAttribute('data-genre') || 'ALL';
+				const allBtn = document.querySelector('#genre-filters .filter-btn[data-genre="ALL"]');
+
+				if (genre === 'ALL') {
+					selectedGenres.clear();
+					document.querySelectorAll('#genre-filters .filter-btn').forEach((b) => b.classList.remove('active'));
+					allBtn?.classList.add('active');
+				} else {
+					if (selectedGenres.has(genre)) {
+						selectedGenres.delete(genre);
+						btn.classList.remove('active');
+					} else {
+						selectedGenres.add(genre);
+						btn.classList.add('active');
+					}
+					if (selectedGenres.size === 0) {
+						allBtn?.classList.add('active');
+					} else {
+						allBtn?.classList.remove('active');
+					}
+				}
 				render();
 			});
 
@@ -343,14 +334,6 @@ const description =
 							speedKt: typeof live.gs === 'number' ? Math.round(live.gs) : item.speedKt,
 							track: typeof live.track === 'number' ? Math.round(live.track) : item.track
 						};
-					});
-
-					document.getElementById('stat-airborne').textContent = `${airborneCount}機`;
-					document.getElementById('stat-ground').textContent = `${groundCount}機`;
-					document.getElementById('stat-updated').textContent = new Date().toLocaleTimeString('ja-JP', {
-						hour: '2-digit',
-						minute: '2-digit',
-						second: '2-digit'
 					});
 					render();
 				} catch (err) {
