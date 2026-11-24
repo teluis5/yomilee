@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月24日 16:00",
-  "updatedAtIso": "2026-11-24T07:00:06.386Z",
+  "updatedAt": "2026年11月24日 16:15",
+  "updatedAtIso": "2026-11-24T07:15:06.011Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "東京(羽田)",
-    "currentLocationCode": "HND",
+    "currentLocation": "飛行中 (東京(羽田) ➔ 松山)",
+    "currentLocationCode": "MYJ",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "東京(羽田) (100%)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
@@ -2015,7 +2015,7 @@
           "route": "広島 ➔ 東京(羽田)"
         }
       },
-      "currentAirport": "東京(羽田)",
+      "currentAirport": "飛行中 (東京(羽田) ➔ 松山)",
       "nightStay": "東京(羽田) (100%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH593 (東京(羽田) ➔ 松山) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
@@ -2070,7 +2070,7 @@
               "dest": "MYJ",
               "route": "東京(羽田) ➔ 松山",
               "time": "14:15発 - 15:50着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "④ 第4便"
             },
             {
@@ -2159,7 +2159,14 @@
           },
           "planB": null,
           "planC": null,
-          "actual": null
+          "actual": {
+            "flightNo": "NH593",
+            "route": "東京(羽田) ➔ 松山",
+            "time": "16:08離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#5",
@@ -2226,9 +2233,9 @@
           "time": "14:15発 - 15:50着",
           "depGate": "63",
           "arrGate": null,
-          "status": "出発予定 (15:51)",
+          "status": "遅延 (17:20予定)",
           "isLanded": false,
-          "isLive": false,
+          "isLive": true,
           "isPredicted": false
         },
         {
