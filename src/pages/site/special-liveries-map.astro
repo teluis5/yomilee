@@ -59,6 +59,18 @@ const description =
 			</label>
 		</div>
 
+		<div class="theme-bar" id="theme-bar">
+			<span class="theme-label">🎨 地図カラー:</span>
+			<button class="theme-btn active" data-theme="default">標準</button>
+			<button class="theme-btn" data-theme="radar">ダークレーダー</button>
+			<button class="theme-btn" data-theme="ocean">ディープブルー</button>
+			<button class="theme-btn" data-theme="sepia">セピア</button>
+			<label class="hue-control">
+				<span>色相</span>
+				<input type="range" id="map-hue" min="0" max="360" value="0" />
+			</label>
+		</div>
+
 		<div id="livery-map" class="map-container" aria-label="特別塗装機現在地マップ"></div>
 
 		<h2 class="list-heading">特別塗装機 ステータス一覧</h2>
@@ -279,6 +291,38 @@ const description =
 				render();
 			});
 
+			// 地図カラー・テーマ切替
+			const mapEl = document.getElementById('livery-map');
+			const hueInput = document.getElementById('map-hue');
+			let currentTheme = 'default';
+
+			function applyMapFilter() {
+				const tilePane = mapEl?.querySelector('.leaflet-tile-pane');
+				if (!tilePane) return;
+				const hue = Number(hueInput?.value || 0);
+				let baseFilter = '';
+				if (currentTheme === 'radar') {
+					baseFilter = 'invert(92%) hue-rotate(180deg) brightness(95%) contrast(105%)';
+				} else if (currentTheme === 'ocean') {
+					baseFilter = 'invert(88%) hue-rotate(195deg) saturate(160%) brightness(90%)';
+				} else if (currentTheme === 'sepia') {
+					baseFilter = 'sepia(75%) contrast(95%) brightness(98%)';
+				}
+				const extraHue = hue > 0 ? ` hue-rotate(${hue}deg)` : '';
+				tilePane.style.filter = `${baseFilter}${extraHue}`.trim() || 'none';
+			}
+
+			document.getElementById('theme-bar')?.addEventListener('click', (e) => {
+				const btn = e.target.closest('.theme-btn');
+				if (!btn) return;
+				document.querySelectorAll('.theme-btn').forEach((b) => b.classList.remove('active'));
+				btn.classList.add('active');
+				currentTheme = btn.getAttribute('data-theme') || 'default';
+				applyMapFilter();
+			});
+
+			hueInput?.addEventListener('input', applyMapFilter);
+
 			loadData();
 		})();
 	</script>
@@ -368,6 +412,55 @@ const description =
 			font-size: 0.88rem;
 			font-weight: 600;
 			color: #334155;
+			cursor: pointer;
+		}
+		.theme-bar {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 0.45rem;
+			margin-bottom: 0.85rem;
+			padding: 0.5rem 0.75rem;
+			background: #f8fafc;
+			border: 1px solid #e2e8f0;
+			border-radius: 10px;
+		}
+		.theme-label {
+			font-size: 0.8rem;
+			font-weight: 700;
+			color: #475569;
+			margin-right: 0.2rem;
+		}
+		.theme-btn {
+			padding: 0.3rem 0.7rem;
+			border-radius: 6px;
+			border: 1px solid #cbd5e1;
+			background: #ffffff;
+			color: #334155;
+			font-size: 0.78rem;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.15s ease;
+		}
+		.theme-btn:hover {
+			background: #f1f5f9;
+		}
+		.theme-btn.active {
+			background: #0f172a;
+			color: #ffffff;
+			border-color: #0f172a;
+		}
+		.hue-control {
+			display: flex;
+			align-items: center;
+			gap: 0.4rem;
+			margin-left: auto;
+			font-size: 0.78rem;
+			font-weight: 600;
+			color: #475569;
+		}
+		.hue-control input[type='range'] {
+			width: 90px;
 			cursor: pointer;
 		}
 		.map-container {
