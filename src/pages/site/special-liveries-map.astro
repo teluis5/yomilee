@@ -102,10 +102,10 @@ const description =
 				zoomControl: true
 			});
 
-			const gsiBlank = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/blank/{z}/{x}/{y}.png', {
-				attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院（白地図）</a>',
+			const gsiStd = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
+				attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院（標準地図）</a>',
 				minZoom: 5,
-				maxZoom: 14
+				maxZoom: 18
 			});
 
 			const gsiPale = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
@@ -114,14 +114,21 @@ const description =
 				maxZoom: 18
 			});
 
-			// デフォルトは白地図
-			gsiBlank.addTo(map);
+			const gsiBlank = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/blank/{z}/{x}/{y}.png', {
+				attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院（白地図）</a>',
+				minZoom: 5,
+				maxZoom: 14
+			});
+
+			// デフォルトは海が青・陸が緑の標準地図
+			gsiStd.addTo(map);
 
 			// 右上に地図切替コントロールを追加
 			L.control.layers(
 				{
-					'白地図（シンプル）': gsiBlank,
-					'淡色地図（地名・空港表示）': gsiPale
+					'標準地図（海青・陸緑）': gsiStd,
+					'淡色地図（すっきり）': gsiPale,
+					'白地図（シンプル）': gsiBlank
 				},
 				{},
 				{ position: 'topright' }
