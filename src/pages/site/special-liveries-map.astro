@@ -143,6 +143,25 @@ const description =
 				return '<span class="badge badge-offline">📡 圏外/駐機</span>';
 			}
 
+			const AIRPORT_JA = {
+				HND: '羽田', NRT: '成田', ITM: '伊丹', KIX: '関西', UKB: '神戸',
+				NGO: '中部', CTS: '新千歳', FUK: '福岡', OKA: '那覇', SDJ: '仙台',
+				HIJ: '広島', KOJ: '鹿児島', KMJ: '熊本', NGS: '長崎', OIT: '大分',
+				KMI: '宮崎', MYJ: '松山', TAK: '高松', KCZ: '高知', OKJ: '岡山',
+				KMQ: '小松', HKD: '函館', AKJ: '旭川', AOJ: '青森', ISG: '石垣',
+				MMY: '宮古', TOY: '富山', YGJ: '米子', UBJ: '山口宇部', AXT: '秋田',
+				FSZ: '静岡', HSG: '佐賀', KKJ: '北九州', OBO: '帯広', KUH: '釧路',
+				MMB: '女満別', HNL: 'ホノルル', LAX: 'ロサンゼルス', SFO: 'サンフランシスコ',
+				JFK: 'ニューヨーク', ORD: 'シカゴ', LHR: 'ロンドン', FRA: 'フランクフルト',
+				CDG: 'パリ', SIN: 'シンガポール', BKK: 'バンコク', TPE: '台北', ICN: 'ソウル'
+			};
+
+			function toAirportJa(codeOrName) {
+				if (!codeOrName) return '';
+				const clean = String(codeOrName).replace(/\s*\([A-Z0-9]{3}\)$/, '').trim();
+				return AIRPORT_JA[clean.toUpperCase()] || clean;
+			}
+
 			function render() {
 				// マーカークリア
 				for (const marker of markersByReg.values()) {
@@ -163,12 +182,12 @@ const description =
 							icon: createPlaneIcon(ac)
 						}).addTo(map);
 
-						const altText = typeof ac.altFt === 'number' ? `${ac.altFt.toLocaleString()} ft` : '-';
-						const spdText = typeof ac.speedKt === 'number' ? `${ac.speedKt} kt` : '-';
-						const routeText = ac.origin && ac.destination ? `${ac.origin} → ${ac.destination}` : (ac.nearestAirport || '-');
+						const routeText = ac.origin && ac.destination
+							? `${toAirportJa(ac.origin)} → ${toAirportJa(ac.destination)}`
+							: (toAirportJa(ac.nearestAirport) || '-');
 						const timeText = ac.depTime ? `${ac.depTime}発${ac.arrTime ? ` → ${ac.arrTime}着` : ''}` : '-';
 						const airportRow = ac.nearestAirport
-							? `<tr><th>最寄空港</th><td>${ac.nearestAirport}</td></tr>`
+							? `<tr><th>最寄空港</th><td>${toAirportJa(ac.nearestAirport)}</td></tr>`
 							: '';
 
 						// ホバー時のツールチップ（出発地・行き先・出発時刻のみシンプル表示）
@@ -194,8 +213,6 @@ const description =
 									<tr><th>区間</th><td>${routeText}</td></tr>
 									<tr><th>時刻</th><td>${timeText}</td></tr>
 									${airportRow}
-									<tr><th>高度</th><td>${altText}</td></tr>
-									<tr><th>速度</th><td>${spdText}</td></tr>
 								</table>
 								<p class="popup-note">${ac.note || ''}</p>
 							</div>
@@ -217,9 +234,8 @@ const description =
 				listEl.innerHTML = filtered
 					.map((ac) => {
 						const hasPos = typeof ac.lat === 'number' && typeof ac.lon === 'number';
-						const altText = typeof ac.altFt === 'number' ? `${ac.altFt.toLocaleString()} ft` : '-';
-						const spdText = typeof ac.speedKt === 'number' ? `${ac.speedKt} kt` : '-';
-						const airportInfo = ac.nearestAirport ? `<span>📍 <strong>${ac.nearestAirport}</strong></span>` : '';
+						const airportInfo = ac.nearestAirport ? `<span>📍 <strong>${toAirportJa(ac.nearestAirport)}</strong></span>` : '';
+						const routeInfo = ac.origin && ac.destination ? `<span>🛫 <strong>${toAirportJa(ac.origin)} → ${toAirportJa(ac.destination)}</strong></span>` : '';
 						return `
 							<div class="aircraft-card ${hasPos ? 'is-clickable' : 'is-offline'}" data-reg="${ac.reg}">
 								<div class="card-top">
@@ -231,9 +247,8 @@ const description =
 								<div class="card-sub">${ac.model} ・ ${ac.category}</div>
 								<div class="card-telemetry">
 									<span>便名: <strong>${ac.flight || '-'}</strong></span>
+									${routeInfo}
 									${airportInfo}
-									<span>高度: <strong>${altText}</strong></span>
-									<span>速度: <strong>${spdText}</strong></span>
 								</div>
 								<p class="card-note">${ac.note || ''}</p>
 							</div>
