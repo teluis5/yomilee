@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月24日 15:45",
-  "updatedAtIso": "2026-11-24T06:45:06.036Z",
+  "updatedAt": "2026年11月24日 16:00",
+  "updatedAtIso": "2026-11-24T07:00:06.386Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
@@ -2018,8 +2018,8 @@
       "currentAirport": "東京(羽田)",
       "nightStay": "東京(羽田) (100%)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH664 (長崎 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
-      "todayOutlook": "現在 NH664 (長崎 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "pendingNightStayNote": "現在 NH593 (東京(羽田) ➔ 松山) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "todayOutlook": "現在 NH593 (東京(羽田) ➔ 松山) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
       "nightStayProbabilities": [
         {
           "airport": "東京(羽田)",
@@ -2033,63 +2033,7 @@
           "planName": "プランA (羽田泊)",
           "stayCode": "HND",
           "rank": "本命 ◎",
-          "probability": 52,
-          "title": "【今夜羽田泊シナリオ】広島 ➔ 羽田 ➔ 長崎 ➔ 羽田 ➔ 広島 ➔ 羽田(泊)",
-          "routeSummary": "広島 ➔ 羽田 ➔ 長崎 ➔ 羽田 ➔ 広島 ➔ 羽田(泊)",
-          "flights": [
-            {
-              "flightNo": "NH672",
-              "orig": "HIJ",
-              "dest": "HND",
-              "route": "広島 ➔ 東京(羽田)",
-              "time": "07:35発 - 08:55着",
-              "tag": "運航完了",
-              "step": "① 第1便"
-            },
-            {
-              "flightNo": "NH661",
-              "orig": "HND",
-              "dest": "NGS",
-              "route": "東京(羽田) ➔ 長崎",
-              "time": "08:30発 - 10:30着",
-              "tag": "運航完了",
-              "step": "② 第2便"
-            },
-            {
-              "flightNo": "NH664",
-              "orig": "NGS",
-              "dest": "HND",
-              "route": "長崎 ➔ 東京(羽田)",
-              "time": "11:20発 - 12:55着",
-              "tag": "運航完了",
-              "step": "③ 第3便"
-            },
-            {
-              "flightNo": "NH681",
-              "orig": "HND",
-              "dest": "HIJ",
-              "route": "東京(羽田) ➔ 広島",
-              "time": "15:50発 - 17:20着",
-              "tag": "予想接続(76P)",
-              "step": "④ 第4便"
-            },
-            {
-              "flightNo": "NH682",
-              "orig": "HIJ",
-              "dest": "HND",
-              "route": "広島 ➔ 東京(羽田)",
-              "time": "17:35発 - 19:00着",
-              "tag": "🌙羽田泊候補",
-              "step": "⑤ 第5便"
-            }
-          ]
-        },
-        {
-          "planId": "today-plan-b",
-          "planName": "プランB (羽田泊)",
-          "stayCode": "HND",
-          "rank": "有力 ◯",
-          "probability": 48,
+          "probability": 100,
           "title": "【今夜羽田泊シナリオ】広島 ➔ 羽田 ➔ 長崎 ➔ 羽田 ➔ 松山 ➔ 羽田(泊)",
           "routeSummary": "広島 ➔ 羽田 ➔ 長崎 ➔ 羽田 ➔ 松山 ➔ 羽田(泊)",
           "flights": [
@@ -2125,8 +2069,8 @@
               "orig": "HND",
               "dest": "MYJ",
               "route": "東京(羽田) ➔ 松山",
-              "time": "15:40発 - 17:15着",
-              "tag": "予想接続(76P)",
+              "time": "14:15発 - 15:50着",
+              "tag": "本日確定枠",
               "step": "④ 第4便"
             },
             {
@@ -2277,34 +2221,30 @@
           "isPredicted": false
         },
         {
-          "flightNo": "NH681",
-          "origCode": "HND",
-          "destCode": "HIJ",
-          "route": "東京(羽田) ➔ 広島",
-          "depTime": "15:50",
-          "arrTime": "17:20",
-          "time": "15:50発 - 17:20着 (予想)",
-          "status": "後続便候補",
+          "flightNo": "NH593",
+          "route": "東京(羽田) ➔ 松山",
+          "time": "14:15発 - 15:50着",
+          "depGate": "63",
+          "arrGate": null,
+          "status": "出発予定 (15:51)",
           "isLanded": false,
           "isLive": false,
-          "isPredicted": true,
-          "depGate": "55",
-          "arrGate": null
+          "isPredicted": false
         },
         {
-          "flightNo": "NH682",
-          "origCode": "HIJ",
+          "flightNo": "NH596",
+          "origCode": "MYJ",
           "destCode": "HND",
-          "route": "広島 ➔ 東京(羽田)",
-          "depTime": "17:35",
-          "arrTime": "19:00",
-          "time": "17:35発 - 19:00着 (予想)",
+          "route": "松山 ➔ 東京(羽田)",
+          "depTime": "17:40",
+          "arrTime": "19:10",
+          "time": "17:40発 - 19:10着 (予想)",
           "status": "本命予想 (100%・羽田帰還候補)",
           "isLanded": false,
           "isLive": false,
           "isPredicted": true,
           "depGate": null,
-          "arrGate": "4,5,6"
+          "arrGate": "1,2,3"
         }
       ]
     },
@@ -2380,7 +2320,7 @@
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
       "expectedStart": "羽田発 (NH245)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH664 (長崎 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "pendingNightStayNote": "現在 NH593 (東京(羽田) ➔ 松山) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
@@ -2782,7 +2722,7 @@
           ],
           "description": "前夜長崎駐機シナリオから連動。朝一NH662(08:25発 - 10:00着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全6便を運航して夜に広島泊となる予測スジ。 [フリート整合: 他機体14機スジ整合（76P確定枠カバー率100%）]",
           "fleetConsistency": {
-            "fleetScore": 3.990909090909091,
+            "fleetScore": 3.9272727272727272,
             "is100Percent": true,
             "strictCoverageRate": 100,
             "otherLinesCount": 14,
@@ -2890,7 +2830,7 @@
           ],
           "description": "前夜名古屋(中部)駐機シナリオから連動。朝一NH303(08:20発 - 10:55着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全4便を運航して夜に中部泊となる予測スジ。 [フリート整合: 他機体14機スジ整合（76P確定枠カバー率100%）]",
           "fleetConsistency": {
-            "fleetScore": 3.9210526315789473,
+            "fleetScore": 3.8596491228070176,
             "is100Percent": true,
             "strictCoverageRate": 100,
             "otherLinesCount": 14,
@@ -2972,7 +2912,7 @@
           ],
           "description": "前夜広島駐機シナリオから連動。朝一NH672(07:35発 - 08:55着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全5便を運航して夜に羽田泊となる予測スジ。 [フリート整合: 他機体14機スジ整合（76P確定枠カバー率100%）]",
           "fleetConsistency": {
-            "fleetScore": 3.9642857142857144,
+            "fleetScore": 3.9017857142857144,
             "is100Percent": true,
             "strictCoverageRate": 100,
             "otherLinesCount": 14,
@@ -3429,7 +3369,7 @@
           ],
           "description": "前夜名古屋(中部)駐機シナリオから連動。朝一NH703(08:40発 - 10:25着)で始動し、ODPT公式ダイヤとマルコフ遷移実績に基づき全5便を運航して夜に羽田泊となる予測スジ。 [フリート整合: 他機体16機スジ整合（76P確定枠カバー率100%）]",
           "fleetConsistency": {
-            "fleetScore": 3.925,
+            "fleetScore": 3.9333333333333336,
             "is100Percent": true,
             "strictCoverageRate": 100,
             "otherLinesCount": 16,
@@ -5043,7 +4983,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 737,
+    "totalFleetFlights": 738,
     "fleetCount": 11
   }
 }
