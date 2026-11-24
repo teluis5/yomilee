@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月25日 06:00",
-  "updatedAtIso": "2026-11-24T21:00:08.504Z",
+  "updatedAt": "2026年11月25日 07:00",
+  "updatedAtIso": "2026-11-24T22:00:09.913Z",
   "totalJets": 5,
   "jets": [
     {
@@ -161,7 +161,7 @@
         "arrTime": "07:45",
         "timeRange": "01:17 - 07:45",
         "dateJst": "2026-11-25",
-        "status": "Delayed 08:24",
+        "status": "Delayed 08:19",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -180,7 +180,7 @@
           "arrTime": "07:45",
           "timeRange": "01:17 - 07:45",
           "dateJst": "2026-11-25",
-          "status": "Delayed 08:24",
+          "status": "Delayed 08:19",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -200,7 +200,7 @@
           "arrTime": "07:45",
           "timeRange": "01:17 - 07:45",
           "dateJst": "2026-11-25",
-          "status": "Delayed 08:24",
+          "status": "Delayed 08:19",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -326,7 +326,7 @@
         "arrTime": "15:25",
         "timeRange": "05:14 - 15:25",
         "dateJst": "2026-11-25",
-        "status": "Estimated 15:24",
+        "status": "Estimated 15:26",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -345,7 +345,7 @@
           "arrTime": "15:25",
           "timeRange": "05:14 - 15:25",
           "dateJst": "2026-11-25",
-          "status": "Estimated 15:24",
+          "status": "Estimated 15:26",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -365,7 +365,7 @@
           "arrTime": "15:25",
           "timeRange": "05:14 - 15:25",
           "dateJst": "2026-11-25",
-          "status": "Estimated 15:24",
+          "status": "Estimated 15:26",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -479,8 +479,45 @@
       "flightState": "確認中",
       "currentLocation": "確認中",
       "currentFlight": null,
-      "todayFlights": [],
+      "todayFlights": [
+        {
+          "flightNo": "NH889",
+          "origin": "HND",
+          "dest": "SYD",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "シドニー (SYD)",
+          "origCode": "HND",
+          "destCode": "SYD",
+          "route": "東京(羽田) ➔ シドニー",
+          "depTime": "08:35",
+          "arrTime": "18:15",
+          "timeRange": "08:35 - 18:15",
+          "dateJst": "2026-11-25",
+          "status": "Estimated dep 08:35",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        }
+      ],
       "recentFlights": [
+        {
+          "flightNo": "NH889",
+          "origin": "HND",
+          "dest": "SYD",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "シドニー (SYD)",
+          "origCode": "HND",
+          "destCode": "SYD",
+          "route": "東京(羽田) ➔ シドニー",
+          "depTime": "08:35",
+          "arrTime": "18:15",
+          "timeRange": "08:35 - 18:15",
+          "dateJst": "2026-11-25",
+          "status": "Estimated dep 08:35",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH880",
           "origin": "SYD",
@@ -570,24 +607,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH855",
-          "origin": "HND",
-          "dest": "CGK",
-          "originName": "東京(羽田) (HND)",
-          "destinationName": "ジャカルタ (CGK)",
-          "origCode": "HND",
-          "destCode": "CGK",
-          "route": "東京(羽田) ➔ ジャカルタ",
-          "depTime": "10:47",
-          "arrTime": "18:04",
-          "timeRange": "10:47 - 18:04",
-          "dateJst": "2026-11-22",
-          "status": "Landed 16:04",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -605,26 +624,9 @@
       "routesSummary": "羽田/成田 ➔ フランクフルト / パリ / ロサンゼルス / アジア",
       "color": "#f59e0b",
       "serviceStart": "2023-06-04",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "VIE ➔ 東京(羽田) (HND)",
-      "currentFlight": {
-        "flightNo": "NH206",
-        "origin": "VIE",
-        "dest": "HND",
-        "originName": "VIE",
-        "destinationName": "東京(羽田) (HND)",
-        "origCode": "VIE",
-        "destCode": "HND",
-        "route": "VIE ➔ 東京(羽田)",
-        "depTime": "19:00",
-        "arrTime": "06:55",
-        "timeRange": "19:00 - 06:55",
-        "dateJst": "2026-11-24",
-        "status": "Estimated 06:07",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": false
-      },
+      "flightState": "確認中",
+      "currentLocation": "確認中",
+      "currentFlight": null,
       "todayFlights": [],
       "recentFlights": [
         {
@@ -637,12 +639,12 @@
           "destCode": "HND",
           "route": "VIE ➔ 東京(羽田)",
           "depTime": "19:00",
-          "arrTime": "06:55",
-          "timeRange": "19:00 - 06:55",
+          "arrTime": "06:08",
+          "timeRange": "19:00 - 06:08",
           "dateJst": "2026-11-24",
-          "status": "Estimated 06:07",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 06:08",
+          "isLive": false,
+          "isLanded": true,
           "isToday": false
         },
         {
