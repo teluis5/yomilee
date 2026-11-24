@@ -1545,6 +1545,69 @@
         }
       ],
       "trialApplicable": true
+    },
+    "morning": {
+      "updatedAtIso": "2026-11-24T20:00:04.943Z",
+      "arrival": {
+        "airport": "HIJ",
+        "arrivalMin": 1334,
+        "gate": null,
+        "flightNo": "NH685",
+        "time": "22:14"
+      },
+      "candidates": [
+        {
+          "flightNo": "NH672",
+          "orig": "HIJ",
+          "dest": "HND",
+          "route": "広島 ➔ 東京(羽田)",
+          "depTime": "07:35",
+          "arrTime": "08:55",
+          "depGate": null,
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH676",
+          "orig": "HIJ",
+          "dest": "HND",
+          "route": "広島 ➔ 東京(羽田)",
+          "depTime": "10:30",
+          "arrTime": "11:50",
+          "depGate": null,
+          "model": "76E",
+          "modelSource": null,
+          "modelObservedAt": null
+        }
+      ],
+      "trialCandidates": [
+        {
+          "flightNo": "NH672",
+          "orig": "HIJ",
+          "dest": "HND",
+          "route": "広島 ➔ 東京(羽田)",
+          "depTime": "07:35",
+          "arrTime": "08:55",
+          "depGate": null,
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH676",
+          "orig": "HIJ",
+          "dest": "HND",
+          "route": "広島 ➔ 東京(羽田)",
+          "depTime": "10:30",
+          "arrTime": "11:50",
+          "depGate": null,
+          "model": "76E",
+          "modelSource": null,
+          "modelObservedAt": null
+        }
+      ],
+      "trialApplicable": true
     }
   }
 }
