@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026年11月24日 18:30",
-  "updatedAtIso": "2026-11-24T09:30:06.825Z",
+  "updatedAt": "2026年11月24日 18:45",
+  "updatedAtIso": "2026-11-24T09:45:06.247Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "松山",
-    "currentLocationCode": "MYJ",
+    "currentLocation": "飛行中 (松山 ➔ 東京(羽田))",
+    "currentLocationCode": "HND",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "東京(羽田) (100%)",
     "nightStayCode": "HND",
-    "isNightStayConfirmed": false,
+    "isNightStayConfirmed": true,
     "nightStayProbabilities": [
       {
         "airport": "東京(羽田)",
@@ -2015,11 +2015,11 @@
           "route": "広島 ➔ 東京(羽田)"
         }
       },
-      "currentAirport": "松山",
+      "currentAirport": "飛行中 (松山 ➔ 東京(羽田))",
       "nightStay": "東京(羽田) (100%)",
-      "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH593 (東京(羽田) ➔ 松山) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
-      "todayOutlook": "現在 NH593 (東京(羽田) ➔ 松山) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "isNightStayConfirmed": true,
+      "pendingNightStayNote": "現在 NH596 (松山 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "todayOutlook": "現在 NH596 (松山 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
       "nightStayProbabilities": [
         {
           "airport": "東京(羽田)",
@@ -2078,8 +2078,8 @@
               "orig": "MYJ",
               "dest": "HND",
               "route": "松山 ➔ 東京(羽田)",
-              "time": "18:10発 - 19:40着",
-              "tag": "🌙羽田泊候補",
+              "time": "16:40発 - 18:10着",
+              "tag": "飛行中",
               "step": "⑤ 第5便"
             }
           ]
@@ -2178,7 +2178,14 @@
           },
           "planB": null,
           "planC": null,
-          "actual": null
+          "actual": {
+            "flightNo": "NH596",
+            "route": "松山 ➔ 東京(羽田)",
+            "time": "18:31離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#6",
@@ -2240,18 +2247,14 @@
         },
         {
           "flightNo": "NH596",
-          "origCode": "MYJ",
-          "destCode": "HND",
           "route": "松山 ➔ 東京(羽田)",
-          "depTime": "18:10",
-          "arrTime": "19:40",
-          "time": "18:10発 - 19:40着 (予想)",
-          "status": "本命予想 (100%・羽田帰還候補)",
-          "isLanded": false,
-          "isLive": false,
-          "isPredicted": true,
+          "time": "16:40発 - 18:10着",
           "depGate": null,
-          "arrGate": "1,2,3"
+          "arrGate": "1,2,3",
+          "status": "遅延 (19:40予定)",
+          "isLanded": false,
+          "isLive": true,
+          "isPredicted": false
         }
       ]
     },
@@ -2324,10 +2327,10 @@
           "modelObservedAt": "2026-11-24T08:15:05.654Z"
         }
       ],
-      "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
+      "statusLabel": "明日（ナイトステイ確定・マルコフ連鎖予測）",
       "expectedStart": "羽田発 (NH245)",
-      "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH593 (東京(羽田) ➔ 松山) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "isNightStayConfirmed": true,
+      "pendingNightStayNote": "現在 NH596 (松山 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
@@ -4908,7 +4911,7 @@
       "code": "MYJ",
       "name": "松山空港",
       "note": "午後便（NH593/NH596）や夕方便での投入実績多数。",
-      "prob": 26,
+      "prob": 27,
       "level": "C (注目)"
     },
     {
@@ -4990,7 +4993,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 738,
+    "totalFleetFlights": 739,
     "fleetCount": 11
   }
 }
