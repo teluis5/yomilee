@@ -76,6 +76,9 @@ const description =
 	<script is:inline>
 		(function () {
 			const DATA_URL = '/data/special_liveries.json';
+			// Cloudflare Workers にデプロイしたプロキシURLを設定すると30秒ごとに完全リアルタイム更新されます
+			const LIVE_PROXY_URL = '';
+			const REFRESH_INTERVAL_MS = 30000;
 			let allAircraft = [];
 			let selectedAirline = 'ALL';
 			let onlyActive = false;
@@ -304,7 +307,65 @@ const description =
 				render();
 			});
 
-			loadData();
+			async function refreshLiveFromProxy() {
+				if (!LIVE_PROXY_URL || allAircraft.length === 0) return;
+				try {
+					const regs = allAircraft.map((a) => a.reg).join(',');
+					const res = await fetch(`${LIVE_PROXY_URL}?regs=${encodeURIComponent(regs)}`);
+					if (!res.ok) return;
+					const data = await res.json();
+					const acList = Array.isArray(data.ac) ? data.ac : [];
+					const byReg = new Map();
+					for (const ac of acList) {
+						if (ac.r) byReg.set(String(ac.r).toUpperCase().trim(), ac);
+					}
+
+					let airborneCount = 0;
+					let groundCount = 0;
+					allAircraft = allAircraft.map((item) => {
+						const live = byReg.get(item.reg);
+						if (!live || typeof live.lat !== 'number' || typeof live.lon !== 'number') {
+							return { ...item, status: 'offline' };
+						}
+						const alt = live.alt_baro === 'ground' ? 0 : (typeof live.alt_baro === 'number' ? live.alt_baro : null);
+						const isGround = live.alt_baro === 'ground' || (alt !== null && alt < 100 && (live.gs ?? 0) < 40);
+						const status = isGround ? 'ground' : 'airborne';
+						if (status === 'airborne') airborneCount++;
+						else groundCount++;
+
+						return {
+							...item,
+							status,
+							flight: live.flight ? String(live.flight).trim() : item.flight,
+							lat: live.lat,
+							lon: live.lon,
+							altFt: alt,
+							speedKt: typeof live.gs === 'number' ? Math.round(live.gs) : item.speedKt,
+							track: typeof live.track === 'number' ? Math.round(live.track) : item.track
+						};
+					});
+
+					document.getElementById('stat-airborne').textContent = `${airborneCount}機`;
+					document.getElementById('stat-ground').textContent = `${groundCount}機`;
+					document.getElementById('stat-updated').textContent = new Date().toLocaleTimeString('ja-JP', {
+						hour: '2-digit',
+						minute: '2-digit',
+						second: '2-digit'
+					});
+					render();
+				} catch (err) {
+					console.warn('Live proxy refresh warning:', err);
+				}
+			}
+
+			loadData().then(() => {
+				if (LIVE_PROXY_URL) {
+					refreshLiveFromProxy();
+					setInterval(refreshLiveFromProxy, REFRESH_INTERVAL_MS);
+				} else {
+					setInterval(loadData, 60000);
+				}
+			});
 		})();
 	</script>
 
