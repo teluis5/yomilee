@@ -966,9 +966,9 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
       const actDepM = parseTimeToMinutes(df.actDepTime || df.depTime);
       if (schedDepM === null) return false;
 
-      // 実到着時刻ベースで間に合うか、または地方空港折り返し等で定刻ベースで30分以上確保されているか（前便遅延時は折り返し便も遅延出発するため）
+      // 実到着時刻ベースで間に合うか（羽田では実到着見込+35分以降に出発する便のみを厳密に許可し、定時出発済み・先行便を除外）
       const isActTurnValid = actDepM !== null && actDepM >= curArrMin + minTurn && actDepM <= curArrMin + maxTurn;
-      const isSchedTurnValid = (curAirport !== 'HND' || (transitions[curFn]?.[df.flightNo] > 0)) &&
+      const isSchedTurnValid = (curAirport !== 'HND') &&
         schedDepM >= curSchedArrMin + minTurn && schedDepM <= curSchedArrMin + maxTurn;
 
       return isActTurnValid || isSchedTurnValid;
