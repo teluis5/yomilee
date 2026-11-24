@@ -1,0 +1,541 @@
+---
+import Layout from '../layouts/BlogPost.astro';
+import { SITE_TITLE } from '../consts';
+
+const title = '日本の特別塗装機 リアルタイム現在地MAP（ANA・JAL・ポケモン・ちいかわ等）';
+const description =
+	'ANAのちいかわジェットやフライングホヌ、JALのディズニー・大谷翔平ジェット、スカイマーク・AIRDO・ソラシドエアのポケモンジェットなど、日本の主要特別塗装機が今どこを飛んでいるか一目でわかるインタラクティブMAPです。';
+---
+
+<Layout
+	title={title}
+	description={description}
+	pubDate={new Date('2026-11-24')}
+	updatedDate={new Date('2026-11-24')}
+>
+	<link
+		rel="stylesheet"
+		href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+		integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+		crossorigin=""
+	/>
+
+	<div class="livery-tracker">
+		<p class="tracker-intro">
+			ANA・JAL・スカイマーク・AIRDO・ソラシドエアなど、国内主要航空会社の<strong>特別塗装機</strong>が「今どこにいるのか」を地図上で確認できるトラッカーです。飛行中の機体は進行方向を向いたアイコンで表示され、クリックすると便名・高度・速度を確認できます。
+		</p>
+
+		<div class="stats-bar" id="stats-bar">
+			<div class="stat-card">
+				<span class="stat-label">監視対象</span>
+				<span class="stat-value" id="stat-total">--</span>
+			</div>
+			<div class="stat-card stat-airborne">
+				<span class="stat-label">✈️ 飛行中</span>
+				<span class="stat-value" id="stat-airborne">--</span>
+			</div>
+			<div class="stat-card stat-ground">
+				<span class="stat-label">🛬 地上/待機</span>
+				<span class="stat-value" id="stat-ground">--</span>
+			</div>
+			<div class="stat-card">
+				<span class="stat-label">最終更新</span>
+				<span class="stat-value stat-time" id="stat-updated">読込中...</span>
+			</div>
+		</div>
+
+		<div class="controls-bar">
+			<div class="filter-group" id="airline-filters">
+				<button class="filter-btn active" data-airline="ALL">すべて</button>
+				<button class="filter-btn" data-airline="ANA">ANA</button>
+				<button class="filter-btn" data-airline="JAL">JAL</button>
+				<button class="filter-btn" data-airline="SKY">スカイマーク</button>
+				<button class="filter-btn" data-airline="ADO">AIRDO</button>
+				<button class="filter-btn" data-airline="SNA">ソラシドエア</button>
+			</div>
+			<label class="toggle-airborne">
+				<input type="checkbox" id="only-active-checkbox" />
+				<span>位置捕捉中のみ表示</span>
+			</label>
+		</div>
+
+		<div id="livery-map" class="map-container" aria-label="特別塗装機現在地マップ"></div>
+
+		<h2 class="list-heading">特別塗装機 ステータス一覧</h2>
+		<p class="list-note">カードをクリックすると、地図上の該当機体へフォーカスします（位置捕捉中の機体のみ）。</p>
+		<div id="aircraft-list" class="aircraft-grid"></div>
+	</div>
+
+	<script
+		is:inline
+		src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+		integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+		crossorigin=""
+	></script>
+
+	<script is:inline>
+		(function () {
+			const DATA_URL = '/data/special_liveries.json';
+			let allAircraft = [];
+			let selectedAirline = 'ALL';
+			let onlyActive = false;
+			const markersByReg = new Map();
+
+			// 地図初期化（日本中心）
+			const map = L.map('livery-map', {
+				center: [36.2, 137.9],
+				zoom: 5,
+				zoomControl: true
+			});
+
+			L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+				subdomains: 'abcd',
+				maxZoom: 18
+			}).addTo(map);
+
+			function createPlaneIcon(ac) {
+				const angle = typeof ac.track === 'number' ? ac.track : 0;
+				const color = ac.color || '#005BAC';
+				const isAirborne = ac.status === 'airborne';
+				const pulseHtml = isAirborne ? `<span class="plane-pulse" style="border-color:${color}"></span>` : '';
+
+				return L.divIcon({
+					className: 'custom-plane-marker',
+					html: `
+						<div class="plane-wrapper" title="${ac.name} (${ac.reg})">
+							${pulseHtml}
+							<svg viewBox="0 0 24 24" width="28" height="28" style="transform: rotate(${angle}deg); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));">
+								<path fill="${color}" stroke="#ffffff" stroke-width="1.2" d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+							</svg>
+							<span class="plane-tag" style="background:${color}">${ac.flight || ac.reg}</span>
+						</div>
+					`,
+					iconSize: [36, 36],
+					iconAnchor: [18, 18],
+					popupAnchor: [0, -18]
+				});
+			}
+
+			function formatStatusBadge(status) {
+				if (status === 'airborne') return '<span class="badge badge-airborne">✈️ 飛行中</span>';
+				if (status === 'ground') return '<span class="badge badge-ground">🛬 地上待機</span>';
+				return '<span class="badge badge-offline">📡 圏外/駐機</span>';
+			}
+
+			function render() {
+				// マーカークリア
+				for (const marker of markersByReg.values()) {
+					map.removeLayer(marker);
+				}
+				markersByReg.clear();
+
+				const filtered = allAircraft.filter((ac) => {
+					if (selectedAirline !== 'ALL' && ac.airline !== selectedAirline) return false;
+					if (onlyActive && ac.status === 'offline') return false;
+					return true;
+				});
+
+				// マップにプロット
+				for (const ac of filtered) {
+					if (typeof ac.lat === 'number' && typeof ac.lon === 'number') {
+						const marker = L.marker([ac.lat, ac.lon], {
+							icon: createPlaneIcon(ac)
+						}).addTo(map);
+
+						const altText = typeof ac.altFt === 'number' ? `${ac.altFt.toLocaleString()} ft` : '-';
+						const spdText = typeof ac.speedKt === 'number' ? `${ac.speedKt} kt` : '-';
+
+						marker.bindPopup(`
+							<div class="livery-popup">
+								<div class="popup-header">
+									<span class="popup-airline" style="background:${ac.color}">${ac.airline}</span>
+									<strong>${ac.reg}</strong>
+								</div>
+								<div class="popup-title">${ac.name}</div>
+								<div class="popup-meta">${ac.model} / ${formatStatusBadge(ac.status)}</div>
+								<table class="popup-table">
+									<tr><th>便名</th><td>${ac.flight || '未設定'}</td></tr>
+									<tr><th>高度</th><td>${altText}</td></tr>
+									<tr><th>速度</th><td>${spdText}</td></tr>
+									<tr><th>方位</th><td>${ac.track ?? '-'}°</td></tr>
+								</table>
+								<p class="popup-note">${ac.note || ''}</p>
+							</div>
+						`);
+
+						markersByReg.set(ac.reg, marker);
+					}
+				}
+
+				// リスト描画
+				const listEl = document.getElementById('aircraft-list');
+				if (!listEl) return;
+
+				if (filtered.length === 0) {
+					listEl.innerHTML = '<p class="empty-msg">条件に一致する機体がありません。</p>';
+					return;
+				}
+
+				listEl.innerHTML = filtered
+					.map((ac) => {
+						const hasPos = typeof ac.lat === 'number' && typeof ac.lon === 'number';
+						const altText = typeof ac.altFt === 'number' ? `${ac.altFt.toLocaleString()} ft` : '-';
+						const spdText = typeof ac.speedKt === 'number' ? `${ac.speedKt} kt` : '-';
+						return `
+							<div class="aircraft-card ${hasPos ? 'is-clickable' : 'is-offline'}" data-reg="${ac.reg}">
+								<div class="card-top">
+									<span class="airline-pill" style="background:${ac.color}">${ac.airline}</span>
+									<span class="reg-code">${ac.reg}</span>
+									${formatStatusBadge(ac.status)}
+								</div>
+								<h3 class="card-title">${ac.name}</h3>
+								<div class="card-sub">${ac.model} ・ ${ac.category}</div>
+								<div class="card-telemetry">
+									<span>便名: <strong>${ac.flight || '-'}</strong></span>
+									<span>高度: <strong>${altText}</strong></span>
+									<span>速度: <strong>${spdText}</strong></span>
+								</div>
+								<p class="card-note">${ac.note || ''}</p>
+							</div>
+						`;
+					})
+					.join('');
+
+				listEl.querySelectorAll('.aircraft-card.is-clickable').forEach((card) => {
+					card.addEventListener('click', () => {
+						const reg = card.getAttribute('data-reg');
+						const marker = markersByReg.get(reg);
+						if (marker) {
+							map.setView(marker.getLatLng(), 8, { animate: true });
+							marker.openPopup();
+							document.getElementById('livery-map')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+						}
+					});
+				});
+			}
+
+			async function loadData() {
+				try {
+					const res = await fetch(`${DATA_URL}?t=${Date.now()}`);
+					if (!res.ok) throw new Error(`HTTP ${res.status}`);
+					const data = await res.json();
+					allAircraft = Array.isArray(data.aircraft) ? data.aircraft : [];
+
+					document.getElementById('stat-total').textContent = `${data.totalCount ?? allAircraft.length}機`;
+					document.getElementById('stat-airborne').textContent = `${data.airborneCount ?? 0}機`;
+					const groundCount = allAircraft.filter((a) => a.status === 'ground').length;
+					document.getElementById('stat-ground').textContent = `${groundCount}機`;
+
+					if (data.updatedAt) {
+						const d = new Date(data.updatedAt);
+						document.getElementById('stat-updated').textContent = d.toLocaleString('ja-JP', {
+							month: 'numeric',
+							day: 'numeric',
+							hour: '2-digit',
+							minute: '2-digit'
+						});
+					}
+
+					render();
+				} catch (err) {
+					console.error('Failed to load special liveries data:', err);
+					document.getElementById('stat-updated').textContent = '取得エラー';
+				}
+			}
+
+			document.getElementById('airline-filters')?.addEventListener('click', (e) => {
+				const btn = e.target.closest('.filter-btn');
+				if (!btn) return;
+				document.querySelectorAll('.filter-btn').forEach((b) => b.classList.remove('active'));
+				btn.classList.add('active');
+				selectedAirline = btn.getAttribute('data-airline') || 'ALL';
+				render();
+			});
+
+			document.getElementById('only-active-checkbox')?.addEventListener('change', (e) => {
+				onlyActive = Boolean(e.target.checked);
+				render();
+			});
+
+			loadData();
+		})();
+	</script>
+
+	<style>
+		.livery-tracker {
+			margin-top: 1rem;
+		}
+		.tracker-intro {
+			font-size: 0.98rem;
+			line-height: 1.7;
+			margin-bottom: 1.25rem;
+		}
+		.stats-bar {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+			gap: 0.75rem;
+			margin-bottom: 1rem;
+		}
+		.stat-card {
+			background: #f8fafc;
+			border: 1px solid #e2e8f0;
+			border-radius: 10px;
+			padding: 0.75rem 1rem;
+			display: flex;
+			flex-direction: column;
+			gap: 0.25rem;
+		}
+		.stat-airborne {
+			background: #eff6ff;
+			border-color: #bfdbfe;
+		}
+		.stat-ground {
+			background: #f0fdf4;
+			border-color: #bbf7d0;
+		}
+		.stat-label {
+			font-size: 0.75rem;
+			color: #64748b;
+			font-weight: 600;
+		}
+		.stat-value {
+			font-size: 1.25rem;
+			font-weight: 700;
+			color: #0f172a;
+		}
+		.stat-time {
+			font-size: 0.95rem;
+			margin-top: 0.2rem;
+		}
+		.controls-bar {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			align-items: center;
+			gap: 0.75rem;
+			margin-bottom: 1rem;
+		}
+		.filter-group {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.4rem;
+		}
+		.filter-btn {
+			padding: 0.4rem 0.85rem;
+			border-radius: 9999px;
+			border: 1px solid #cbd5e1;
+			background: #ffffff;
+			color: #334155;
+			font-size: 0.85rem;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.15s ease;
+		}
+		.filter-btn:hover {
+			background: #f1f5f9;
+		}
+		.filter-btn.active {
+			background: #0f172a;
+			color: #ffffff;
+			border-color: #0f172a;
+		}
+		.toggle-airborne {
+			display: flex;
+			align-items: center;
+			gap: 0.4rem;
+			font-size: 0.88rem;
+			font-weight: 600;
+			color: #334155;
+			cursor: pointer;
+		}
+		.map-container {
+			width: 100%;
+			height: 520px;
+			border-radius: 14px;
+			border: 1px solid #cbd5e1;
+			overflow: hidden;
+			box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08);
+			margin-bottom: 2rem;
+			z-index: 1;
+		}
+		.list-heading {
+			margin-top: 1.5rem;
+			margin-bottom: 0.25rem;
+		}
+		.list-note {
+			font-size: 0.85rem;
+			color: #64748b;
+			margin-bottom: 1rem;
+		}
+		.aircraft-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+			gap: 1rem;
+		}
+		:global(.aircraft-card) {
+			background: #ffffff;
+			border: 1px solid #e2e8f0;
+			border-radius: 12px;
+			padding: 1rem;
+			transition: transform 0.15s ease, box-shadow 0.15s ease;
+		}
+		:global(.aircraft-card.is-clickable) {
+			cursor: pointer;
+		}
+		:global(.aircraft-card.is-clickable:hover) {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+			border-color: #94a3b8;
+		}
+		:global(.aircraft-card.is-offline) {
+			opacity: 0.72;
+			background: #f8fafc;
+		}
+		:global(.card-top) {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+			margin-bottom: 0.5rem;
+		}
+		:global(.airline-pill),
+		:global(.popup-airline) {
+			color: #ffffff;
+			font-size: 0.72rem;
+			font-weight: 700;
+			padding: 0.15rem 0.5rem;
+			border-radius: 4px;
+		}
+		:global(.reg-code) {
+			font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+			font-size: 0.85rem;
+			font-weight: 700;
+			color: #334155;
+		}
+		:global(.badge) {
+			margin-left: auto;
+			font-size: 0.72rem;
+			font-weight: 700;
+			padding: 0.15rem 0.5rem;
+			border-radius: 9999px;
+		}
+		:global(.badge-airborne) {
+			background: #dbeafe;
+			color: #1d4ed8;
+		}
+		:global(.badge-ground) {
+			background: #dcfce7;
+			color: #15803d;
+		}
+		:global(.badge-offline) {
+			background: #e2e8f0;
+			color: #475569;
+		}
+		:global(.card-title) {
+			font-size: 1rem;
+			font-weight: 700;
+			margin: 0 0 0.25rem 0;
+			color: #0f172a;
+		}
+		:global(.card-sub) {
+			font-size: 0.78rem;
+			color: #64748b;
+			margin-bottom: 0.65rem;
+		}
+		:global(.card-telemetry) {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.75rem;
+			font-size: 0.8rem;
+			color: #334155;
+			background: #f8fafc;
+			padding: 0.45rem 0.65rem;
+			border-radius: 6px;
+			margin-bottom: 0.6rem;
+		}
+		:global(.card-note) {
+			font-size: 0.8rem;
+			color: #475569;
+			margin: 0;
+			line-height: 1.5;
+		}
+		:global(.plane-wrapper) {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+		:global(.plane-pulse) {
+			position: absolute;
+			width: 34px;
+			height: 34px;
+			border-radius: 50%;
+			border: 2px solid;
+			animation: planePulse 2s infinite;
+			pointer-events: none;
+		}
+		:global(.plane-tag) {
+			margin-top: -2px;
+			color: #fff;
+			font-size: 10px;
+			font-weight: 700;
+			padding: 1px 4px;
+			border-radius: 3px;
+			white-space: nowrap;
+			box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+		}
+		@keyframes planePulse {
+			0% {
+				transform: scale(0.7);
+				opacity: 0.9;
+			}
+			100% {
+				transform: scale(1.5);
+				opacity: 0;
+			}
+		}
+		:global(.livery-popup) {
+			min-width: 210px;
+			font-family: system-ui, -apple-system, sans-serif;
+		}
+		:global(.popup-header) {
+			display: flex;
+			align-items: center;
+			gap: 0.4rem;
+			margin-bottom: 0.3rem;
+		}
+		:global(.popup-title) {
+			font-weight: 700;
+			font-size: 0.95rem;
+			margin-bottom: 0.25rem;
+		}
+		:global(.popup-meta) {
+			font-size: 0.78rem;
+			color: #475569;
+			margin-bottom: 0.5rem;
+		}
+		:global(.popup-table) {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 0.8rem;
+			margin-bottom: 0.4rem;
+		}
+		:global(.popup-table th) {
+			text-align: left;
+			color: #64748b;
+			padding: 2px 4px 2px 0;
+			width: 45px;
+		}
+		:global(.popup-table td) {
+			font-weight: 600;
+			padding: 2px 0;
+		}
+		:global(.popup-note) {
+			font-size: 0.75rem;
+			color: #475569;
+			margin: 0;
+			line-height: 1.4;
+		}
+	</style>
+</Layout>
