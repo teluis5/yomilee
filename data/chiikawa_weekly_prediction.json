@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月24日 22:00",
-  "updatedAtIso": "2026-11-24T13:00:07.174Z",
+  "updatedAt": "2026年11月24日 22:15",
+  "updatedAtIso": "2026-11-24T13:15:06.580Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (東京(羽田) ➔ 広島)",
+    "currentLocation": "広島",
     "currentLocationCode": "HIJ",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "広島 (確定)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": true,
@@ -2015,7 +2015,7 @@
           "route": "広島 ➔ 東京(羽田)"
         }
       },
-      "currentAirport": "飛行中 (東京(羽田) ➔ 広島)",
+      "currentAirport": "広島",
       "nightStay": "広島 (確定)",
       "isNightStayConfirmed": true,
       "pendingNightStayNote": "",
@@ -2253,10 +2253,10 @@
           "actual": {
             "flightNo": "NH685",
             "route": "東京(羽田) ➔ 広島",
-            "time": "20:55離陸",
-            "status": "飛行中",
-            "isLanded": false,
-            "isLive": true
+            "time": "20:55離陸 / 22:14着陸",
+            "status": "着陸済",
+            "isLanded": true,
+            "isLive": false
           }
         }
       ],
@@ -2322,9 +2322,9 @@
           "time": "19:40発 - 21:10着",
           "depGate": "49",
           "arrGate": null,
-          "status": "遅延 (22:14予定)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (22:14)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         }
       ]
