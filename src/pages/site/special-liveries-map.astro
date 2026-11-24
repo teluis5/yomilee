@@ -21,6 +21,11 @@ const description =
 	/>
 
 	<div class="livery-tracker">
+		<div class="nav-banner">
+			<span>✈️ 空港ごとの在駐・飛来予測を見る：</span>
+			<a href="/site/airport-special-liveries/" class="nav-link-btn">空港別 飛来予測ページへ →</a>
+		</div>
+
 		<p class="tracker-intro">
 			ANA・JAL・スカイマーク・AIRDO・ソラシドエアなど、国内主要航空会社の<strong>特別塗装機</strong>が「今どこにいるのか」を地図上で確認できるトラッカーです。飛行中の機体は進行方向を向いたアイコンで表示され、クリックすると便名・高度・速度を確認できます。
 		</p>
@@ -367,6 +372,29 @@ const description =
 	<style>
 		.livery-tracker {
 			margin-top: 1rem;
+		}
+		.nav-banner {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: space-between;
+			gap: 0.75rem;
+			background: #eff6ff;
+			border: 1px solid #bfdbfe;
+			border-radius: 10px;
+			padding: 0.75rem 1rem;
+			margin-bottom: 1rem;
+			font-size: 0.9rem;
+			font-weight: 600;
+		}
+		.nav-link-btn {
+			background: #1d4ed8;
+			color: #ffffff !important;
+			text-decoration: none;
+			padding: 0.4rem 0.9rem;
+			border-radius: 6px;
+			font-size: 0.85rem;
+			font-weight: 700;
 		}
 		.tracker-intro {
 			font-size: 0.98rem;
