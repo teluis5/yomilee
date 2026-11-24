@@ -59,18 +59,6 @@ const description =
 			</label>
 		</div>
 
-		<div class="theme-bar" id="theme-bar">
-			<span class="theme-label">🎨 地図カラー:</span>
-			<button class="theme-btn active" data-theme="default">標準</button>
-			<button class="theme-btn" data-theme="radar">ダークレーダー</button>
-			<button class="theme-btn" data-theme="ocean">ディープブルー</button>
-			<button class="theme-btn" data-theme="sepia">セピア</button>
-			<label class="hue-control">
-				<span>色相</span>
-				<input type="range" id="map-hue" min="0" max="360" value="0" />
-			</label>
-		</div>
-
 		<div id="livery-map" class="map-container" aria-label="特別塗装機現在地マップ"></div>
 
 		<h2 class="list-heading">特別塗装機 ステータス一覧</h2>
@@ -315,43 +303,6 @@ const description =
 				onlyActive = Boolean(e.target.checked);
 				render();
 			});
-
-			// 地図カラー・テーマ切替
-			const mapEl = document.getElementById('livery-map');
-			const hueInput = document.getElementById('map-hue');
-			let currentTheme = 'default';
-
-			function applyMapFilter() {
-				const t = THEMES[currentTheme] || THEMES.default;
-				if (mapEl) {
-					mapEl.style.backgroundColor = t.sea;
-				}
-				if (japanGeoJsonLayer) {
-					japanGeoJsonLayer.setStyle({
-						fillColor: t.land,
-						fillOpacity: 1,
-						color: t.border,
-						weight: 1
-					});
-				}
-				const tilePane = mapEl?.querySelector('.leaflet-tile-pane');
-				const vectorPane = mapEl?.querySelector('.leaflet-overlay-pane');
-				const hue = Number(hueInput?.value || 0);
-				const hueFilter = hue > 0 ? `hue-rotate(${hue}deg)` : 'none';
-				if (tilePane) tilePane.style.filter = hueFilter;
-				if (vectorPane) vectorPane.style.filter = hueFilter;
-			}
-
-			document.getElementById('theme-bar')?.addEventListener('click', (e) => {
-				const btn = e.target.closest('.theme-btn');
-				if (!btn) return;
-				document.querySelectorAll('.theme-btn').forEach((b) => b.classList.remove('active'));
-				btn.classList.add('active');
-				currentTheme = btn.getAttribute('data-theme') || 'default';
-				applyMapFilter();
-			});
-
-			hueInput?.addEventListener('input', applyMapFilter);
 
 			loadData();
 		})();
