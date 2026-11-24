@@ -106,13 +106,13 @@ const description =
 			let japanGeoJsonLayer = null;
 
 			const THEMES = {
-				default: { sea: '#60a5fa', land: '#4ade80', border: '#22c55e' },
+				default: { sea: '#93c5fd', land: '#86efac', border: '#4ade80' },
 				radar: { sea: '#0f172a', land: '#1e293b', border: '#38bdf8' },
 				ocean: { sea: '#1e3a8a', land: '#0f766e', border: '#2dd4bf' },
 				sepia: { sea: '#d6d3d1', land: '#a8a29e', border: '#78716c' }
 			};
 
-			// 日本の陸地GeoJSONを読み込み（緑単一色）
+			// 日本の陸地GeoJSONを読み込み（淡い緑単一色）
 			fetch('/data/japan.geojson')
 				.then((r) => r.json())
 				.then((geo) => {
@@ -128,31 +128,8 @@ const description =
 				})
 				.catch((e) => console.warn('GeoJSON load error:', e));
 
-			const gsiStd = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
-				attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院（標準地図）</a>',
-				minZoom: 5,
-				maxZoom: 18
-			});
-
-			const gsiPale = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
-				attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院（淡色地図）</a>',
-				minZoom: 5,
-				maxZoom: 18
-			});
-
-			// デフォルトは「陸：緑単一色 / 海：青単一色」のベクター地図
+			// デフォルトは「陸：淡い緑単一色 / 海：淡い青単一色」のベクター地図
 			vectorLandLayer.addTo(map);
-
-			// 右上に地図切替コントロールを追加
-			L.control.layers(
-				{
-					'シンプル地図（陸緑・海青）': vectorLandLayer,
-					'国土地理院（標準地図）': gsiStd,
-					'国土地理院（淡色地図）': gsiPale
-				},
-				{},
-				{ position: 'topright' }
-			).addTo(map);
 
 			function createPlaneIcon(ac) {
 				const angle = typeof ac.track === 'number' ? ac.track : 0;
@@ -509,7 +486,7 @@ const description =
 		.map-container {
 			width: 100%;
 			height: 520px;
-			background-color: #60a5fa;
+			background-color: #93c5fd;
 			border-radius: 14px;
 			border: 1px solid #cbd5e1;
 			overflow: hidden;
