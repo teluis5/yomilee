@@ -103,6 +103,8 @@ const productItems = propItems || (amazonCampaign?.items as any[]) || [];
 
 <style is:global>
   .affiliate-banner-card {
+    position: relative;
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -190,6 +192,12 @@ const productItems = propItems || (amazonCampaign?.items as any[]) || [];
     white-space: nowrap;
     transition: opacity 0.2s ease, transform 0.15s ease;
   }
+  .aff-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
   .aff-btn:hover {
     opacity: 0.9;
     transform: scale(1.02);
@@ -230,6 +238,8 @@ const productItems = propItems || (amazonCampaign?.items as any[]) || [];
     gap: 0.65rem;
   }
   .aff-product-card {
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     background: #f8fafc;
