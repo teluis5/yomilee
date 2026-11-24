@@ -110,20 +110,15 @@ const formatRakutenUrl = (itemUrl: string) => {
 
 <style is:global>
   .rakuten-event-banner {
-    margin: 0 auto 0.75rem auto;
+    margin: 0 auto 0.65rem auto;
     max-width: 680px;
-    background: linear-gradient(135deg, #fff7f7 0%, #ffffff 100%);
-    border: 1px solid #fecdd3;
-    border-radius: 8px;
-    padding: 0.75rem 1rem;
+    background: transparent;
+    border: none;
+    border-bottom: 1px dashed #fecdd3;
+    border-radius: 0;
+    padding: 0.25rem 0.5rem 0.55rem 0.5rem;
     box-sizing: border-box;
-    box-shadow: 0 1px 3px rgba(191, 0, 0, 0.04);
-    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
-  }
-  .rakuten-event-banner:hover {
-    background: #fff1f2;
-    border-color: #fda4af;
-    box-shadow: 0 3px 8px rgba(191, 0, 0, 0.08);
+    box-shadow: none;
   }
   .rakuten-banner-main {
     width: 100%;
