@@ -3,7 +3,7 @@ import Layout from '../../layouts/BlogPost.astro';
 
 const title = '空港別 特別塗装機の在駐状況・飛来予測（羽田・成田・伊丹・新千歳・福岡・那覇等）';
 const description =
-	'羽田・成田・伊丹・関西・新千歳・福岡・那覇など国内主要空港ごとに、今いる特別塗装機（ちいかわジェット・ポケモンジェット・ディズニー・大谷翔平ジェット等）とこの後の飛来予測をリアルタイムで確認できるページです。';
+	'羽田・成田・伊丹・関西・新千歳・福岡・那覇など国内主要空港ごとに、今いる特別塗装機（ちいかわジェット・ポケモンジェット・ディズニー・大谷翔平ジェット等）とこの後の飛来予測を一覧でスクロール確認できるページです。';
 ---
 
 <Layout
@@ -19,60 +19,33 @@ const description =
 		</div>
 
 		<p class="tracker-intro">
-			空港を選ぶと、<strong>今その空港にいる特別塗装機</strong>と、<strong>この後その空港へ飛来予定（到着予定）の特別塗装機</strong>を一覧で確認できます。
+			国内主要空港ごとに、<strong>今その空港にいる特別塗装機</strong>と、<strong>この後その空港へ飛来予定の特別塗装機</strong>を縦に並べています。スクロールして各空港の状況を一覧で確認できます。
 		</p>
 
-		<div class="airport-selector" id="airport-selector">
-			<button class="ap-btn active" data-code="HND">羽田</button>
-			<button class="ap-btn" data-code="NRT">成田</button>
-			<button class="ap-btn" data-code="ITM">伊丹</button>
-			<button class="ap-btn" data-code="KIX">関西</button>
-			<button class="ap-btn" data-code="CTS">新千歳</button>
-			<button class="ap-btn" data-code="FUK">福岡</button>
-			<button class="ap-btn" data-code="OKA">那覇</button>
-			<button class="ap-btn" data-code="NGO">中部</button>
-			<button class="ap-btn" data-code="UKB">神戸</button>
-			<button class="ap-btn" data-code="SDJ">仙台</button>
-			<button class="ap-btn" data-code="HIJ">広島</button>
-			<button class="ap-btn" data-code="KOJ">鹿児島</button>
-			<button class="ap-btn" data-code="NGS">長崎</button>
-			<button class="ap-btn" data-code="KMJ">熊本</button>
-		</div>
-
-		<div class="airport-summary" id="airport-summary">
-			<div class="sum-card sum-present">
-				<span class="sum-label">🅿️ 現在この空港にいる機体</span>
-				<span class="sum-val" id="count-present">--</span>
-			</div>
-			<div class="sum-card sum-arriving">
-				<span class="sum-label">🛬 この後の飛来予定</span>
-				<span class="sum-val" id="count-arriving">--</span>
-			</div>
-			<div class="sum-card sum-departing">
-				<span class="sum-label">🛫 出発便</span>
-				<span class="sum-val" id="count-departing">--</span>
-			</div>
-		</div>
-
-		<section class="ap-section">
-			<h2>🅿️ 現在この空港にいる特別塗装機</h2>
-			<div id="list-present" class="ap-list"></div>
-		</section>
-
-		<section class="ap-section">
-			<h2>🛬 この後の飛来予測（到着予定）</h2>
-			<div id="list-arriving" class="ap-list"></div>
-		</section>
-
-		<section class="ap-section">
-			<h2>🛫 この空港からの出発便</h2>
-			<div id="list-departing" class="ap-list"></div>
-		</section>
+		<div class="airport-jump-bar" id="airport-jump-bar"></div>
+		<div id="airports-container" class="airports-container">読込中...</div>
 	</div>
 
 	<script is:inline>
 		(function () {
 			const DATA_URL = '/data/special_liveries.json';
+			const TARGET_AIRPORTS = [
+				{ code: 'HND', name: '羽田空港' },
+				{ code: 'NRT', name: '成田空港' },
+				{ code: 'ITM', name: '伊丹空港' },
+				{ code: 'KIX', name: '関西空港' },
+				{ code: 'CTS', name: '新千歳空港' },
+				{ code: 'FUK', name: '福岡空港' },
+				{ code: 'OKA', name: '那覇空港' },
+				{ code: 'NGO', name: '中部国際空港' },
+				{ code: 'UKB', name: '神戸空港' },
+				{ code: 'SDJ', name: '仙台空港' },
+				{ code: 'HIJ', name: '広島空港' },
+				{ code: 'KOJ', name: '鹿児島空港' },
+				{ code: 'NGS', name: '長崎空港' },
+				{ code: 'KMJ', name: '熊本空港' }
+			];
+
 			const AIRPORT_JA = {
 				HND: '羽田', NRT: '成田', ITM: '伊丹', KIX: '関西', UKB: '神戸',
 				NGO: '中部', CTS: '新千歳', FUK: '福岡', OKA: '那覇', SDJ: '仙台',
@@ -83,7 +56,6 @@ const description =
 			};
 
 			let allAircraft = [];
-			let selectedCode = 'HND';
 
 			function toJa(code) {
 				if (!code) return '-';
@@ -114,36 +86,51 @@ const description =
 							<span class="reg-code">${ac.reg}</span>
 							${statusBadge}
 						</div>
-						<h3 class="card-title">${ac.name}</h3>
+						<h4 class="card-title">${ac.name}</h4>
 						<div class="card-sub">${ac.model} ・ ${ac.category}</div>
 						<div class="card-info">
 							<span>便名: <strong>${ac.flight || '-'}</strong></span>
 							${type !== 'present' ? `<span>区間: <strong>${routeText}</strong></span>` : ''}
 							${ac.depTime ? `<span>時刻: <strong>${timeText}</strong></span>` : ''}
 						</div>
-						<p class="card-note">${ac.note || ''}</p>
 					</div>
 				`;
 			}
 
 			function render() {
-				const present = allAircraft.filter((ac) => isAtAirport(ac, selectedCode));
-				const arriving = allAircraft.filter((ac) => ac.destination === selectedCode);
-				const departing = allAircraft.filter((ac) => ac.origin === selectedCode);
+				const jumpBar = document.getElementById('airport-jump-bar');
+				const container = document.getElementById('airports-container');
+				if (!container) return;
 
-				document.getElementById('count-present').textContent = `${present.length}機`;
-				document.getElementById('count-arriving').textContent = `${arriving.length}機`;
-				document.getElementById('count-departing').textContent = `${departing.length}機`;
+				if (jumpBar) {
+					jumpBar.innerHTML = TARGET_AIRPORTS.map(
+						(ap) => `<a class="jump-pill" href="#ap-${ap.code}">${toJa(ap.code)}</a>`
+					).join('');
+				}
 
-				const renderList = (id, items, type, emptyMsg) => {
-					const el = document.getElementById(id);
-					if (!el) return;
-					el.innerHTML = items.length > 0 ? items.map((a) => formatCard(a, type)).join('') : `<p class="empty-msg">${emptyMsg}</p>`;
-				};
+				container.innerHTML = TARGET_AIRPORTS.map((ap) => {
+					const present = allAircraft.filter((ac) => isAtAirport(ac, ap.code));
+					const arriving = allAircraft.filter((ac) => ac.destination === ap.code);
+					const departing = allAircraft.filter((ac) => ac.origin === ap.code);
 
-				renderList('list-present', present, 'present', '現在この空港で確認されている特別塗装機はありません。');
-				renderList('list-arriving', arriving, 'arriving', '現在この空港への飛来予定便は捕捉されていません。');
-				renderList('list-departing', departing, 'departing', '現在この空港からの出発便は捕捉されていません。');
+					return `
+						<section class="ap-block" id="ap-${ap.code}">
+							<div class="ap-block-header">
+								<h2>${ap.name}</h2>
+								<div class="ap-counts">
+									<span class="cnt cnt-present">🅿️ 在駐 ${present.length}</span>
+									<span class="cnt cnt-arriving">🛬 飛来予定 ${arriving.length}</span>
+									<span class="cnt cnt-departing">🛫 出発 ${departing.length}</span>
+								</div>
+							</div>
+
+							${present.length > 0 ? `<h3 class="sub-h">🅿️ 現在いる機体</h3><div class="ap-list">${present.map((a) => formatCard(a, 'present')).join('')}</div>` : ''}
+							${arriving.length > 0 ? `<h3 class="sub-h">🛬 この後の飛来予定</h3><div class="ap-list">${arriving.map((a) => formatCard(a, 'arriving')).join('')}</div>` : ''}
+							${departing.length > 0 ? `<h3 class="sub-h">🛫 出発便</h3><div class="ap-list">${departing.map((a) => formatCard(a, 'departing')).join('')}</div>` : ''}
+							${present.length === 0 && arriving.length === 0 && departing.length === 0 ? '<p class="empty-msg">現在この空港で捕捉されている特別塗装機はありません。</p>' : ''}
+						</section>
+					`;
+				}).join('');
 			}
 
 			async function load() {
@@ -157,15 +144,6 @@ const description =
 					console.error(e);
 				}
 			}
-
-			document.getElementById('airport-selector')?.addEventListener('click', (e) => {
-				const btn = e.target.closest('.ap-btn');
-				if (!btn) return;
-				document.querySelectorAll('.ap-btn').forEach((b) => b.classList.remove('active'));
-				btn.classList.add('active');
-				selectedCode = btn.getAttribute('data-code') || 'HND';
-				render();
-			});
 
 			load();
 			setInterval(load, 60000);
@@ -204,89 +182,96 @@ const description =
 			line-height: 1.7;
 			margin-bottom: 1rem;
 		}
-		.airport-selector {
+		.airport-jump-bar {
 			display: flex;
 			flex-wrap: wrap;
 			gap: 0.4rem;
-			margin-bottom: 1.25rem;
-		}
-		.ap-btn {
-			padding: 0.45rem 0.9rem;
-			border-radius: 9999px;
-			border: 1px solid #cbd5e1;
-			background: #ffffff;
-			color: #334155;
-			font-size: 0.85rem;
-			font-weight: 600;
-			cursor: pointer;
-			transition: all 0.15s ease;
-		}
-		.ap-btn:hover {
-			background: #f1f5f9;
-		}
-		.ap-btn.active {
-			background: #0f172a;
-			color: #ffffff;
-			border-color: #0f172a;
-		}
-		.airport-summary {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-			gap: 0.75rem;
 			margin-bottom: 1.5rem;
 		}
-		.sum-card {
+		:global(.jump-pill) {
+			padding: 0.35rem 0.75rem;
+			border-radius: 9999px;
+			border: 1px solid #cbd5e1;
+			background: #f8fafc;
+			color: #334155 !important;
+			font-size: 0.8rem;
+			font-weight: 600;
+			text-decoration: none;
+		}
+		:global(.jump-pill:hover) {
+			background: #e2e8f0;
+		}
+		.airports-container {
+			display: flex;
+			flex-direction: column;
+			gap: 2rem;
+		}
+		:global(.ap-block) {
+			background: #ffffff;
+			border: 1px solid #e2e8f0;
+			border-radius: 14px;
+			padding: 1.25rem;
+			box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+		}
+		:global(.ap-block-header) {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: space-between;
+			gap: 0.5rem;
+			border-bottom: 2px solid #e2e8f0;
+			padding-bottom: 0.6rem;
+			margin-bottom: 1rem;
+		}
+		:global(.ap-block-header h2) {
+			margin: 0;
+			font-size: 1.25rem;
+			color: #0f172a;
+		}
+		:global(.ap-counts) {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.4rem;
+		}
+		:global(.cnt) {
+			font-size: 0.75rem;
+			font-weight: 700;
+			padding: 0.2rem 0.55rem;
+			border-radius: 9999px;
+		}
+		:global(.cnt-present) {
+			background: #dcfce7;
+			color: #15803d;
+		}
+		:global(.cnt-arriving) {
+			background: #dbeafe;
+			color: #1d4ed8;
+		}
+		:global(.cnt-departing) {
+			background: #f1f5f9;
+			color: #475569;
+		}
+		:global(.sub-h) {
+			font-size: 0.95rem;
+			margin: 1rem 0 0.5rem 0;
+			color: #334155;
+		}
+		:global(.ap-list) {
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: 0.65rem;
+		}
+		:global(.ap-card) {
 			background: #f8fafc;
 			border: 1px solid #e2e8f0;
 			border-radius: 10px;
-			padding: 0.75rem 1rem;
-			display: flex;
-			flex-direction: column;
-			gap: 0.25rem;
-		}
-		.sum-present {
-			background: #f0fdf4;
-			border-color: #bbf7d0;
-		}
-		.sum-arriving {
-			background: #eff6ff;
-			border-color: #bfdbfe;
-		}
-		.sum-label {
-			font-size: 0.75rem;
-			color: #64748b;
-			font-weight: 600;
-		}
-		.sum-val {
-			font-size: 1.25rem;
-			font-weight: 700;
-			color: #0f172a;
-		}
-		.ap-section {
-			margin-bottom: 2rem;
-		}
-		.ap-section h2 {
-			font-size: 1.15rem;
-			margin-bottom: 0.75rem;
-			border-bottom: 2px solid #e2e8f0;
-			padding-bottom: 0.35rem;
-		}
-		.ap-list {
-			display: grid;
-			grid-template-columns: 1fr;
-			gap: 0.75rem;
-		}
-		:global(.ap-card) {
-			background: #ffffff;
-			border: 1px solid #e2e8f0;
-			border-radius: 12px;
-			padding: 1rem;
+			padding: 0.85rem 1rem;
 		}
 		:global(.card-top) {
 			display: flex;
 			align-items: center;
 			gap: 0.5rem;
-			margin-bottom: 0.45rem;
+			margin-bottom: 0.35rem;
 		}
 		:global(.airline-pill) {
 			color: #ffffff;
@@ -321,15 +306,15 @@ const description =
 			color: #475569;
 		}
 		:global(.card-title) {
-			font-size: 1rem;
+			font-size: 0.98rem;
 			font-weight: 700;
-			margin: 0 0 0.25rem 0;
+			margin: 0 0 0.2rem 0;
 			color: #0f172a;
 		}
 		:global(.card-sub) {
-			font-size: 0.78rem;
+			font-size: 0.76rem;
 			color: #64748b;
-			margin-bottom: 0.55rem;
+			margin-bottom: 0.45rem;
 		}
 		:global(.card-info) {
 			display: flex;
@@ -337,24 +322,11 @@ const description =
 			gap: 0.75rem;
 			font-size: 0.82rem;
 			color: #334155;
-			background: #f8fafc;
-			padding: 0.45rem 0.65rem;
-			border-radius: 6px;
-			margin-bottom: 0.5rem;
-		}
-		:global(.card-note) {
-			font-size: 0.8rem;
-			color: #475569;
-			margin: 0;
-			line-height: 1.5;
 		}
 		:global(.empty-msg) {
-			font-size: 0.88rem;
+			font-size: 0.85rem;
 			color: #64748b;
-			background: #f8fafc;
-			padding: 0.85rem 1rem;
-			border-radius: 8px;
-			border: 1px dashed #cbd5e1;
+			margin: 0;
 		}
 	</style>
 </Layout>
