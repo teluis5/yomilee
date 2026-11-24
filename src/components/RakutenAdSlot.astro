@@ -40,75 +40,53 @@ const formatRakutenUrl = (itemUrl: string) => {
 };
 ---
 
-<div
-  class="rakuten-event-banner dynamic-campaign-banner"
-  data-campaign-provider="rakuten"
-  data-campaigns={JSON.stringify(campaigns)}
-  data-rakuten-aff-id={rakutenAffId}
->
-  <div class="rakuten-banner-main">
-    <a href={url} target="_blank" rel="sponsored noopener noreferrer" class="rakuten-event-link" data-role="event-link">
-      <div class="rakuten-event-meta">
-        <span class="rakuten-event-badge" data-role="event-badge">{badge}</span>
-        <span class="rakuten-pr-label">PR</span>
-      </div>
-      <div class="rakuten-event-text" data-role="event-text">{text}</div>
-      <div class="rakuten-event-cta" data-role="event-cta">エントリー &raquo;</div>
-    </a>
-  </div>
-
-  {productItems.length > 0 && (
-    <div class="rakuten-products-section">
-      <div class="rakuten-products-header">
-        <span class="rakuten-products-title">🔥 楽天ブラックフライデー注目の目玉アイテム</span>
-        <span class="rakuten-products-sub">ポイント還元・特価</span>
-      </div>
-      <div class="rakuten-products-grid">
-        {productItems.map((item) => (
-          <a
-            href={formatRakutenUrl(item.url)}
-            target="_blank"
-            rel="sponsored noopener noreferrer"
-            class="rakuten-product-card"
-          >
-            <div class="rakuten-product-img-wrap">
-              <img
-                src={item.image || 'https://thumbnail.image.rakuten.co.jp/@0_sub/itunes-gift-cards/img/top/giftcard_apple.png'}
-                alt={item.name}
-                loading="lazy"
-                decoding="async"
-                class="rakuten-product-img"
-              />
-              {item.badge && <span class="rakuten-product-badge">{item.badge}</span>}
-            </div>
-            <div class="rakuten-product-info">
-              <div class="rakuten-product-name">{item.name}</div>
-              <div class="rakuten-product-highlight">{item.highlight}</div>
-            </div>
-          </a>
-        ))}
-      </div>
+<div class="rakuten-ad-slot-wrapper">
+  <div
+    class="rakuten-event-banner dynamic-campaign-banner"
+    data-campaign-provider="rakuten"
+    data-campaigns={JSON.stringify(campaigns)}
+    data-rakuten-aff-id={rakutenAffId}
+  >
+    <div class="rakuten-banner-main">
+      <a href={url} target="_blank" rel="sponsored noopener noreferrer" class="rakuten-event-link" data-role="event-link">
+        <div class="rakuten-event-meta">
+          <span class="rakuten-event-badge" data-role="event-badge">{badge}</span>
+          <span class="rakuten-pr-label">PR</span>
+        </div>
+        <div class="rakuten-event-text" data-role="event-text">{text}</div>
+        <div class="rakuten-event-cta" data-role="event-cta">エントリー &raquo;</div>
+      </a>
     </div>
-  )}
-</div>
-
-<div class="rakuten-motion-widget-wrapper">
-  <div class="rakuten-widget-container">
-    <iframe
-      src={iframeUrl}
-      width="468"
-      height="160"
-      frameborder="0"
-      scrolling="no"
-      loading="lazy"
-      title="楽天市場 おすすめ商品"
-      style="border:0; display:block; margin:0 auto;"
-    ></iframe>
   </div>
-  <div class="adsense-label" style="margin-top:0.35rem; margin-bottom:0;">PR 楽天市場</div>
+
+  <div class="rakuten-motion-widget-wrapper">
+    <div class="rakuten-widget-container">
+      <iframe
+        src={iframeUrl}
+        width="468"
+        height="160"
+        frameborder="0"
+        scrolling="no"
+        loading="lazy"
+        title="楽天市場 おすすめ商品"
+        style="border:0; display:block; margin:0 auto;"
+      ></iframe>
+    </div>
+    <div class="adsense-label" style="margin-top:0.35rem; margin-bottom:0;">PR 楽天市場</div>
+  </div>
 </div>
 
 <style is:global>
+  .rakuten-ad-slot-wrapper {
+    border: 2px solid #bf0000;
+    border-radius: 8px;
+    background: #ffffff;
+    padding: 0.75rem 0.5rem 0.65rem 0.5rem;
+    box-sizing: border-box;
+    box-shadow: 0 2px 8px rgba(191, 0, 0, 0.08);
+    max-width: 728px;
+    margin: 0 auto;
+  }
   .rakuten-event-banner {
     margin: 0 auto 0.65rem auto;
     max-width: 680px;
