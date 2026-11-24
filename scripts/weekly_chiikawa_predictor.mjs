@@ -1049,6 +1049,8 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
       const { df, estArrM, schedArrM, edgeWeight } = br;
       const origName = AIRPORT_NAMES[df.origin] || df.origin;
       const destName = AIRPORT_NAMES[df.dest] || df.dest;
+      const dispDep = df.actDepTime || df.depTime;
+      const dispArr = df.actArrTime || df.arrTime;
       const nextFlightObj = {
         flightNo: df.flightNo,
         orig: df.origin,
@@ -1056,11 +1058,11 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
         origCode: df.origin,
         destCode: df.dest,
         route: `${origName} ➔ ${destName}`,
-        depTime: df.depTime,
-        arrTime: df.arrTime,
-        actDepTime: df.actDepTime || df.depTime,
-        actArrTime: df.actArrTime || df.arrTime,
-        time: `${df.depTime}発 - ${df.arrTime}着`,
+        depTime: dispDep,
+        arrTime: dispArr,
+        actDepTime: dispDep,
+        actArrTime: dispArr,
+        time: `${dispDep}発 - ${dispArr}着`,
         model: df.model || '76P',
         is767Confirmed: Boolean(df.is767),
         is767Strict: Boolean(df.is767Strict),
