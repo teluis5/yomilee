@@ -85,14 +85,35 @@ const description =
 			const map = L.map('livery-map', {
 				center: [36.2, 137.9],
 				zoom: 5,
+				minZoom: 5,
+				maxZoom: 14,
 				zoomControl: true
 			});
 
-			L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-				subdomains: 'abcd',
+			const gsiBlank = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/blank/{z}/{x}/{y}.png', {
+				attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院（白地図）</a>',
+				minZoom: 5,
+				maxZoom: 14
+			});
+
+			const gsiPale = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
+				attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院（淡色地図）</a>',
+				minZoom: 5,
 				maxZoom: 18
-			}).addTo(map);
+			});
+
+			// デフォルトは白地図
+			gsiBlank.addTo(map);
+
+			// 右上に地図切替コントロールを追加
+			L.control.layers(
+				{
+					'白地図（シンプル）': gsiBlank,
+					'淡色地図（地名・空港表示）': gsiPale
+				},
+				{},
+				{ position: 'topright' }
+			).addTo(map);
 
 			function createPlaneIcon(ac) {
 				const angle = typeof ac.track === 'number' ? ac.track : 0;
