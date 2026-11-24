@@ -23,7 +23,7 @@ const description =
 	<div class="livery-tracker">
 		<div class="nav-banner">
 			<span>✈️ 空港ごとの在駐・飛来予測を見る：</span>
-			<a href="/site/airport-special-liveries/" class="nav-link-btn">空港別 飛来予測ページへ →</a>
+			<a href="#airport-section" class="nav-link-btn">空港別 在駐・飛来予測へ ↓</a>
 		</div>
 
 		<p class="tracker-intro">
@@ -50,6 +50,13 @@ const description =
 		<h2 class="list-heading">特別塗装機 ステータス一覧</h2>
 		<p class="list-note">カードをクリックすると、地図上の該当機体へフォーカスします（位置捕捉中の機体のみ）。</p>
 		<div id="aircraft-list" class="aircraft-grid"></div>
+
+		<section id="airport-section" class="airport-section">
+			<h2 class="list-heading">空港別 特別塗装機の在駐状況・飛来予測</h2>
+			<p class="list-note">国内主要空港ごとに、今いる機体とこの後の飛来予定・出発便を一覧で確認できます。</p>
+			<div class="airport-jump-bar" id="airport-jump-bar"></div>
+			<div id="airports-container" class="airports-container"></div>
+		</section>
 	</div>
 
 	<script
@@ -319,6 +326,81 @@ const description =
 						}
 					});
 				});
+
+				// 空港別 在駐・飛来予測の描画
+				renderAirports();
+			}
+
+			const TARGET_AIRPORTS = [
+				{ code: 'HND', name: '羽田空港' }, { code: 'NRT', name: '成田空港' },
+				{ code: 'ITM', name: '伊丹空港' }, { code: 'KIX', name: '関西空港' },
+				{ code: 'CTS', name: '新千歳空港' }, { code: 'FUK', name: '福岡空港' },
+				{ code: 'OKA', name: '那覇空港' }, { code: 'NGO', name: '中部国際空港' },
+				{ code: 'UKB', name: '神戸空港' }, { code: 'SDJ', name: '仙台空港' },
+				{ code: 'HIJ', name: '広島空港' }, { code: 'KOJ', name: '鹿児島空港' },
+				{ code: 'NGS', name: '長崎空港' }, { code: 'KMJ', name: '熊本空港' }
+			];
+
+			function isAtAirport(ac, code) {
+				if (ac.status === 'airborne') return false;
+				if (!ac.nearestAirport) return false;
+				return ac.nearestAirport.includes(`(${code})`) || ac.nearestAirport.includes(AIRPORT_JA[code] || '');
+			}
+
+			function formatAirportCard(ac, type) {
+				const routeText = ac.origin && ac.destination ? `${toAirportJa(ac.origin)} → ${toAirportJa(ac.destination)}` : '-';
+				const timeText = ac.depTime ? `${ac.depTime}発${ac.arrTime ? ` → ${ac.arrTime}着` : ''}` : '-';
+				return `
+					<div class="ap-card">
+						<div class="card-top">
+							<span class="airline-pill" style="background:${ac.color}">${ac.airline}</span>
+							<span class="reg-code">${ac.reg}</span>
+							${formatStatusBadge(ac.status)}
+						</div>
+						<h4 class="card-title">${ac.name}</h4>
+						<div class="card-sub">${ac.model} ・ ${ac.category}</div>
+						<div class="card-telemetry">
+							<span>便名: <strong>${ac.flight || '-'}</strong></span>
+							${type !== 'present' ? `<span>区間: <strong>${routeText}</strong></span>` : ''}
+							${ac.depTime ? `<span>時刻: <strong>${timeText}</strong></span>` : ''}
+						</div>
+					</div>
+				`;
+			}
+
+			function renderAirports() {
+				const jumpBar = document.getElementById('airport-jump-bar');
+				const container = document.getElementById('airports-container');
+				if (!container) return;
+
+				if (jumpBar) {
+					jumpBar.innerHTML = TARGET_AIRPORTS.map(
+						(ap) => `<a class="jump-pill" href="#ap-${ap.code}">${toAirportJa(ap.code)}</a>`
+					).join('');
+				}
+
+				container.innerHTML = TARGET_AIRPORTS.map((ap) => {
+					const present = allAircraft.filter((ac) => isAtAirport(ac, ap.code));
+					const arriving = allAircraft.filter((ac) => ac.destination === ap.code);
+					const departing = allAircraft.filter((ac) => ac.origin === ap.code);
+
+					return `
+						<div class="ap-block" id="ap-${ap.code}">
+							<div class="ap-block-header">
+								<h3>${ap.name}</h3>
+								<div class="ap-counts">
+									<span class="cnt cnt-present">🅿️ 在駐 ${present.length}</span>
+									<span class="cnt cnt-arriving">🛬 飛来予定 ${arriving.length}</span>
+									<span class="cnt cnt-departing">🛫 出発 ${departing.length}</span>
+								</div>
+							</div>
+							${present.length > 0 ? `<h4 class="sub-h">🅿️ 現在いる機体</h4><div class="ap-list">${present.map((a) => formatAirportCard(a, 'present')).join('')}</div>` : ''}
+							${arriving.length > 0 ? `<h4 class="sub-h">🛬 この後の飛来予定</h4><div class="ap-list">${arriving.map((a) => formatAirportCard(a, 'arriving')).join('')}</div>` : ''}
+							${departing.length > 0 ? `<h4 class="sub-h">🛫 出発便</h4><div class="ap-list">${departing.map((a) => formatAirportCard(a, 'departing')).join('')}</div>` : ''}
+							${present.length === 0 && arriving.length === 0 && departing.length === 0 ? '<p class="empty-msg">現在この空港で捕捉されている特別塗装機はありません。</p>' : ''}
+						</div>
+					`;
+				}).join('');
 			}
 
 			async function loadData() {
@@ -804,6 +886,98 @@ const description =
 			color: #475569;
 			margin: 0;
 			line-height: 1.4;
+		}
+		.airport-section {
+			margin-top: 2.5rem;
+		}
+		.airport-jump-bar {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.4rem;
+			margin-bottom: 1.25rem;
+		}
+		:global(.jump-pill) {
+			padding: 0.35rem 0.75rem;
+			border-radius: 9999px;
+			border: 1px solid #cbd5e1;
+			background: #f8fafc;
+			color: #334155 !important;
+			font-size: 0.8rem;
+			font-weight: 600;
+			text-decoration: none;
+		}
+		:global(.jump-pill:hover) {
+			background: #e2e8f0;
+		}
+		.airports-container {
+			display: flex;
+			flex-direction: column;
+			gap: 1.5rem;
+		}
+		:global(.ap-block) {
+			background: #ffffff;
+			border: 1px solid #e2e8f0;
+			border-radius: 14px;
+			padding: 1.15rem;
+		}
+		:global(.ap-block-header) {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: space-between;
+			gap: 0.5rem;
+			border-bottom: 2px solid #e2e8f0;
+			padding-bottom: 0.5rem;
+			margin-bottom: 0.85rem;
+		}
+		:global(.ap-block-header h3) {
+			margin: 0;
+			font-size: 1.15rem;
+			color: #0f172a;
+		}
+		:global(.ap-counts) {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.35rem;
+		}
+		:global(.cnt) {
+			font-size: 0.72rem;
+			font-weight: 700;
+			padding: 0.18rem 0.5rem;
+			border-radius: 9999px;
+		}
+		:global(.cnt-present) {
+			background: #dcfce7;
+			color: #15803d;
+		}
+		:global(.cnt-arriving) {
+			background: #dbeafe;
+			color: #1d4ed8;
+		}
+		:global(.cnt-departing) {
+			background: #f1f5f9;
+			color: #475569;
+		}
+		:global(.sub-h) {
+			font-size: 0.9rem;
+			margin: 0.85rem 0 0.45rem 0;
+			color: #334155;
+		}
+		:global(.ap-list) {
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: 0.6rem;
+		}
+		:global(.ap-card) {
+			background: #f8fafc;
+			border: 1px solid #e2e8f0;
+			border-radius: 10px;
+			padding: 0.8rem 0.95rem;
+		}
+		:global(.empty-msg) {
+			font-size: 0.85rem;
+			color: #64748b;
+			margin: 0;
 		}
 	</style>
 </Layout>
