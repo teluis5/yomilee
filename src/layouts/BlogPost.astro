@@ -284,39 +284,207 @@ const articleSchema = {
 				margin: 0 !important;
 				padding: 0 !important;
 			}
+
+			/* tavi-navi準拠 1段目：全幅ヒーロー ＋ タイトル＆メタ */
+			.e-main {
+				width: 100%;
+				max-width: 100%;
+				margin: 0;
+				padding: 0;
+			}
+			.e-hero-section {
+				margin-bottom: 2rem;
+			}
+			.e-hero-figure {
+				position: relative;
+				width: 100%;
+				height: clamp(240px, 38vw, 440px);
+				margin: 0;
+				overflow: hidden;
+				background: #0f172a;
+			}
+			.e-hero-blur-bg {
+				position: absolute;
+				inset: -24px;
+				background-size: cover;
+				background-position: center;
+				filter: blur(22px) brightness(0.65);
+				transform: scale(1.08);
+				z-index: 1;
+			}
+			.e-hero-img-wrap {
+				position: relative;
+				z-index: 2;
+				max-width: 1180px;
+				height: 100%;
+				margin: 0 auto;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 0 1.25rem;
+				box-sizing: border-box;
+			}
+			.e-hero-img-wrap img {
+				max-width: 100%;
+				max-height: 100%;
+				width: auto;
+				height: auto;
+				object-fit: contain;
+				border-radius: 0;
+				box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+			}
+			.e-header-inner {
+				max-width: 1180px;
+				margin: 1.25rem auto 0;
+				padding: 0 1.25rem 1.25rem;
+				border-bottom: 1px solid #e2e8f0;
+				box-sizing: border-box;
+			}
+			.e-title {
+				margin: 0.35rem 0 0.75rem;
+				font-size: 2rem;
+				font-weight: 900;
+				line-height: 1.35;
+				color: #0f172a;
+				letter-spacing: -0.02em;
+			}
+			.e-meta-row {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: 0.75rem 1rem;
+			}
+			.e-badges {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.45rem;
+			}
+			.e-badge {
+				font-size: 0.76rem;
+				font-weight: 700;
+				padding: 0.22rem 0.7rem;
+				border-radius: 999px;
+				background: #f1f5f9;
+				color: #334155;
+				text-decoration: none;
+				transition: background-color 0.15s ease;
+			}
+			.e-badge:hover {
+				background: #e2e8f0;
+			}
+			.e-badge.primary {
+				background: #e0f2fe;
+				color: #0369a1;
+			}
+			.e-badge.primary:hover {
+				background: #bae6fd;
+			}
+			.e-meta-divider {
+				color: #cbd5e1;
+				font-size: 0.9rem;
+				font-weight: 300;
+			}
+			.e-dates {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.85rem;
+				font-size: 0.84rem;
+				color: #64748b;
+			}
+
+			/* tavi-navi準拠 2段目：左サイドバー ＋ 右本文 */
+			.e-body-shell {
+				max-width: 1180px;
+				margin: 0 auto;
+				padding: 0 1.25rem 3.5rem;
+				display: grid;
+				grid-template-columns: 225px minmax(0, 1fr);
+				gap: 2.25rem;
+				align-items: start;
+				box-sizing: border-box;
+			}
+			.e-article {
+				min-width: 0;
+			}
+			@media (max-width: 960px) {
+				.e-body-shell {
+					grid-template-columns: 1fr;
+					gap: 1.5rem;
+				}
+				.e-article {
+					order: 1;
+				}
+				.layout-sidebar.e-sidebar {
+					order: 2;
+				}
+			}
+			@media (max-width: 640px) {
+				.e-title {
+					font-size: 1.55rem;
+				}
+				.e-header-inner,
+				.e-body-shell {
+					padding-left: 1rem;
+					padding-right: 1rem;
+				}
+			}
 		</style>
 	</head>
 
 	<body>
 		<Header />
-		<main>
-			<div class="layout-container">
-				<!-- メインコンテンツ (左カラム) -->
-				<article class="layout-main google-anno-skip">
-					<Breadcrumb items={breadcrumbItems} />
-					<div class="title">
-						<div class="date">
-							<span><Icon name="heroicons:calendar" class="icon-inline" /> <FormattedDate date={pubDate} /></span>
-							{
-								updatedDate && (
-									<span><Icon name="heroicons:arrow-path" class="icon-inline" /> <FormattedDate date={updatedDate} /></span>
-								)
-							}
+		<main class="e-main">
+			<!-- 1段目：全幅ヒーロー画像（背景のみブラー） ➔ タイトル・メタ -->
+			<section class="e-hero-section">
+				{heroImage && (
+					<figure class="e-hero-figure">
+						<div
+							class="e-hero-blur-bg"
+							style={`background-image: url('${typeof heroImage === 'string' ? heroImage : heroImage.src}')`}
+							aria-hidden="true"
+						></div>
+						<div class="e-hero-img-wrap">
+							<Image width={1200} height={630} src={heroImage} alt={title} loading="eager" fetchpriority="high" decoding="async" />
 						</div>
-						<h1>{title}</h1>
+					</figure>
+				)}
+
+				<div class="e-header-inner">
+					<Breadcrumb items={breadcrumbItems} />
+					<h1 class="e-title">{title}</h1>
+
+					<div class="e-meta-row">
 						{categories && categories.length > 0 && (
-							<div class="tags">
-								{categories.map((category: string) => (
-									<a href={`/category/${category}/`} class="tag"><Icon name="heroicons:tag" class="icon-inline" /> {category}</a>
+							<div class="e-badges">
+								{categories.map((category: string, idx: number) => (
+									<a href={`/category/${category}/`} class={`e-badge ${idx === 0 ? 'primary' : ''}`}>
+										{category}
+									</a>
 								))}
 							</div>
 						)}
+
+						{categories && categories.length > 0 && (
+							<span class="e-meta-divider" aria-hidden="true">|</span>
+						)}
+
+						<div class="e-dates">
+							<span>公開日: <FormattedDate date={pubDate} /></span>
+							{updatedDate && (
+								<span>更新日: <FormattedDate date={updatedDate} /></span>
+							)}
+						</div>
 					</div>
-					
-					<div class="hero-image">
-						{heroImage && <Image width={1020} height={510} src={heroImage} alt={title} loading="eager" fetchpriority="high" decoding="async" />}
-					</div>
-					
+				</div>
+			</section>
+
+			<!-- 2段目：左サイドバー（上部目次 ＋ 下部メニュー）＋ 右本文 -->
+			<div class="e-body-shell">
+				<!-- サイドバー (左カラム) -->
+				<Sidebar headings={headings ?? []} currentCategories={categories ?? []} currentSlug={currentSlug} />
+
+				<!-- メイン本文 (右カラム) -->
+				<article class="e-article layout-main google-anno-skip">
 					<div class="prose google-anno-skip">
 						<div id="toc-wrapper">
 							{headings && <TableOfContents headings={headings} />}
@@ -346,9 +514,6 @@ const articleSchema = {
 						})();
 					</script>
 				</article>
-
-				<!-- サイドバー (右カラム) -->
-				<Sidebar currentCategories={categories ?? []} currentSlug={currentSlug} />
 			</div>
 		</main>
 		<Footer />
