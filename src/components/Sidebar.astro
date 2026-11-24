@@ -1,35 +1,44 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
-import { Icon } from 'astro-icon/components';
-import FormattedDate from './FormattedDate.astro';
 import * as consts from '../consts';
 
+export interface MenuLinkItem {
+	label: string;
+	href: string;
+	isCurrent?: boolean;
+}
+
+export interface MenuGroup {
+	label: string;
+	type?: 'list' | 'chips';
+	items: MenuLinkItem[];
+}
+
 interface Props {
-	authorName?: string;
-	authorTitle?: string;
-	authorBio?: string;
-	authorAvatar?: string;
+	headings?: { depth: number; slug: string; text: string }[];
 	currentCategory?: string;
+	currentCategories?: string[];
 	currentPostId?: string;
+	currentSlug?: string;
+	fixedMenuItems?: MenuLinkItem[];
+	menuGroups?: MenuGroup[];
 }
 
 const siteConsts = consts as Record<string, any>;
 
 const {
-	authorName = siteConsts.AUTHOR_NAME ?? siteConsts.AUTHOR?.name ?? 'teluis',
-	authorTitle = siteConsts.AUTHOR_TITLE ?? siteConsts.AUTHOR?.title ?? '',
-	authorBio = siteConsts.AUTHOR_BIO ?? siteConsts.AUTHOR?.bio ?? '',
-	authorAvatar = siteConsts.AUTHOR_AVATAR ?? siteConsts.AUTHOR?.avatar ?? '/brand/teluis_avatar.webp',
+	headings = [],
 	currentCategory: propCategory,
+	currentCategories: propCategories = [],
 	currentPostId: propPostId,
+	currentSlug: propSlug,
+	fixedMenuItems: propFixedMenuItems,
+	menuGroups: propMenuGroups,
 } = Astro.props;
 
 // 全記事の取得（ドラフト除外）
 const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
-const recentPosts = sortedPosts.slice(0, 5);
-const totalArticlesCount = allPosts.length;
 
 // カテゴリ別記事件数の集計
 const categoryCounts: Record<string, number> = {};
@@ -42,16 +51,17 @@ const categories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
 
 // 現在のURLまたはPropsから記事・カテゴリを自動特定
 const pathname = Astro.url.pathname.replace(/\/$/, '');
+const currentIdOrSlug = propPostId || propSlug;
 
-// 1. 表示中記事の特定 (props or URL)
-let currentPost = propPostId ? allPosts.find((p) => p.id === propPostId) : undefined;
+let currentPost = currentIdOrSlug
+	? allPosts.find((p) => p.id === currentIdOrSlug || p.slug === currentIdOrSlug)
+	: undefined;
 if (!currentPost && pathname.includes('/blog/')) {
 	const slugFromUrl = pathname.replace(/^.*\/blog\//, '').replace(/\/$/, '');
 	currentPost = allPosts.find((p) => p.id === slugFromUrl || p.id.endsWith(slugFromUrl) || slugFromUrl.endsWith(p.id));
 }
 
-// 2. 現在のカテゴリーの特定
-let targetCategory = propCategory;
+let targetCategory = propCategory || (propCategories.length > 0 ? propCategories[0] : undefined);
 if (!targetCategory && currentPost?.data.categories && currentPost.data.categories.length > 0) {
 	targetCategory = currentPost.data.categories[0];
 }
@@ -61,469 +71,471 @@ if (!targetCategory && pathname.includes('/category/')) {
 		targetCategory = decodeURIComponent(catMatch[1]);
 	}
 }
-// 3. カテゴリが定まらない場合（トップページなど）は最も記事数が多いカテゴリを自動選定
 if (!targetCategory && categories.length > 0) {
 	targetCategory = categories[0][0];
 }
 
-// 同じカテゴリの最新記事を取得（現在表示中の記事は除外、最大5件）
+// 同じカテゴリの最新記事（現在記事除外、最大5件）
 const categoryPosts = targetCategory
 	? sortedPosts
 			.filter((post) => post.data.categories?.includes(targetCategory))
 			.filter((post) => !currentPost || post.id !== currentPost.id)
 			.slice(0, 5)
 	: [];
-const categoryTotalCount = targetCategory ? (categoryCounts[targetCategory] || 0) : 0;
+
+const recentPosts = sortedPosts
+	.filter((post) => !currentPost || post.id !== currentPost.id)
+	.slice(0, 5);
+
+// サイト判別によるサイト別固定メニュー出し分け
+let host = '';
+try {
+	host = (Astro.site ? new URL(Astro.site).hostname : Astro.url.hostname || '').toLowerCase();
+} catch {
+	host = '';
+}
+const isYomilee = host.includes('yomilee');
+
+const defaultFixedMenu: MenuLinkItem[] = isYomilee
+	? [
+			{ label: '🏠 トップページ', href: '/' },
+			{ label: '📰 記事一覧', href: '/blog/' },
+			{ label: '✈️ 旅行・交通', href: '/category/旅行/' },
+		]
+	: [
+			{ label: '🏠 トップページ', href: '/' },
+			{ label: '📰 記事一覧', href: '/blog/' },
+		];
+
+const fixedMenu = propFixedMenuItems || defaultFixedMenu;
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
-<aside class="layout-sidebar">
-	<!-- プロフィールウィジェット -->
-	<div class="sidebar-widget box">
-		<div class="widget-header">
-			<Icon name="heroicons:user" class="icon-inline" />
-			<span>運営者プロフィール</span>
-		</div>
-		<div class="profile-card">
-			<div class="profile-avatar-wrap">
-				<a href="/about/" aria-label="運営者プロフィール詳細へ">
-					<img class="profile-avatar" src={authorAvatar} alt={authorName} width="76" height="76" loading="lazy" decoding="async" />
-				</a>
+<aside class="layout-sidebar e-sidebar" aria-label="目次とサイトメニュー">
+	<div class="e-sidebar-container">
+		<!-- 上部：目次エリア -->
+		<div class="e-sidebar-toc-box" id="e-sidebar-toc-box" hidden={tocHeadings.length === 0}>
+			<div class="e-sidebar-heading">
+				<span class="e-sidebar-heading-text">目次</span>
 			</div>
-			<div class="profile-body">
-				<div class="profile-name"><a href="/about/" style="color: inherit; text-decoration: none;">{authorName}</a></div>
-				<div class="profile-role">{authorTitle}</div>
-				<p class="profile-text">{authorBio}</p>
-			</div>
+			<nav class="e-toc-nav" id="e-sidebar-toc-nav" aria-label="この記事の目次">
+				<ul id="e-sidebar-toc-list">
+					{tocHeadings.map((h) => (
+						<li class={`e-toc-item depth-${h.depth}`}>
+							<a href={`#${h.slug}`} class="e-toc-link" data-toc-link={h.slug}>
+								{h.text}
+							</a>
+						</li>
+					))}
+				</ul>
+			</nav>
 		</div>
 
-		<div class="profile-action">
-			<a href="/about/" class="profile-btn">
-				詳しいプロフィール・運営情報を見る &raquo;
-			</a>
+		<!-- 下部：サイトメニューエリア（サイト案内は固定、その下をスクロール可能） -->
+		<div class="e-sidebar-menu-box" aria-label="サイトメニュー">
+			<div class="e-sidebar-heading">
+				<span class="e-sidebar-heading-text">メニュー</span>
+			</div>
+
+			<div class="menu-group e-menu-fixed-group">
+				<p class="menu-label">サイト案内</p>
+				<ul class="menu-list">
+					{fixedMenu.map((item) => (
+						<li>
+							<a href={item.href} class={`menu-link ${pathname === item.href.replace(/\/$/, '') ? 'is-current' : ''}`}>
+								{item.label}
+							</a>
+						</li>
+					))}
+				</ul>
+			</div>
+
+			<div class="e-menu-scroll-wrap">
+				<div class="e-menu-scroll" id="menu-scroll-area" tabindex="0" aria-label="カテゴリ・関連記事メニュー">
+					{propMenuGroups ? (
+						propMenuGroups.map((group) => (
+							<div class="menu-group">
+								<p class="menu-label">{group.label}</p>
+								{group.type === 'chips' ? (
+									<div class="menu-chips">
+										{group.items.map((item) => (
+											<a href={item.href} class={`menu-chip ${item.isCurrent ? 'is-current' : ''}`}>
+												{item.label}
+											</a>
+										))}
+									</div>
+								) : (
+									<ul class="menu-list">
+										{group.items.map((item) => (
+											<li>
+												<a href={item.href} class={`menu-link ${item.isCurrent ? 'is-current' : ''}`}>
+													{item.label}
+												</a>
+											</li>
+										))}
+									</ul>
+								)}
+							</div>
+						))
+					) : (
+						<>
+							{categories.length > 0 && (
+								<div class="menu-group">
+									<p class="menu-label">🏷️ カテゴリ</p>
+									<div class="menu-chips">
+										{categories.map(([cat, count]) => (
+											<a
+												href={`/category/${encodeURIComponent(cat)}/`}
+												class={`menu-chip ${cat === targetCategory ? 'is-current' : ''}`}
+											>
+												{cat} ({count})
+											</a>
+										))}
+									</div>
+								</div>
+							)}
+
+							{categoryPosts.length > 0 && targetCategory && (
+								<div class="menu-group">
+									<p class="menu-label">📂 {targetCategory}の記事</p>
+									<ul class="menu-list">
+										{categoryPosts.map((post) => (
+											<li>
+												<a href={`/blog/${post.id}/`} class="menu-link menu-link-article">
+													{post.data.title}
+												</a>
+											</li>
+										))}
+									</ul>
+								</div>
+							)}
+
+							{recentPosts.length > 0 && (
+								<div class="menu-group">
+									<p class="menu-label">🔥 新着記事</p>
+									<ul class="menu-list">
+										{recentPosts.map((post) => (
+											<li>
+												<a href={`/blog/${post.id}/`} class="menu-link menu-link-article">
+													{post.data.title}
+												</a>
+											</li>
+										))}
+									</ul>
+								</div>
+							)}
+						</>
+					)}
+				</div>
+
+				<button
+					type="button"
+					class="e-menu-scroll-hint"
+					id="menu-scroll-hint"
+					aria-label="下にスクロール"
+					hidden
+				>
+					<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<polyline points="6 9 12 15 18 9"></polyline>
+					</svg>
+				</button>
+			</div>
 		</div>
 	</div>
-
-	<!-- 新着記事ウィジェット（回遊性重視・サムネイル付き） -->
-	{recentPosts.length > 0 && (
-		<div class="sidebar-widget box">
-			<div class="widget-header">
-				<Icon name="heroicons:sparkles" class="icon-inline" />
-				<span>新着記事</span>
-			</div>
-			<div class="recent-posts">
-				{recentPosts.map((post) => (
-					<a href={`/blog/${post.id}/`} class="recent-post-card">
-						<div class="recent-thumb">
-							{post.data.heroImage ? (
-								<Image
-									width={160}
-									height={90}
-									src={post.data.heroImage}
-									alt={post.data.title}
-									loading="lazy"
-									decoding="async"
-								/>
-							) : (
-								<div class="thumb-placeholder">
-									<Icon name="heroicons:photo" class="placeholder-icon" />
-								</div>
-							)}
-						</div>
-						<div class="recent-content">
-							<h4 class="recent-title">{post.data.title}</h4>
-							<span class="recent-date">
-								<Icon name="heroicons:calendar" class="date-icon" />
-								<FormattedDate date={post.data.pubDate} />
-							</span>
-						</div>
-					</a>
-				))}
-			</div>
-			<div class="widget-footer-action">
-				<a href="/blog/" class="widget-more-link">
-					すべての記事を見る（全{totalArticlesCount}件） &raquo;
-				</a>
-			</div>
-		</div>
-	)}
-
-	<!-- カテゴリ一覧ウィジェット -->
-	{categories.length > 0 && (
-		<div class="sidebar-widget box">
-			<div class="widget-header">
-				<Icon name="heroicons:tag" class="icon-inline" />
-				<span>カテゴリー</span>
-			</div>
-			<ul class="category-list">
-				{categories.map(([category, count]) => (
-					<li>
-						<a href={`/category/${category}/`} class="category-item">
-							<span class="category-name">
-								<Icon name="heroicons:folder" class="cat-icon" />
-								{category}
-							</span>
-							<span class="category-count">{count}</span>
-						</a>
-					</li>
-				))}
-			</ul>
-			<div class="widget-footer-action">
-				<a href="/category/" class="widget-more-link">
-					カテゴリー一覧を見る &raquo;
-				</a>
-			</div>
-		</div>
-	)}
-
-	<!-- 同一カテゴリーの最新記事ウィジェット（広告削除枠に配置・回遊性向上） -->
-	{categoryPosts.length > 0 && targetCategory && (
-		<div class="sidebar-widget box">
-			<div class="widget-header">
-				<Icon name="heroicons:folder-open" class="icon-inline" />
-				<span>「{targetCategory}」の最新記事</span>
-			</div>
-			<div class="recent-posts">
-				{categoryPosts.map((post) => (
-					<a href={`/blog/${post.id}/`} class="recent-post-card">
-						<div class="recent-thumb">
-							{post.data.heroImage ? (
-								<Image
-									width={160}
-									height={90}
-									src={post.data.heroImage}
-									alt={post.data.title}
-									loading="lazy"
-									decoding="async"
-								/>
-							) : (
-								<div class="thumb-placeholder">
-									<Icon name="heroicons:photo" class="placeholder-icon" />
-								</div>
-							)}
-						</div>
-						<div class="recent-content">
-							<h4 class="recent-title">{post.data.title}</h4>
-							<span class="recent-date">
-								<Icon name="heroicons:calendar" class="date-icon" />
-								<FormattedDate date={post.data.pubDate} />
-							</span>
-						</div>
-					</a>
-				))}
-			</div>
-			<div class="widget-footer-action">
-				<a href={`/category/${encodeURIComponent(targetCategory)}/`} class="widget-more-link">
-					「{targetCategory}」の記事をもっと見る（全{categoryTotalCount}件） &raquo;
-				</a>
-			</div>
-		</div>
-	)}
-
-	<!-- ブログ固有カスタムウィジェット用スロット（各メディアで独自拡張可能） -->
-	<slot name="sidebar-custom" />
 </aside>
 
-<style>
-	.layout-sidebar {
-		flex: 1 1 30%;
-		min-width: 300px;
-		position: sticky;
-		top: 80px;
-		max-height: calc(100vh - 100px);
-		overflow-y: auto;
-		overflow-x: hidden;
-		scrollbar-width: thin;
-		scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
-		display: flex;
-		flex-direction: column;
-		gap: 1.5rem;
-	}
+<script is:inline>
+	(() => {
+		const initSidebar = () => {
+			// 1. 目次の自動生成（headingsがサーバーから渡されなかった場合）
+			const tocBox = document.getElementById('e-sidebar-toc-box');
+			const tocList = document.getElementById('e-sidebar-toc-list');
+			if (tocBox && tocList) {
+				if (tocList.children.length === 0) {
+					const proseHeadings = Array.from(document.querySelectorAll('.prose h2, article h2'));
+					if (proseHeadings.length > 0) {
+						proseHeadings.forEach((h, idx) => {
+							if (!h.id) {
+								h.id = `section-${idx + 1}`;
+							}
+							const li = document.createElement('li');
+							li.className = 'e-toc-item depth-2';
+							const a = document.createElement('a');
+							a.href = `#${h.id}`;
+							a.className = 'e-toc-link';
+							a.setAttribute('data-toc-link', h.id);
+							a.textContent = h.textContent?.trim() || '';
+							li.appendChild(a);
+							tocList.appendChild(li);
+						});
+						tocBox.hidden = false;
+					} else {
+						tocBox.hidden = true;
+					}
+				}
 
-	.layout-sidebar::-webkit-scrollbar {
-		width: 5px;
-	}
-	.layout-sidebar::-webkit-scrollbar-thumb {
-		background: rgba(0, 0, 0, 0.15);
-		border-radius: 4px;
-	}
-	.layout-sidebar::-webkit-scrollbar-thumb:hover {
-		background: rgba(0, 0, 0, 0.3);
-	}
+				// ScrollSpy: 現在表示中の見出しを目次でハイライト
+				const tocLinks = Array.from(tocList.querySelectorAll('.e-toc-link'));
+				if (tocLinks.length > 0 && 'IntersectionObserver' in window) {
+					const headingEls = tocLinks
+						.map((link) => {
+							const id = link.getAttribute('data-toc-link');
+							return id ? document.getElementById(id) : null;
+						})
+						.filter(Boolean);
 
-	@media (max-width: 800px) {
-		.layout-sidebar {
-			flex: 1 1 100%;
-			position: static;
-			max-height: none;
-			overflow-y: visible;
+					const setActive = (id) => {
+						tocLinks.forEach((link) => {
+							link.classList.toggle('is-active', link.getAttribute('data-toc-link') === id);
+						});
+					};
+
+					const observer = new IntersectionObserver(
+						(entries) => {
+							const visible = entries.filter((e) => e.isIntersecting);
+							if (visible.length > 0) {
+								setActive(visible[0].target.id);
+							}
+						},
+						{ rootMargin: '-80px 0px -65% 0px', threshold: 0.1 }
+					);
+
+					headingEls.forEach((el) => observer.observe(el));
+				}
+			}
+
+			// 2. メニュースクロールヒント制御
+			const scrollArea = document.getElementById('menu-scroll-area');
+			const scrollHint = document.getElementById('menu-scroll-hint');
+			if (scrollArea && scrollHint) {
+				const updateHint = () => {
+					const hasMore = scrollArea.scrollHeight - scrollArea.clientHeight - scrollArea.scrollTop > 12;
+					scrollHint.hidden = !hasMore;
+				};
+				updateHint();
+				scrollArea.addEventListener('scroll', updateHint, { passive: true });
+				window.addEventListener('resize', updateHint, { passive: true });
+				scrollHint.addEventListener('click', () => {
+					scrollArea.scrollBy({ top: 180, behavior: 'smooth' });
+				});
+			}
+		};
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initSidebar);
+		} else {
+			initSidebar();
 		}
-	}
+	})();
+</script>
 
-	/* ウィジェット共通スタイル */
-	.sidebar-widget {
-		padding: 1.25rem;
-		background: var(--bg-content, #ffffff);
-	}
-
-	.widget-header {
-		font-size: 1.05rem;
-		font-weight: 700;
-		color: var(--text-main, #333333);
-		background-color: #f8fafc;
-		padding: 0.6rem 1rem;
-		border-left: 4px solid var(--theme-accent, #0284c7);
-		margin: -1.25rem -1.25rem 1.2rem -1.25rem;
-		display: flex;
-		align-items: center;
-		gap: 0.4rem;
-		border-bottom: 1px solid var(--border-color, #e2e8f0);
-	}
-
-	/* プロフィール */
-	.profile-card {
+<style is:global>
+	.layout-sidebar.e-sidebar {
+		position: sticky;
+		top: 84px;
+		height: calc(100vh - 104px);
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		text-align: center;
+		width: 100%;
+		min-width: 0;
+		box-sizing: border-box;
 	}
-
-	.profile-avatar-wrap {
+	.e-sidebar-container {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		min-height: 0;
+	}
+	.e-sidebar-toc-box {
+		flex-shrink: 0;
+		margin-bottom: 1.5rem;
+		max-height: 40vh;
+		overflow-y: auto;
+		scrollbar-width: none;
+	}
+	.e-sidebar-toc-box::-webkit-scrollbar {
+		display: none;
+	}
+	.e-sidebar-toc-box[hidden] {
+		display: none;
+	}
+	.e-sidebar-menu-box {
+		flex: 1 1 0%;
+		min-height: 0;
+		display: flex;
+		flex-direction: column;
+	}
+	.e-sidebar-menu-box .e-sidebar-heading,
+	.e-menu-fixed-group {
+		flex-shrink: 0;
+	}
+	.e-menu-scroll-wrap {
 		position: relative;
-		margin-bottom: 0.75rem;
-	}
-
-	.profile-avatar {
-		width: 88px;
-		height: 88px;
-		border-radius: 50%;
-		object-fit: cover;
-		border: 3px solid #f0f9ff;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-		display: block;
-	}
-
-	.profile-name {
-		font-size: 1.15rem;
-		font-weight: 700;
-		color: var(--text-main, #1e293b);
-		margin-bottom: 0.2rem;
-	}
-
-	.profile-role {
-		font-size: 0.78rem;
-		font-weight: 600;
-		color: var(--theme-accent, #0284c7);
-		background: #e0f2fe;
-		padding: 0.15rem 0.6rem;
-		border-radius: 9999px;
-		display: inline-block;
-		margin-bottom: 0.75rem;
-	}
-
-	.profile-text {
-		font-size: 0.88rem;
-		color: var(--text-main, #475569);
-		line-height: 1.6;
-		margin: 0;
-		text-align: left;
-	}
-
-	.profile-action {
-		margin-top: 1rem;
-	}
-
-	.profile-btn {
-		display: block;
-		text-align: center;
-		padding: 0.55rem 0.8rem;
-		background-color: #f0f9ff;
-		color: #0369a1 !important;
-		border: 1px solid #bae6fd;
-		border-radius: 6px;
-		font-size: 0.82rem;
-		font-weight: 700;
-		text-decoration: none !important;
-		transition: background-color 0.15s ease, border-color 0.15s ease;
-	}
-
-	.profile-btn:hover {
-		background-color: #e0f2fe;
-		border-color: #7dd3fc;
-	}
-
-	/* カテゴリ一覧 */
-	.category-list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
+		flex: 1 1 0%;
+		min-height: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.4rem;
 	}
-
-	.category-item {
+	.e-menu-scroll {
+		flex: 1 1 0%;
+		min-height: 0;
+		overflow-y: auto;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+		padding-bottom: 1.75rem;
+	}
+	.e-menu-scroll::-webkit-scrollbar {
+		display: none;
+	}
+	.e-menu-scroll-hint {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 2.25rem;
 		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		padding: 0.5rem 0.6rem;
-		border-radius: 6px;
-		text-decoration: none !important;
-		color: var(--text-main, #334155) !important;
-		font-size: 0.9rem;
-		transition: background-color 0.2s, color 0.2s;
+		align-items: flex-end;
+		justify-content: center;
+		padding-bottom: 0.15rem;
+		border: none;
+		background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.92) 55%, #ffffff 100%);
+		color: #0284c7;
+		cursor: pointer;
+		transition: opacity 0.2s ease, color 0.15s ease;
 	}
-
-	.category-item:hover {
-		background-color: #f0f9ff;
-		color: var(--theme-accent, #0284c7) !important;
+	.e-menu-scroll-hint[hidden] {
+		display: none;
 	}
-
-	.category-name {
-		display: flex;
-		align-items: center;
-		gap: 0.4rem;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-
-	.cat-icon {
-		font-size: 1rem;
-		color: var(--theme-accent, #0284c7);
-		flex-shrink: 0;
-	}
-
-	.category-count {
-		font-size: 0.75rem;
-		font-weight: 700;
-		background: #f1f5f9;
-		color: var(--text-light, #64748b);
-		padding: 0.1rem 0.5rem;
-		border-radius: 9999px;
-		flex-shrink: 0;
-		font-variant-numeric: tabular-nums;
-	}
-
-	.category-item:hover .category-count {
-		background: #bae6fd;
+	.e-menu-scroll-hint:hover {
 		color: #0369a1;
 	}
-
-	/* 新着記事（サムネイル付き） */
-	.recent-posts {
-		display: flex;
-		flex-direction: column;
-		gap: 0.9rem;
-	}
-
-	.recent-post-card {
-		display: flex;
-		gap: 0.75rem;
-		text-decoration: none !important;
-		color: inherit !important;
-		padding-bottom: 0.85rem;
-		border-bottom: 1px dashed var(--border-color, #e2e8f0);
-		transition: transform 0.15s ease;
-	}
-
-	.recent-post-card:last-child {
-		border-bottom: none;
-		padding-bottom: 0;
-	}
-
-	.recent-post-card:hover .recent-title {
-		color: var(--theme-accent, #0284c7);
-	}
-
-	.recent-post-card:hover .recent-thumb img {
-		transform: scale(1.05);
-	}
-
-	.recent-thumb {
-		width: 84px;
-		aspect-ratio: 16 / 9;
-		border-radius: 4px;
-		overflow: hidden;
-		flex-shrink: 0;
-		background: #e2e8f0;
-	}
-
-	.recent-thumb img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		transition: transform 0.25s ease;
+	.e-sidebar-heading {
 		display: block;
+		margin-bottom: 0.75rem;
+		padding-bottom: 0.35rem;
+		border-bottom: 2px solid #0284c7;
+	}
+	.e-sidebar-heading-text {
+		font-size: 1.05rem;
+		font-weight: 800;
+		color: #0f172a;
+		letter-spacing: 0.05em;
 	}
 
-	.thumb-placeholder {
-		width: 100%;
-		height: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background: #f1f5f9;
-		color: #94a3b8;
+	.e-toc-nav ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		border-left: 1px solid #e2e8f0;
+	}
+	.e-toc-link {
+		display: block;
+		padding: 0.4rem 0 0.4rem 0.9rem;
+		margin-left: -1px;
+		border-left: 2px solid transparent;
+		font-size: 0.82rem;
+		line-height: 1.45;
+		color: #475569;
+		text-decoration: none !important;
+		transition: color 0.15s ease, border-color 0.15s ease;
+	}
+	.e-toc-item.depth-3 .e-toc-link {
+		padding-left: 1.6rem;
+		font-size: 0.78rem;
+		color: #64748b;
+	}
+	.e-toc-link:hover,
+	.e-toc-link.is-active {
+		color: #0284c7;
+		border-left-color: #0284c7;
+		font-weight: 700;
 	}
 
-	.placeholder-icon {
-		font-size: 1.25rem;
+	.menu-group {
+		margin-bottom: 1.25rem;
 	}
-
-	.recent-content {
-		flex: 1;
-		min-width: 0;
+	.menu-label {
+		margin: 0 0 0.45rem;
+		font-size: 0.72rem;
+		font-weight: 800;
+		color: #64748b;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+	.menu-list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
 		display: flex;
 		flex-direction: column;
-		justify-content: space-between;
-	}
-
-	.recent-title {
-		font-size: 0.86rem;
-		font-weight: 600;
-		line-height: 1.4;
-		margin: 0 0 0.35rem 0;
-		color: var(--text-main, #1e293b);
-		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-		transition: color 0.2s;
-	}
-
-	.recent-date {
-		font-size: 0.76rem;
-		color: var(--text-light, #94a3b8);
-		display: inline-flex;
-		align-items: center;
-		gap: 0.25rem;
-	}
-
-	.date-icon {
-		font-size: 0.85rem;
-	}
-
-	/* ウィジェット下部リンク（回遊促進） */
-	.widget-footer-action {
-		margin-top: 1rem;
-		padding-top: 0.75rem;
-		border-top: 1px solid var(--border-color, #f1f5f9);
-		text-align: right;
-	}
-
-	.widget-more-link {
-		font-size: 0.8rem;
-		font-weight: 600;
-		color: var(--theme-accent, #0284c7) !important;
-		text-decoration: none !important;
-		display: inline-flex;
-		align-items: center;
 		gap: 0.2rem;
-		transition: color 0.15s ease, transform 0.15s ease;
+	}
+	.menu-link {
+		display: block;
+		padding: 0.42rem 0.6rem;
+		border-radius: 7px;
+		font-size: 0.84rem;
+		line-height: 1.4;
+		color: #334155;
+		text-decoration: none !important;
+		transition: background-color 0.15s ease, color 0.15s ease;
+	}
+	.menu-link-article {
+		font-size: 0.8rem;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		overflow: hidden;
+	}
+	.menu-link:hover,
+	.menu-link.is-current {
+		background-color: #f1f5f9;
+		color: #0284c7;
+		font-weight: 700;
+	}
+	.menu-chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem;
+	}
+	.menu-chip {
+		display: inline-block;
+		padding: 0.28rem 0.6rem;
+		background-color: #f8fafc;
+		border: 1px solid #e2e8f0;
+		border-radius: 999px;
+		font-size: 0.75rem;
+		color: #475569;
+		text-decoration: none !important;
+		transition: all 0.15s ease;
+	}
+	.menu-chip:hover {
+		border-color: #0284c7;
+		color: #0284c7;
+		background-color: #f0f9ff;
+	}
+	.menu-chip.is-current {
+		background-color: #0284c7;
+		border-color: #0284c7;
+		color: #ffffff;
+		font-weight: 700;
 	}
 
-	.widget-more-link:hover {
-		color: #0369a1 !important;
-		transform: translateX(2px);
+	@media (max-width: 960px) {
+		.layout-sidebar.e-sidebar {
+			position: static;
+			height: auto;
+			margin-top: 2rem;
+		}
+		.e-sidebar-toc-box {
+			max-height: none;
+		}
+		.e-menu-scroll {
+			overflow-y: visible;
+			padding-bottom: 0;
+		}
+		.e-menu-scroll-hint {
+			display: none !important;
+		}
 	}
 </style>
