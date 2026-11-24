@@ -588,19 +588,14 @@ const isSaleSwitchableBottom = renderType === 'adsense' && selectedType === 'mix
   .adsense-wrapper:has(ins[data-ad-status="unfilled"]) {
     display: none !important;
   }
-  .adsense-wrapper.ad-pos-home-top,
-  .adsense-wrapper.ad-pos-in-article {
+  .ad-pos-home-top {
     margin: 1.25rem auto 1.75rem auto;
     max-width: 728px;
-    border: 2px solid #bf0000 !important;
-    border-radius: 8px !important;
-    background: #ffffff !important;
-    padding: 0.75rem 0.5rem 0.65rem 0.5rem !important;
-    box-sizing: border-box;
-    box-shadow: 0 2px 8px rgba(191, 0, 0, 0.08);
   }
-  .adsense-wrapper.ad-pos-in-article {
+  .ad-pos-in-article {
     margin: 2rem auto;
+    max-width: 728px;
+    padding: 0;
   }
   .ad-pos-bottom {
     margin: 2rem auto 1.5rem auto;
