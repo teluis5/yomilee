@@ -187,11 +187,8 @@ const description =
 
 						const routeText = ac.origin && ac.destination
 							? `${toAirportJa(ac.origin)} → ${toAirportJa(ac.destination)}`
-							: (toAirportJa(ac.nearestAirport) || '-');
+							: '-';
 						const timeText = ac.depTime ? `${ac.depTime}発${ac.arrTime ? ` → ${ac.arrTime}着` : ''}` : '-';
-						const airportRow = ac.nearestAirport
-							? `<tr><th>最寄空港</th><td>${toAirportJa(ac.nearestAirport)}</td></tr>`
-							: '';
 
 						// ホバー時のツールチップ（出発地・行き先・出発時刻のみシンプル表示）
 						marker.bindTooltip(
@@ -215,7 +212,6 @@ const description =
 									<tr><th>便名</th><td>${ac.flight || '未設定'}</td></tr>
 									<tr><th>区間</th><td>${routeText}</td></tr>
 									<tr><th>時刻</th><td>${timeText}</td></tr>
-									${airportRow}
 								</table>
 								<p class="popup-note">${ac.note || ''}</p>
 							</div>
@@ -237,7 +233,6 @@ const description =
 				listEl.innerHTML = filtered
 					.map((ac) => {
 						const hasPos = typeof ac.lat === 'number' && typeof ac.lon === 'number';
-						const airportInfo = ac.nearestAirport ? `<span>📍 <strong>${toAirportJa(ac.nearestAirport)}</strong></span>` : '';
 						const routeInfo = ac.origin && ac.destination ? `<span>🛫 <strong>${toAirportJa(ac.origin)} → ${toAirportJa(ac.destination)}</strong></span>` : '';
 						return `
 							<div class="aircraft-card ${hasPos ? 'is-clickable' : 'is-offline'}" data-reg="${ac.reg}">
@@ -251,7 +246,6 @@ const description =
 								<div class="card-telemetry">
 									<span>便名: <strong>${ac.flight || '-'}</strong></span>
 									${routeInfo}
-									${airportInfo}
 								</div>
 								<p class="card-note">${ac.note || ''}</p>
 							</div>
