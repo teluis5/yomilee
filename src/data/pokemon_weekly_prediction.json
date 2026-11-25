@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月25日 19:00",
-  "updatedAtIso": "2026-11-25T10:00:16.350Z",
+  "updatedAt": "2026年11月25日 20:00",
+  "updatedAtIso": "2026-11-25T11:00:15.525Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,26 +17,9 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "熊本 (KMJ) ➔ 東京(羽田) (HND)",
-      "currentFlight": {
-        "flightNo": "NH648",
-        "origin": "KMJ",
-        "dest": "HND",
-        "originName": "熊本 (KMJ)",
-        "destinationName": "東京(羽田) (HND)",
-        "origCode": "KMJ",
-        "destCode": "HND",
-        "route": "熊本 ➔ 東京(羽田)",
-        "depTime": "18:28",
-        "arrTime": "19:45",
-        "timeRange": "18:28 - 19:45",
-        "dateJst": "2026-11-25",
-        "status": "Estimated 19:44",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": true
-      },
+      "flightState": "着陸済・駐機中 🟡",
+      "currentLocation": "東京(羽田) (HND)",
+      "currentFlight": null,
       "todayFlights": [
         {
           "flightNo": "NH1079",
@@ -102,12 +85,12 @@
           "destCode": "HND",
           "route": "熊本 ➔ 東京(羽田)",
           "depTime": "18:28",
-          "arrTime": "19:45",
-          "timeRange": "18:28 - 19:45",
+          "arrTime": "19:41",
+          "timeRange": "18:28 - 19:41",
           "dateJst": "2026-11-25",
-          "status": "Estimated 19:44",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 19:41",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         }
       ],
@@ -122,12 +105,12 @@
           "destCode": "HND",
           "route": "熊本 ➔ 東京(羽田)",
           "depTime": "18:28",
-          "arrTime": "19:45",
-          "timeRange": "18:28 - 19:45",
+          "arrTime": "19:41",
+          "timeRange": "18:28 - 19:41",
           "dateJst": "2026-11-25",
-          "status": "Estimated 19:44",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 19:41",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         {
@@ -251,7 +234,7 @@
         "arrTime": "01:55",
         "timeRange": "18:30 - 01:55",
         "dateJst": "2026-11-25",
-        "status": "Estimated 00:05",
+        "status": "Delayed 00:20",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -288,7 +271,7 @@
           "arrTime": "01:55",
           "timeRange": "18:30 - 01:55",
           "dateJst": "2026-11-25",
-          "status": "Estimated 00:05",
+          "status": "Delayed 00:20",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -308,7 +291,7 @@
           "arrTime": "01:55",
           "timeRange": "18:30 - 01:55",
           "dateJst": "2026-11-25",
-          "status": "Estimated 00:05",
+          "status": "Delayed 00:20",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -637,7 +620,7 @@
           "arrTime": "05:20",
           "timeRange": "19:45 - 05:20",
           "dateJst": "2026-11-25",
-          "status": "Estimated dep 21:45",
+          "status": "Estimated dep 21:47",
           "isLive": false,
           "isLanded": false,
           "isToday": true
@@ -657,7 +640,7 @@
           "arrTime": "05:20",
           "timeRange": "19:45 - 05:20",
           "dateJst": "2026-11-25",
-          "status": "Estimated dep 21:45",
+          "status": "Estimated dep 21:47",
           "isLive": false,
           "isLanded": false,
           "isToday": true
@@ -972,8 +955,8 @@
             "orig": "KMJ",
             "dest": "HND",
             "route": "熊本 ➔ 東京(羽田)",
-            "time": "18:28発 - 19:45着",
-            "tag": "飛行中 🟢",
+            "time": "18:28発 - 19:41着",
+            "tag": "運航完了",
             "step": "第4便"
           },
           {
@@ -1028,8 +1011,8 @@
             "orig": "KMJ",
             "dest": "HND",
             "route": "熊本 ➔ 東京(羽田)",
-            "time": "18:28発 - 19:45着",
-            "tag": "飛行中 🟢",
+            "time": "18:28発 - 19:41着",
+            "tag": "運航完了",
             "step": "第4便"
           },
           {
@@ -1084,8 +1067,8 @@
             "orig": "KMJ",
             "dest": "HND",
             "route": "熊本 ➔ 東京(羽田)",
-            "time": "18:28発 - 19:45着",
-            "tag": "飛行中 🟢",
+            "time": "18:28発 - 19:41着",
+            "tag": "運航完了",
             "step": "第4便"
           }
         ]
