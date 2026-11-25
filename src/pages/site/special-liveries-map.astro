@@ -166,11 +166,13 @@ const description =
 				HIJ: '広島', KOJ: '鹿児島', KMJ: '熊本', NGS: '長崎', OIT: '大分',
 				KMI: '宮崎', MYJ: '松山', TAK: '高松', KCZ: '高知', OKJ: '岡山',
 				KMQ: '小松', HKD: '函館', AKJ: '旭川', AOJ: '青森', ISG: '石垣',
-				MMY: '宮古', TOY: '富山', YGJ: '米子', UBJ: '山口宇部', AXT: '秋田',
-				FSZ: '静岡', HSG: '佐賀', KKJ: '北九州', OBO: '帯広', KUH: '釧路',
-				MMB: '女満別', HNL: 'ホノルル', LAX: 'ロサンゼルス', SFO: 'サンフランシスコ',
-				JFK: 'ニューヨーク', ORD: 'シカゴ', LHR: 'ロンドン', FRA: 'フランクフルト',
-				CDG: 'パリ', SIN: 'シンガポール', BKK: 'バンコク', TPE: '台北', ICN: 'ソウル'
+				MMY: '宮古', SHI: '下地島', IBR: '茨城', TOY: '富山', YGJ: '米子',
+				IZO: '出雲', UBJ: '山口宇部', TKS: '徳島', AXT: '秋田', HNA: '花巻',
+				KIJ: '新潟', FSZ: '静岡', HSG: '佐賀', KKJ: '北九州', ASJ: '奄美',
+				OBO: '帯広', KUH: '釧路', MMB: '女満別', HNL: 'ホノルル',
+				LAX: 'ロサンゼルス', SFO: 'サンフランシスコ', JFK: 'ニューヨーク',
+				ORD: 'シカゴ', LHR: 'ロンドン', FRA: 'フランクフルト', CDG: 'パリ',
+				SIN: 'シンガポール', BKK: 'バンコク', TPE: '台北', ICN: 'ソウル'
 			};
 
 			function toAirportJa(codeOrName) {
@@ -187,8 +189,14 @@ const description =
 				KMJ: [32.8373, 130.8551], NGS: [32.9169, 129.9136], OIT: [33.4794, 131.7372],
 				KMI: [31.8772, 131.4486], MYJ: [33.8272, 132.6997], TAK: [34.2142, 134.0156],
 				KCZ: [33.5461, 133.6694], OKJ: [34.7569, 133.8553], KMQ: [36.3946, 136.4065],
-				HKD: [41.7700, 140.8219], AKJ: [43.6708, 142.4475], AOJ: [40.7347, 140.6908],
-				ISG: [24.3964, 124.2450], MMY: [24.7828, 125.2951]
+				HKD: [41.7700, 140.8219], AKJ: [43.6708, 142.4475], MMB: [43.8806, 144.1640],
+				OBO: [42.7333, 143.2172], KUH: [43.0410, 144.1930], AOJ: [40.7347, 140.6908],
+				AXT: [39.6156, 140.2186], HNA: [39.4286, 141.1353], KIJ: [37.9558, 139.1114],
+				IBR: [36.1811, 140.4153], FSZ: [34.7961, 138.1894], TOY: [36.6483, 137.1875],
+				IZO: [35.4136, 132.8900], YGJ: [35.4922, 133.2364], UBJ: [33.9300, 131.2786],
+				TKS: [34.1328, 134.6067], KKJ: [33.8459, 131.0347], HSG: [33.1497, 130.3022],
+				ASJ: [28.4306, 129.7125], ISG: [24.3964, 124.2450], MMY: [24.7828, 125.2951],
+				SHI: [24.8267, 125.1447]
 			};
 			let hoverRouteLine = null;
 
@@ -338,9 +346,15 @@ const description =
 				{ code: 'ITM', name: '伊丹空港' }, { code: 'KIX', name: '関西空港' },
 				{ code: 'CTS', name: '新千歳空港' }, { code: 'FUK', name: '福岡空港' },
 				{ code: 'OKA', name: '那覇空港' }, { code: 'NGO', name: '中部国際空港' },
-				{ code: 'UKB', name: '神戸空港' }, { code: 'SDJ', name: '仙台空港' },
-				{ code: 'HIJ', name: '広島空港' }, { code: 'KOJ', name: '鹿児島空港' },
-				{ code: 'NGS', name: '長崎空港' }, { code: 'KMJ', name: '熊本空港' }
+				{ code: 'UKB', name: '神戸空港' }, { code: 'IBR', name: '茨城空港' },
+				{ code: 'SDJ', name: '仙台空港' }, { code: 'HIJ', name: '広島空港' },
+				{ code: 'KOJ', name: '鹿児島空港' }, { code: 'NGS', name: '長崎空港' },
+				{ code: 'KMJ', name: '熊本空港' }, { code: 'KMI', name: '宮崎空港' },
+				{ code: 'MYJ', name: '松山空港' }, { code: 'HKD', name: '函館空港' },
+				{ code: 'AKJ', name: '旭川空港' }, { code: 'MMB', name: '女満別空港' },
+				{ code: 'OBO', name: '帯広空港' }, { code: 'KUH', name: '釧路空港' },
+				{ code: 'ISG', name: '石垣空港' }, { code: 'MMY', name: '宮古空港' },
+				{ code: 'SHI', name: '下地島空港' }
 			];
 
 			function isAtAirport(ac, code) {
