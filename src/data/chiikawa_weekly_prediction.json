@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月25日 10:15",
-  "updatedAtIso": "2026-11-25T01:15:05.490Z",
+  "updatedAt": "2026年11月25日 10:30",
+  "updatedAtIso": "2026-11-25T01:30:17.324Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "東京(羽田)",
-    "currentLocationCode": "HND",
+    "currentLocation": "飛行中 (東京(羽田) ➔ 札幌(新千歳))",
+    "currentLocationCode": "CTS",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "広島(76%) / 東京(羽田)(24%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
@@ -2376,7 +2376,7 @@
           "route": "広島 ➔ 東京(羽田)"
         }
       },
-      "currentAirport": "東京(羽田)",
+      "currentAirport": "飛行中 (東京(羽田) ➔ 札幌(新千歳))",
       "nightStay": "広島(76%) / 東京(羽田)(24%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH59 (東京(羽田) ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 76% / 東京(羽田) 24% と推定されます。",
@@ -2418,7 +2418,7 @@
               "dest": "CTS",
               "route": "東京(羽田) ➔ 札幌(新千歳)",
               "time": "10:00発 - 11:35着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "② 第2便"
             },
             {
@@ -2483,7 +2483,7 @@
               "dest": "CTS",
               "route": "東京(羽田) ➔ 札幌(新千歳)",
               "time": "10:00発 - 11:35着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "② 第2便"
             },
             {
@@ -2539,7 +2539,7 @@
               "dest": "CTS",
               "route": "東京(羽田) ➔ 札幌(新千歳)",
               "time": "10:00発 - 11:35着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "② 第2便"
             },
             {
@@ -2622,7 +2622,14 @@
             "update": null
           },
           "planC": null,
-          "actual": null
+          "actual": {
+            "flightNo": "NH59",
+            "route": "東京(羽田) ➔ 札幌(新千歳)",
+            "time": "10:15離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#3",
@@ -2706,9 +2713,9 @@
           "time": "10:00発 - 11:35着",
           "depGate": "60",
           "arrGate": null,
-          "status": "出発予定 (10:00)",
+          "status": "到着予定 (11:26)",
           "isLanded": false,
-          "isLive": false,
+          "isLive": true,
           "isPredicted": false
         },
         {
