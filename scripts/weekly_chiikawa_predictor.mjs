@@ -489,6 +489,8 @@ export function buildLearnedModel(fleetDb, cutoffDateStr = null, seasonStartDate
   const nightStaysByDow = { weekday: {}, weekend: {} };
   const nightStaysByExactDow = {}; // 0(日)..6(土) -> airport -> fn -> count
   const overnightArrivalTransitions = {}; // airport -> prevLastFn -> nextFirstFn -> count
+  const prevDayStartTransitions = {};     // airport -> prevStartAirport(-2d泊) -> nextFirstFn -> count
+  const prevDayFirstTransitions = {};     // airport -> prevFirstFn(-1d初便) -> nextFirstFn -> count
   const fullDaySequences = {}; // fullDaySequences[startAirport]['NH661>NH664>...'] = count
   const prefixSequences = {};  // prefixSequences[startAirport]['NH661>NH664>NH27'] = count
   const stayTransitions = {};  // stayTransitions[startAirport][endAirport] = count
@@ -582,15 +584,29 @@ export function buildLearnedModel(fleetDb, cutoffDateStr = null, seasonStartDate
         if (!nightStaysByExactDow[exactDow][firstF.orig]) nightStaysByExactDow[exactDow][firstF.orig] = {};
         nightStaysByExactDow[exactDow][firstF.orig][firstF.normFn] = (nightStaysByExactDow[exactDow][firstF.orig][firstF.normFn] || 0) + 1;
 
-        // 連続日の前夜最終到着便 -> 翌朝初便の直接相関を学習（例: NH1078 -> NH1077, NH266 -> NH245 等）
+        // 連続日の前夜最終到着便(-1d) および 前日始発空港(-2d泊) / 前日初便(-1d初便) -> 翌朝初便の相関を学習
         if (prevDate && prevDayList && prevDayList.length > 0) {
           const dayDiffMs = Date.parse(`${d}T00:00:00Z`) - Date.parse(`${prevDate}T00:00:00Z`);
           const prevLastF = prevDayList[prevDayList.length - 1];
+          const prevFirstF = prevDayList[0];
           if (dayDiffMs === 86400000 && prevLastF.dest === firstF.orig && (prevLastF.arrMin ?? 0) >= 1020) {
             if (!overnightArrivalTransitions[firstF.orig]) overnightArrivalTransitions[firstF.orig] = {};
             if (!overnightArrivalTransitions[firstF.orig][prevLastF.normFn]) overnightArrivalTransitions[firstF.orig][prevLastF.normFn] = {};
             overnightArrivalTransitions[firstF.orig][prevLastF.normFn][firstF.normFn] =
               (overnightArrivalTransitions[firstF.orig][prevLastF.normFn][firstF.normFn] || 0) + 1;
+
+            if (prevFirstF?.orig) {
+              if (!prevDayStartTransitions[firstF.orig]) prevDayStartTransitions[firstF.orig] = {};
+              if (!prevDayStartTransitions[firstF.orig][prevFirstF.orig]) prevDayStartTransitions[firstF.orig][prevFirstF.orig] = {};
+              prevDayStartTransitions[firstF.orig][prevFirstF.orig][firstF.normFn] =
+                (prevDayStartTransitions[firstF.orig][prevFirstF.orig][firstF.normFn] || 0) + 1;
+            }
+            if (prevFirstF?.normFn) {
+              if (!prevDayFirstTransitions[firstF.orig]) prevDayFirstTransitions[firstF.orig] = {};
+              if (!prevDayFirstTransitions[firstF.orig][prevFirstF.normFn]) prevDayFirstTransitions[firstF.orig][prevFirstF.normFn] = {};
+              prevDayFirstTransitions[firstF.orig][prevFirstF.normFn][firstF.normFn] =
+                (prevDayFirstTransitions[firstF.orig][prevFirstF.normFn][firstF.normFn] || 0) + 1;
+            }
           }
         }
 
@@ -693,6 +709,8 @@ export function buildLearnedModel(fleetDb, cutoffDateStr = null, seasonStartDate
     nightStaysByDow,
     nightStaysByExactDow,
     overnightArrivalTransitions,
+    prevDayStartTransitions,
+    prevDayFirstTransitions,
     fullDaySequences,
     prefixSequences,
     stayTransitions,
@@ -1457,11 +1475,12 @@ function evaluateFleetWideConsistency(candidateFlights, allDayFlights, learnedMo
   const is100Percent = strictCoverageRate >= 1.0;
   let fleetScore = 1.0;
   if (is100Percent) {
-    fleetScore = 2.0 * fleetNormBonus; // 確定枠100%完全整合 ＋ 他機定石スジ一致ボーナス
+    fleetScore = 1.35 * fleetNormBonus; // 確定枠100%完全整合 ＋ 他機定石スジ一致ボーナス
   } else if (strictCoverageRate >= 0.85) {
-    fleetScore = 0.5 * fleetNormBonus;
+    // 貪欲ソルバーの順序依存で本命の5〜6便スジ(NH661/NH245等)が過剰減衰しないよう連続ソフト重みに変更
+    fleetScore = (0.75 + (strictCoverageRate - 0.85) * 3.0) * fleetNormBonus;
   } else {
-    fleetScore = 0.05;
+    fleetScore = 0.35;
   }
 
   return {
@@ -1518,6 +1537,8 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
   const nightStaysDow = learnedModel.nightStaysByDow?.[dowType] || {};
   const nightStaysExactDow = learnedModel.nightStaysByExactDow?.[exactDow] || {};
   const overnightArrivalTransitions = learnedModel.overnightArrivalTransitions || {};
+  const prevDayStartTransitions = learnedModel.prevDayStartTransitions || {};
+  const prevDayFirstTransitions = learnedModel.prevDayFirstTransitions || {};
   const fullDaySequences = learnedModel.fullDaySequences || {};
   const prefixSequences = learnedModel.prefixSequences || {};
   const stayTransitions = learnedModel.stayTransitions || {};
@@ -1692,6 +1713,45 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
             const pairCnt = arrTransMap[df.flightNo] || 0;
             const pairRate = (pairCnt + 0.35) / (arrTransTotal + 1.8);
             score *= (0.65 + Math.min(pairRate * 2.6, 1.55));
+          }
+        }
+      }
+
+      // 💡 -2d宿泊地(=前日始発空港) ＆ -1d初便名 -> 翌朝羽田初便のベイズ平滑化Lift補正
+      // 実データ検証: -2d広島泊(-1d NH672始発)経由の羽田泊翌朝はNH661が極端に低く(8%)、NH619/NH245/NH583へシフトする等
+      // (-3d以前はLOO正答率がベースラインを下回るノイズのため不採用)
+      if (startAirport === 'HND') {
+        const totalHndBase = Object.values(stayHistMap).reduce((a, b) => a + b, 0);
+        const baseFnProb = totalHndBase >= 8
+          ? ((stayHistMap[df.flightNo] || 0) + 0.5) / (totalHndBase + 4.0)
+          : null;
+        const resolvedPrevStartAp = firstFlightOptions.prevStartAirport
+          || (prevFirstFlightNo ? flightMeta[normalizeFlightNo(prevFirstFlightNo)]?.orig : null);
+
+        if (baseFnProb && resolvedPrevStartAp) {
+          const startMap = prevDayStartTransitions['HND']?.[resolvedPrevStartAp];
+          if (startMap) {
+            const startTot = Object.values(startMap).reduce((a, b) => a + b, 0);
+            if (startTot >= 5) {
+              const condProb = ((startMap[df.flightNo] || 0) + 0.6) / (startTot + 4.0);
+              const lift = condProb / baseFnProb;
+              const dampened = 1.0 + 0.45 * (lift - 1.0);
+              score *= Math.max(0.72, Math.min(1.38, dampened));
+            }
+          }
+        }
+
+        if (baseFnProb && prevFirstFlightNo) {
+          const prevFirstNorm = normalizeFlightNo(prevFirstFlightNo);
+          const pfMap = prevDayFirstTransitions['HND']?.[prevFirstNorm];
+          if (pfMap) {
+            const pfTot = Object.values(pfMap).reduce((a, b) => a + b, 0);
+            if (pfTot >= 4) {
+              const condProb = ((pfMap[df.flightNo] || 0) + 0.6) / (pfTot + 4.0);
+              const lift = condProb / baseFnProb;
+              const dampened = 1.0 + 0.35 * (lift - 1.0);
+              score *= Math.max(0.78, Math.min(1.30, dampened));
+            }
           }
         }
       }
@@ -2035,14 +2095,10 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
     }
   }
 
-  // ⚠️ フリート整合フィルタ: 最高カバー率（100%優先）から3%以内かつ94%以上のプランを許容し、
-  // 貪欲ソルバーの順序依存で正規の羽田早朝便が誤って全滅する現象を防止
-  const maxCovRate = Math.max(0, ...candidateCompletePlans.map(p => p.fleetConsistency?.strictCoverageRate || 0));
-  const nearPerfectPlans = candidateCompletePlans.filter(p => {
-    const rate = p.fleetConsistency?.strictCoverageRate || 0;
-    return rate >= Math.max(94, maxCovRate - 3);
-  });
-  const eligiblePlans = nearPerfectPlans.length > 0 ? nearPerfectPlans : candidateCompletePlans;
+  // ⚠️ フリート整合評価は上の連続ソフト重み(fleetScore)に一本化。
+  // 従来のハード足切り(maxCovRate - 3%)は、4便の短いスジ(NH1077/NH1079)だけ貪欲カバー率100%になった日に
+  // 羽田本命初便(NH661/NH245等)を丸ごと除外してしまう原因となっていたため撤廃。
+  const eligiblePlans = candidateCompletePlans;
 
   // 💡 ユーザー指示: 「プランA・B・Cは異なる初便を選ぶは不要、確率に合わせて設定されれば良い」
   // 恣意的な初便縛り（異なる初便の強制）や宿泊空港代表枠を全廃。
@@ -2374,7 +2430,10 @@ function computeRealAccuracyAndHistory(fleetDb, todayStr, anaFleetData, snapshot
       prevFirstFn,
       null,
       prevArrivalFlight,
-      { regionalStayStreak: pastRegStreak }
+      {
+        regionalStayStreak: pastRegStreak,
+        prevStartAirport: (prevActual && prevActual.length > 0) ? prevActual[0].orig : null
+      }
     );
 
     // 予測された全プラン（プランA〜C）に含まれる便名セットと初便セット
@@ -2893,7 +2952,8 @@ export async function generateWeeklyPrediction() {
     {
       capture: tomorrowFirstRaw,
       arrival: tomorrowArrival,
-      regionalStayStreak: maintenanceProfile.projectedRegionalStayStreak
+      regionalStayStreak: maintenanceProfile.projectedRegionalStayStreak,
+      prevStartAirport: todayFlights.length > 0 ? (todayFlights[0].origCode || todayFlights[0].orig) : null
     }
   );
 
@@ -2933,13 +2993,18 @@ export async function generateWeeklyPrediction() {
   const fleetUpdatedAt = Date.parse(anaFleetData?.updatedAt || '');
   const freshFleetData = Number.isFinite(fleetUpdatedAt) &&
     Date.now() - fleetUpdatedAt >= 0 && Date.now() - fleetUpdatedAt <= 2 * 60 * 60 * 1000;
+  const previousDayFlights = parsedFlights
+    .filter(f => f.dateStr === previousDateStr)
+    .sort((a, b) => (parseTimeToMinutes(a.depTime) ?? 0) - (parseTimeToMinutes(b.depTime) ?? 0));
+  const previousDayFirst = previousDayFlights[0] || null;
   if (!firstObserved && arrivalContext && arrivalContext.arrivalMin !== null &&
       freshFleetData && jstNow.getHours() >= 5 && jstNow.getHours() < 17) {
     generateDayPlansViaBeamSearch(
       [{ code: arrivalContext.airport, probability: 100 }], todayStr, anaFleetData,
-      learnedModel, null, null, previousLanded,
+      learnedModel, previousDayFirst ? normalizeFlightNo(previousDayFirst.flightNo) : null, null, previousLanded,
       { capture: morningFirstRaw, currentDay: true, nowMin: jstNow.getHours() * 60 + jstNow.getMinutes(),
-        assignedOther: assignedOtherMap, arrival: arrivalContext }
+        assignedOther: assignedOtherMap, arrival: arrivalContext,
+        prevStartAirport: previousDayFirst?.origCode || null }
     );
   }
   const morningFirstFlightsRaw = rankFirstCandidates(morningFirstRaw);
@@ -3191,7 +3256,11 @@ export async function generateWeeklyPrediction() {
         prevDayFirstFn,
         prevVisitedDests,
         rollingArrivalFlight,
-        { arrivalByAirport: runningArrivalByAirport, regionalStayStreak: runningRegionalStreak }
+        {
+          arrivalByAirport: runningArrivalByAirport,
+          regionalStayStreak: runningRegionalStreak,
+          prevStartAirport: prevPlanForDay?.startAirportCode || prevPlanForDay?.flights?.[0]?.orig || null
+        }
       );
 
       if (dayPlans.length > 0) {
