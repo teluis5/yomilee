@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月25日 18:00",
-  "updatedAtIso": "2026-11-25T09:00:31.833Z",
+  "updatedAt": "2026年11月25日 19:00",
+  "updatedAtIso": "2026-11-25T10:00:16.350Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,9 +17,26 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "着陸済・駐機中 🟡",
-      "currentLocation": "熊本 (KMJ)",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "熊本 (KMJ) ➔ 東京(羽田) (HND)",
+      "currentFlight": {
+        "flightNo": "NH648",
+        "origin": "KMJ",
+        "dest": "HND",
+        "originName": "熊本 (KMJ)",
+        "destinationName": "東京(羽田) (HND)",
+        "origCode": "KMJ",
+        "destCode": "HND",
+        "route": "熊本 ➔ 東京(羽田)",
+        "depTime": "18:28",
+        "arrTime": "19:45",
+        "timeRange": "18:28 - 19:45",
+        "dateJst": "2026-11-25",
+        "status": "Estimated 19:44",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH1079",
@@ -74,9 +91,45 @@
           "isLive": false,
           "isLanded": true,
           "isToday": true
+        },
+        {
+          "flightNo": "NH648",
+          "origin": "KMJ",
+          "dest": "HND",
+          "originName": "熊本 (KMJ)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "KMJ",
+          "destCode": "HND",
+          "route": "熊本 ➔ 東京(羽田)",
+          "depTime": "18:28",
+          "arrTime": "19:45",
+          "timeRange": "18:28 - 19:45",
+          "dateJst": "2026-11-25",
+          "status": "Estimated 19:44",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
         }
       ],
       "recentFlights": [
+        {
+          "flightNo": "NH648",
+          "origin": "KMJ",
+          "dest": "HND",
+          "originName": "熊本 (KMJ)",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "KMJ",
+          "destCode": "HND",
+          "route": "熊本 ➔ 東京(羽田)",
+          "depTime": "18:28",
+          "arrTime": "19:45",
+          "timeRange": "18:28 - 19:45",
+          "dateJst": "2026-11-25",
+          "status": "Estimated 19:44",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH645",
           "origin": "HND",
@@ -166,24 +219,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH1080",
-          "origin": "MMY",
-          "dest": "HND",
-          "originName": "宮古 (MMY)",
-          "destinationName": "東京(羽田) (HND)",
-          "origCode": "MMY",
-          "destCode": "HND",
-          "route": "宮古 ➔ 東京(羽田)",
-          "depTime": "12:14",
-          "arrTime": "14:28",
-          "timeRange": "12:14 - 14:28",
-          "dateJst": "2026-11-24",
-          "status": "Landed 14:28",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -201,9 +236,26 @@
       "routesSummary": "羽田/成田 ➔ シンガポール / バンクーバー / ホノルル / シドニー / マニラ / ジャカルタ",
       "color": "#eab308",
       "serviceStart": "2023-06-04",
-      "flightState": "着陸済・駐機中 🟡",
-      "currentLocation": "東京(成田) (NRT)",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "東京(成田) (NRT) ➔ ジャカルタ (CGK)",
+      "currentFlight": {
+        "flightNo": "NH835",
+        "origin": "NRT",
+        "dest": "CGK",
+        "originName": "東京(成田) (NRT)",
+        "destinationName": "ジャカルタ (CGK)",
+        "origCode": "NRT",
+        "destCode": "CGK",
+        "route": "東京(成田) ➔ ジャカルタ",
+        "depTime": "18:30",
+        "arrTime": "01:55",
+        "timeRange": "18:30 - 01:55",
+        "dateJst": "2026-11-25",
+        "status": "Estimated 00:05",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH830",
@@ -222,9 +274,45 @@
           "isLive": false,
           "isLanded": true,
           "isToday": true
+        },
+        {
+          "flightNo": "NH835",
+          "origin": "NRT",
+          "dest": "CGK",
+          "originName": "東京(成田) (NRT)",
+          "destinationName": "ジャカルタ (CGK)",
+          "origCode": "NRT",
+          "destCode": "CGK",
+          "route": "東京(成田) ➔ ジャカルタ",
+          "depTime": "18:30",
+          "arrTime": "01:55",
+          "timeRange": "18:30 - 01:55",
+          "dateJst": "2026-11-25",
+          "status": "Estimated 00:05",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
         }
       ],
       "recentFlights": [
+        {
+          "flightNo": "NH835",
+          "origin": "NRT",
+          "dest": "CGK",
+          "originName": "東京(成田) (NRT)",
+          "destinationName": "ジャカルタ (CGK)",
+          "origCode": "NRT",
+          "destCode": "CGK",
+          "route": "東京(成田) ➔ ジャカルタ",
+          "depTime": "18:30",
+          "arrTime": "01:55",
+          "timeRange": "18:30 - 01:55",
+          "dateJst": "2026-11-25",
+          "status": "Estimated 00:05",
+          "isLive": true,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH830",
           "origin": "BOM",
@@ -314,24 +402,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH801",
-          "origin": "NRT",
-          "dest": "SIN",
-          "originName": "東京(成田) (NRT)",
-          "destinationName": "シンガポール (SIN)",
-          "origCode": "NRT",
-          "destCode": "SIN",
-          "route": "東京(成田) ➔ シンガポール",
-          "depTime": "18:22",
-          "arrTime": "01:22",
-          "timeRange": "18:22 - 01:22",
-          "dateJst": "2026-11-22",
-          "status": "Landed 00:22",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -349,9 +419,26 @@
       "routesSummary": "羽田/成田 ➔ サンフランシスコ / シカゴ / ロンドン / ニューヨーク",
       "color": "#d97706",
       "serviceStart": "2023-08-31",
-      "flightState": "着陸済・駐機中 🟡",
-      "currentLocation": "東京(成田) (NRT)",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "東京(成田) (NRT) ➔ シカゴ (ORD)",
+      "currentFlight": {
+        "flightNo": "NH12",
+        "origin": "NRT",
+        "dest": "ORD",
+        "originName": "東京(成田) (NRT)",
+        "destinationName": "シカゴ (ORD)",
+        "origCode": "NRT",
+        "destCode": "ORD",
+        "route": "東京(成田) ➔ シカゴ",
+        "depTime": "18:27",
+        "arrTime": "04:50",
+        "timeRange": "18:27 - 04:50",
+        "dateJst": "2026-11-25",
+        "status": "Delayed 14:09",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH7",
@@ -380,12 +467,12 @@
           "origCode": "NRT",
           "destCode": "ORD",
           "route": "東京(成田) ➔ シカゴ",
-          "depTime": "17:05",
+          "depTime": "18:27",
           "arrTime": "04:50",
-          "timeRange": "17:05 - 04:50",
+          "timeRange": "18:27 - 04:50",
           "dateJst": "2026-11-25",
-          "status": "Estimated dep 18:00",
-          "isLive": false,
+          "status": "Delayed 14:09",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         }
@@ -400,12 +487,12 @@
           "origCode": "NRT",
           "destCode": "ORD",
           "route": "東京(成田) ➔ シカゴ",
-          "depTime": "17:05",
+          "depTime": "18:27",
           "arrTime": "04:50",
-          "timeRange": "17:05 - 04:50",
+          "timeRange": "18:27 - 04:50",
           "dateJst": "2026-11-25",
-          "status": "Estimated dep 18:00",
-          "isLive": false,
+          "status": "Delayed 14:09",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         },
@@ -805,7 +892,7 @@
       {
         "code": "CTS",
         "airport": "新千歳",
-        "weight": 1.944,
+        "weight": 1.08,
         "floored": 34,
         "remainder": 0.1772151898734151,
         "originalIndex": 0,
@@ -814,7 +901,7 @@
       {
         "code": "KIX",
         "airport": "関空",
-        "weight": 1.944,
+        "weight": 1.08,
         "floored": 34,
         "remainder": 0.1772151898734151,
         "originalIndex": 1,
@@ -823,25 +910,14 @@
       {
         "code": "HND",
         "airport": "羽田",
-        "weight": 1.8,
+        "weight": 1,
         "floored": 32,
-        "remainder": 0.6455696202531662,
+        "remainder": 0.6455696202531627,
         "originalIndex": 2,
         "probability": 32
       }
     ],
     "predictedRemainingToday": [
-      {
-        "flightNo": "NH648",
-        "origCode": "KMJ",
-        "destCode": "HND",
-        "route": "熊本 ➔ 東京(羽田)",
-        "depTime": "18:10",
-        "arrTime": "19:45",
-        "time": "18:10発 - 19:45着 (予想)",
-        "status": "後続便候補",
-        "isPredicted": true
-      },
       {
         "flightNo": "NH81",
         "origCode": "HND",
@@ -896,8 +972,8 @@
             "orig": "KMJ",
             "dest": "HND",
             "route": "熊本 ➔ 東京(羽田)",
-            "time": "18:10発 - 19:45着",
-            "tag": "予想接続 (78P)",
+            "time": "18:28発 - 19:45着",
+            "tag": "飛行中 🟢",
             "step": "第4便"
           },
           {
@@ -952,8 +1028,8 @@
             "orig": "KMJ",
             "dest": "HND",
             "route": "熊本 ➔ 東京(羽田)",
-            "time": "18:10発 - 19:45着",
-            "tag": "予想接続 (78P)",
+            "time": "18:28発 - 19:45着",
+            "tag": "飛行中 🟢",
             "step": "第4便"
           },
           {
@@ -1008,8 +1084,8 @@
             "orig": "KMJ",
             "dest": "HND",
             "route": "熊本 ➔ 東京(羽田)",
-            "time": "18:10発 - 19:45着",
-            "tag": "🌙羽田泊候補",
+            "time": "18:28発 - 19:45着",
+            "tag": "飛行中 🟢",
             "step": "第4便"
           }
         ]
