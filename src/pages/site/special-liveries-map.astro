@@ -100,6 +100,11 @@ const description =
 				zoomControl: true
 			});
 
+			// 点線ルート用の最前面ペインを作成（マウス操作は透過）
+			const routePane = map.createPane('routeLinePane');
+			routePane.style.zIndex = '700';
+			routePane.style.pointerEvents = 'none';
+
 			const vectorLandLayer = L.layerGroup();
 			let japanGeoJsonLayer = null;
 
@@ -258,10 +263,11 @@ const description =
 							const destCoord = ac.destination ? AIRPORT_COORDS[String(ac.destination).toUpperCase()] : null;
 							if (destCoord) {
 								hoverRouteLine = L.polyline([[ac.lat, ac.lon], destCoord], {
+									pane: 'routeLinePane',
 									color: ac.color || '#1d4ed8',
 									weight: 2.5,
 									dashArray: '6, 6',
-									opacity: 0.85
+									opacity: 0.9
 								}).addTo(map);
 							}
 						});
