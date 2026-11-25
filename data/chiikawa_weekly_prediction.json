@@ -1,14 +1,14 @@
 {
-  "updatedAt": "2026年11月25日 16:45",
-  "updatedAtIso": "2026-11-25T07:45:19.187Z",
+  "updatedAt": "2026年11月25日 17:00",
+  "updatedAtIso": "2026-11-25T08:00:22.559Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
     "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
-    "currentSpot": "北ピア(1,2,3)",
-    "spotConfidenceNote": "羽田第2ターミナル 北ピア（到着口1,2,3 / 46〜62番ゲート帯）連動判定",
+    "currentSpot": null,
+    "spotConfidenceNote": null,
     "isAirborne": false,
     "nightStay": "東京(羽田) (100%)",
     "nightStayCode": "HND",
@@ -133,8 +133,8 @@
     "asOfDate": "2026-11-25",
     "specialLiveryPolicy": "exclude_training_and_standby",
     "ja609aConsecutiveOperatingDays": 35,
-    "ja609aRecent7dLegs": 35,
-    "ja609aRecent14dLegs": 71,
+    "ja609aRecent7dLegs": 36,
+    "ja609aRecent14dLegs": 72,
     "ja609aHndStayStats": {
       "hndStayCount": 14,
       "idleAfterHnd": 0
@@ -164,8 +164,8 @@
       },
       "streak_3": {
         "total": 12,
-        "hndReturns": 8,
-        "returnRatePct": 66.7
+        "hndReturns": 7,
+        "returnRatePct": 58.3
       },
       "streak_4": {
         "total": 10,
@@ -173,7 +173,7 @@
         "returnRatePct": 30
       }
     },
-    "summaryNote": "JA609Aは現在 35日連続稼働中（直近7日: 35便 / 14日: 71便・羽田泊翌日運休実績 0/14回）。特別塗装機のため訓練・予備機待機は除外し、同型機の複数日整備（ドック入り）実績ベースで羽田泊翌日の整備運休率は約2.5%。長期連続稼働帯に入っているため、羽田帰還後の定期整備（Aチェック等）による運休に留意。"
+    "summaryNote": "JA609Aは現在 35日連続稼働中（直近7日: 36便 / 14日: 72便・羽田泊翌日運休実績 0/14回）。特別塗装機のため訓練・予備機待機は除外し、同型機の複数日整備（ドック入り）実績ベースで羽田泊翌日の整備運休率は約2.5%。長期連続稼働帯に入っているため、羽田帰還後の定期整備（Aチェック等）による運休に留意。"
   },
   "firstFlightStats": {
     "previousNight": {
@@ -2374,8 +2374,8 @@
       "currentAirport": "東京(羽田)",
       "nightStay": "東京(羽田) (100%)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH62 (札幌(新千歳) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
-      "todayOutlook": "現在 NH62 (札幌(新千歳) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "pendingNightStayNote": "現在 NH667 (東京(羽田) ➔ 長崎) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "todayOutlook": "現在 NH667 (東京(羽田) ➔ 長崎) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
       "nightStayProbabilities": [
         {
           "airport": "東京(羽田)",
@@ -2426,7 +2426,7 @@
               "dest": "NGS",
               "route": "東京(羽田) ➔ 長崎",
               "time": "16:35発 - 18:35着",
-              "tag": "予想接続(76P)",
+              "tag": "本日確定枠",
               "step": "④ 第4便"
             },
             {
@@ -2607,18 +2607,14 @@
         },
         {
           "flightNo": "NH667",
-          "origCode": "HND",
-          "destCode": "NGS",
           "route": "東京(羽田) ➔ 長崎",
-          "depTime": "16:35",
-          "arrTime": "18:35",
-          "time": "16:35発 - 18:35着 (予想)",
-          "status": "後続便候補",
+          "time": "16:35発 - 18:35着",
+          "depGate": "507",
+          "arrGate": null,
+          "status": "出発予定 (16:35)",
           "isLanded": false,
           "isLive": false,
-          "isPredicted": true,
-          "depGate": "507",
-          "arrGate": null
+          "isPredicted": false
         },
         {
           "flightNo": "NH670",
@@ -2685,7 +2681,7 @@
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
       "expectedStart": "羽田発 (NH661)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH62 (札幌(新千歳) ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "pendingNightStayNote": "現在 NH667 (東京(羽田) ➔ 長崎) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
@@ -5312,7 +5308,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 743,
+    "totalFleetFlights": 744,
     "fleetCount": 11
   }
 }
