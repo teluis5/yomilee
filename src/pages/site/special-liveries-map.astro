@@ -410,7 +410,8 @@ const description =
 						if (!present && !isArr && !isDep) continue;
 
 						let barStart = START_MIN;
-						let barEnd = END_MIN;
+						let barEnd = START_MIN;
+						let showBar = true;
 						let stayText = '';
 
 						if (isArr && isDep) {
@@ -422,30 +423,29 @@ const description =
 						} else if (isArr) {
 							const aMin = toMin(ac.arrTime);
 							barStart = aMin !== null ? Math.max(START_MIN, Math.min(END_MIN, aMin)) : Math.max(START_MIN, nowMin);
-							barEnd = END_MIN;
+							barEnd = Math.min(END_MIN, barStart + 90);
 							stayText = ac.arrTime
-								? `🛬 ${ac.arrTime}頃〜滞在（${toAirportJa(ac.origin)}発 ${ac.flight || ''}）`
+								? `🛬 ${ac.arrTime}頃 到着予定（${toAirportJa(ac.origin)}発 ${ac.flight || ''}）`
 								: `🛬 飛来予定（${toAirportJa(ac.origin)}発 ${ac.flight || ''}）`;
 						} else if (isDep) {
 							const dMin = toMin(ac.depTime);
-							barStart = START_MIN;
 							barEnd = dMin !== null ? Math.max(START_MIN, Math.min(END_MIN, dMin)) : Math.min(END_MIN, nowMin);
+							barStart = Math.max(START_MIN, barEnd - 90);
 							stayText = ac.depTime
-								? `🛫 〜${ac.depTime}まで滞在（${ac.depTime}発 → ${toAirportJa(ac.destination)}）`
+								? `🛫 ${ac.depTime} 出発予定（→ ${toAirportJa(ac.destination)}）`
 								: `🛫 出発便（→ ${toAirportJa(ac.destination)} ${ac.flight || ''}）`;
 						} else if (present) {
-							barStart = START_MIN;
-							barEnd = END_MIN;
+							showBar = false;
 							stayText = `🅿️ 現在滞在中（次の便未捕捉）`;
 						}
 
 						const leftPct = ((barStart - START_MIN) / SPAN) * 100;
 						const widthPct = Math.max(4, ((barEnd - barStart) / SPAN) * 100);
-						items.push({ ac, leftPct, widthPct, stayText, present, isArr, isDep });
+						items.push({ ac, leftPct, widthPct, showBar, present, stayText });
 					}
 
 					const rowsHtml = items
-						.map(({ ac, leftPct, widthPct, stayText }) => `
+						.map(({ ac, leftPct, widthPct, showBar, present, stayText }) => `
 							<div class="tl-row">
 								<div class="tl-info">
 									<div class="tl-ac-head">
@@ -457,7 +457,7 @@ const description =
 								</div>
 								<div class="tl-track">
 									<div class="tl-now-line" style="left:${nowPct}%" title="現在時刻 ${nowLabel}"></div>
-									<div class="tl-bar" style="left:${leftPct}%; width:${widthPct}%; background:${ac.color};" title="${stayText}"></div>
+									${showBar ? `<div class="tl-bar" style="left:${leftPct}%; width:${widthPct}%; background:${ac.color};" title="${stayText}"></div>` : (present ? `<div class="tl-park-dot" style="left:${nowPct}%; background:${ac.color};" title="${stayText}"></div>` : '')}
 								</div>
 							</div>
 						`)
@@ -1147,6 +1147,17 @@ const description =
 			bottom: 3px;
 			border-radius: 4px;
 			opacity: 0.88;
+		}
+		:global(.tl-park-dot) {
+			position: absolute;
+			top: 50%;
+			width: 12px;
+			height: 12px;
+			border-radius: 50%;
+			border: 2px solid #ffffff;
+			transform: translate(-50%, -50%);
+			z-index: 3;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 		}
 		:global(.tl-now-line) {
 			position: absolute;
