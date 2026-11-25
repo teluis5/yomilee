@@ -54,8 +54,8 @@ const description =
 		<div id="aircraft-list" class="aircraft-grid"></div>
 
 		<section id="airport-section" class="airport-section">
-			<h2 class="list-heading">空港別 特別塗装機の在駐・飛来予測</h2>
-			<p class="list-note">国内主要空港ごとに、今いる機体とこの後の飛来予定・出発便を一覧で確認できます。</p>
+			<h2 class="list-heading">空港別 特別塗装機の在駐・飛来タイムライン</h2>
+			<p class="list-note">各空港に「何時から何時まで」特別塗装機がいるかをタイムライン（06:00〜23:00）で確認できます。赤い縦線が現在時刻です。</p>
 			<div class="airport-jump-bar" id="airport-jump-bar"></div>
 			<div id="airports-container" class="airports-container"></div>
 		</section>
@@ -363,31 +363,10 @@ const description =
 				{ code: 'SHI', name: '下地島空港' }
 			];
 
-			function isAtAirport(ac, code) {
-				if (ac.status === 'airborne') return false;
-				if (!ac.nearestAirport) return false;
-				return ac.nearestAirport.includes(`(${code})`) || ac.nearestAirport.includes(AIRPORT_JA[code] || '');
-			}
-
-			function formatAirportCard(ac, type) {
-				const routeText = ac.origin && ac.destination ? `${toAirportJa(ac.origin)} → ${toAirportJa(ac.destination)}` : '-';
-				const timeText = ac.depTime ? `${ac.depTime}発${ac.arrTime ? ` → ${ac.arrTime}着` : ''}` : '-';
-				return `
-					<div class="ap-card">
-						<div class="card-top">
-							<span class="airline-pill" style="background:${ac.color}">${ac.airline}</span>
-							<span class="reg-code">${ac.reg}</span>
-							${formatStatusBadge(ac.status)}
-						</div>
-						<h4 class="card-title">${ac.name}</h4>
-						<div class="card-sub">${ac.model} ・ ${ac.category}</div>
-						<div class="card-telemetry">
-							<span>便名: <strong>${ac.flight || '-'}</strong></span>
-							${type !== 'present' ? `<span>区間: <strong>${routeText}</strong></span>` : ''}
-							${ac.depTime ? `<span>時刻: <strong>${timeText}</strong></span>` : ''}
-						</div>
-					</div>
-				`;
+			function toMin(hhmm) {
+				if (!hhmm || !/^\d{1,2}:\d{2}$/.test(hhmm)) return null;
+				const [h, m] = hhmm.split(':').map(Number);
+				return h * 60 + m;
 			}
 
 			function renderAirports() {
@@ -401,25 +380,98 @@ const description =
 					).join('');
 				}
 
+				const START_MIN = 6 * 60;  // 06:00
+				const END_MIN = 23 * 60;   // 23:00
+				const SPAN = END_MIN - START_MIN;
+				const now = new Date();
+				const nowMin = now.getHours() * 60 + now.getMinutes();
+				const nowPct = Math.max(0, Math.min(100, ((nowMin - START_MIN) / SPAN) * 100));
+				const nowLabel = now.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' });
+
+				const ticksHtml = [6, 9, 12, 15, 18, 21]
+					.map((h) => {
+						const pct = ((h * 60 - START_MIN) / SPAN) * 100;
+						return `<span class="tl-tick" style="left:${pct}%">${String(h).padStart(2, '0')}:00</span>`;
+					})
+					.join('');
+
 				container.innerHTML = TARGET_AIRPORTS.map((ap) => {
-					const present = allAircraft.filter((ac) => isAtAirport(ac, ap.code));
-					const arriving = allAircraft.filter((ac) => ac.destination === ap.code);
-					const departing = allAircraft.filter((ac) => ac.origin === ap.code);
+					const items = [];
+					for (const ac of allAircraft) {
+						const present = isAtAirport(ac, ap.code);
+						const isArr = ac.destination === ap.code;
+						const isDep = ac.origin === ap.code;
+						if (!present && !isArr && !isDep) continue;
+
+						let barStart = START_MIN;
+						let barEnd = END_MIN;
+						let stayText = '';
+
+						if (isArr && isDep) {
+							const aMin = toMin(ac.arrTime) ?? START_MIN;
+							const dMin = toMin(ac.depTime) ?? END_MIN;
+							barStart = Math.max(START_MIN, Math.min(aMin, dMin));
+							barEnd = Math.min(END_MIN, Math.max(aMin, dMin));
+							stayText = `${ac.arrTime || '?'} 〜 ${ac.depTime || '?'} 滞在`;
+						} else if (isArr) {
+							const aMin = toMin(ac.arrTime);
+							barStart = aMin !== null ? Math.max(START_MIN, Math.min(END_MIN, aMin)) : Math.max(START_MIN, nowMin);
+							barEnd = END_MIN;
+							stayText = ac.arrTime
+								? `🛬 ${ac.arrTime}頃〜滞在（${toAirportJa(ac.origin)}発 ${ac.flight || ''}）`
+								: `🛬 飛来予定（${toAirportJa(ac.origin)}発 ${ac.flight || ''}）`;
+						} else if (isDep) {
+							const dMin = toMin(ac.depTime);
+							barStart = START_MIN;
+							barEnd = dMin !== null ? Math.max(START_MIN, Math.min(END_MIN, dMin)) : Math.min(END_MIN, nowMin);
+							stayText = ac.depTime
+								? `🛫 〜${ac.depTime}まで滞在（${ac.depTime}発 → ${toAirportJa(ac.destination)}）`
+								: `🛫 出発便（→ ${toAirportJa(ac.destination)} ${ac.flight || ''}）`;
+						} else if (present) {
+							barStart = START_MIN;
+							barEnd = END_MIN;
+							stayText = `🅿️ 現在滞在中（次の便未捕捉）`;
+						}
+
+						const leftPct = ((barStart - START_MIN) / SPAN) * 100;
+						const widthPct = Math.max(4, ((barEnd - barStart) / SPAN) * 100);
+						items.push({ ac, leftPct, widthPct, stayText, present, isArr, isDep });
+					}
+
+					const rowsHtml = items
+						.map(({ ac, leftPct, widthPct, stayText }) => `
+							<div class="tl-row">
+								<div class="tl-info">
+									<div class="tl-ac-head">
+										<span class="airline-pill" style="background:${ac.color}">${ac.airline}</span>
+										<strong class="tl-name">${ac.name}</strong>
+										<span class="reg-code">${ac.reg}</span>
+									</div>
+									<div class="tl-stay-text">${stayText}</div>
+								</div>
+								<div class="tl-track">
+									<div class="tl-now-line" style="left:${nowPct}%" title="現在時刻 ${nowLabel}"></div>
+									<div class="tl-bar" style="left:${leftPct}%; width:${widthPct}%; background:${ac.color};" title="${stayText}"></div>
+								</div>
+							</div>
+						`)
+						.join('');
 
 					return `
 						<div class="ap-block" id="ap-${ap.code}">
 							<div class="ap-block-header">
 								<h3>${ap.name}</h3>
 								<div class="ap-counts">
-									<span class="cnt cnt-present">🅿️ 在駐 ${present.length}</span>
-									<span class="cnt cnt-arriving">🛬 飛来予定 ${arriving.length}</span>
-									<span class="cnt cnt-departing">🛫 出発 ${departing.length}</span>
+									<span class="cnt cnt-present">対象 ${items.length}機</span>
 								</div>
 							</div>
-							${present.length > 0 ? `<h4 class="sub-h">🅿️ 現在いる機体</h4><div class="ap-list">${present.map((a) => formatAirportCard(a, 'present')).join('')}</div>` : ''}
-							${arriving.length > 0 ? `<h4 class="sub-h">🛬 この後の飛来予定</h4><div class="ap-list">${arriving.map((a) => formatAirportCard(a, 'arriving')).join('')}</div>` : ''}
-							${departing.length > 0 ? `<h4 class="sub-h">🛫 出発便</h4><div class="ap-list">${departing.map((a) => formatAirportCard(a, 'departing')).join('')}</div>` : ''}
-							${present.length === 0 && arriving.length === 0 && departing.length === 0 ? '<p class="empty-msg">現在この空港で捕捉されている特別塗装機はありません。</p>' : ''}
+							${items.length > 0 ? `
+								<div class="tl-header">
+									<div class="tl-header-spacer">機体・滞在時間帯</div>
+									<div class="tl-axis">${ticksHtml}<span class="tl-now-badge" style="left:${nowPct}%">▼${nowLabel}</span></div>
+								</div>
+								<div class="tl-body">${rowsHtml}</div>
+							` : '<p class="empty-msg">現在この空港で捕捉されている特別塗装機はありません。</p>'}
 						</div>
 					`;
 				}).join('');
@@ -1000,6 +1052,99 @@ const description =
 			font-size: 0.85rem;
 			color: #64748b;
 			margin: 0;
+		}
+		:global(.tl-header) {
+			display: grid;
+			grid-template-columns: 240px 1fr;
+			gap: 0.75rem;
+			align-items: end;
+			margin-bottom: 0.5rem;
+			font-size: 0.72rem;
+			color: #64748b;
+			font-weight: 700;
+		}
+		:global(.tl-axis) {
+			position: relative;
+			height: 22px;
+			border-bottom: 1px solid #cbd5e1;
+		}
+		:global(.tl-tick) {
+			position: absolute;
+			bottom: 2px;
+			transform: translateX(-50%);
+			font-size: 0.7rem;
+			color: #64748b;
+		}
+		:global(.tl-now-badge) {
+			position: absolute;
+			top: -2px;
+			transform: translateX(-50%);
+			font-size: 0.68rem;
+			font-weight: 700;
+			color: #dc2626;
+			white-space: nowrap;
+		}
+		:global(.tl-body) {
+			display: flex;
+			flex-direction: column;
+			gap: 0.65rem;
+		}
+		:global(.tl-row) {
+			display: grid;
+			grid-template-columns: 240px 1fr;
+			gap: 0.75rem;
+			align-items: center;
+			background: #f8fafc;
+			border: 1px solid #e2e8f0;
+			border-radius: 10px;
+			padding: 0.6rem 0.75rem;
+		}
+		:global(.tl-ac-head) {
+			display: flex;
+			align-items: center;
+			gap: 0.35rem;
+			flex-wrap: wrap;
+			margin-bottom: 0.2rem;
+		}
+		:global(.tl-name) {
+			font-size: 0.84rem;
+			color: #0f172a;
+		}
+		:global(.tl-stay-text) {
+			font-size: 0.76rem;
+			color: #334155;
+			font-weight: 600;
+		}
+		:global(.tl-track) {
+			position: relative;
+			height: 22px;
+			background: #e2e8f0;
+			border-radius: 6px;
+			overflow: hidden;
+		}
+		:global(.tl-bar) {
+			position: absolute;
+			top: 3px;
+			bottom: 3px;
+			border-radius: 4px;
+			opacity: 0.88;
+		}
+		:global(.tl-now-line) {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			width: 2px;
+			background: #dc2626;
+			z-index: 2;
+		}
+		@media (max-width: 640px) {
+			:global(.tl-header) {
+				display: none;
+			}
+			:global(.tl-row) {
+				grid-template-columns: 1fr;
+				gap: 0.4rem;
+			}
 		}
 	</style>
 </Layout>
