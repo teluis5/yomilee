@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月25日 21:00",
-  "updatedAtIso": "2026-11-25T12:00:14.187Z",
+  "updatedAt": "2026年11月25日 21:15",
+  "updatedAtIso": "2026-11-25T12:15:14.393Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (長崎 ➔ 東京(羽田))",
+    "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
     "currentSpot": "南ピア(4,5,6)",
     "spotConfidenceNote": "羽田第2ターミナル 南ピア（到着口4,5,6 / 63〜73番ゲート帯）連動判定",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "東京(羽田) (確定)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": true,
@@ -2371,7 +2371,7 @@
           "route": "広島 ➔ 東京(羽田)"
         }
       },
-      "currentAirport": "飛行中 (長崎 ➔ 東京(羽田))",
+      "currentAirport": "東京(羽田)",
       "nightStay": "東京(羽田) (確定)",
       "isNightStayConfirmed": true,
       "pendingNightStayNote": "",
@@ -2715,10 +2715,10 @@
           "actual": {
             "flightNo": "NH670",
             "route": "長崎 ➔ 東京(羽田)",
-            "time": "19:54離陸",
-            "status": "飛行中",
-            "isLanded": false,
-            "isLive": true
+            "time": "19:54離陸 / 21:08着陸",
+            "status": "着陸済",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -2785,9 +2785,9 @@
           "time": "19:25発 - 21:00着",
           "depGate": null,
           "arrGate": "4,5,6",
-          "status": "到着予定 (21:08)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (21:08)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         }
       ]
