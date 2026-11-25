@@ -1590,14 +1590,14 @@
     ]
   },
   "2026-11-26": {
-    "updatedAtIso": "2026-11-25T00:00:08.304Z",
+    "updatedAtIso": "2026-11-25T01:00:08.730Z",
     "plans": [
       {
         "planId": "tomorrow-plan-1",
         "planName": "プランA",
         "stayCode": "KMJ",
         "rank": "本命",
-        "probability": 36,
+        "probability": 39,
         "routeSummary": "羽田 ➔ 宮古 ➔ 羽田 ➔ 熊本",
         "flights": [
           {
@@ -1634,7 +1634,7 @@
         "planName": "プランB",
         "stayCode": "HND",
         "rank": "候補",
-        "probability": 36,
+        "probability": 38,
         "routeSummary": "羽田 ➔ 宮古 ➔ 羽田 ➔ 熊本 ➔ 羽田",
         "flights": [
           {
@@ -1678,54 +1678,36 @@
       {
         "planId": "tomorrow-plan-3",
         "planName": "プランC",
-        "stayCode": "FUK",
+        "stayCode": "NGS",
         "rank": "候補",
-        "probability": 28,
-        "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 松山 ➔ 羽田 ➔ 福岡",
+        "probability": 23,
+        "routeSummary": "羽田 ➔ 長崎 ➔ 羽田 ➔ 長崎",
         "flights": [
           {
             "step": "第1便",
-            "flightNo": "NH1075",
+            "flightNo": "NH663",
             "orig": "HND",
-            "dest": "FUK",
-            "route": "東京(羽田) ➔ 福岡",
-            "time": "07:00発 - 08:55着",
+            "dest": "NGS",
+            "route": "東京(羽田) ➔ 長崎",
+            "time": "10:55発 - 12:55着",
             "tag": "予想"
           },
           {
             "step": "第2便",
-            "flightNo": "NH1076",
-            "orig": "FUK",
+            "flightNo": "NH666",
+            "orig": "NGS",
             "dest": "HND",
-            "route": "福岡 ➔ 東京(羽田)",
-            "time": "09:45発 - 11:25着",
+            "route": "長崎 ➔ 東京(羽田)",
+            "time": "13:45発 - 15:20着",
             "tag": "予想"
           },
           {
             "step": "第3便",
-            "flightNo": "NH589",
+            "flightNo": "NH667",
             "orig": "HND",
-            "dest": "MYJ",
-            "route": "東京(羽田) ➔ 松山",
-            "time": "12:15発 - 13:50着",
-            "tag": "予想"
-          },
-          {
-            "step": "第4便",
-            "flightNo": "NH592",
-            "orig": "MYJ",
-            "dest": "HND",
-            "route": "松山 ➔ 東京(羽田)",
-            "time": "14:35発 - 15:55着",
-            "tag": "予想"
-          },
-          {
-            "step": "第5便",
-            "flightNo": "NH265",
-            "orig": "HND",
-            "dest": "FUK",
-            "route": "東京(羽田) ➔ 福岡",
-            "time": "17:05発 - 19:05着",
+            "dest": "NGS",
+            "route": "東京(羽田) ➔ 長崎",
+            "time": "16:35発 - 18:35着",
             "tag": "予想"
           }
         ]
