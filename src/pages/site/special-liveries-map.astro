@@ -145,12 +145,12 @@ const description =
 				return L.divIcon({
 					className: 'custom-plane-marker',
 					html: `
-						<div class="plane-wrapper" style="${opacityStyle}" title="${ac.name} (${ac.reg})">
+						<div class="plane-wrapper" style="${opacityStyle}" title="${ac.name}">
 							${pulseHtml}
 							<svg viewBox="0 0 24 24" width="28" height="28" style="transform: rotate(${angle}deg); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));">
 								<path fill="${color}" stroke="#ffffff" stroke-width="1.2" d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
 							</svg>
-							<span class="plane-tag" style="background:${color}">${isOffline ? `🅿️ ${ac.reg}` : (ac.flight || ac.reg)}</span>
+							<span class="plane-tag" style="background:${color}">${isOffline ? '🅿️ 駐機' : (ac.flight || ac.airline)}</span>
 						</div>
 					`,
 					iconSize: [36, 36],
@@ -247,7 +247,7 @@ const description =
 						// ホバー時のツールチップ（出発地・行き先・出発時刻のみシンプル表示）
 						marker.bindTooltip(
 							`<div class="livery-tooltip">
-								<div class="tt-title">${ac.name} (${ac.flight || ac.reg})</div>
+								<div class="tt-title">${ac.name}${ac.flight ? ` (${ac.flight})` : ''}</div>
 								<div class="tt-route">🛫 ${routeText}</div>
 								${ac.depTime ? `<div class="tt-time">🕒 ${timeText}</div>` : ''}
 							</div>`,
@@ -282,10 +282,10 @@ const description =
 							<div class="livery-popup">
 								<div class="popup-header">
 									<span class="popup-airline" style="background:${ac.color}">${ac.airline}</span>
-									<strong>${ac.reg}</strong>
+									<span class="popup-model">${ac.model}</span>
 								</div>
 								<div class="popup-title">${ac.name}</div>
-								<div class="popup-meta">${ac.model} / ${formatStatusBadge(ac.status)}</div>
+								<div class="popup-meta">${formatStatusBadge(ac.status)}</div>
 								<table class="popup-table">
 									<tr><th>便名</th><td>${ac.flight || '未設定'}</td></tr>
 									<tr><th>区間</th><td>${routeText}</td></tr>
@@ -316,7 +316,6 @@ const description =
 							<div class="aircraft-card ${hasPos ? 'is-clickable' : 'is-offline'}" data-reg="${ac.reg}">
 								<div class="card-top">
 									<span class="airline-pill" style="background:${ac.color}">${ac.airline}</span>
-									<span class="reg-code">${ac.reg}</span>
 									${formatStatusBadge(ac.status)}
 								</div>
 								<h3 class="card-title">${ac.name}</h3>
@@ -451,7 +450,6 @@ const description =
 									<div class="tl-ac-head">
 										<span class="airline-pill" style="background:${ac.color}">${ac.airline}</span>
 										<strong class="tl-name">${ac.name}</strong>
-										<span class="reg-code">${ac.reg}</span>
 									</div>
 									<div class="tl-stay-text">${stayText}</div>
 								</div>
