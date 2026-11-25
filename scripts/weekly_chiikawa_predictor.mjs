@@ -969,6 +969,15 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
 
   // B767全機の羽田発着二部グラフ同時割当（他機体の本命便占有を考慮）
   const hndBipartiteToday = buildHndBipartiteMatching(dayFlights, learnedModel, assignedOtherMap);
+  // 当日シップチェンジ検知: 本来76Pだった便が他機種へ離脱(demotedFrom76P)し、別便が新たに76Pへ昇格(promotedTo76P)した場合、
+  // 既存76P枠は他機体が担当しているため、余剰となった76P機は「新たに76Pへ昇格した便」へ最優先で振り替えられる
+  const hasDemoted76P = Object.values(dayFlights).some(f => f?.demotedFrom76P);
+  const promoted76PFlights = new Set(
+    Object.values(dayFlights).filter(f => f?.promotedTo76P && f?.is76P && !f?.isCancelled).map(f => normalizeFlightNo(f.flightNo))
+  );
+  if (promoted76PFlights.size > 0) {
+    console.log(`🔄 [当日シップチェンジ連動] 他機種➔76P昇格便を検知: ${[...promoted76PFlights].join(', ')} (離脱76P有り: ${hasDemoted76P})`);
+  }
 
   // すでに他機材で出発済み・飛行中・到着済み、または出発時刻から十分経過して未搭乗確定の便を判定
   const isFlightAlreadyGone = (df, isPairOrReturn = false) => {
@@ -1151,11 +1160,26 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
         }
         // B767全機二部マッチングによる羽田折返し競合解消
         const contentionFactor = getHndContentionFactor(hndBipartiteToday, curFn, df.flightNo);
-        edgeWeight *= turnScore * contentionFactor;
+        // 💡 当日シップチェンジ・スワップ優先補正:
+        // 本来76Pだった便が他機種へ降格(hasDemoted76P)し、別便が新たに76Pへ昇格(promotedTo76P)した場合、
+        // 既存の通常76P便は他機体の固定枠であるため、余剰76P機(JA609A)は新たに76P昇格した便へ最優先で振り替えられる。
+        if (df.promotedTo76P && promoted76PFlights.has(normalizeFlightNo(df.flightNo))) {
+          const swapTurnFloor = Math.max(turnScore, 1.45);
+          const swapMultiplier = hasDemoted76P ? 18.0 : 4.0;
+          edgeWeight = Math.max(edgeWeight, 3.0) * swapTurnFloor * swapMultiplier;
+        } else if (hasDemoted76P && promoted76PFlights.size > 0 && depth === 0) {
+          // 1対1スワップ発生時、昇格便以外の既存76P枠は他機体担当の可能性が高いため控えめに評価
+          edgeWeight *= turnScore * contentionFactor * 0.35;
+        } else {
+          edgeWeight *= turnScore * contentionFactor;
+        }
       } else {
         const turn = actDepM - curArrMin;
         if (turn >= 30 && turn <= 85) edgeWeight *= 1.45;
         else if (schedDepM - curSchedArrMin >= 35 && schedDepM - curSchedArrMin <= 85) edgeWeight *= 1.35;
+        if (df.promotedTo76P && promoted76PFlights.has(normalizeFlightNo(df.flightNo))) {
+          edgeWeight *= 2.5;
+        }
       }
 
       return {
