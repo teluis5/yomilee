@@ -363,6 +363,12 @@ const description =
 				{ code: 'SHI', name: '下地島空港' }
 			];
 
+			function isAtAirport(ac, code) {
+				if (ac.status === 'airborne') return false;
+				if (!ac.nearestAirport) return false;
+				return ac.nearestAirport.includes(`(${code})`) || ac.nearestAirport.includes(AIRPORT_JA[code] || '');
+			}
+
 			function toMin(hhmm) {
 				if (!hhmm || !/^\d{1,2}:\d{2}$/.test(hhmm)) return null;
 				const [h, m] = hhmm.split(':').map(Number);
