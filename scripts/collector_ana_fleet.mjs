@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
+import { atomicWriteFileSync } from './file_safety.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -68,7 +69,7 @@ function exportCsv(flightsObj) {
         `"${(f.status || '').replace(/"/g, '""')}"`
       ].join(','));
     }
-    fs.writeFileSync(MASTER_CSV_FILE, lines.join('\n'), 'utf-8');
+    atomicWriteFileSync(MASTER_CSV_FILE, lines.join('\n'), 'utf-8');
     console.log(`📁 分析用CSVアーカイブを更新しました: ${MASTER_CSV_FILE}`);
   } catch (e) {
     console.warn('⚠️ CSVエクスポート警告:', e.message);
@@ -76,23 +77,24 @@ function exportCsv(flightsObj) {
 }
 
 function saveHistory(data) {
-  // 1. プライベートマスターDB（完全非公開）へ保存
+  // 1. プライベートマスターDB（完全非公開）へ原子保存
   if (!fs.existsSync(PRIVATE_DB_DIR)) fs.mkdirSync(PRIVATE_DB_DIR, { recursive: true });
-  fs.writeFileSync(MASTER_HISTORY_FILE, JSON.stringify(data, null, 2), 'utf-8');
+  const serialized = JSON.stringify(data, null, 2);
+  atomicWriteFileSync(MASTER_HISTORY_FILE, serialized, 'utf-8');
   console.log(`🔒 プライベートマスターDBに永続保存しました: ${MASTER_HISTORY_FILE}`);
 
   // 2. 日次スナップショット（過去データ永久保証・破損対策）
   const todayStr = toJSTDateStr(Math.floor(Date.now() / 1000));
   if (!fs.existsSync(PRIVATE_SNAPSHOTS_DIR)) fs.mkdirSync(PRIVATE_SNAPSHOTS_DIR, { recursive: true });
   const snapshotFile = path.join(PRIVATE_SNAPSHOTS_DIR, `ana_b767_snapshot_${todayStr}.json`);
-  fs.writeFileSync(snapshotFile, JSON.stringify(data, null, 2), 'utf-8');
+  atomicWriteFileSync(snapshotFile, serialized, 'utf-8');
 
   // 3. CSV形式でアーカイブ（Excel/データ分析用）
   exportCsv(data.flights);
 
   // 4. ローカルキャッシュ（プロジェクト内）も同期更新
   if (!fs.existsSync(LOCAL_DATA_DIR)) fs.mkdirSync(LOCAL_DATA_DIR, { recursive: true });
-  fs.writeFileSync(LOCAL_HISTORY_FILE, JSON.stringify(data, null, 2), 'utf-8');
+  atomicWriteFileSync(LOCAL_HISTORY_FILE, serialized, 'utf-8');
 }
 
 // curl.exe で特定の機体のフライトデータを取得

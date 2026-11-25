@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月25日 08:45",
-  "updatedAtIso": "2026-11-24T23:45:05.613Z",
+  "updatedAt": "2026年11月25日 09:00",
+  "updatedAtIso": "2026-11-25T00:00:05.721Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (広島 ➔ 東京(羽田))",
+    "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
     "currentSpot": "北ピア(1,2,3)",
     "spotConfidenceNote": "羽田第2ターミナル 北ピア（到着口1,2,3 / 46〜62番ゲート帯）連動判定",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "広島(89%) / 東京(羽田)(11%)",
     "nightStayCode": "HIJ",
     "isNightStayConfirmed": false,
@@ -136,17 +136,25 @@
   },
   "maintenanceProfile": {
     "asOfDate": "2026-11-25",
+    "specialLiveryPolicy": "exclude_training_and_standby",
     "ja609aConsecutiveOperatingDays": 35,
     "ja609aRecent7dLegs": 33,
     "ja609aRecent14dLegs": 69,
+    "ja609aHndStayStats": {
+      "hndStayCount": 14,
+      "idleAfterHnd": 0
+    },
     "consecutiveRegionalStaysBeforeToday": 3,
     "projectedRegionalStayStreak": 4,
     "hndReturnPressure": "high",
     "maintenanceRiskLevel": "elevated",
-    "fleetIdleRateAfterHndPct": 10.8,
+    "fleetMaintenanceDockRateAfterHndPct": 2.5,
+    "referenceNormalFleetIdleRatePct": 7.4,
     "fleetIdleSamples": {
-      "idleNextAfterHnd": 9,
-      "hndStayCount": 83
+      "multiDayMaintAfterHnd": 2,
+      "singleDayStandbyReference": 4,
+      "trainingReference": 2,
+      "hndStayCount": 81
     },
     "fleetRegionalReturnCurve": {
       "streak_1": {
@@ -170,7 +178,7 @@
         "returnRatePct": 30
       }
     },
-    "summaryNote": "JA609Aは現在 35日連続稼働中（直近7日: 33便 / 14日: 69便）。地方泊が4泊連続となる見込みのため、羽田帰還圧力が高め（同型機実績では3泊目以降の翌日羽田帰還率 約66.7%）。長期連続稼働帯に入っているため、羽田帰還後のAチェック等による運休・シップチェンジに注意。"
+    "summaryNote": "JA609Aは現在 35日連続稼働中（直近7日: 33便 / 14日: 69便・羽田泊翌日運休実績 0/14回）。地方泊が4泊連続となる見込みのため、羽田帰還圧力が高め（同型機実績では3泊目以降の翌日羽田帰還率 約66.7%）。長期連続稼働帯に入っているため、羽田帰還後の定期整備（Aチェック等）による運休に留意。"
   },
   "firstFlightStats": {
     "previousNight": {
@@ -2368,7 +2376,7 @@
           "route": "広島 ➔ 東京(羽田)"
         }
       },
-      "currentAirport": "飛行中 (広島 ➔ 東京(羽田))",
+      "currentAirport": "東京(羽田)",
       "nightStay": "広島(89%) / 東京(羽田)(11%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH672 (広島 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 広島 89% / 東京(羽田) 11% と推定されます。",
@@ -2401,7 +2409,7 @@
               "dest": "HND",
               "route": "広島 ➔ 東京(羽田)",
               "time": "07:35発 - 08:55着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "① 第1便"
             },
             {
@@ -2466,7 +2474,7 @@
               "dest": "HND",
               "route": "広島 ➔ 東京(羽田)",
               "time": "07:35発 - 08:55着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "① 第1便"
             },
             {
@@ -2522,7 +2530,7 @@
               "dest": "HND",
               "route": "広島 ➔ 東京(羽田)",
               "time": "07:35発 - 08:55着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "① 第1便"
             },
             {
@@ -2602,10 +2610,10 @@
           "actual": {
             "flightNo": "NH672",
             "route": "広島 ➔ 東京(羽田)",
-            "time": "07:43離陸",
-            "status": "飛行中",
-            "isLanded": false,
-            "isLive": true
+            "time": "07:43離陸 / 08:46着陸",
+            "status": "着陸済",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -2696,9 +2704,9 @@
           "time": "07:35発 - 08:55着",
           "depGate": null,
           "arrGate": "1,2,3",
-          "status": "到着予定 (08:47)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (08:46)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -2796,7 +2804,7 @@
           "depGate": null,
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-24T21:45:08.442Z"
+          "modelObservedAt": "2026-11-24T23:45:15.165Z"
         },
         {
           "flightNo": "NH661",
@@ -2808,7 +2816,7 @@
           "depGate": "48",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-24T21:45:08.694Z"
+          "modelObservedAt": "2026-11-24T23:45:15.501Z"
         },
         {
           "flightNo": "NH245",
@@ -2820,7 +2828,7 @@
           "depGate": "57",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-24T21:45:08.519Z"
+          "modelObservedAt": "2026-11-24T23:45:15.251Z"
         },
         {
           "flightNo": "NH1077",
@@ -2832,7 +2840,7 @@
           "depGate": "58",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-24T21:45:08.519Z"
+          "modelObservedAt": "2026-11-24T23:45:15.251Z"
         }
       ],
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",

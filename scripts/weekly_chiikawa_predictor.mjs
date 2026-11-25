@@ -5,6 +5,19 @@ import { execSync } from 'node:child_process';
 import { collectFleetData } from './collector_ana_fleet.mjs';
 import { overnightPairs, overnightWeights, walkForward } from './chiikawa_overnight_model.mjs';
 import { updateAnaFleetStatusFromODPT } from '../../../5_script/fetch_ana_odpt_fleet_status.mjs';
+import { atomicWriteFileSync, backupFileDaily } from './file_safety.mjs';
+import {
+  resolveHndSpotFromOdptGate,
+  evaluateHndSpotAffinityEnhanced,
+  buildHndBipartiteMatching,
+  getHndContentionFactor,
+  analyzeOperatingAndMaintenanceProfile,
+  getRegionalReturnHndBoost,
+  updateWeeklyPredictionsArchive,
+  evaluateWeeklyArchiveAccuracy,
+  classifyEvaluationFailure,
+  summarizeFailureBreakdown
+} from './chiikawa_analytics_enhancements.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,8 +31,10 @@ const ANA_FLEET_STATUS_FILE = path.join(DATA_DIR, 'ana_fleet_status.json');
 const SNAPSHOT_FILE = path.join(DATA_DIR, 'daily_predictions_snapshot.json');
 const FIRST_FLIGHT_HISTORY_FILE = path.join(DATA_DIR, 'chiikawa_first_flight_history.json');
 const EVAL_LOG_FILE = path.join(DATA_DIR, 'evaluation_log.jsonl');
+const WEEKLY_ARCHIVE_FILE = path.join(DATA_DIR, 'weekly_predictions_archive.jsonl');
 const SPOT_STATUS_FILE = path.join(DATA_DIR, 'chiikawa_spot_status.json');
 const SRC_SPOT_STATUS_FILE = path.join(SRC_DATA_DIR, 'chiikawa_spot_status.json');
+const PREDICTION_BACKUP_DIR = path.resolve(YOMILEE_ROOT, '..', '..', 'private_data', 'flight_db', 'prediction_backups');
 
 // スポット状態のロード＆セーブ
 function loadCurrentSpotStatus() {
@@ -36,21 +51,19 @@ function loadCurrentSpotStatus() {
 function saveCurrentSpotStatus(spotData) {
   try {
     fs.mkdirSync(path.dirname(SPOT_STATUS_FILE), { recursive: true });
-    fs.writeFileSync(SPOT_STATUS_FILE, JSON.stringify(spotData, null, 2), 'utf-8');
+    const content = JSON.stringify(spotData, null, 2);
+    atomicWriteFileSync(SPOT_STATUS_FILE, content, 'utf-8');
     if (fs.existsSync(path.dirname(SRC_SPOT_STATUS_FILE))) {
-      fs.writeFileSync(SRC_SPOT_STATUS_FILE, JSON.stringify(spotData, null, 2), 'utf-8');
+      atomicWriteFileSync(SRC_SPOT_STATUS_FILE, content, 'utf-8');
     }
   } catch (e) {
     console.warn('⚠️ chiikawa_spot_status.json 保存失敗:', e.message);
   }
 }
 
-// ゲート情報は位置の参考に留め、同一番号以外には補正をかけない。
-export function evaluateHndSpotAffinity(currentSpot, candidateDepGate) {
-  const spot = String(currentSpot || '').trim().toUpperCase();
-  const gate = String(candidateDepGate || '').trim().toUpperCase();
-  if (!/^(?:[5-9]\d)[A-Z]?$/.test(spot) || !/^(?:[5-9]\d)[A-Z]?$/.test(gate)) return 1.0;
-  return spot === gate ? 1.1 : 1.0;
+// 羽田スポット/ピア連動評価（同一番号・クイックターン同ピアを穏当に加点）
+export function evaluateHndSpotAffinity(currentSpot, candidateDepGate, turnaroundMin = null) {
+  return evaluateHndSpotAffinityEnhanced(currentSpot, candidateDepGate, turnaroundMin);
 }
 
 // ============================================================================
@@ -887,8 +900,9 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
   const startSchedArrMin = parseTimeToMinutes(odptLast?.arrTime || lastToday.arrTime) ?? 950;
   const startActArrMin = parseTimeToMinutes(odptLast?.actArrTime || lastToday.arrTime || odptLast?.arrTime) ?? startSchedArrMin;
 
-  // スポット情報の解決: CLI引数(--spot) > 保存済みステータス(chiikawa_spot_status.json)
+  // スポット情報の解決: CLI引数(--spot) > 保存済みステータス(chiikawa_spot_status.json) > ODPT到着ゲート/ピア(arrGate)
   let currentSpot = null;
+  let spotConfidenceNote = null;
   const spotArg = process.argv.find(a => a.startsWith('--spot='));
   if (spotArg) {
     currentSpot = spotArg.split('=')[1]?.trim();
@@ -898,24 +912,45 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
       currentSpot = process.argv[spotIdx + 1].trim();
     }
   }
-  if (!currentSpot) {
+  if (currentSpot) {
+    spotConfidenceNote = `羽田空港 ${currentSpot}番スポット（手動指定）連動判定`;
+    saveCurrentSpotStatus({
+      airport: startAirport,
+      spot: currentSpot,
+      flightNo: lastToday.flightNo,
+      source: 'CLI',
+      updatedAt: new Date().toISOString()
+    });
+  } else {
     const saved = loadCurrentSpotStatus();
     const savedTime = Date.parse(saved?.updatedAt || '');
     if (saved && saved.airport === startAirport && saved.spot &&
         normalizeFlightNo(saved.flightNo) === startFn &&
         Number.isFinite(savedTime) && Date.now() - savedTime >= 0 &&
-        Date.now() - savedTime <= 6 * 60 * 60 * 1000 && lastToday.isLanded) {
+        Date.now() - savedTime <= 6 * 60 * 60 * 1000 && (lastToday.isLanded || lastToday.isLive)) {
       currentSpot = String(saved.spot).trim();
+      spotConfidenceNote = saved.note || `羽田空港 ${currentSpot} 連動判定適用中`;
+    } else if (startAirport === 'HND' && odptLast?.arrGate) {
+      const resolved = resolveHndSpotFromOdptGate(odptLast.arrGate, startAirport);
+      if (resolved) {
+        currentSpot = resolved.spot;
+        spotConfidenceNote = resolved.note;
+        saveCurrentSpotStatus({
+          airport: startAirport,
+          spot: resolved.spot,
+          pier: resolved.pier,
+          rawArrGate: odptLast.arrGate,
+          flightNo: lastToday.flightNo,
+          source: resolved.source,
+          note: resolved.note,
+          updatedAt: new Date().toISOString()
+        });
+      }
     }
-  } else {
-    // 明示指定されたスポット状態を保存
-    saveCurrentSpotStatus({
-      airport: startAirport,
-      spot: currentSpot,
-      flightNo: lastToday.flightNo,
-      updatedAt: new Date().toISOString()
-    });
   }
+
+  // B767全機の羽田発着二部グラフ同時割当（他機体の本命便占有を考慮）
+  const hndBipartiteToday = buildHndBipartiteMatching(dayFlights, learnedModel, assignedOtherMap);
 
   // すでに他機材で出発済み・飛行中・到着済み、または出発時刻から十分経過して未搭乗確定の便を判定
   const isFlightAlreadyGone = (df, isPairOrReturn = false) => {
@@ -980,7 +1015,7 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
       todayPlans: [],
       pendingNightStayNote: '',
       currentSpot,
-      spotConfidenceNote: currentSpot ? `羽田空港 ${currentSpot}番スポット連動判定` : null
+      spotConfidenceNote: spotConfidenceNote || (currentSpot ? `羽田空港 ${currentSpot} 連動判定` : null)
     };
   }
 
@@ -1096,7 +1131,9 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
         if (isPairOrReturn && df.dest === lastToday?.origCode) {
           turnScore *= 1.1; // 💡 ピストン折返し運用ボーナス（過剰な偏りを防ぐため1.1倍に調整）
         }
-        edgeWeight *= turnScore;
+        // B767全機二部マッチングによる羽田折返し競合解消
+        const contentionFactor = getHndContentionFactor(hndBipartiteToday, curFn, df.flightNo);
+        edgeWeight *= turnScore * contentionFactor;
       } else {
         const turn = actDepM - curArrMin;
         if (turn >= 30 && turn <= 85) edgeWeight *= 1.45;
@@ -1155,7 +1192,7 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
       todayPlans: [],
       pendingNightStayNote: '本日の後続便候補を解析中です。',
       currentSpot,
-      spotConfidenceNote: currentSpot ? `羽田空港 ${currentSpot}番スポット連動判定` : null
+      spotConfidenceNote: spotConfidenceNote || (currentSpot ? `羽田空港 ${currentSpot} 連動判定` : null)
     };
   }
 
@@ -1281,7 +1318,7 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
     todayPlans,
     pendingNightStayNote,
     currentSpot,
-    spotConfidenceNote: currentSpot ? `羽田空港 ${currentSpot}番スポット連動判定適用中` : null
+    spotConfidenceNote: spotConfidenceNote || (currentSpot ? `羽田空港 ${currentSpot} 連動判定適用中` : null)
   };
 }
 
@@ -1520,6 +1557,9 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
     : [{ code: 'HND', probability: 100 }];
 
   const arrivalByAirportMap = firstFlightOptions.arrivalByAirport || {};
+  const regionalStayStreak = Number.isFinite(firstFlightOptions.regionalStayStreak) ? firstFlightOptions.regionalStayStreak : 0;
+  // B767全機の羽田発着二部グラフ同時割当を1回だけ構築（羽田到着後の第2便分岐の競合解消用）
+  const hndBipartite = buildHndBipartiteMatching(effectiveFlights, learnedModel, firstFlightOptions.assignedOther || null);
   const candidateCompletePlans = [];
 
   for (const stay of validPriors) {
@@ -1588,12 +1628,17 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
     }
 
     if (firstFlightOptions.currentDay) {
+      // FR24の離陸反映ラグおよび出発遅延を考慮し、45分の猶予バッファを設ける（0分足切りによる本命便消失バグを防止）
+      const FR24_DEPARTURE_GRACE_MIN = 45;
       morningFlights = morningFlights.filter(df => {
         const dep = parseTimeToMinutes(df.actDepTime || df.depTime);
-        return dep !== null && dep >= firstFlightOptions.nowMin &&
-          !firstFlightOptions.assignedOther?.has(normalizeFlightNo(df.flightNo)) &&
-          !/^(Departed|InAir|Arrived|Landed|TakeOff)$/i.test(String(df.status || '')) &&
-          Boolean(df.is767 || df.is76P || String(df.model || '').includes('76'));
+        if (dep === null || dep + FR24_DEPARTURE_GRACE_MIN < firstFlightOptions.nowMin) return false;
+        if (firstFlightOptions.assignedOther?.has(normalizeFlightNo(df.flightNo))) return false;
+        const st = String(df.status || '');
+        // 既に到着済み(Arrived/Landed)は確実に他機体。Departed/InAirは出発35分超経過してもFR24未反映なら他機体扱い
+        if (/^(Arrived|Landed)$/i.test(st)) return false;
+        if (/^(Departed|InAir|TakeOff)$/i.test(st) && dep + 35 < firstFlightOptions.nowMin) return false;
+        return Boolean(df.is767 || df.is76P || String(df.model || '').includes('76'));
       });
     }
     const arrival = firstFlightOptions.arrival;
@@ -1863,7 +1908,12 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
 
             if (curAirport === 'HND') {
               // 羽田空港でのターンアラウンド評価（なるべく45〜85分から探すが、長め待機もソフトに評価）
-              edgeScore *= evaluateHndTurnaroundScore(curArrMin, df, dayFlightsMap, null, learnedModel);
+              const curSpotForStep = (step === 1 && df.depGate)
+                ? resolveHndSpotFromOdptGate(dayFlightsMap[curFn]?.arrGate, 'HND')?.spot || null
+                : null;
+              edgeScore *= evaluateHndTurnaroundScore(curArrMin, df, dayFlightsMap, curSpotForStep, learnedModel);
+              // B767全機二部グラフ同時割当による羽田折返し競合解消
+              edgeScore *= getHndContentionFactor(hndBipartite, curFn, df.flightNo);
               // 2晩連続で同一の地方空港にナイトステイする反復ループを適度に抑制（機材ローテーション分散）
               const arrM = parseTimeToMinutes(df.arrTime) ?? 0;
               if (startAirport !== 'HND' && df.dest === startAirport && arrM >= 1110) {
@@ -1953,6 +2003,11 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
         const empiricalStayProb = (endCnt + 0.3) / (totalStayFromStart + 1.5);
         plan.weight *= (0.45 + 1.1 * Math.min(1.0, empiricalStayProb * 2.5));
       }
+    }
+
+    // 💡 連続地方泊からの羽田帰還圧力（3泊目以降は実データ帰還カーブに基づき羽田泊へ穏当なブースト）
+    if (plan.startAirport !== 'HND' && plan.endAirport === 'HND' && regionalStayStreak >= 3) {
+      plan.weight *= getRegionalReturnHndBoost(regionalStayStreak);
     }
   }
 
@@ -2302,7 +2357,25 @@ function computeRealAccuracyAndHistory(fleetDb, todayStr, anaFleetData, snapshot
       dest: prevActual[prevActual.length - 1].dest || prevActual[prevActual.length - 1].destination,
       flightNo: prevActual[prevActual.length - 1].flightNo
     } : null;
-    const predictedPlans = generateDayPlansViaBeamSearch(priorStays, d, anaFleetData, oosModel, prevFirstFn, null, prevArrivalFlight);
+    // 前日までの連続地方泊数を算出（リークなし）
+    let pastRegStreak = 0;
+    for (let k = i - 1; k >= 0; k--) {
+      const pList = byDate[completedDates[k]];
+      if (!pList || pList.length === 0) break;
+      const pStay = pList[pList.length - 1].dest;
+      if (pStay === 'HND') break;
+      pastRegStreak++;
+    }
+    const predictedPlans = generateDayPlansViaBeamSearch(
+      priorStays,
+      d,
+      anaFleetData,
+      oosModel,
+      prevFirstFn,
+      null,
+      prevArrivalFlight,
+      { regionalStayStreak: pastRegStreak }
+    );
 
     // 予測された全プラン（プランA〜C）に含まれる便名セットと初便セット
     const predictedFirstFns = new Set(predictedPlans.map(p => normalizeFlightNo(p.flights?.[0]?.flightNo)).filter(Boolean));
@@ -2364,6 +2437,14 @@ function computeRealAccuracyAndHistory(fleetDb, todayStr, anaFleetData, snapshot
       ? `🎯 ${planShortName} 完全的中 (${dayHitFlights}/${actualList.length}便)`
       : `📊 ${actualList.length}便中${dayHitFlights}便的中 (${hitPct}%)`;
 
+    const failureInfo = classifyEvaluationFailure({
+      actualList,
+      evaluatedFlights,
+      prevNightStayCode,
+      isFirstHit,
+      dayHitFlights
+    });
+
     evalRecords.push({
       dateStr: d,
       date: dateJa,
@@ -2377,9 +2458,12 @@ function computeRealAccuracyAndHistory(fleetDb, todayStr, anaFleetData, snapshot
       dayTotalFlights: actualList.length,
       isPerfect: dayHitFlights === actualList.length,
       isFirstHit,
+      failureCategory: failureInfo.failureCategory,
+      failureCategoryLabel: failureInfo.failureCategoryLabel,
+      failureDetail: failureInfo.failureDetail,
       reason: dayHitFlights === actualList.length
         ? `前夜${shortAirportName(prevNightStayCode)}泊からの初便(${actualList[0].normFn})および後続の全${actualList.length}便が予測シナリオと完全一致`
-        : `初便${actualList[0].normFn}から${dayHitFlights}便が予測シナリオに合致（一部区間は当日の機材繰りにより別スジへ分岐）`
+        : `${failureInfo.failureCategoryLabel}: ${failureInfo.failureDetail}（${dayHitFlights}/${actualList.length}便的中）`
     });
   }
 
@@ -2399,6 +2483,7 @@ function computeRealAccuracyAndHistory(fleetDb, todayStr, anaFleetData, snapshot
   const firstFlightHitRate = totalEvaluatedDays > 0
     ? Number(((firstFlightHitDays / totalEvaluatedDays) * 100).toFixed(1))
     : 0;
+  const failureBreakdown = summarizeFailureBreakdown(evalRecords);
 
   const accuracyStats = {
     dailyFullHitRate,
@@ -2408,12 +2493,13 @@ function computeRealAccuracyAndHistory(fleetDb, todayStr, anaFleetData, snapshot
     totalFlightsEvaluated,
     totalFlightsHit,
     streakHits,
+    failureBreakdown,
     evaluationPeriod: completedDates.length > 0
       ? `${completedDates[0]} 〜 ${completedDates[completedDates.length - 1]} (実データ検証)`
       : '実データ検証中'
   };
 
-  // 監査ログ (evaluation_log.jsonl) の保存
+  // 監査ログ (evaluation_log.jsonl) の原子保存（外れ要因自動分類タグ付き）
   try {
     const lines = evalRecords.map(r => JSON.stringify({
       evaluatedAt: new Date().toISOString(),
@@ -2422,10 +2508,13 @@ function computeRealAccuracyAndHistory(fleetDb, todayStr, anaFleetData, snapshot
       hitFlights: r.dayHitFlights,
       totalFlights: r.dayTotalFlights,
       hitRate: r.hitRate,
+      failureCategory: r.failureCategory,
+      failureCategoryLabel: r.failureCategoryLabel,
+      failureDetail: r.failureDetail,
       actual: r.actual,
       predicted: r.predicted
     }));
-    fs.writeFileSync(EVAL_LOG_FILE, lines.join('\n') + '\n', 'utf-8');
+    atomicWriteFileSync(EVAL_LOG_FILE, lines.join('\n') + '\n', 'utf-8');
   } catch (e) {
     console.warn('⚠️ evaluation_log.jsonl 書き込み警告:', e.message);
   }
@@ -2743,12 +2832,16 @@ export async function generateWeeklyPrediction() {
   }
 
   // 実データ精度検証＆過去日履歴を構築
-  const { accuracyStats, pastPredictions } = computeRealAccuracyAndHistory(
+  const { accuracyStats, pastPredictions, byDate: actualByDate } = computeRealAccuracyAndHistory(
     fleetDb,
     todayStr,
     anaFleetData,
     snapshots
   );
+
+  // 連続稼働日数・連続地方泊・整備（運休/羽田帰還）リスク分析
+  const maintenanceProfile = analyzeOperatingAndMaintenanceProfile(fleetDb, todayStr, nightStayCode);
+  console.log(`🔧 稼働・整備分析: 連続稼働 ${maintenanceProfile.ja609aConsecutiveOperatingDays}日 / 連続地方泊見込 ${maintenanceProfile.projectedRegionalStayStreak}泊 / 帰還圧力: ${maintenanceProfile.hndReturnPressure} / 整備リスク: ${maintenanceProfile.maintenanceRiskLevel}`);
 
   // 8. 向こう7日間（Day 0 〜 Day 6）の連鎖スケジュール構築
   const weeklyDays = [];
@@ -2797,7 +2890,11 @@ export async function generateWeeklyPrediction() {
     todayFirstFn,
     todayVisitedDests,
     tomorrowArrivalFlight,
-    { capture: tomorrowFirstRaw, arrival: tomorrowArrival }
+    {
+      capture: tomorrowFirstRaw,
+      arrival: tomorrowArrival,
+      regionalStayStreak: maintenanceProfile.projectedRegionalStayStreak
+    }
   );
 
   const previousDateStr = formatDate(new Date(jstNow.getTime() - 24 * 60 * 60 * 1000));
@@ -2845,7 +2942,7 @@ export async function generateWeeklyPrediction() {
         assignedOther: assignedOtherMap, arrival: arrivalContext }
     );
   }
-  const morningFirstFlights = rankFirstCandidates(morningFirstRaw);
+  const morningFirstFlightsRaw = rankFirstCandidates(morningFirstRaw);
   let firstFlightHistory = {};
   if (fs.existsSync(FIRST_FLIGHT_HISTORY_FILE)) {
     try {
@@ -2855,6 +2952,7 @@ export async function generateWeeklyPrediction() {
       firstFlightHistory = null;
     }
   }
+  const nowMinutesJst = jstNow.getHours() * 60 + jstNow.getMinutes();
   if (firstFlightHistory) {
     if (tomorrowFirstFlights.length && jstNow.getHours() >= 17) {
       firstFlightHistory[tomorrowDateStr] ||= {};
@@ -2864,20 +2962,37 @@ export async function generateWeeklyPrediction() {
         trialApplicable: Boolean(tomorrowArrival)
       };
     }
-    if (morningFirstFlights.length) {
+    if (morningFirstFlightsRaw.length) {
       firstFlightHistory[todayStr] ||= {};
-      firstFlightHistory[todayStr].morning = {
-        updatedAtIso: new Date().toISOString(), arrival: arrivalContext, candidates: morningFirstFlights,
-        trialCandidates: rankFirstCandidates(morningFirstRaw, 'shadowScore'), trialApplicable: true
-      };
+      const existingMorning = firstFlightHistory[todayStr].morning;
+      // 💡 当朝初便スナップショット不変保護（上書き汚染防止）:
+      // 既に朝スナップショットが保存済みで、その1位候補の出発15分前以降（または朝07:45以降）に達している場合、
+      // FR24離陸検知遅延による本命便脱落で当朝予想を上書き破壊するのを厳禁とする。
+      let canWriteMorning = !existingMorning || !(existingMorning.candidates?.length);
+      if (!canWriteMorning) {
+        const existingTopDepMin = parseTimeToMinutes(existingMorning.candidates[0]?.depTime);
+        const lockCutoffMin = existingTopDepMin !== null ? Math.min(465, existingTopDepMin - 15) : 450; // 最大07:45または出発15分前
+        if (nowMinutesJst < lockCutoffMin) {
+          canWriteMorning = true;
+        }
+      }
+      if (canWriteMorning) {
+        firstFlightHistory[todayStr].morning = {
+          updatedAtIso: new Date().toISOString(), arrival: arrivalContext, candidates: morningFirstFlightsRaw,
+          trialCandidates: rankFirstCandidates(morningFirstRaw, 'shadowScore'), trialApplicable: true
+        };
+      }
     }
     if (firstObserved && firstFlightHistory[todayStr]) {
       firstFlightHistory[todayStr].actual = {
         flightNo: firstObserved.flightNo, route: firstObserved.route
       };
     }
-    fs.writeFileSync(FIRST_FLIGHT_HISTORY_FILE, JSON.stringify(firstFlightHistory, null, 2), 'utf-8');
+    atomicWriteFileSync(FIRST_FLIGHT_HISTORY_FILE, JSON.stringify(firstFlightHistory, null, 2), 'utf-8');
   }
+  const morningFirstFlights = morningFirstFlightsRaw.length > 0
+    ? morningFirstFlightsRaw
+    : (firstFlightHistory?.[todayStr]?.morning?.candidates || []);
   const firstFlightStats = {};
   for (const phase of ['previousNight', 'morning']) {
     const entries = Object.values(firstFlightHistory || {}).filter(
@@ -2911,13 +3026,13 @@ export async function generateWeeklyPrediction() {
     trialHits: trialEntries.filter(e => e.prediction.trialCandidates[0].flightNo === e.actual.flightNo).length
   };
 
-  // 明日の最新予測を明日のスナップショットとして保存（明日になった後は上書きされない）
+  // 明日の最新予測を明日のスナップショットとして原子保存（明日になった後は上書きされない）
   if (tomorrowPlans && tomorrowPlans.length > 0) {
     snapshots[tomorrowDateStr] = tomorrowPlans;
   }
 
   try {
-    fs.writeFileSync(SNAPSHOT_FILE, JSON.stringify(snapshots, null, 2), 'utf-8');
+    atomicWriteFileSync(SNAPSHOT_FILE, JSON.stringify(snapshots, null, 2), 'utf-8');
   } catch (e) {
     console.warn('⚠️ daily_predictions_snapshot.json 保存警告:', e.message);
   }
@@ -2926,6 +3041,9 @@ export async function generateWeeklyPrediction() {
   let runningPriors = computeNextDayStayPriorsFromPlans(tomorrowPlans);
   let runningArrivalByAirport = tomorrowPlans?._arrivalByAirport || {};
   let prevDayFirstFn = tomorrowPlans[0]?.flights?.[0]?.flightNo || null;
+  let runningRegionalStreak = (tomorrowPlans[0]?.stayCode && tomorrowPlans[0].stayCode !== 'HND')
+    ? (maintenanceProfile.projectedRegionalStayStreak + 1)
+    : 0;
 
   for (const day of weeklyDays) {
     if (day.dayIndex === 0) {
@@ -3073,13 +3191,16 @@ export async function generateWeeklyPrediction() {
         prevDayFirstFn,
         prevVisitedDests,
         rollingArrivalFlight,
-        { arrivalByAirport: runningArrivalByAirport }
+        { arrivalByAirport: runningArrivalByAirport, regionalStayStreak: runningRegionalStreak }
       );
 
       if (dayPlans.length > 0) {
         runningPriors = computeNextDayStayPriorsFromPlans(dayPlans);
         runningArrivalByAirport = dayPlans._arrivalByAirport || {};
         prevDayFirstFn = dayPlans[0]?.flights?.[0]?.flightNo || null;
+        runningRegionalStreak = (dayPlans[0]?.stayCode && dayPlans[0].stayCode !== 'HND')
+          ? (runningRegionalStreak + 1)
+          : 0;
       }
 
       const top5Routes = buildDynamicRouteSummaryForDay(dayPlans, dayScheduleFlights, learnedModel, day.isWeekend);
@@ -3098,8 +3219,24 @@ export async function generateWeeklyPrediction() {
     }
   }
 
-  // 9. 動的計算による空港遭遇確率レーダー
+  // 9. 動的計算による空港遭遇確率レーダー ＆ 週間予測(D+1〜D+6)リードタイム別アーカイブ更新・自動検証
   const airportRadar = buildDynamicAirportRadar(learnedModel);
+  const weeklyArchiveRecords = updateWeeklyPredictionsArchive(
+    WEEKLY_ARCHIVE_FILE,
+    todayStr,
+    weeklySchedule,
+    isNightStayConfirmed
+  );
+  const weeklyArchiveAccuracy = evaluateWeeklyArchiveAccuracy(
+    weeklyArchiveRecords,
+    actualByDate,
+    todayStr
+  );
+
+  // 重要スナップショット・履歴ファイルの日次バックアップ（非公開ディレクトリ・14日ローテーション）
+  backupFileDaily(SNAPSHOT_FILE, PREDICTION_BACKUP_DIR, todayStr, 14);
+  backupFileDaily(FIRST_FLIGHT_HISTORY_FILE, PREDICTION_BACKUP_DIR, todayStr, 14);
+  backupFileDaily(WEEKLY_ARCHIVE_FILE, PREDICTION_BACKUP_DIR, todayStr, 14);
 
   const resultData = {
     updatedAt: nowJa,
@@ -3119,6 +3256,8 @@ export async function generateWeeklyPrediction() {
       nightStayProbabilities
     },
     accuracyStats,
+    weeklyArchiveAccuracy,
+    maintenanceProfile,
     firstFlightStats,
     pairedFirstFlightStats,
     overnightTrialStats,
@@ -3132,10 +3271,12 @@ export async function generateWeeklyPrediction() {
   };
 
   if (!fs.existsSync(SRC_DATA_DIR)) fs.mkdirSync(SRC_DATA_DIR, { recursive: true });
-  fs.writeFileSync(OUTPUT_JSON_FILE, JSON.stringify(resultData, null, 2), 'utf-8');
-  fs.writeFileSync(SRC_OUTPUT_JSON_FILE, JSON.stringify(resultData, null, 2), 'utf-8');
-  console.log(`💾 週間予測JSONデータを保存しました: ${OUTPUT_JSON_FILE}`);
-  console.log(`💾 src/dataにも保存しました: ${SRC_OUTPUT_JSON_FILE}`);
+  const serializedResult = JSON.stringify(resultData, null, 2);
+  atomicWriteFileSync(OUTPUT_JSON_FILE, serializedResult, 'utf-8');
+  atomicWriteFileSync(SRC_OUTPUT_JSON_FILE, serializedResult, 'utf-8');
+  console.log(`💾 週間予測JSONデータを原子保存しました: ${OUTPUT_JSON_FILE}`);
+  console.log(`💾 src/dataにも原子保存しました: ${SRC_OUTPUT_JSON_FILE}`);
+  console.log(`📦 週間アーカイブ(D+1〜D+6)累計: ${weeklyArchiveAccuracy.totalArchivedRecords} 件（検証済: ${weeklyArchiveAccuracy.totalEvaluatedRecords} 件）`);
   return resultData;
 }
 
