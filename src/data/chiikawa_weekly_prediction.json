@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月26日 11:30",
-  "updatedAtIso": "2026-11-26T02:30:13.374Z",
+  "updatedAt": "2026年11月26日 11:45",
+  "updatedAtIso": "2026-11-26T02:45:14.415Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "長崎",
-    "currentLocationCode": "NGS",
-    "currentSpot": null,
-    "spotConfidenceNote": null,
-    "isAirborne": false,
+    "currentLocation": "飛行中 (長崎 ➔ 東京(羽田))",
+    "currentLocationCode": "HND",
+    "currentSpot": "南ピア(4,5,6)",
+    "spotConfidenceNote": "羽田第2ターミナル 南ピア（到着口4,5,6 / 63〜73番ゲート帯）連動判定",
+    "isAirborne": true,
     "nightStay": "名古屋(中部)(85%) / 長崎(5%)",
     "nightStayCode": "NGO",
     "isNightStayConfirmed": false,
@@ -148,8 +148,8 @@
     "asOfDate": "2026-11-26",
     "specialLiveryPolicy": "exclude_training_and_standby",
     "ja609aConsecutiveOperatingDays": 36,
-    "ja609aRecent7dLegs": 33,
-    "ja609aRecent14dLegs": 69,
+    "ja609aRecent7dLegs": 34,
+    "ja609aRecent14dLegs": 70,
     "ja609aHndStayStats": {
       "hndStayCount": 15,
       "idleAfterHnd": 0
@@ -188,7 +188,7 @@
         "returnRatePct": 30
       }
     },
-    "summaryNote": "JA609Aは現在 36日連続稼働中（直近7日: 33便 / 14日: 69便・羽田泊翌日運休実績 0/15回）。長期連続稼働帯に入っているため、羽田帰還後の定期整備（Aチェック等）による運休に留意。"
+    "summaryNote": "JA609Aは現在 36日連続稼働中（直近7日: 34便 / 14日: 70便・羽田泊翌日運休実績 0/15回）。長期連続稼働帯に入っているため、羽田帰還後の定期整備（Aチェック等）による運休に留意。"
   },
   "firstFlightStats": {
     "previousNight": {
@@ -2529,11 +2529,11 @@
           "route": "東京(羽田) ➔ 長崎"
         }
       },
-      "currentAirport": "長崎",
+      "currentAirport": "飛行中 (長崎 ➔ 東京(羽田))",
       "nightStay": "名古屋(中部)(85%) / 長崎(5%)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH661 (東京(羽田) ➔ 長崎) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 名古屋(中部) 85% / 長崎 5% / 広島 5% / 東京(羽田) 5% と推定されます。",
-      "todayOutlook": "現在 NH661 (東京(羽田) ➔ 長崎) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 名古屋(中部) 85% / 長崎 5% / 広島 5% / 東京(羽田) 5% と推定されます。",
+      "pendingNightStayNote": "現在 NH664 (長崎 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 名古屋(中部) 85% / 長崎 5% / 広島 5% / 東京(羽田) 5% と推定されます。",
+      "todayOutlook": "現在 NH664 (長崎 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 名古屋(中部) 85% / 長崎 5% / 広島 5% / 東京(羽田) 5% と推定されます。",
       "nightStayProbabilities": [
         {
           "airport": "名古屋(中部)",
@@ -2562,7 +2562,7 @@
           "planName": "プランA (中部泊)",
           "stayCode": "NGO",
           "rank": "本命 ◎",
-          "probability": 82,
+          "probability": 81,
           "title": "【今夜中部泊シナリオ】羽田 ➔ 長崎 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
           "routeSummary": "羽田 ➔ 長崎 ➔ 羽田 ➔ 伊丹 ➔ 新千歳 ➔ 中部(泊)",
           "flights": [
@@ -2581,7 +2581,7 @@
               "dest": "HND",
               "route": "長崎 ➔ 東京(羽田)",
               "time": "11:20発 - 12:55着",
-              "tag": "予想接続(76P)",
+              "tag": "飛行中",
               "step": "② 第2便"
             },
             {
@@ -2637,7 +2637,7 @@
               "dest": "HND",
               "route": "長崎 ➔ 東京(羽田)",
               "time": "11:20発 - 12:55着",
-              "tag": "予想接続(76P)",
+              "tag": "飛行中",
               "step": "② 第2便"
             },
             {
@@ -2693,7 +2693,7 @@
               "dest": "HND",
               "route": "長崎 ➔ 東京(羽田)",
               "time": "11:20発 - 12:55着",
-              "tag": "予想接続(76P)",
+              "tag": "飛行中",
               "step": "② 第2便"
             },
             {
@@ -2790,7 +2790,14 @@
             "time": "10:40発 - 13:00着",
             "update": null
           },
-          "actual": null
+          "actual": {
+            "flightNo": "NH664",
+            "route": "長崎 ➔ 東京(羽田)",
+            "time": "11:40離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#3",
@@ -2868,18 +2875,14 @@
         },
         {
           "flightNo": "NH664",
-          "origCode": "NGS",
-          "destCode": "HND",
           "route": "長崎 ➔ 東京(羽田)",
-          "depTime": "11:20",
-          "arrTime": "12:55",
-          "time": "11:20発 - 12:55着 (予想)",
-          "status": "後続便候補",
-          "isLanded": false,
-          "isLive": false,
-          "isPredicted": true,
+          "time": "11:20発 - 12:55着",
           "depGate": null,
-          "arrGate": "4,5,6"
+          "arrGate": "4,5,6",
+          "status": "到着予定 (13:05)",
+          "isLanded": false,
+          "isLive": true,
+          "isPredicted": false
         },
         {
           "flightNo": "NH27",
@@ -3000,7 +3003,7 @@
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
       "expectedStart": "中部発 (NH703)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH661 (東京(羽田) ➔ 長崎) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 名古屋(中部) 85% / 長崎 5% / 広島 5% / 東京(羽田) 5% と推定されます。",
+      "pendingNightStayNote": "現在 NH664 (長崎 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 名古屋(中部) 85% / 長崎 5% / 広島 5% / 東京(羽田) 5% と推定されます。",
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
@@ -5595,7 +5598,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 746,
+    "totalFleetFlights": 747,
     "fleetCount": 11
   }
 }
