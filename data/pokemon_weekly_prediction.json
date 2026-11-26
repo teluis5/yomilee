@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月27日 04:00",
-  "updatedAtIso": "2026-11-26T19:00:15.963Z",
+  "updatedAt": "2026年11月27日 05:00",
+  "updatedAtIso": "2026-11-26T20:00:17.669Z",
   "totalJets": 5,
   "jets": [
     {
@@ -149,8 +149,45 @@
       "flightState": "確認中",
       "currentLocation": "確認中",
       "currentFlight": null,
-      "todayFlights": [],
+      "todayFlights": [
+        {
+          "flightNo": "NH118",
+          "origin": "HND",
+          "dest": "SEA",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "シアトル (SEA)",
+          "origCode": "HND",
+          "destCode": "SEA",
+          "route": "東京(羽田) ➔ シアトル",
+          "depTime": "21:15",
+          "arrTime": "06:20",
+          "timeRange": "21:15 - 06:20",
+          "dateJst": "2026-11-27",
+          "status": "Estimated dep 21:15",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        }
+      ],
       "recentFlights": [
+        {
+          "flightNo": "NH118",
+          "origin": "HND",
+          "dest": "SEA",
+          "originName": "東京(羽田) (HND)",
+          "destinationName": "シアトル (SEA)",
+          "origCode": "HND",
+          "destCode": "SEA",
+          "route": "東京(羽田) ➔ シアトル",
+          "depTime": "21:15",
+          "arrTime": "06:20",
+          "timeRange": "21:15 - 06:20",
+          "dateJst": "2026-11-27",
+          "status": "Estimated dep 21:15",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH805",
           "origin": "NRT",
@@ -237,24 +274,6 @@
           "timeRange": "12:48 - 22:58",
           "dateJst": "2026-11-24",
           "status": "Landed 19:28",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
-        },
-        {
-          "flightNo": "NH804",
-          "origin": "SIN",
-          "dest": "NRT",
-          "originName": "シンガポール (SIN)",
-          "destinationName": "東京(成田) (NRT)",
-          "origCode": "SIN",
-          "destCode": "NRT",
-          "route": "シンガポール ➔ 東京(成田)",
-          "depTime": "02:14",
-          "arrTime": "08:12",
-          "timeRange": "02:14 - 08:12",
-          "dateJst": "2026-11-24",
-          "status": "Landed 08:12",
           "isLive": false,
           "isLanded": true,
           "isToday": false
@@ -419,7 +438,7 @@
         "arrTime": "06:50",
         "timeRange": "00:17 - 06:50",
         "dateJst": "2026-11-27",
-        "status": "Estimated 06:47",
+        "status": "Estimated 06:45",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -438,7 +457,7 @@
           "arrTime": "06:50",
           "timeRange": "00:17 - 06:50",
           "dateJst": "2026-11-27",
-          "status": "Estimated 06:47",
+          "status": "Estimated 06:45",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -458,7 +477,7 @@
           "arrTime": "06:50",
           "timeRange": "00:17 - 06:50",
           "dateJst": "2026-11-27",
-          "status": "Estimated 06:47",
+          "status": "Estimated 06:45",
           "isLive": true,
           "isLanded": false,
           "isToday": true

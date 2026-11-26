@@ -1843,6 +1843,69 @@
         }
       ],
       "trialApplicable": true
+    },
+    "morning": {
+      "updatedAtIso": "2026-11-26T20:00:14.673Z",
+      "arrival": {
+        "airport": "NGO",
+        "arrivalMin": 1235,
+        "gate": null,
+        "flightNo": "NH712",
+        "time": "20:35"
+      },
+      "candidates": [
+        {
+          "flightNo": "NH703",
+          "orig": "NGO",
+          "dest": "CTS",
+          "route": "名古屋(中部) ➔ 札幌(新千歳)",
+          "depTime": "08:40",
+          "arrTime": "10:25",
+          "depGate": "6",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH303",
+          "orig": "NGO",
+          "dest": "OKA",
+          "route": "名古屋(中部) ➔ 沖縄(那覇)",
+          "depTime": "08:20",
+          "arrTime": "10:55",
+          "depGate": "5",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        }
+      ],
+      "trialCandidates": [
+        {
+          "flightNo": "NH703",
+          "orig": "NGO",
+          "dest": "CTS",
+          "route": "名古屋(中部) ➔ 札幌(新千歳)",
+          "depTime": "08:40",
+          "arrTime": "10:25",
+          "depGate": "6",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH303",
+          "orig": "NGO",
+          "dest": "OKA",
+          "route": "名古屋(中部) ➔ 沖縄(那覇)",
+          "depTime": "08:20",
+          "arrTime": "10:55",
+          "depGate": "5",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        }
+      ],
+      "trialApplicable": true
     }
   }
 }
