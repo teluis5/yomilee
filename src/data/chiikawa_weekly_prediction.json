@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月26日 13:00",
-  "updatedAtIso": "2026-11-26T04:00:14.105Z",
+  "updatedAt": "2026年11月26日 13:15",
+  "updatedAtIso": "2026-11-26T04:15:13.764Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (長崎 ➔ 東京(羽田))",
+    "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
     "currentSpot": "南ピア(4,5,6)",
     "spotConfidenceNote": "羽田第2ターミナル 南ピア（到着口4,5,6 / 63〜73番ゲート帯）連動判定",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "名古屋(中部)(85%) / 長崎(5%)",
     "nightStayCode": "NGO",
     "isNightStayConfirmed": false,
@@ -2529,7 +2529,7 @@
           "route": "東京(羽田) ➔ 長崎"
         }
       },
-      "currentAirport": "飛行中 (長崎 ➔ 東京(羽田))",
+      "currentAirport": "東京(羽田)",
       "nightStay": "名古屋(中部)(85%) / 長崎(5%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH664 (長崎 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 名古屋(中部) 85% / 長崎 5% / 広島 5% / 東京(羽田) 5% と推定されます。",
@@ -2581,7 +2581,7 @@
               "dest": "HND",
               "route": "長崎 ➔ 東京(羽田)",
               "time": "11:20発 - 12:55着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -2637,7 +2637,7 @@
               "dest": "HND",
               "route": "長崎 ➔ 東京(羽田)",
               "time": "11:20発 - 12:55着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -2693,7 +2693,7 @@
               "dest": "HND",
               "route": "長崎 ➔ 東京(羽田)",
               "time": "11:20発 - 12:55着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -2793,10 +2793,10 @@
           "actual": {
             "flightNo": "NH664",
             "route": "長崎 ➔ 東京(羽田)",
-            "time": "11:40離陸",
-            "status": "飛行中",
-            "isLanded": false,
-            "isLive": true
+            "time": "11:40離陸 / 13:07着陸",
+            "status": "着陸済",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -2879,9 +2879,9 @@
           "time": "11:20発 - 12:55着",
           "depGate": null,
           "arrGate": "4,5,6",
-          "status": "到着予定 (13:10)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (13:07)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
