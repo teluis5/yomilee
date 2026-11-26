@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月26日 15:00",
-  "updatedAtIso": "2026-11-26T06:00:05.507Z",
+  "updatedAt": "2026年11月26日 15:15",
+  "updatedAtIso": "2026-11-26T06:15:14.546Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (東京(羽田) ➔ 大阪(伊丹))",
+    "currentLocation": "大阪(伊丹)",
     "currentLocationCode": "ITM",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "名古屋(中部) (100%)",
     "nightStayCode": "NGO",
     "isNightStayConfirmed": false,
@@ -2334,7 +2334,13 @@
           "modelObservedAt": null
         }
       ],
-      "firstFlightArrival": null,
+      "firstFlightArrival": {
+        "airport": "HND",
+        "arrivalMin": 1268,
+        "gate": null,
+        "flightNo": "NH670",
+        "time": "21:08"
+      },
       "firstFlightHistory": {
         "previousNight": {
           "updatedAtIso": "2026-11-25T14:45:26.754Z",
@@ -2508,7 +2514,7 @@
           "route": "東京(羽田) ➔ 長崎"
         }
       },
-      "currentAirport": "飛行中 (東京(羽田) ➔ 大阪(伊丹))",
+      "currentAirport": "大阪(伊丹)",
       "nightStay": "名古屋(中部) (100%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH27 (東京(羽田) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 名古屋(中部) 100% と推定されます。",
@@ -2554,7 +2560,7 @@
               "dest": "ITM",
               "route": "東京(羽田) ➔ 大阪(伊丹)",
               "time": "14:00発 - 15:10着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "③ 第3便"
             },
             {
@@ -2674,10 +2680,10 @@
           "actual": {
             "flightNo": "NH27",
             "route": "東京(羽田) ➔ 大阪(伊丹)",
-            "time": "14:25離陸",
-            "status": "飛行中",
-            "isLanded": false,
-            "isLive": true
+            "time": "14:25離陸 / 15:12着陸",
+            "status": "着陸済",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -2749,9 +2755,9 @@
           "time": "14:00発 - 15:10着",
           "depGate": "64",
           "arrGate": null,
-          "status": "到着予定 (15:12)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (15:12)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -2804,7 +2810,7 @@
           "depGate": null,
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-26T04:00:06.456Z"
+          "modelObservedAt": "2026-11-26T06:15:11.838Z"
         },
         {
           "flightNo": "NH303",
@@ -2816,7 +2822,7 @@
           "depGate": null,
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-26T04:00:06.472Z"
+          "modelObservedAt": "2026-11-26T06:15:11.855Z"
         }
       ],
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
