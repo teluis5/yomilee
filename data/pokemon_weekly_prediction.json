@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月26日 17:00",
-  "updatedAtIso": "2026-11-26T08:00:16.372Z",
+  "updatedAt": "2026年11月26日 18:00",
+  "updatedAtIso": "2026-11-26T09:00:17.068Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,26 +17,9 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "東京(羽田) (HND) ➔ 宮古 (MMY)",
-      "currentFlight": {
-        "flightNo": "NH87",
-        "origin": "HND",
-        "dest": "MMY",
-        "originName": "東京(羽田) (HND)",
-        "destinationName": "宮古 (MMY)",
-        "origCode": "HND",
-        "destCode": "MMY",
-        "route": "東京(羽田) ➔ 宮古",
-        "depTime": "14:43",
-        "arrTime": "15:15",
-        "timeRange": "14:43 - 15:15",
-        "dateJst": "2026-11-26",
-        "status": "Delayed 17:37",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": true
-      },
+      "flightState": "着陸済・駐機中 🟡",
+      "currentLocation": "宮古 (MMY)",
+      "currentFlight": null,
       "todayFlights": [
         {
           "flightNo": "NH243",
@@ -84,12 +67,12 @@
           "destCode": "MMY",
           "route": "東京(羽田) ➔ 宮古",
           "depTime": "14:43",
-          "arrTime": "15:15",
-          "timeRange": "14:43 - 15:15",
+          "arrTime": "17:45",
+          "timeRange": "14:43 - 17:45",
           "dateJst": "2026-11-26",
-          "status": "Delayed 17:37",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 17:45",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         }
       ],
@@ -104,12 +87,12 @@
           "destCode": "MMY",
           "route": "東京(羽田) ➔ 宮古",
           "depTime": "14:43",
-          "arrTime": "15:15",
-          "timeRange": "14:43 - 15:15",
+          "arrTime": "17:45",
+          "timeRange": "14:43 - 17:45",
           "dateJst": "2026-11-26",
-          "status": "Delayed 17:37",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 17:45",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         {
@@ -564,7 +547,7 @@
         "arrTime": "18:15",
         "timeRange": "10:43 - 18:15",
         "dateJst": "2026-11-26",
-        "status": "Estimated 16:03",
+        "status": "Estimated 16:01",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -583,7 +566,7 @@
           "arrTime": "18:15",
           "timeRange": "10:43 - 18:15",
           "dateJst": "2026-11-26",
-          "status": "Estimated 16:03",
+          "status": "Estimated 16:01",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -603,7 +586,7 @@
           "arrTime": "18:15",
           "timeRange": "10:43 - 18:15",
           "dateJst": "2026-11-26",
-          "status": "Estimated 16:03",
+          "status": "Estimated 16:01",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -874,7 +857,7 @@
       {
         "code": "MYJ",
         "airport": "松山",
-        "weight": 1.944,
+        "weight": 0.972,
         "floored": 42,
         "remainder": 0.3793103448275801,
         "originalIndex": 0,
@@ -883,7 +866,7 @@
       {
         "code": "TAK",
         "airport": "高松",
-        "weight": 1.944,
+        "weight": 0.972,
         "floored": 41,
         "remainder": 0.3793103448275801,
         "originalIndex": 1,
@@ -892,7 +875,7 @@
       {
         "code": "HND",
         "airport": "羽田",
-        "weight": 0.81,
+        "weight": 0.405,
         "floored": 17,
         "remainder": 0.24137931034482563,
         "originalIndex": 2,
@@ -956,8 +939,8 @@
             "orig": "HND",
             "dest": "MMY",
             "route": "東京(羽田) ➔ 宮古",
-            "time": "14:43発 - 15:15着",
-            "tag": "飛行中 🟢",
+            "time": "14:43発 - 17:45着",
+            "tag": "運航完了",
             "step": "第3便"
           },
           {
@@ -1012,8 +995,8 @@
             "orig": "HND",
             "dest": "MMY",
             "route": "東京(羽田) ➔ 宮古",
-            "time": "14:43発 - 15:15着",
-            "tag": "飛行中 🟢",
+            "time": "14:43発 - 17:45着",
+            "tag": "運航完了",
             "step": "第3便"
           },
           {
@@ -1068,8 +1051,8 @@
             "orig": "HND",
             "dest": "MMY",
             "route": "東京(羽田) ➔ 宮古",
-            "time": "14:43発 - 15:15着",
-            "tag": "飛行中 🟢",
+            "time": "14:43発 - 17:45着",
+            "tag": "運航完了",
             "step": "第3便"
           },
           {
@@ -1280,12 +1263,12 @@
           "destCode": "MMY",
           "route": "東京(羽田) ➔ 宮古",
           "depTime": "14:43",
-          "arrTime": "15:15",
-          "timeRange": "14:43 - 15:15",
+          "arrTime": "17:45",
+          "timeRange": "14:43 - 17:45",
           "dateJst": "2026-11-26",
-          "status": "Delayed 17:37",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 17:45",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         "update": null
