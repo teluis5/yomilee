@@ -1808,13 +1808,13 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
         }
       }
 
-      // 前夜到着便との往復ペアリング（ANA 767地方ステイ折返し率 88.3%の実データ相関）
-      // 空港別 arrivalByAirport 対応により、Day 2〜6 でも NGO(CTS系 vs OKA系)等の折返しを正確に維持
+      // 前夜到着便との往復ペアリング（単機ステイ地方空港では折返し率ほぼ100%だが、中部NGOなど複数機ステイ拠点は実測約63%のため過大倍率を抑制）
       if (startAirport !== 'HND' && stayPrevArrival && stayPrevArrival.orig) {
+        const isMultiFlightRegionalHub = startAirport === 'NGO' || morningFlights.length >= 2;
         if (df.dest === stayPrevArrival.orig) {
-          score *= 3.8; // 前夜飛んできた空港への折返し便に特大ボーナス！
+          score *= isMultiFlightRegionalHub ? 1.45 : 3.8;
         } else {
-          score *= 0.55; // 前夜と無関係な別路線は相対的に減衰
+          score *= isMultiFlightRegionalHub ? 0.85 : 0.55;
         }
       } else if (startAirport !== 'HND' && df.dest === 'HND' && depM <= 540) {
         score *= 1.35; // 地方泊からの朝一番羽田帰還便は高優先度
