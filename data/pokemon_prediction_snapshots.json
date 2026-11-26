@@ -1715,60 +1715,14 @@
     ]
   },
   "2026-11-27": {
-    "updatedAtIso": "2026-11-26T04:00:16.531Z",
+    "updatedAtIso": "2026-11-26T05:00:17.091Z",
     "plans": [
       {
         "planId": "tomorrow-plan-1",
         "planName": "プランA",
-        "stayCode": "ITM",
-        "rank": "本命",
-        "probability": 52,
-        "routeSummary": "伊丹 ➔ 新千歳 ➔ 伊丹 ➔ 新千歳 ➔ 伊丹",
-        "flights": [
-          {
-            "step": "第1便",
-            "flightNo": "NH771",
-            "orig": "ITM",
-            "dest": "CTS",
-            "route": "大阪(伊丹) ➔ 札幌(新千歳)",
-            "time": "08:30発 - 10:20着",
-            "tag": "予想"
-          },
-          {
-            "step": "第2便",
-            "flightNo": "NH774",
-            "orig": "CTS",
-            "dest": "ITM",
-            "route": "札幌(新千歳) ➔ 大阪(伊丹)",
-            "time": "11:10発 - 13:10着",
-            "tag": "予想"
-          },
-          {
-            "step": "第3便",
-            "flightNo": "NH983",
-            "orig": "ITM",
-            "dest": "CTS",
-            "route": "大阪(伊丹) ➔ 札幌(新千歳)",
-            "time": "14:00発 - 15:50着",
-            "tag": "予想"
-          },
-          {
-            "step": "第4便",
-            "flightNo": "NH780",
-            "orig": "CTS",
-            "dest": "ITM",
-            "route": "札幌(新千歳) ➔ 大阪(伊丹)",
-            "time": "16:50発 - 18:55着",
-            "tag": "予想"
-          }
-        ]
-      },
-      {
-        "planId": "tomorrow-plan-2",
-        "planName": "プランB",
         "stayCode": "KMJ",
-        "rank": "候補",
-        "probability": 24,
+        "rank": "本命",
+        "probability": 40,
         "routeSummary": "羽田 ➔ 宮古 ➔ 羽田 ➔ 熊本",
         "flights": [
           {
@@ -1801,11 +1755,11 @@
         ]
       },
       {
-        "planId": "tomorrow-plan-3",
-        "planName": "プランC",
+        "planId": "tomorrow-plan-2",
+        "planName": "プランB",
         "stayCode": "HND",
         "rank": "候補",
-        "probability": 24,
+        "probability": 40,
         "routeSummary": "羽田 ➔ 宮古 ➔ 羽田 ➔ 熊本 ➔ 羽田",
         "flights": [
           {
@@ -1842,6 +1796,52 @@
             "dest": "HND",
             "route": "熊本 ➔ 東京(羽田)",
             "time": "18:10発 - 19:45着",
+            "tag": "予想"
+          }
+        ]
+      },
+      {
+        "planId": "tomorrow-plan-3",
+        "planName": "プランC",
+        "stayCode": "HND",
+        "rank": "候補",
+        "probability": 20,
+        "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 広島 ➔ 羽田",
+        "flights": [
+          {
+            "step": "第1便",
+            "flightNo": "NH243",
+            "orig": "HND",
+            "dest": "FUK",
+            "route": "東京(羽田) ➔ 福岡",
+            "time": "08:30発 - 10:30着",
+            "tag": "予想"
+          },
+          {
+            "step": "第2便",
+            "flightNo": "NH248",
+            "orig": "FUK",
+            "dest": "HND",
+            "route": "福岡 ➔ 東京(羽田)",
+            "time": "11:20発 - 13:00着",
+            "tag": "予想"
+          },
+          {
+            "step": "第3便",
+            "flightNo": "NH679",
+            "orig": "HND",
+            "dest": "HIJ",
+            "route": "東京(羽田) ➔ 広島",
+            "time": "14:00発 - 15:30着",
+            "tag": "予想"
+          },
+          {
+            "step": "第4便",
+            "flightNo": "NH680",
+            "orig": "HIJ",
+            "dest": "HND",
+            "route": "広島 ➔ 東京(羽田)",
+            "time": "16:15発 - 17:40着",
             "tag": "予想"
           }
         ]
