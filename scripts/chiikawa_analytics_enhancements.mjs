@@ -103,6 +103,91 @@ export function evaluateHndSpotAffinityEnhanced(currentSpot, candidateDepGate, t
   return 1.0;
 }
 
+/**
+ * 羽田「到着ピア × 出発ゲートピア」排他確定判定。
+ * 同じ到着ピア(NORTH / SOUTH)に前後時間帯の他76P到着機が0機で、
+ * かつ同じピアから35〜95分以内に出発する未出発76P便がちょうど1便のみの場合、
+ * 物理的にその次便への充当が確定的(isPierLocked: true)と判定する。
+ */
+export function evaluateHndPierExclusiveLock({
+  curArrFn,
+  curArrMin,
+  currentSpot,
+  dayFlights,
+  assignedOtherMap = null,
+  alreadyFlownSet = null,
+  nowMin = null
+}) {
+  const myPier = resolveHndPier(currentSpot);
+  if (!myPier || (myPier !== 'NORTH' && myPier !== 'SOUTH') || curArrMin === null) {
+    return { isPierLocked: false };
+  }
+  const curNormFn = normalizeFlightNo(curArrFn);
+  const allList = Array.isArray(dayFlights) ? dayFlights : Object.values(dayFlights || {});
+
+  // 1. 同じピアから 35〜95分以内に出発する未出発・未割当の 76P 便を抽出
+  const samePierDeps = allList.filter(df => {
+    if (!df || df.origin !== 'HND' || df.isCancelled) return false;
+    const is76P = Boolean(df.is76P || df.model === '76P');
+    if (!is76P) return false;
+    const fn = normalizeFlightNo(df.flightNo);
+    if (alreadyFlownSet?.has(fn) || assignedOtherMap?.has(fn)) return false;
+    const st = String(df.status || '');
+    if (/^(Arrived|Landed)$/i.test(st)) return false;
+    const depPier = resolveHndPier(df.depGate);
+    if (depPier !== myPier) return false;
+    const depM = parseTimeToMinutes(df.actDepTime || df.depTime);
+    if (depM === null) return false;
+    const turn = depM - curArrMin;
+    if (turn < 35 || turn > 95) return false;
+    if (nowMin !== null && depM + 20 < nowMin) return false;
+    return true;
+  });
+
+  if (samePierDeps.length !== 1) {
+    return { isPierLocked: false, pier: myPier, samePierDepCount: samePierDeps.length };
+  }
+
+  const targetDep = samePierDeps[0];
+  const targetDepMin = parseTimeToMinutes(targetDep.actDepTime || targetDep.depTime);
+
+  // 2. 同じピアに前後時間帯（curArrMin - 75分 〜 targetDepMin - 35分）で到着している他の 76P 便がないか確認
+  const samePierRivalArrivals = allList.filter(af => {
+    if (!af || af.dest !== 'HND' || af.isCancelled) return false;
+    const is76P = Boolean(af.is76P || af.model === '76P');
+    if (!is76P) return false;
+    const fn = normalizeFlightNo(af.flightNo);
+    if (fn === curNormFn) return false;
+    const arrPier = resolveHndPier(af.arrGate);
+    if (arrPier !== myPier) return false;
+    const arrM = parseTimeToMinutes(af.actArrTime || af.arrTime);
+    if (arrM === null) return false;
+    return arrM >= curArrMin - 75 && arrM <= targetDepMin - 35;
+  });
+
+  if (samePierRivalArrivals.length > 0) {
+    return {
+      isPierLocked: false,
+      pier: myPier,
+      samePierDepCount: 1,
+      rivalCount: samePierRivalArrivals.length
+    };
+  }
+
+  const pierJa = myPier === 'NORTH' ? '北ピア' : '南ピア';
+  return {
+    isPierLocked: true,
+    pier: myPier,
+    pierJa,
+    lockedFlightNo: normalizeFlightNo(targetDep.flightNo),
+    depGate: targetDep.depGate || null,
+    depTime: targetDep.actDepTime || targetDep.depTime || '',
+    arrTime: targetDep.actArrTime || targetDep.arrTime || '',
+    dest: targetDep.dest,
+    reason: `羽田${pierJa}に同時間帯の他76P到着機がなく、同ピア${targetDep.depGate ? `${targetDep.depGate}番ゲート` : ''}発の${normalizeFlightNo(targetDep.flightNo)}が唯一の76P折返し枠のため確定的`
+  };
+}
+
 // ============================================================================
 // 2. B767全機 羽田発着 二部グラフ同時割当（競合解消）エンジン
 // ============================================================================

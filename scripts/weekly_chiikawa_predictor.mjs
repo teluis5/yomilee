@@ -9,6 +9,7 @@ import { atomicWriteFileSync, backupFileDaily } from './file_safety.mjs';
 import {
   resolveHndSpotFromOdptGate,
   evaluateHndSpotAffinityEnhanced,
+  evaluateHndPierExclusiveLock,
   buildHndBipartiteMatching,
   getHndContentionFactor,
   analyzeOperatingAndMaintenanceProfile,
@@ -933,6 +934,7 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
   if (currentSpot) {
     spotConfidenceNote = `羽田空港 ${currentSpot}番スポット（手動指定）連動判定`;
     saveCurrentSpotStatus({
+      dateStr: todayStr,
       airport: startAirport,
       spot: currentSpot,
       flightNo: lastToday.flightNo,
@@ -942,7 +944,8 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
   } else {
     const saved = loadCurrentSpotStatus();
     const savedTime = Date.parse(saved?.updatedAt || '');
-    if (saved && saved.airport === startAirport && saved.spot &&
+    const isSameDaySpot = !saved?.dateStr || saved.dateStr === todayStr;
+    if (saved && isSameDaySpot && saved.airport === startAirport && saved.spot &&
         normalizeFlightNo(saved.flightNo) === startFn &&
         Number.isFinite(savedTime) && Date.now() - savedTime >= 0 &&
         Date.now() - savedTime <= 6 * 60 * 60 * 1000 && (lastToday.isLanded || lastToday.isLive)) {
@@ -954,6 +957,7 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
         currentSpot = resolved.spot;
         spotConfidenceNote = resolved.note;
         saveCurrentSpotStatus({
+          dateStr: todayStr,
           airport: startAirport,
           spot: resolved.spot,
           pier: resolved.pier,
@@ -977,6 +981,22 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
   );
   if (promoted76PFlights.size > 0) {
     console.log(`🔄 [当日シップチェンジ連動] 他機種➔76P昇格便を検知: ${[...promoted76PFlights].join(', ')} (離脱76P有り: ${hasDemoted76P})`);
+  }
+
+  // 羽田到着ピア × 出発ゲートピアの排他判定（遅延による変更を避けるため「羽田到着後(isLanded)」にのみ判断）
+  const pierExclusiveLock = (startAirport === 'HND' && lastToday.isLanded && currentSpot)
+    ? evaluateHndPierExclusiveLock({
+        curArrFn: startFn,
+        curArrMin: startActArrMin,
+        currentSpot,
+        dayFlights,
+        assignedOtherMap,
+        alreadyFlownSet,
+        nowMin
+      })
+    : { isPierLocked: false };
+  if (pierExclusiveLock.isPierLocked) {
+    console.log(`🔒 [到着位置連動・充当見込み] ${pierExclusiveLock.reason}`);
   }
 
   // すでに他機材で出発済み・飛行中・到着済み、または出発時刻から十分経過して未搭乗確定の便を判定
@@ -1167,6 +1187,11 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
           const swapTurnFloor = Math.max(turnScore, 1.45);
           const swapMultiplier = hasDemoted76P ? 18.0 : 4.0;
           edgeWeight = Math.max(edgeWeight, 3.0) * swapTurnFloor * swapMultiplier;
+        } else if (depth === 0 && pierExclusiveLock.isPierLocked && normalizeFlightNo(df.flightNo) === pierExclusiveLock.lockedFlightNo) {
+          // 🔒 羽田ピア排他確定（同ピアに他76P機なし＆同ピア発76Pが唯一の折返し枠）
+          edgeWeight = Math.max(edgeWeight, 3.0) * Math.max(turnScore, 1.45) * 14.0;
+        } else if (depth === 0 && pierExclusiveLock.isPierLocked && normalizeFlightNo(df.flightNo) !== pierExclusiveLock.lockedFlightNo) {
+          edgeWeight *= turnScore * contentionFactor * 0.15;
         } else if (hasDemoted76P && promoted76PFlights.size > 0 && depth === 0) {
           // 1対1スワップ発生時、昇格便以外の既存76P枠は他機体担当の可能性が高いため控えめに評価
           edgeWeight *= turnScore * contentionFactor * 0.35;
@@ -1284,6 +1309,7 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
   const predictedRemainingToday = bestPath.remFlights.map((rf, idx) => {
     const isFinal = idx === bestPath.remFlights.length - 1;
     const stayLabel = bestPath.finalStayCode === 'HND' ? '羽田帰還' : `${shortAirportName(bestPath.finalStayCode)}ステイ`;
+    const isPierLockedFlight = idx === 0 && pierExclusiveLock.isPierLocked && normalizeFlightNo(rf.flightNo) === pierExclusiveLock.lockedFlightNo;
     return {
       flightNo: rf.flightNo,
       origCode: rf.orig,
@@ -1292,9 +1318,11 @@ function predictTodayRemainderAndNightStay(todayFlights, todayStr, anaFleetData,
       depTime: rf.depTime,
       arrTime: rf.arrTime,
       time: `${rf.depTime}発 - ${rf.arrTime}着 (予想)`,
-      status: isFinal
-        ? `本命予想 (${topStay.probability}%・${stayLabel}候補)`
-        : '後続便候補',
+      status: isPierLockedFlight
+        ? `📍到着位置より充当見込み (${pierExclusiveLock.pierJa}${pierExclusiveLock.depGate ? `・${pierExclusiveLock.depGate}番ゲート` : ''})`
+        : (isFinal ? `本命予想 (${topStay.probability}%・${stayLabel}候補)` : '後続便候補'),
+      isPierLocked: isPierLockedFlight,
+      pierLockReason: isPierLockedFlight ? pierExclusiveLock.reason : null,
       isLanded: false,
       isLive: false,
       isPredicted: true
@@ -1809,11 +1837,7 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
       if (sw && Number.isFinite(sw)) {
         score *= (0.5 + 0.5 * sw);
       }
-      // 到着ゲートは留め置き位置を保証しないため、同じ番号の場合のみ小さく加点する。
-      if (arrival && arrival.airport === startAirport && arrival.gate && df.depGate &&
-          String(df.depGate).trim().toUpperCase() === arrival.gate) {
-        score *= 1.1;
-      }
+      // 夜をまたぐ駐機（ナイトステイ）では夜間のトーイング移動が入るため、前夜到着ゲートと翌朝出発ゲートの連動加点は行わない。
 
       return { df, score };
     }).sort((a, b) => b.score - a.score).slice(0, startAirport === 'HND' ? 12 : 4);

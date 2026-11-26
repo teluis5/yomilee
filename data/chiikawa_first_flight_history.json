@@ -1786,5 +1786,63 @@
       "flightNo": "NH661",
       "route": "東京(羽田) ➔ 長崎"
     }
+  },
+  "2026-11-27": {
+    "previousNight": {
+      "updatedAtIso": "2026-11-26T08:00:13.613Z",
+      "candidates": [
+        {
+          "flightNo": "NH703",
+          "orig": "NGO",
+          "dest": "CTS",
+          "route": "名古屋(中部) ➔ 札幌(新千歳)",
+          "depTime": "08:40",
+          "arrTime": "10:25",
+          "depGate": null,
+          "model": "76P",
+          "modelSource": "ANA運航状況",
+          "modelObservedAt": "2026-11-26T06:15:11.838Z"
+        },
+        {
+          "flightNo": "NH303",
+          "orig": "NGO",
+          "dest": "OKA",
+          "route": "名古屋(中部) ➔ 沖縄(那覇)",
+          "depTime": "08:20",
+          "arrTime": "10:55",
+          "depGate": null,
+          "model": "76P",
+          "modelSource": "ANA運航状況",
+          "modelObservedAt": "2026-11-26T06:15:11.855Z"
+        }
+      ],
+      "trialCandidates": [
+        {
+          "flightNo": "NH703",
+          "orig": "NGO",
+          "dest": "CTS",
+          "route": "名古屋(中部) ➔ 札幌(新千歳)",
+          "depTime": "08:40",
+          "arrTime": "10:25",
+          "depGate": null,
+          "model": "76P",
+          "modelSource": "ANA運航状況",
+          "modelObservedAt": "2026-11-26T06:15:11.838Z"
+        },
+        {
+          "flightNo": "NH303",
+          "orig": "NGO",
+          "dest": "OKA",
+          "route": "名古屋(中部) ➔ 沖縄(那覇)",
+          "depTime": "08:20",
+          "arrTime": "10:55",
+          "depGate": null,
+          "model": "76P",
+          "modelSource": "ANA運航状況",
+          "modelObservedAt": "2026-11-26T06:15:11.855Z"
+        }
+      ],
+      "trialApplicable": false
+    }
   }
 }
