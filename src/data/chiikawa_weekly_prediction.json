@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月26日 14:15",
-  "updatedAtIso": "2026-11-26T05:15:14.030Z",
+  "updatedAt": "2026年11月26日 14:30",
+  "updatedAtIso": "2026-11-26T05:30:12.120Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "東京(羽田)",
-    "currentLocationCode": "HND",
+    "currentLocation": "飛行中 (東京(羽田) ➔ 大阪(伊丹))",
+    "currentLocationCode": "ITM",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "名古屋(中部) (100%)",
     "nightStayCode": "NGO",
     "isNightStayConfirmed": false,
@@ -2514,7 +2514,7 @@
           "route": "東京(羽田) ➔ 長崎"
         }
       },
-      "currentAirport": "東京(羽田)",
+      "currentAirport": "飛行中 (東京(羽田) ➔ 大阪(伊丹))",
       "nightStay": "名古屋(中部) (100%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH27 (東京(羽田) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 名古屋(中部) 100% と推定されます。",
@@ -2560,7 +2560,7 @@
               "dest": "ITM",
               "route": "東京(羽田) ➔ 大阪(伊丹)",
               "time": "14:00発 - 15:10着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "③ 第3便"
             },
             {
@@ -2677,7 +2677,14 @@
             "time": "14:20発 - 17:05着",
             "update": null
           },
-          "actual": null
+          "actual": {
+            "flightNo": "NH27",
+            "route": "東京(羽田) ➔ 大阪(伊丹)",
+            "time": "14:25離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#4",
@@ -2748,9 +2755,9 @@
           "time": "14:00発 - 15:10着",
           "depGate": "64",
           "arrGate": null,
-          "status": "出発予定 (14:04)",
+          "status": "到着予定 (15:14)",
           "isLanded": false,
-          "isLive": false,
+          "isLive": true,
           "isPredicted": false
         },
         {
