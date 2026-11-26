@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月26日 18:00",
-  "updatedAtIso": "2026-11-26T09:00:17.068Z",
+  "updatedAt": "2026年11月26日 19:00",
+  "updatedAtIso": "2026-11-26T10:00:16.624Z",
   "totalJets": 5,
   "jets": [
     {
@@ -532,26 +532,9 @@
       "routesSummary": "羽田/成田 ➔ シアトル / 欧州 / 北米 / バンコク / アジア幹線",
       "color": "#22c55e",
       "serviceStart": "2026-09-18",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "東京(羽田) (HND) ➔ ジャカルタ (CGK)",
-      "currentFlight": {
-        "flightNo": "NH855",
-        "origin": "HND",
-        "dest": "CGK",
-        "originName": "東京(羽田) (HND)",
-        "destinationName": "ジャカルタ (CGK)",
-        "origCode": "HND",
-        "destCode": "CGK",
-        "route": "東京(羽田) ➔ ジャカルタ",
-        "depTime": "10:43",
-        "arrTime": "18:15",
-        "timeRange": "10:43 - 18:15",
-        "dateJst": "2026-11-26",
-        "status": "Estimated 16:01",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": true
-      },
+      "flightState": "着陸済・駐機中 🟡",
+      "currentLocation": "ジャカルタ (CGK)",
+      "currentFlight": null,
       "todayFlights": [
         {
           "flightNo": "NH855",
@@ -563,12 +546,12 @@
           "destCode": "CGK",
           "route": "東京(羽田) ➔ ジャカルタ",
           "depTime": "10:43",
-          "arrTime": "18:15",
-          "timeRange": "10:43 - 18:15",
+          "arrTime": "18:01",
+          "timeRange": "10:43 - 18:01",
           "dateJst": "2026-11-26",
-          "status": "Estimated 16:01",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 16:01",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         }
       ],
@@ -583,12 +566,12 @@
           "destCode": "CGK",
           "route": "東京(羽田) ➔ ジャカルタ",
           "depTime": "10:43",
-          "arrTime": "18:15",
-          "timeRange": "10:43 - 18:15",
+          "arrTime": "18:01",
+          "timeRange": "10:43 - 18:01",
           "dateJst": "2026-11-26",
-          "status": "Estimated 16:01",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 16:01",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         {
@@ -712,7 +695,7 @@
         "arrTime": "21:05",
         "timeRange": "09:05 - 21:05",
         "dateJst": "2026-11-26",
-        "status": "Estimated 20:53",
+        "status": "Estimated 20:48",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -731,7 +714,7 @@
           "arrTime": "21:05",
           "timeRange": "09:05 - 21:05",
           "dateJst": "2026-11-26",
-          "status": "Estimated 20:53",
+          "status": "Estimated 20:48",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -751,7 +734,7 @@
           "arrTime": "21:05",
           "timeRange": "09:05 - 21:05",
           "dateJst": "2026-11-26",
-          "status": "Estimated 20:53",
+          "status": "Estimated 20:48",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -850,7 +833,7 @@
     }
   ],
   "domesticPrediction": {
-    "nightStayName": "松山 (42%)",
+    "nightStayName": "松山 (34%)",
     "nightStayCode": "MYJ",
     "isNightStayConfirmed": false,
     "nightStayProbabilities": [
@@ -858,28 +841,37 @@
         "code": "MYJ",
         "airport": "松山",
         "weight": 0.972,
-        "floored": 42,
-        "remainder": 0.3793103448275801,
+        "floored": 34,
+        "remainder": 0.2857142857142847,
         "originalIndex": 0,
-        "probability": 42
+        "probability": 34
       },
       {
         "code": "TAK",
         "airport": "高松",
         "weight": 0.972,
-        "floored": 41,
-        "remainder": 0.3793103448275801,
+        "floored": 34,
+        "remainder": 0.2857142857142847,
         "originalIndex": 1,
-        "probability": 41
+        "probability": 34
+      },
+      {
+        "code": "FUK",
+        "airport": "福岡",
+        "weight": 0.486,
+        "floored": 17,
+        "remainder": 0.14285714285714235,
+        "originalIndex": 2,
+        "probability": 17
       },
       {
         "code": "HND",
         "airport": "羽田",
         "weight": 0.405,
-        "floored": 17,
-        "remainder": 0.24137931034482563,
-        "originalIndex": 2,
-        "probability": 17
+        "floored": 15,
+        "remainder": 0.28571428571428825,
+        "originalIndex": 3,
+        "probability": 15
       }
     ],
     "predictedRemainingToday": [
@@ -912,7 +904,7 @@
         "planName": "プランA (松山泊)",
         "stayCode": "MYJ",
         "rank": "本命 ◎",
-        "probability": 42,
+        "probability": 40,
         "title": "【今夜松山泊シナリオ】羽田 ➔ 福岡 ➔ 羽田 ➔ 宮古 ➔ 羽田 ➔ 松山(泊)",
         "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 宮古 ➔ 羽田 ➔ 松山(泊)",
         "flights": [
@@ -968,7 +960,7 @@
         "planName": "プランB (高松泊)",
         "stayCode": "TAK",
         "rank": "有力 ◯",
-        "probability": 41,
+        "probability": 40,
         "title": "【今夜高松泊シナリオ】羽田 ➔ 福岡 ➔ 羽田 ➔ 宮古 ➔ 羽田 ➔ 高松(泊)",
         "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 宮古 ➔ 羽田 ➔ 高松(泊)",
         "flights": [
@@ -1021,12 +1013,12 @@
       },
       {
         "planId": "today-plan-3",
-        "planName": "プランC (羽田泊)",
-        "stayCode": "HND",
+        "planName": "プランC (福岡泊)",
+        "stayCode": "FUK",
         "rank": "対抗 ▲",
-        "probability": 17,
-        "title": "【今夜羽田泊シナリオ】羽田 ➔ 福岡 ➔ 羽田 ➔ 宮古 ➔ 羽田(泊)",
-        "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 宮古 ➔ 羽田(泊)",
+        "probability": 20,
+        "title": "【今夜福岡泊シナリオ】羽田 ➔ 福岡 ➔ 羽田 ➔ 宮古 ➔ 羽田 ➔ 福岡(泊)",
+        "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 宮古 ➔ 羽田 ➔ 福岡(泊)",
         "flights": [
           {
             "flightNo": "NH243",
@@ -1061,8 +1053,17 @@
             "dest": "HND",
             "route": "宮古 ➔ 東京(羽田)",
             "time": "16:15発 - 18:45着",
-            "tag": "🌙羽田泊候補",
+            "tag": "予想接続 (78P)",
             "step": "第4便"
+          },
+          {
+            "flightNo": "NH271",
+            "orig": "HND",
+            "dest": "FUK",
+            "route": "東京(羽田) ➔ 福岡",
+            "time": "19:15発 - 21:20着",
+            "tag": "🌙福岡泊候補",
+            "step": "第5便"
           }
         ]
       }
