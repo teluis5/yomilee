@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月26日 08:45",
-  "updatedAtIso": "2026-11-25T23:45:12.593Z",
+  "updatedAt": "2026年11月26日 09:00",
+  "updatedAtIso": "2026-11-26T00:00:13.037Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "東京(羽田)",
-    "currentLocationCode": "HND",
+    "currentLocation": "飛行中 (東京(羽田) ➔ 長崎)",
+    "currentLocationCode": "NGS",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "名古屋(中部)(85%) / 長崎(5%)",
     "nightStayCode": "NGO",
     "isNightStayConfirmed": false,
@@ -192,18 +192,18 @@
   },
   "firstFlightStats": {
     "previousNight": {
-      "total": 11,
+      "total": 12,
       "firstHits": 9,
-      "candidateHits": 11
+      "candidateHits": 12
     },
     "morning": {
-      "total": 11,
+      "total": 12,
       "firstHits": 7,
-      "candidateHits": 7
+      "candidateHits": 8
     }
   },
   "pairedFirstFlightStats": {
-    "total": 11,
+    "total": 12,
     "previousNightHits": 9,
     "morningHits": 7
   },
@@ -218,7 +218,7 @@
       "chiikawaBaselineHits": 2,
       "chiikawaModelHits": 2
     },
-    "savedComparisons": 22,
+    "savedComparisons": 24,
     "baselineHits": 16,
     "trialHits": 16
   },
@@ -2313,6 +2313,18 @@
       "statusLabel": "本日（リアルタイム＋夕方以降ベイズ予測）",
       "firstFlightCandidates": [
         {
+          "flightNo": "NH245",
+          "orig": "HND",
+          "dest": "FUK",
+          "route": "東京(羽田) ➔ 福岡",
+          "depTime": "08:55",
+          "arrTime": "10:55",
+          "depGate": "57",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
           "flightNo": "NH661",
           "orig": "HND",
           "dest": "NGS",
@@ -2325,13 +2337,13 @@
           "modelObservedAt": null
         },
         {
-          "flightNo": "NH245",
+          "flightNo": "NH1077",
           "orig": "HND",
           "dest": "FUK",
           "route": "東京(羽田) ➔ 福岡",
-          "depTime": "08:55",
-          "arrTime": "10:55",
-          "depGate": "57",
+          "depTime": "08:00",
+          "arrTime": "09:55",
+          "depGate": "58",
           "model": "76P",
           "modelSource": null,
           "modelObservedAt": null
@@ -2511,9 +2523,13 @@
             }
           ],
           "trialApplicable": true
+        },
+        "actual": {
+          "flightNo": "NH661",
+          "route": "東京(羽田) ➔ 長崎"
         }
       },
-      "currentAirport": "東京(羽田)",
+      "currentAirport": "飛行中 (東京(羽田) ➔ 長崎)",
       "nightStay": "名古屋(中部)(85%) / 長崎(5%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH661 (東京(羽田) ➔ 長崎) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 名古屋(中部) 85% / 長崎 5% / 広島 5% / 東京(羽田) 5% と推定されます。",
@@ -2556,7 +2572,7 @@
               "dest": "NGS",
               "route": "東京(羽田) ➔ 長崎",
               "time": "08:30発 - 10:30着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "① 第1便"
             },
             {
@@ -2612,7 +2628,7 @@
               "dest": "NGS",
               "route": "東京(羽田) ➔ 長崎",
               "time": "08:30発 - 10:30着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "① 第1便"
             },
             {
@@ -2668,7 +2684,7 @@
               "dest": "NGS",
               "route": "東京(羽田) ➔ 長崎",
               "time": "08:30発 - 10:30着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "① 第1便"
             },
             {
@@ -2745,7 +2761,14 @@
             "time": "08:00発 - 09:55着",
             "update": null
           },
-          "actual": null
+          "actual": {
+            "flightNo": "NH661",
+            "route": "東京(羽田) ➔ 長崎",
+            "time": "08:48離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#2",
@@ -2838,9 +2861,9 @@
           "time": "08:30発 - 10:30着",
           "depGate": "48",
           "arrGate": null,
-          "status": "出発予定 (08:34)",
+          "status": "到着予定 (10:25)",
           "isLanded": false,
-          "isLive": false,
+          "isLive": true,
           "isPredicted": false
         },
         {
