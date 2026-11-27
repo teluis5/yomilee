@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月27日 16:15",
-  "updatedAtIso": "2026-11-27T07:15:14.294Z",
+  "updatedAt": "2026年11月27日 16:30",
+  "updatedAtIso": "2026-11-27T07:30:17.677Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "札幌(新千歳)",
-    "currentLocationCode": "CTS",
+    "currentLocation": "飛行中 (札幌(新千歳) ➔ 大阪(伊丹))",
+    "currentLocationCode": "ITM",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "東京(羽田) (100%)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": false,
@@ -133,8 +133,8 @@
     "asOfDate": "2026-11-27",
     "specialLiveryPolicy": "exclude_training_and_standby",
     "ja609aConsecutiveOperatingDays": 37,
-    "ja609aRecent7dLegs": 37,
-    "ja609aRecent14dLegs": 73,
+    "ja609aRecent7dLegs": 38,
+    "ja609aRecent14dLegs": 74,
     "ja609aHndStayStats": {
       "hndStayCount": 15,
       "idleAfterHnd": 0
@@ -173,7 +173,7 @@
         "returnRatePct": 30
       }
     },
-    "summaryNote": "JA609Aは現在 37日連続稼働中（直近7日: 37便 / 14日: 73便・羽田泊翌日運休実績 0/15回）。特別塗装機のため訓練・予備機待機は除外し、同型機の複数日整備（ドック入り）実績ベースで羽田泊翌日の整備運休率は約2.4%。長期連続稼働帯に入っているため、羽田帰還後の定期整備（Aチェック等）による運休に留意。"
+    "summaryNote": "JA609Aは現在 37日連続稼働中（直近7日: 38便 / 14日: 74便・羽田泊翌日運休実績 0/15回）。特別塗装機のため訓練・予備機待機は除外し、同型機の複数日整備（ドック入り）実績ベースで羽田泊翌日の整備運休率は約2.4%。長期連続稼働帯に入っているため、羽田帰還後の定期整備（Aチェック等）による運休に留意。"
   },
   "firstFlightStats": {
     "previousNight": {
@@ -2513,11 +2513,11 @@
           "route": "名古屋(中部) ➔ 札幌(新千歳)"
         }
       },
-      "currentAirport": "札幌(新千歳)",
+      "currentAirport": "飛行中 (札幌(新千歳) ➔ 大阪(伊丹))",
       "nightStay": "東京(羽田) (100%)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH707 (名古屋(中部) ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
-      "todayOutlook": "現在 NH707 (名古屋(中部) ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "pendingNightStayNote": "現在 NH778 (札幌(新千歳) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "todayOutlook": "現在 NH778 (札幌(新千歳) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
       "nightStayProbabilities": [
         {
           "airport": "東京(羽田)",
@@ -2568,7 +2568,7 @@
               "dest": "ITM",
               "route": "札幌(新千歳) ➔ 大阪(伊丹)",
               "time": "16:15発 - 18:15着",
-              "tag": "予想接続(76P)",
+              "tag": "飛行中",
               "step": "④ 第4便"
             },
             {
@@ -2705,7 +2705,14 @@
             "time": "18:30発 - 20:10着",
             "update": null
           },
-          "actual": null
+          "actual": {
+            "flightNo": "NH778",
+            "route": "札幌(新千歳) ➔ 大阪(伊丹)",
+            "time": "16:28離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#5",
@@ -2756,20 +2763,14 @@
         },
         {
           "flightNo": "NH778",
-          "origCode": "CTS",
-          "destCode": "ITM",
           "route": "札幌(新千歳) ➔ 大阪(伊丹)",
-          "depTime": "16:15",
-          "arrTime": "18:15",
-          "time": "16:15発 - 18:15着 (予想)",
-          "status": "後続便候補",
-          "isPierLocked": false,
-          "pierLockReason": null,
-          "isLanded": false,
-          "isLive": false,
-          "isPredicted": true,
+          "time": "16:15発 - 18:15着",
           "depGate": null,
-          "arrGate": null
+          "arrGate": null,
+          "status": "到着予定 (18:00)",
+          "isLanded": false,
+          "isLive": true,
+          "isPredicted": false
         },
         {
           "flightNo": "NH38",
@@ -2838,7 +2839,7 @@
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
       "expectedStart": "羽田発 (NH661)",
       "isNightStayConfirmed": false,
-      "pendingNightStayNote": "現在 NH707 (名古屋(中部) ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
+      "pendingNightStayNote": "現在 NH778 (札幌(新千歳) ➔ 大阪(伊丹)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 東京(羽田) 100% と推定されます。",
       "isRegionalNightStay": false,
       "confirmedFirstFlight": null,
       "plans": [
@@ -5354,14 +5355,7 @@
       "code": "FUK",
       "name": "福岡空港",
       "note": "羽田幹線（NH245/NH250/NH265/NH270等）で連日高頻度運航。",
-      "prob": 41,
-      "level": "B (中確率)"
-    },
-    {
-      "code": "NGS",
-      "name": "長崎空港",
-      "note": "朝一便（NH661/NH664）および夜間ステイ便（NH669/NH662）で高頻度投入。",
-      "prob": 37,
+      "prob": 40,
       "level": "B (中確率)"
     },
     {
@@ -5369,6 +5363,13 @@
       "name": "広島空港",
       "note": "昼往復便（NH679/NH680）および夜間ステイ便（NH685/NH672）の主要拠点。",
       "prob": 37,
+      "level": "B (中確率)"
+    },
+    {
+      "code": "NGS",
+      "name": "長崎空港",
+      "note": "朝一便（NH661/NH664）および夜間ステイ便（NH669/NH662）で高頻度投入。",
+      "prob": 36,
       "level": "B (中確率)"
     },
     {
@@ -5464,7 +5465,7 @@
     }
   ],
   "dbStats": {
-    "totalFleetFlights": 755,
+    "totalFleetFlights": 756,
     "fleetCount": 11
   }
 }
