@@ -1625,9 +1625,14 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
     }
   }
 
+  const anchorStartAirport = firstFlightOptions.anchorStartAirport || null;
   const validPriors = (Array.isArray(priorStays) && priorStays.length > 0)
-    ? priorStays.filter(p => p.probability > 0)
+    ? priorStays.filter(p => p.probability > 0).map(p => ({ ...p }))
     : [{ code: 'HND', probability: 100 }];
+  // 週間連鎖のアンカー宿泊地（前日プランAの最終着地）が事前分布に欠落していれば補完して物理的連続性を保証
+  if (anchorStartAirport && !validPriors.some(p => p.code === anchorStartAirport)) {
+    validPriors.unshift({ code: anchorStartAirport, airport: AIRPORT_NAMES[anchorStartAirport] || anchorStartAirport, probability: 25 });
+  }
 
   const arrivalByAirportMap = firstFlightOptions.arrivalByAirport || {};
   const regionalStayStreak = Number.isFinite(firstFlightOptions.regionalStayStreak) ? firstFlightOptions.regionalStayStreak : 0;
@@ -2158,6 +2163,22 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
   const usedMidAndEnd = new Set();
   const prefix3Counts = new Map();
 
+  // ⓪ 週間連鎖アンカー整合（Day 2〜Day 6）:
+  // 前日プランAの宿泊地(anchorStartAirport)から始まる最有力スジを必ずプランA(1枠目)に据え、
+  // 「前日中部泊なのに翌日プランAが羽田始発」のような物理的不整合・同一プラン連続表示を根絶する。
+  if (anchorStartAirport) {
+    const anchorBest = eligiblePlans.find(c => c.startAirport === anchorStartAirport);
+    if (anchorBest) {
+      const sig = anchorBest.rawFlights.map(f => f.flightNo).join('>');
+      const p3 = anchorBest.rawFlights.slice(0, 3).map(f => f.flightNo).join('>');
+      const midEndKey = `${anchorBest.midAirport}_${anchorBest.endAirport}`;
+      selectedRaw.push(anchorBest);
+      usedSignatures.add(sig);
+      usedMidAndEnd.add(midEndKey);
+      prefix3Counts.set(p3, 1);
+    }
+  }
+
   // ① 確率（weight）が高い順に、前半スジや経由地・宿泊先が異なる代表シナリオを優先選出（同一前半の3枠独占を防止）
   for (const cand of eligiblePlans) {
     if (selectedRaw.length >= 3) break;
@@ -2265,6 +2286,14 @@ export function generateDayPlansViaBeamSearch(priorStays, targetDateStr, anaFlee
   const fullStayPriors = stayItems.length > 0
     ? normalizeTo100Percent(stayItems, 'weight', 1).map(it => ({ code: it.code, airport: it.airport, probability: it.probability }))
     : null;
+
+  // 週間連鎖アンカー指定時は、1枠目(プランA)が2枠目以降に確率逆転されないよう順序整合を保証
+  if (anchorStartAirport && selectedRaw.length >= 2 && selectedRaw[0].startAirport === anchorStartAirport) {
+    const maxOtherW = Math.max(...selectedRaw.slice(1).map(p => p.weight || 0));
+    if ((selectedRaw[0].weight || 0) <= maxOtherW) {
+      selectedRaw[0] = { ...selectedRaw[0], weight: maxOtherW * 1.15 };
+    }
+  }
 
   // スコア順にソートしてHamilton法で合計100%に正規化
   selectedRaw.sort((a, b) => b.weight - a.weight);
@@ -3307,7 +3336,8 @@ export async function generateWeeklyPrediction() {
         {
           arrivalByAirport: runningArrivalByAirport,
           regionalStayStreak: runningRegionalStreak,
-          prevStartAirport: prevPlanForDay?.startAirportCode || prevPlanForDay?.flights?.[0]?.orig || null
+          prevStartAirport: prevPlanForDay?.startAirportCode || prevPlanForDay?.flights?.[0]?.orig || null,
+          anchorStartAirport: prevPlanForDay?.stayCode || prevPlanForDay?.flights?.[prevPlanForDay.flights.length - 1]?.dest || null
         }
       );
 
