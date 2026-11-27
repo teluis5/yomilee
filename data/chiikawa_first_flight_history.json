@@ -1992,6 +1992,93 @@
         }
       ],
       "trialApplicable": true
+    },
+    "morning": {
+      "updatedAtIso": "2026-11-27T20:00:15.360Z",
+      "arrival": {
+        "airport": "HND",
+        "arrivalMin": 1216,
+        "gate": null,
+        "flightNo": "NH38",
+        "time": "20:16"
+      },
+      "candidates": [
+        {
+          "flightNo": "NH661",
+          "orig": "HND",
+          "dest": "NGS",
+          "route": "東京(羽田) ➔ 長崎",
+          "depTime": "08:30",
+          "arrTime": "10:30",
+          "depGate": "48",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH1077",
+          "orig": "HND",
+          "dest": "FUK",
+          "route": "東京(羽田) ➔ 福岡",
+          "depTime": "08:00",
+          "arrTime": "09:55",
+          "depGate": "58",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH245",
+          "orig": "HND",
+          "dest": "FUK",
+          "route": "東京(羽田) ➔ 福岡",
+          "depTime": "08:55",
+          "arrTime": "10:55",
+          "depGate": "57",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        }
+      ],
+      "trialCandidates": [
+        {
+          "flightNo": "NH661",
+          "orig": "HND",
+          "dest": "NGS",
+          "route": "東京(羽田) ➔ 長崎",
+          "depTime": "08:30",
+          "arrTime": "10:30",
+          "depGate": "48",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH1077",
+          "orig": "HND",
+          "dest": "FUK",
+          "route": "東京(羽田) ➔ 福岡",
+          "depTime": "08:00",
+          "arrTime": "09:55",
+          "depGate": "58",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        },
+        {
+          "flightNo": "NH245",
+          "orig": "HND",
+          "dest": "FUK",
+          "route": "東京(羽田) ➔ 福岡",
+          "depTime": "08:55",
+          "arrTime": "10:55",
+          "depGate": "57",
+          "model": "76P",
+          "modelSource": null,
+          "modelObservedAt": null
+        }
+      ],
+      "trialApplicable": true
     }
   }
 }
