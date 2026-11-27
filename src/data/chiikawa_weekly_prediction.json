@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月27日 19:15",
-  "updatedAtIso": "2026-11-27T10:15:10.868Z",
+  "updatedAt": "2026年11月27日 19:30",
+  "updatedAtIso": "2026-11-27T10:30:14.883Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "大阪(伊丹)",
-    "currentLocationCode": "ITM",
+    "currentLocation": "飛行中 (大阪(伊丹) ➔ 東京(羽田))",
+    "currentLocationCode": "HND",
     "currentSpot": "北ピア(1,2,3)",
     "spotConfidenceNote": "羽田第2ターミナル 北ピア（到着口1,2,3 / 46〜62番ゲート帯）連動判定",
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "東京(羽田) (確定)",
     "nightStayCode": "HND",
     "isNightStayConfirmed": true,
@@ -2513,7 +2513,7 @@
           "route": "名古屋(中部) ➔ 札幌(新千歳)"
         }
       },
-      "currentAirport": "大阪(伊丹)",
+      "currentAirport": "飛行中 (大阪(伊丹) ➔ 東京(羽田))",
       "nightStay": "東京(羽田) (確定)",
       "isNightStayConfirmed": true,
       "pendingNightStayNote": "",
@@ -2926,7 +2926,14 @@
           },
           "planB": null,
           "planC": null,
-          "actual": null
+          "actual": {
+            "flightNo": "NH38",
+            "route": "大阪(伊丹) ➔ 東京(羽田)",
+            "time": "19:24離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         }
       ],
       "flights": [
@@ -2980,9 +2987,9 @@
           "time": "19:00発 - 20:10着",
           "depGate": null,
           "arrGate": "1,2,3",
-          "status": "出発予定 (19:07)",
+          "status": "到着予定 (20:16)",
           "isLanded": false,
-          "isLive": false,
+          "isLive": true,
           "isPredicted": false
         }
       ]
