@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月27日 20:00",
-  "updatedAtIso": "2026-11-27T11:00:24.197Z",
+  "updatedAt": "2026年11月27日 21:00",
+  "updatedAtIso": "2026-11-27T12:00:18.597Z",
   "totalJets": 5,
   "jets": [
     {
@@ -17,26 +17,9 @@
       "routesSummary": "羽田 ➔ 福岡 / 新千歳 / 伊丹 / 松山 / 函館 / 那覇 / 宮古 / 石垣 / 長崎",
       "color": "#ef4444",
       "serviceStart": "2026-07-29",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "東京(羽田) (HND) ➔ 大阪(伊丹) (ITM)",
-      "currentFlight": {
-        "flightNo": "NH39",
-        "origin": "HND",
-        "dest": "ITM",
-        "originName": "東京(羽田) (HND)",
-        "destinationName": "大阪(伊丹) (ITM)",
-        "origCode": "HND",
-        "destCode": "ITM",
-        "route": "東京(羽田) ➔ 大阪(伊丹)",
-        "depTime": "19:17",
-        "arrTime": "20:20",
-        "timeRange": "19:17 - 20:20",
-        "dateJst": "2026-11-27",
-        "status": "Estimated 20:08",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": true
-      },
+      "flightState": "着陸済・駐機中 🟡",
+      "currentLocation": "大阪(伊丹) (ITM)",
+      "currentFlight": null,
       "todayFlights": [
         {
           "flightNo": "NH243",
@@ -120,12 +103,12 @@
           "destCode": "ITM",
           "route": "東京(羽田) ➔ 大阪(伊丹)",
           "depTime": "19:17",
-          "arrTime": "20:20",
-          "timeRange": "19:17 - 20:20",
+          "arrTime": "20:07",
+          "timeRange": "19:17 - 20:07",
           "dateJst": "2026-11-27",
-          "status": "Estimated 20:08",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 20:07",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         }
       ],
@@ -140,12 +123,12 @@
           "destCode": "ITM",
           "route": "東京(羽田) ➔ 大阪(伊丹)",
           "depTime": "19:17",
-          "arrTime": "20:20",
-          "timeRange": "19:17 - 20:20",
+          "arrTime": "20:07",
+          "timeRange": "19:17 - 20:07",
           "dateJst": "2026-11-27",
-          "status": "Estimated 20:08",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 20:07",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         {
@@ -585,26 +568,9 @@
       "routesSummary": "羽田/成田 ➔ シアトル / 欧州 / 北米 / バンコク / アジア幹線",
       "color": "#22c55e",
       "serviceStart": "2026-09-18",
-      "flightState": "飛行中 🟢",
-      "currentLocation": "東京(羽田) (HND) ➔ DEL",
-      "currentFlight": {
-        "flightNo": "NH837",
-        "origin": "HND",
-        "dest": "DEL",
-        "originName": "東京(羽田) (HND)",
-        "destinationName": "DEL",
-        "origCode": "HND",
-        "destCode": "DEL",
-        "route": "東京(羽田) ➔ DEL",
-        "depTime": "10:53",
-        "arrTime": "20:55",
-        "timeRange": "10:53 - 20:55",
-        "dateJst": "2026-11-27",
-        "status": "Estimated 16:37",
-        "isLive": true,
-        "isLanded": false,
-        "isToday": true
-      },
+      "flightState": "着陸済・駐機中 🟡",
+      "currentLocation": "DEL",
+      "currentFlight": null,
       "todayFlights": [
         {
           "flightNo": "NH856",
@@ -634,16 +600,52 @@
           "destCode": "DEL",
           "route": "東京(羽田) ➔ DEL",
           "depTime": "10:53",
-          "arrTime": "20:55",
-          "timeRange": "10:53 - 20:55",
+          "arrTime": "20:06",
+          "timeRange": "10:53 - 20:06",
           "dateJst": "2026-11-27",
-          "status": "Estimated 16:37",
-          "isLive": true,
+          "status": "Landed 16:36",
+          "isLive": false,
+          "isLanded": true,
+          "isToday": true
+        },
+        {
+          "flightNo": "NH838",
+          "origin": "DEL",
+          "dest": "HND",
+          "originName": "DEL",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "DEL",
+          "destCode": "HND",
+          "route": "DEL ➔ 東京(羽田)",
+          "depTime": "22:25",
+          "arrTime": "05:55",
+          "timeRange": "22:25 - 05:55",
+          "dateJst": "2026-11-27",
+          "status": "Estimated dep 18:55",
+          "isLive": false,
           "isLanded": false,
           "isToday": true
         }
       ],
       "recentFlights": [
+        {
+          "flightNo": "NH838",
+          "origin": "DEL",
+          "dest": "HND",
+          "originName": "DEL",
+          "destinationName": "東京(羽田) (HND)",
+          "origCode": "DEL",
+          "destCode": "HND",
+          "route": "DEL ➔ 東京(羽田)",
+          "depTime": "22:25",
+          "arrTime": "05:55",
+          "timeRange": "22:25 - 05:55",
+          "dateJst": "2026-11-27",
+          "status": "Estimated dep 18:55",
+          "isLive": false,
+          "isLanded": false,
+          "isToday": true
+        },
         {
           "flightNo": "NH837",
           "origin": "HND",
@@ -654,12 +656,12 @@
           "destCode": "DEL",
           "route": "東京(羽田) ➔ DEL",
           "depTime": "10:53",
-          "arrTime": "20:55",
-          "timeRange": "10:53 - 20:55",
+          "arrTime": "20:06",
+          "timeRange": "10:53 - 20:06",
           "dateJst": "2026-11-27",
-          "status": "Estimated 16:37",
-          "isLive": true,
-          "isLanded": false,
+          "status": "Landed 16:36",
+          "isLive": false,
+          "isLanded": true,
           "isToday": true
         },
         {
@@ -733,24 +735,6 @@
           "isLive": false,
           "isLanded": true,
           "isToday": false
-        },
-        {
-          "flightNo": "NH880",
-          "origin": "SYD",
-          "dest": "HND",
-          "originName": "シドニー (SYD)",
-          "destinationName": "東京(羽田) (HND)",
-          "origCode": "SYD",
-          "destCode": "HND",
-          "route": "シドニー ➔ 東京(羽田)",
-          "depTime": "20:20",
-          "arrTime": "05:22",
-          "timeRange": "20:20 - 05:22",
-          "dateJst": "2026-11-24",
-          "status": "Landed 05:22",
-          "isLive": false,
-          "isLanded": true,
-          "isToday": false
         }
       ]
     },
@@ -783,7 +767,7 @@
         "arrTime": "00:30",
         "timeRange": "10:05 - 00:30",
         "dateJst": "2026-11-27",
-        "status": "Estimated 16:28",
+        "status": "Estimated 16:23",
         "isLive": true,
         "isLanded": false,
         "isToday": true
@@ -802,7 +786,7 @@
           "arrTime": "00:30",
           "timeRange": "10:05 - 00:30",
           "dateJst": "2026-11-27",
-          "status": "Estimated 16:28",
+          "status": "Estimated 16:23",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -822,7 +806,7 @@
           "arrTime": "00:30",
           "timeRange": "10:05 - 00:30",
           "dateJst": "2026-11-27",
-          "status": "Estimated 16:28",
+          "status": "Estimated 16:23",
           "isLive": true,
           "isLanded": false,
           "isToday": true
@@ -987,8 +971,8 @@
             "orig": "HND",
             "dest": "ITM",
             "route": "東京(羽田) ➔ 大阪(伊丹)",
-            "time": "19:17発 - 20:20着",
-            "tag": "飛行中 🟢",
+            "time": "19:17発 - 20:07着",
+            "tag": "運航完了",
             "step": "第5便"
           }
         ]
