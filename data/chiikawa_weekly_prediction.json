@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月28日 12:45",
-  "updatedAtIso": "2026-11-28T03:45:12.314Z",
+  "updatedAt": "2026年11月28日 13:00",
+  "updatedAtIso": "2026-11-28T04:00:27.073Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "飛行中 (長崎 ➔ 東京(羽田))",
+    "currentLocation": "東京(羽田)",
     "currentLocationCode": "HND",
     "currentSpot": "南ピア(4,5,6)",
     "spotConfidenceNote": "羽田第2ターミナル 南ピア（到着口4,5,6 / 63〜73番ゲート帯）連動判定",
-    "isAirborne": true,
+    "isAirborne": false,
     "nightStay": "名古屋(中部)(85%) / 長崎(5%)",
     "nightStayCode": "NGO",
     "isNightStayConfirmed": false,
@@ -2683,7 +2683,7 @@
           "route": "東京(羽田) ➔ 長崎"
         }
       },
-      "currentAirport": "飛行中 (長崎 ➔ 東京(羽田))",
+      "currentAirport": "東京(羽田)",
       "nightStay": "名古屋(中部)(85%) / 長崎(5%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH664 (長崎 ➔ 東京(羽田)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 名古屋(中部) 85% / 長崎 5% / 広島 5% / 東京(羽田) 5% と推定されます。",
@@ -2735,7 +2735,7 @@
               "dest": "HND",
               "route": "長崎 ➔ 東京(羽田)",
               "time": "11:20発 - 12:55着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -2791,7 +2791,7 @@
               "dest": "HND",
               "route": "長崎 ➔ 東京(羽田)",
               "time": "11:20発 - 12:55着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -2799,7 +2799,7 @@
               "orig": "HND",
               "dest": "MYJ",
               "route": "東京(羽田) ➔ 松山",
-              "time": "14:15発 - 15:50着",
+              "time": "14:25発 - 16:00着",
               "tag": "予想接続(76P)",
               "step": "③ 第3便"
             },
@@ -2847,7 +2847,7 @@
               "dest": "HND",
               "route": "長崎 ➔ 東京(羽田)",
               "time": "11:20発 - 12:55着",
-              "tag": "飛行中",
+              "tag": "運航完了",
               "step": "② 第2便"
             },
             {
@@ -2855,7 +2855,7 @@
               "orig": "HND",
               "dest": "MYJ",
               "route": "東京(羽田) ➔ 松山",
-              "time": "14:15発 - 15:50着",
+              "time": "14:25発 - 16:00着",
               "tag": "予想接続(76P)",
               "step": "③ 第3便"
             },
@@ -2947,10 +2947,10 @@
           "actual": {
             "flightNo": "NH664",
             "route": "長崎 ➔ 東京(羽田)",
-            "time": "11:31離陸",
-            "status": "飛行中",
-            "isLanded": false,
-            "isLive": true
+            "time": "11:31離陸 / 12:54着陸",
+            "status": "着陸済",
+            "isLanded": true,
+            "isLive": false
           }
         },
         {
@@ -3033,9 +3033,9 @@
           "time": "11:20発 - 12:55着",
           "depGate": null,
           "arrGate": "1,2,3",
-          "status": "到着予定 (12:54)",
-          "isLanded": false,
-          "isLive": true,
+          "status": "着陸済 (12:54)",
+          "isLanded": true,
+          "isLive": false,
           "isPredicted": false
         },
         {
@@ -3109,7 +3109,7 @@
           "depGate": null,
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-28T01:45:14.722Z"
+          "modelObservedAt": "2026-11-28T04:00:13.116Z"
         },
         {
           "flightNo": "NH303",
@@ -3121,7 +3121,7 @@
           "depGate": null,
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-28T01:45:14.725Z"
+          "modelObservedAt": "2026-11-28T04:00:13.148Z"
         },
         {
           "flightNo": "NH662",
@@ -3133,7 +3133,7 @@
           "depGate": null,
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-28T01:45:14.758Z"
+          "modelObservedAt": "2026-11-28T04:00:13.151Z"
         },
         {
           "flightNo": "NH672",
@@ -3145,7 +3145,7 @@
           "depGate": null,
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-28T01:45:13.819Z"
+          "modelObservedAt": "2026-11-28T04:00:12.189Z"
         },
         {
           "flightNo": "NH245",
@@ -3157,7 +3157,7 @@
           "depGate": "57",
           "model": "76P",
           "modelSource": "ANA運航状況",
-          "modelObservedAt": "2026-11-28T01:45:13.893Z"
+          "modelObservedAt": "2026-11-28T04:00:12.259Z"
         }
       ],
       "statusLabel": "明日（今夜の宿泊地確率に連動した3大シナリオ予測）",
