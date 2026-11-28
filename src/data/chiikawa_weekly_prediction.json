@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026年11月28日 16:15",
-  "updatedAtIso": "2026-11-28T07:15:12.177Z",
+  "updatedAt": "2026年11月28日 16:30",
+  "updatedAtIso": "2026-11-28T07:30:17.622Z",
   "aircraft": {
     "model": "ボーイング 767-300ER",
     "reg": "JA609A",
     "nickname": "ANA ちいかわジェット",
-    "currentLocation": "大阪(伊丹)",
-    "currentLocationCode": "ITM",
+    "currentLocation": "飛行中 (大阪(伊丹) ➔ 札幌(新千歳))",
+    "currentLocationCode": "CTS",
     "currentSpot": null,
     "spotConfidenceNote": null,
-    "isAirborne": false,
+    "isAirborne": true,
     "nightStay": "名古屋(中部) (100%)",
     "nightStayCode": "NGO",
     "isNightStayConfirmed": false,
@@ -2668,7 +2668,7 @@
           "route": "東京(羽田) ➔ 長崎"
         }
       },
-      "currentAirport": "大阪(伊丹)",
+      "currentAirport": "飛行中 (大阪(伊丹) ➔ 札幌(新千歳))",
       "nightStay": "名古屋(中部) (100%)",
       "isNightStayConfirmed": false,
       "pendingNightStayNote": "現在 NH777 (大阪(伊丹) ➔ 札幌(新千歳)) まで確定。ODPTリアルタイム76P枠とマルコフ遷移確率・実到着見込み時刻から、今夜の最終着陸地は 名古屋(中部) 100% と推定されます。",
@@ -2723,7 +2723,7 @@
               "dest": "CTS",
               "route": "大阪(伊丹) ➔ 札幌(新千歳)",
               "time": "16:00発 - 17:50着",
-              "tag": "本日確定枠",
+              "tag": "飛行中",
               "step": "④ 第4便"
             },
             {
@@ -2860,7 +2860,14 @@
             "time": "16:40発 - 18:10着",
             "update": null
           },
-          "actual": null
+          "actual": {
+            "flightNo": "NH777",
+            "route": "大阪(伊丹) ➔ 札幌(新千歳)",
+            "time": "16:17離陸",
+            "status": "飛行中",
+            "isLanded": false,
+            "isLive": true
+          }
         },
         {
           "step": "#5",
@@ -2920,9 +2927,9 @@
           "time": "16:00発 - 17:50着",
           "depGate": null,
           "arrGate": null,
-          "status": "出発予定 (16:04)",
+          "status": "到着予定 (17:35)",
           "isLanded": false,
-          "isLive": false,
+          "isLive": true,
           "isPredicted": false
         },
         {
