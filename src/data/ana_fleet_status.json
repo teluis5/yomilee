@@ -341674,84 +341674,64 @@
       }
     },
     "20261128": {
-      "NH1206": {
-        "flightNo": "NH1206",
-        "rawFlightNo": "ANA 1206",
-        "model": "738",
+      "NH296": {
+        "flightNo": "NH296",
+        "rawFlightNo": "ANA 296",
+        "model": "321",
         "is767": false,
         "is76P": false,
         "is767Strict": false,
         "isCancelled": false,
         "depGate": null,
-        "arrGate": null,
-        "origin": "OKA",
-        "dest": "FUK",
-        "depTime": "11:50",
-        "arrTime": "13:30",
-        "actDepTime": "11:59",
-        "actArrTime": "13:48",
+        "arrGate": "4,5,6",
+        "origin": "TTJ",
+        "dest": "HND",
+        "depTime": "11:10",
+        "arrTime": "12:25",
+        "actDepTime": "11:12",
+        "actArrTime": "12:28",
         "status": "Departed",
-        "initialModel": "73H",
+        "initialModel": "321",
         "initialIs76P": false
       },
-      "NH478": {
-        "flightNo": "NH478",
-        "rawFlightNo": "ANA 478",
-        "model": "738",
+      "NH298": {
+        "flightNo": "NH298",
+        "rawFlightNo": "ANA 298",
+        "model": "321",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "isCancelled": false,
+        "depGate": null,
+        "arrGate": "4,5,6",
+        "origin": "TTJ",
+        "dest": "HND",
+        "depTime": "15:00",
+        "arrTime": "16:15",
+        "actDepTime": "15:46",
+        "actArrTime": "17:09",
+        "status": "Departed",
+        "initialModel": "32P/321",
+        "initialIs76P": false
+      },
+      "NH300": {
+        "flightNo": "NH300",
+        "rawFlightNo": "ANA 300",
+        "model": "321",
         "is767": false,
         "is76P": false,
         "is767Strict": false,
         "isCancelled": false,
         "depGate": null,
         "arrGate": "1,2,3",
-        "origin": "OKA",
+        "origin": "TTJ",
         "dest": "HND",
-        "depTime": "20:55",
-        "arrTime": "23:10",
-        "actDepTime": "20:55",
-        "actArrTime": "23:10",
+        "depTime": "18:30",
+        "arrTime": "19:45",
+        "actDepTime": "18:31",
+        "actArrTime": "19:54",
         "status": "Departed",
-        "initialModel": "73H",
-        "initialIs76P": false
-      },
-      "NH1134": {
-        "flightNo": "NH1134",
-        "rawFlightNo": "ANA 1134",
-        "model": "738",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "isCancelled": false,
-        "depGate": null,
-        "arrGate": "1,2,3",
-        "origin": "OKA",
-        "dest": "HND",
-        "depTime": "21:10",
-        "arrTime": "23:25",
-        "actDepTime": "21:10",
-        "actArrTime": "23:25",
-        "status": "EstimatedDeparture",
-        "initialModel": "73H",
-        "initialIs76P": false
-      },
-      "NH1868": {
-        "flightNo": "NH1868",
-        "rawFlightNo": "ANA 1868",
-        "model": "738",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "isCancelled": false,
-        "depGate": null,
-        "arrGate": null,
-        "origin": "OKA",
-        "dest": "KMJ",
-        "depTime": "15:05",
-        "arrTime": "16:30",
-        "actDepTime": "15:15",
-        "actArrTime": "16:35",
-        "status": "Departed",
-        "initialModel": "73H",
+        "initialModel": "73H/32P",
         "initialIs76P": false
       },
       "NH402": {
@@ -341849,8 +341829,8 @@
         "depTime": "19:45",
         "arrTime": "20:55",
         "actDepTime": "20:04",
-        "actArrTime": "21:14",
-        "status": "InAir",
+        "actArrTime": "21:28",
+        "status": "Departed",
         "initialModel": "73H",
         "initialIs76P": false
       },
@@ -342089,8 +342069,8 @@
         "depTime": "18:45",
         "arrTime": "21:30",
         "actDepTime": "18:36",
-        "actArrTime": "21:31",
-        "status": "InAir",
+        "actArrTime": "21:48",
+        "status": "Departed",
         "initialModel": "321",
         "initialIs76P": false
       },
@@ -342209,8 +342189,8 @@
         "depTime": "18:40",
         "arrTime": "20:55",
         "actDepTime": "18:35",
-        "actArrTime": "21:06",
-        "status": "InAir",
+        "actArrTime": "21:11",
+        "status": "Departed",
         "initialModel": "73H",
         "initialIs76P": false
       },
@@ -342509,7 +342489,7 @@
         "depTime": "18:30",
         "arrTime": "20:10",
         "actDepTime": "19:02",
-        "actArrTime": "20:51",
+        "actArrTime": "21:02",
         "status": "Departed",
         "initialModel": "78G",
         "initialIs76P": false
@@ -342523,14 +342503,14 @@
         "is767Strict": false,
         "isCancelled": false,
         "depGate": null,
-        "arrGate": "4,5,6",
+        "arrGate": "1,2,3",
         "origin": "CTS",
         "dest": "HND",
         "depTime": "19:30",
         "arrTime": "21:10",
-        "actDepTime": "21:00",
-        "actArrTime": "22:40",
-        "status": "EstimatedDeparture",
+        "actDepTime": "20:59",
+        "actArrTime": "22:46",
+        "status": "InAir",
         "initialModel": "78K",
         "initialIs76P": false
       },
@@ -342568,9 +342548,9 @@
         "dest": "HND",
         "depTime": "21:25",
         "arrTime": "23:10",
-        "actDepTime": "21:25",
-        "actArrTime": "23:10",
-        "status": "EstimatedDeparture",
+        "actDepTime": "21:14",
+        "actArrTime": "23:12",
+        "status": "InAir",
         "initialModel": "321",
         "initialIs76P": false
       },
@@ -342588,9 +342568,9 @@
         "dest": "HND",
         "depTime": "21:45",
         "arrTime": "23:30",
-        "actDepTime": "21:45",
-        "actArrTime": "23:30",
-        "status": "EstimatedDeparture",
+        "actDepTime": "21:42",
+        "actArrTime": "23:44",
+        "status": "InAir",
         "initialModel": "321",
         "initialIs76P": false
       },
@@ -342949,8 +342929,8 @@
         "depTime": "18:30",
         "arrTime": "20:30",
         "actDepTime": "18:45",
-        "actArrTime": "21:00",
-        "status": "InAir",
+        "actArrTime": "21:09",
+        "status": "Departed",
         "initialModel": "321",
         "initialIs76P": false
       },
@@ -343009,8 +342989,8 @@
         "depTime": "17:25",
         "arrTime": "18:50",
         "actDepTime": "19:52",
-        "actArrTime": "21:40",
-        "status": "InAir",
+        "actArrTime": "21:50",
+        "status": "Departed",
         "initialModel": "Q4A",
         "initialIs76P": false
       },
@@ -343254,6 +343234,26 @@
         "initialModel": "722",
         "initialIs76P": false
       },
+      "NH692": {
+        "flightNo": "NH692",
+        "rawFlightNo": "ANA 692",
+        "model": "321",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "isCancelled": false,
+        "depGate": null,
+        "arrGate": "4,5,6",
+        "origin": "UBJ",
+        "dest": "HND",
+        "depTime": "07:40",
+        "arrTime": "09:15",
+        "actDepTime": "07:39",
+        "actArrTime": "09:07",
+        "status": "Departed",
+        "initialModel": "321",
+        "initialIs76P": false
+      },
       "NH258": {
         "flightNo": "NH258",
         "rawFlightNo": "ANA 258",
@@ -343272,26 +343272,6 @@
         "actArrTime": "18:31",
         "status": "Departed",
         "initialModel": "321",
-        "initialIs76P": false
-      },
-      "NH306": {
-        "flightNo": "NH306",
-        "rawFlightNo": "ANA 306",
-        "model": "738",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "isCancelled": false,
-        "depGate": null,
-        "arrGate": null,
-        "origin": "OKA",
-        "dest": "NGO",
-        "depTime": "14:45",
-        "arrTime": "16:50",
-        "actDepTime": "14:49",
-        "actArrTime": "16:36",
-        "status": "Departed",
-        "initialModel": "738",
         "initialIs76P": false
       },
       "NH260": {
@@ -343394,26 +343374,6 @@
         "initialModel": "76P",
         "initialIs76P": true
       },
-      "NH379": {
-        "flightNo": "NH379",
-        "rawFlightNo": "ANA 379",
-        "model": "738",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "isCancelled": false,
-        "depGate": null,
-        "arrGate": null,
-        "origin": "OKJ",
-        "dest": "CTS",
-        "depTime": "12:00",
-        "arrTime": "13:50",
-        "actDepTime": "11:59",
-        "actArrTime": "13:42",
-        "status": "Departed",
-        "initialModel": "73H",
-        "initialIs76P": false
-      },
       "NH268": {
         "flightNo": "NH268",
         "rawFlightNo": "ANA 268",
@@ -343429,8 +343389,8 @@
         "depTime": "19:15",
         "arrTime": "20:55",
         "actDepTime": "20:11",
-        "actArrTime": "21:47",
-        "status": "InAir",
+        "actArrTime": "21:49",
+        "status": "Departed",
         "initialModel": "78G",
         "initialIs76P": false
       },
@@ -343448,9 +343408,9 @@
         "dest": "HND",
         "depTime": "19:55",
         "arrTime": "21:35",
-        "actDepTime": "21:30",
-        "actArrTime": "23:10",
-        "status": "EstimatedDeparture",
+        "actDepTime": "21:36",
+        "actArrTime": "23:02",
+        "status": "InAir",
         "initialModel": "78P",
         "initialIs76P": false
       },
@@ -343468,9 +343428,9 @@
         "dest": "HND",
         "depTime": "20:50",
         "arrTime": "22:25",
-        "actDepTime": "21:25",
-        "actArrTime": "23:00",
-        "status": "EstimatedDeparture",
+        "actDepTime": "21:33",
+        "actArrTime": "23:06",
+        "status": "InAir",
         "initialModel": "321",
         "initialIs76P": false
       },
@@ -343488,9 +343448,9 @@
         "dest": "HND",
         "depTime": "21:25",
         "arrTime": "23:00",
-        "actDepTime": "21:30",
-        "actArrTime": "23:05",
-        "status": "EstimatedDeparture",
+        "actDepTime": "21:29",
+        "actArrTime": "22:58",
+        "status": "InAir",
         "initialModel": "738",
         "initialIs76P": false
       },
@@ -343789,8 +343749,8 @@
         "depTime": "18:30",
         "arrTime": "20:20",
         "actDepTime": "19:17",
-        "actArrTime": "21:18",
-        "status": "InAir",
+        "actArrTime": "21:24",
+        "status": "Departed",
         "initialModel": "73H",
         "initialIs76P": false
       },
@@ -343809,8 +343769,8 @@
         "depTime": "19:50",
         "arrTime": "21:35",
         "actDepTime": "20:03",
-        "actArrTime": "21:58",
-        "status": "InAir",
+        "actArrTime": "21:55",
+        "status": "Departed",
         "initialModel": "73H",
         "initialIs76P": false
       },
@@ -344048,9 +344008,9 @@
         "dest": "HND",
         "depTime": "20:40",
         "arrTime": "22:00",
-        "actDepTime": "21:10",
-        "actArrTime": "22:30",
-        "status": "EstimatedDeparture",
+        "actDepTime": "21:15",
+        "actArrTime": "22:40",
+        "status": "InAir",
         "initialModel": "738",
         "initialIs76P": false
       },
@@ -344149,7 +344109,7 @@
         "depTime": "19:05",
         "arrTime": "20:35",
         "actDepTime": "20:39",
-        "actArrTime": "22:16",
+        "actArrTime": "22:14",
         "status": "InAir",
         "initialModel": "321",
         "initialIs76P": false
@@ -344192,26 +344152,6 @@
         "actArrTime": "19:52",
         "status": "Departed",
         "initialModel": "73H",
-        "initialIs76P": false
-      },
-      "NH652": {
-        "flightNo": "NH652",
-        "rawFlightNo": "ANA 652",
-        "model": "738",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "isCancelled": false,
-        "depGate": null,
-        "arrGate": "4,5,6",
-        "origin": "OKJ",
-        "dest": "HND",
-        "depTime": "07:05",
-        "arrTime": "08:20",
-        "actDepTime": "07:11",
-        "actArrTime": "08:21",
-        "status": "Departed",
-        "initialModel": "73H/321",
         "initialIs76P": false
       },
       "NH401": {
@@ -344309,8 +344249,8 @@
         "depTime": "20:20",
         "arrTime": "21:30",
         "actDepTime": "20:30",
-        "actArrTime": "21:23",
-        "status": "InAir",
+        "actArrTime": "21:30",
+        "status": "Departed",
         "initialModel": "321",
         "initialIs76P": false
       },
@@ -344668,9 +344608,9 @@
         "dest": "CTS",
         "depTime": "20:00",
         "arrTime": "21:35",
-        "actDepTime": "20:55",
-        "actArrTime": "22:30",
-        "status": "EstimatedDeparture",
+        "actDepTime": "21:05",
+        "actArrTime": "22:23",
+        "status": "InAir",
         "initialModel": "722",
         "initialIs76P": false
       },
@@ -344688,9 +344628,9 @@
         "dest": "CTS",
         "depTime": "20:30",
         "arrTime": "22:05",
-        "actDepTime": "21:40",
-        "actArrTime": "23:15",
-        "status": "EstimatedDeparture",
+        "actDepTime": "21:38",
+        "actArrTime": "22:58",
+        "status": "InAir",
         "initialModel": "78K",
         "initialIs76P": false
       },
@@ -345049,7 +344989,7 @@
         "depTime": "18:55",
         "arrTime": "20:55",
         "actDepTime": "19:43",
-        "actArrTime": "21:44",
+        "actArrTime": "21:57",
         "status": "InAir",
         "initialModel": "722",
         "initialIs76P": false
@@ -345069,7 +345009,7 @@
         "depTime": "19:15",
         "arrTime": "21:20",
         "actDepTime": "19:50",
-        "actArrTime": "22:07",
+        "actArrTime": "22:03",
         "status": "InAir",
         "initialModel": "78P",
         "initialIs76P": false
@@ -345089,7 +345029,7 @@
         "depTime": "19:35",
         "arrTime": "21:40",
         "actDepTime": "20:02",
-        "actArrTime": "22:15",
+        "actArrTime": "22:18",
         "status": "InAir",
         "initialModel": "78K",
         "initialIs76P": false
@@ -345248,9 +345188,9 @@
         "dest": "HSG",
         "depTime": "19:25",
         "arrTime": "21:30",
-        "actDepTime": "20:35",
-        "actArrTime": "22:40",
-        "status": "EstimatedDeparture",
+        "actDepTime": "20:57",
+        "actArrTime": "23:16",
+        "status": "InAir",
         "initialModel": "321",
         "initialIs76P": false
       },
@@ -345409,7 +345349,7 @@
         "depTime": "19:40",
         "arrTime": "21:10",
         "actDepTime": "20:33",
-        "actArrTime": "22:10",
+        "actArrTime": "22:04",
         "status": "InAir",
         "initialModel": "76P",
         "initialIs76P": true
@@ -345589,8 +345529,8 @@
         "depTime": "19:15",
         "arrTime": "20:35",
         "actDepTime": "19:40",
-        "actArrTime": "21:10",
-        "status": "InAir",
+        "actArrTime": "21:54",
+        "status": "Departed",
         "initialModel": "321",
         "initialIs76P": false
       },
@@ -345889,8 +345829,8 @@
         "depTime": "19:00",
         "arrTime": "20:20",
         "actDepTime": "19:18",
-        "actArrTime": "20:58",
-        "status": "InAir",
+        "actArrTime": "21:02",
+        "status": "Departed",
         "initialModel": "78P",
         "initialIs76P": false
       },
@@ -345909,8 +345849,8 @@
         "depTime": "19:10",
         "arrTime": "20:35",
         "actDepTime": "19:22",
-        "actArrTime": "21:03",
-        "status": "InAir",
+        "actArrTime": "21:10",
+        "status": "Departed",
         "initialModel": "722",
         "initialIs76P": false
       },
@@ -346049,8 +345989,8 @@
         "depTime": "18:50",
         "arrTime": "20:20",
         "actDepTime": "19:21",
-        "actArrTime": "21:01",
-        "status": "InAir",
+        "actArrTime": "21:07",
+        "status": "Departed",
         "initialModel": "321",
         "initialIs76P": false
       },
@@ -346129,8 +346069,8 @@
         "depTime": "20:30",
         "arrTime": "21:50",
         "actDepTime": "20:54",
-        "actArrTime": "22:05",
-        "status": "Departed",
+        "actArrTime": "22:20",
+        "status": "InAir",
         "initialModel": "78K",
         "initialIs76P": false
       },
@@ -346148,9 +346088,9 @@
         "dest": "KIX",
         "depTime": "21:00",
         "arrTime": "22:20",
-        "actDepTime": "21:40",
-        "actArrTime": "23:00",
-        "status": "EstimatedDeparture",
+        "actDepTime": "21:37",
+        "actArrTime": "23:07",
+        "status": "InAir",
         "initialModel": "32P",
         "initialIs76P": false
       },
@@ -346249,7 +346189,7 @@
         "depTime": "18:55",
         "arrTime": "20:45",
         "actDepTime": "19:02",
-        "actArrTime": "20:53",
+        "actArrTime": "20:55",
         "status": "Departed",
         "initialModel": "738",
         "initialIs76P": false
@@ -346349,8 +346289,8 @@
         "depTime": "19:00",
         "arrTime": "20:55",
         "actDepTime": "19:11",
-        "actArrTime": "21:19",
-        "status": "InAir",
+        "actArrTime": "21:20",
+        "status": "Departed",
         "initialModel": "321",
         "initialIs76P": false
       },
@@ -346388,9 +346328,9 @@
         "dest": "KMQ",
         "depTime": "20:35",
         "arrTime": "21:40",
-        "actDepTime": "20:50",
-        "actArrTime": "21:55",
-        "status": "EstimatedDeparture",
+        "actDepTime": "21:02",
+        "actArrTime": "22:10",
+        "status": "InAir",
         "initialModel": "321",
         "initialIs76P": false
       },
@@ -346509,8 +346449,8 @@
         "depTime": "19:05",
         "arrTime": "21:00",
         "actDepTime": "19:11",
-        "actArrTime": "21:25",
-        "status": "InAir",
+        "actArrTime": "21:32",
+        "status": "Departed",
         "initialModel": "321",
         "initialIs76P": false
       },
@@ -346709,8 +346649,8 @@
         "depTime": "19:40",
         "arrTime": "21:15",
         "actDepTime": "20:05",
-        "actArrTime": "21:54",
-        "status": "InAir",
+        "actArrTime": "21:52",
+        "status": "Departed",
         "initialModel": "78P",
         "initialIs76P": false
       },
@@ -346829,7 +346769,7 @@
         "depTime": "19:15",
         "arrTime": "21:15",
         "actDepTime": "19:35",
-        "actArrTime": "21:40",
+        "actArrTime": "22:10",
         "status": "InAir",
         "initialModel": "76P",
         "initialIs76P": true
@@ -346969,8 +346909,8 @@
         "depTime": "19:15",
         "arrTime": "21:00",
         "actDepTime": "19:47",
-        "actArrTime": "21:42",
-        "status": "InAir",
+        "actArrTime": "21:54",
+        "status": "Departed",
         "initialModel": "32P",
         "initialIs76P": false
       },
@@ -347209,8 +347149,8 @@
         "depTime": "16:55",
         "arrTime": "19:45",
         "actDepTime": "18:25",
-        "actArrTime": "21:23",
-        "status": "InAir",
+        "actArrTime": "21:31",
+        "status": "Departed",
         "initialModel": "722",
         "initialIs76P": false
       },
@@ -347228,9 +347168,9 @@
         "dest": "OKA",
         "depTime": "20:15",
         "arrTime": "23:10",
-        "actDepTime": "21:10",
-        "actArrTime": "24:05",
-        "status": "EstimatedDeparture",
+        "actDepTime": "21:12",
+        "actArrTime": "24:07",
+        "status": "InAir",
         "initialModel": "722",
         "initialIs76P": false
       },
@@ -347248,9 +347188,9 @@
         "dest": "OKA",
         "depTime": "20:35",
         "arrTime": "23:30",
-        "actDepTime": "20:50",
-        "actArrTime": "23:45",
-        "status": "EstimatedDeparture",
+        "actDepTime": "21:12",
+        "actArrTime": "24:16",
+        "status": "InAir",
         "initialModel": "738",
         "initialIs76P": false
       },
@@ -347349,8 +347289,8 @@
         "depTime": "20:15",
         "arrTime": "21:35",
         "actDepTime": "20:17",
-        "actArrTime": "21:57",
-        "status": "InAir",
+        "actArrTime": "21:54",
+        "status": "Departed",
         "initialModel": "738",
         "initialIs76P": false
       },
@@ -347508,9 +347448,9 @@
         "dest": "SYO",
         "depTime": "20:15",
         "arrTime": "21:20",
-        "actDepTime": "20:45",
-        "actArrTime": "21:50",
-        "status": "EstimatedDeparture",
+        "actDepTime": "20:57",
+        "actArrTime": "21:55",
+        "status": "Departed",
         "initialModel": "32P",
         "initialIs76P": false
       },
@@ -347629,7 +347569,7 @@
         "depTime": "20:05",
         "arrTime": "21:25",
         "actDepTime": "20:32",
-        "actArrTime": "21:58",
+        "actArrTime": "22:00",
         "status": "InAir",
         "initialModel": "78P",
         "initialIs76P": false
@@ -347689,8 +347629,8 @@
         "depTime": "19:40",
         "arrTime": "20:40",
         "actDepTime": "20:18",
-        "actArrTime": "21:19",
-        "status": "InAir",
+        "actArrTime": "21:18",
+        "status": "Departed",
         "initialModel": "738",
         "initialIs76P": false
       },
@@ -347749,8 +347689,8 @@
         "depTime": "19:00",
         "arrTime": "20:45",
         "actDepTime": "19:13",
-        "actArrTime": "21:25",
-        "status": "InAir",
+        "actArrTime": "21:22",
+        "status": "Departed",
         "initialModel": "321",
         "initialIs76P": false
       },
@@ -347789,8 +347729,8 @@
         "depTime": "20:30",
         "arrTime": "21:45",
         "actDepTime": "20:49",
-        "actArrTime": "22:00",
-        "status": "Departed",
+        "actArrTime": "22:06",
+        "status": "InAir",
         "initialModel": "32P",
         "initialIs76P": false
       },
@@ -348029,8 +347969,8 @@
         "depTime": "19:20",
         "arrTime": "20:55",
         "actDepTime": "19:47",
-        "actArrTime": "21:16",
-        "status": "InAir",
+        "actArrTime": "21:26",
+        "status": "Departed",
         "initialModel": "73H/32P",
         "initialIs76P": false
       },
@@ -348334,6 +348274,26 @@
         "initialModel": "Q4A",
         "initialIs76P": false
       },
+      "NH696": {
+        "flightNo": "NH696",
+        "rawFlightNo": "ANA 696",
+        "model": "321",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "isCancelled": false,
+        "depGate": null,
+        "arrGate": "1,2,3",
+        "origin": "UBJ",
+        "dest": "HND",
+        "depTime": "12:40",
+        "arrTime": "14:10",
+        "actDepTime": "12:50",
+        "actArrTime": "14:29",
+        "status": "Departed",
+        "initialModel": "321",
+        "initialIs76P": false
+      },
       "NH1649": {
         "flightNo": "NH1649",
         "rawFlightNo": "ANA 1649",
@@ -348349,7 +348309,7 @@
         "depTime": "20:15",
         "arrTime": "21:10",
         "actDepTime": "20:28",
-        "actArrTime": "21:34",
+        "actArrTime": "22:20",
         "status": "InAir",
         "initialModel": "73H",
         "initialIs76P": false
@@ -349049,8 +349009,8 @@
         "depTime": "20:20",
         "arrTime": "21:30",
         "actDepTime": "20:27",
-        "actArrTime": "21:36",
-        "status": "InAir",
+        "actArrTime": "21:53",
+        "status": "Departed",
         "initialModel": "78G",
         "initialIs76P": false
       },
@@ -349289,8 +349249,8 @@
         "depTime": "19:45",
         "arrTime": "20:55",
         "actDepTime": "19:59",
-        "actArrTime": "21:16",
-        "status": "InAir",
+        "actArrTime": "21:19",
+        "status": "Departed",
         "initialModel": "73H",
         "initialIs76P": false
       },
@@ -349409,8 +349369,8 @@
         "depTime": "19:35",
         "arrTime": "20:55",
         "actDepTime": "19:37",
-        "actArrTime": "20:55",
-        "status": "InAir",
+        "actArrTime": "21:04",
+        "status": "Departed",
         "initialModel": "Q4A",
         "initialIs76P": false
       },
@@ -349529,8 +349489,8 @@
         "depTime": "19:55",
         "arrTime": "21:20",
         "actDepTime": "20:10",
-        "actArrTime": "21:52",
-        "status": "InAir",
+        "actArrTime": "21:57",
+        "status": "Departed",
         "initialModel": "Q4A",
         "initialIs76P": false
       },
@@ -349609,8 +349569,8 @@
         "depTime": "19:25",
         "arrTime": "20:45",
         "actDepTime": "19:26",
-        "actArrTime": "20:58",
-        "status": "InAir",
+        "actArrTime": "21:05",
+        "status": "Departed",
         "initialModel": "73H",
         "initialIs76P": false
       },
@@ -349769,8 +349729,8 @@
         "depTime": "18:50",
         "arrTime": "21:10",
         "actDepTime": "19:02",
-        "actArrTime": "21:31",
-        "status": "InAir",
+        "actArrTime": "21:40",
+        "status": "Departed",
         "initialModel": "73H",
         "initialIs76P": false
       },
@@ -349869,8 +349829,8 @@
         "depTime": "19:40",
         "arrTime": "20:55",
         "actDepTime": "20:14",
-        "actArrTime": "21:17",
-        "status": "InAir",
+        "actArrTime": "21:25",
+        "status": "Departed",
         "initialModel": "321",
         "initialIs76P": false
       },
@@ -350229,8 +350189,8 @@
         "depTime": "21:00",
         "arrTime": "22:15",
         "actDepTime": "21:00",
-        "actArrTime": "22:15",
-        "status": "EstimatedDeparture",
+        "actArrTime": "22:10",
+        "status": "InAir",
         "initialModel": "73H",
         "initialIs76P": false
       },
@@ -350449,8 +350409,8 @@
         "depTime": "20:25",
         "arrTime": "22:00",
         "actDepTime": "20:53",
-        "actArrTime": "22:20",
-        "status": "Departed",
+        "actArrTime": "22:24",
+        "status": "InAir",
         "initialModel": "321",
         "initialIs76P": false
       },
@@ -350663,14 +350623,14 @@
         "is767Strict": false,
         "isCancelled": false,
         "depGate": null,
-        "arrGate": "1,2,3",
+        "arrGate": "4,5,6",
         "origin": "KMJ",
         "dest": "HND",
         "depTime": "20:25",
         "arrTime": "22:00",
         "actDepTime": "20:56",
-        "actArrTime": "22:20",
-        "status": "Departed",
+        "actArrTime": "22:28",
+        "status": "InAir",
         "initialModel": "73H/321",
         "initialIs76P": false
       },
@@ -350769,8 +350729,8 @@
         "depTime": "19:40",
         "arrTime": "21:15",
         "actDepTime": "19:57",
-        "actArrTime": "21:20",
-        "status": "InAir",
+        "actArrTime": "21:41",
+        "status": "Departed",
         "initialModel": "Q4A",
         "initialIs76P": false
       },
@@ -350830,26 +350790,6 @@
         "arrTime": "09:25",
         "actDepTime": "07:49",
         "actArrTime": "09:25",
-        "status": "Departed",
-        "initialModel": "321",
-        "initialIs76P": false
-      },
-      "NH732": {
-        "flightNo": "NH732",
-        "rawFlightNo": "ANA 732",
-        "model": "321",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "isCancelled": false,
-        "depGate": null,
-        "arrGate": null,
-        "origin": "SDJ",
-        "dest": "ITM",
-        "depTime": "07:50",
-        "arrTime": "09:15",
-        "actDepTime": "07:56",
-        "actArrTime": "09:20",
         "status": "Departed",
         "initialModel": "321",
         "initialIs76P": false
@@ -350949,8 +350889,8 @@
         "depTime": "19:20",
         "arrTime": "21:00",
         "actDepTime": "19:31",
-        "actArrTime": "21:04",
-        "status": "InAir",
+        "actArrTime": "21:12",
+        "status": "Departed",
         "initialModel": "73H",
         "initialIs76P": false
       },
@@ -351469,8 +351409,8 @@
         "depTime": "19:50",
         "arrTime": "21:15",
         "actDepTime": "20:19",
-        "actArrTime": "21:38",
-        "status": "InAir",
+        "actArrTime": "21:44",
+        "status": "Departed",
         "initialModel": "78P",
         "initialIs76P": false
       },
@@ -351729,8 +351669,8 @@
         "depTime": "19:20",
         "arrTime": "20:50",
         "actDepTime": "19:27",
-        "actArrTime": "21:02",
-        "status": "InAir",
+        "actArrTime": "21:03",
+        "status": "Departed",
         "initialModel": "73H",
         "initialIs76P": false
       },
@@ -351841,16 +351781,16 @@
         "is767": false,
         "is76P": false,
         "is767Strict": false,
-        "isCancelled": true,
-        "depGate": null,
+        "isCancelled": false,
+        "depGate": "6",
         "arrGate": null,
         "origin": "NGO",
         "dest": "NGS",
         "depTime": "18:00",
         "arrTime": "19:35",
-        "actDepTime": "",
-        "actArrTime": "",
-        "status": "Cancelled",
+        "actDepTime": "18:00",
+        "actArrTime": "19:35",
+        "status": "",
         "initialModel": "73H",
         "initialIs76P": false
       },
@@ -352029,8 +351969,8 @@
         "depTime": "19:25",
         "arrTime": "21:00",
         "actDepTime": "19:55",
-        "actArrTime": "21:28",
-        "status": "InAir",
+        "actArrTime": "21:39",
+        "status": "Departed",
         "initialModel": "78P",
         "initialIs76P": false
       },
@@ -352170,26 +352110,6 @@
         "arrTime": "18:40",
         "actDepTime": "17:25",
         "actArrTime": "18:52",
-        "status": "Departed",
-        "initialModel": "73H",
-        "initialIs76P": false
-      },
-      "NH734": {
-        "flightNo": "NH734",
-        "rawFlightNo": "ANA 734",
-        "model": "738",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "isCancelled": false,
-        "depGate": null,
-        "arrGate": null,
-        "origin": "SDJ",
-        "dest": "ITM",
-        "depTime": "09:45",
-        "arrTime": "11:10",
-        "actDepTime": "09:46",
-        "actArrTime": "11:09",
         "status": "Departed",
         "initialModel": "73H",
         "initialIs76P": false
@@ -352414,6 +352334,26 @@
         "initialModel": "73H",
         "initialIs76P": false
       },
+      "NH1206": {
+        "flightNo": "NH1206",
+        "rawFlightNo": "ANA 1206",
+        "model": "738",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "isCancelled": false,
+        "depGate": null,
+        "arrGate": null,
+        "origin": "OKA",
+        "dest": "FUK",
+        "depTime": "11:50",
+        "arrTime": "13:30",
+        "actDepTime": "11:59",
+        "actArrTime": "13:48",
+        "status": "Departed",
+        "initialModel": "73H",
+        "initialIs76P": false
+      },
       "NH1208": {
         "flightNo": "NH1208",
         "rawFlightNo": "ANA 1208",
@@ -352509,8 +352449,8 @@
         "depTime": "19:30",
         "arrTime": "21:10",
         "actDepTime": "20:16",
-        "actArrTime": "21:47",
-        "status": "InAir",
+        "actArrTime": "21:58",
+        "status": "Departed",
         "initialModel": "73H",
         "initialIs76P": false
       },
@@ -352709,8 +352649,8 @@
         "depTime": "18:35",
         "arrTime": "20:50",
         "actDepTime": "18:57",
-        "actArrTime": "21:06",
-        "status": "InAir",
+        "actArrTime": "21:18",
+        "status": "Departed",
         "initialModel": "781",
         "initialIs76P": false
       },
@@ -352728,9 +352668,9 @@
         "dest": "HND",
         "depTime": "19:10",
         "arrTime": "21:25",
-        "actDepTime": "20:50",
-        "actArrTime": "23:05",
-        "status": "EstimatedDeparture",
+        "actDepTime": "21:05",
+        "actArrTime": "23:03",
+        "status": "InAir",
         "initialModel": "773",
         "initialIs76P": false
       },
@@ -352749,7 +352689,7 @@
         "depTime": "20:00",
         "arrTime": "22:15",
         "actDepTime": "20:38",
-        "actArrTime": "22:37",
+        "actArrTime": "22:44",
         "status": "InAir",
         "initialModel": "772",
         "initialIs76P": false
@@ -352772,6 +352712,46 @@
         "actArrTime": "24:30",
         "status": "EstimatedDeparture",
         "initialModel": "772",
+        "initialIs76P": false
+      },
+      "NH478": {
+        "flightNo": "NH478",
+        "rawFlightNo": "ANA 478",
+        "model": "738",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "isCancelled": false,
+        "depGate": null,
+        "arrGate": "1,2,3",
+        "origin": "OKA",
+        "dest": "HND",
+        "depTime": "20:55",
+        "arrTime": "23:10",
+        "actDepTime": "20:55",
+        "actArrTime": "22:59",
+        "status": "InAir",
+        "initialModel": "73H",
+        "initialIs76P": false
+      },
+      "NH1134": {
+        "flightNo": "NH1134",
+        "rawFlightNo": "ANA 1134",
+        "model": "738",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "isCancelled": false,
+        "depGate": null,
+        "arrGate": "1,2,3",
+        "origin": "OKA",
+        "dest": "HND",
+        "depTime": "21:10",
+        "arrTime": "23:25",
+        "actDepTime": "21:13",
+        "actArrTime": "23:18",
+        "status": "InAir",
+        "initialModel": "73H",
         "initialIs76P": false
       },
       "NH1765": {
@@ -352994,6 +352974,26 @@
         "initialModel": "321",
         "initialIs76P": false
       },
+      "NH1868": {
+        "flightNo": "NH1868",
+        "rawFlightNo": "ANA 1868",
+        "model": "738",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "isCancelled": false,
+        "depGate": null,
+        "arrGate": null,
+        "origin": "OKA",
+        "dest": "KMJ",
+        "depTime": "15:05",
+        "arrTime": "16:30",
+        "actDepTime": "15:15",
+        "actArrTime": "16:35",
+        "status": "Departed",
+        "initialModel": "73H",
+        "initialIs76P": false
+      },
       "NH1721": {
         "flightNo": "NH1721",
         "rawFlightNo": "ANA 1721",
@@ -353134,6 +353134,26 @@
         "initialModel": "76P",
         "initialIs76P": true
       },
+      "NH306": {
+        "flightNo": "NH306",
+        "rawFlightNo": "ANA 306",
+        "model": "738",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "isCancelled": false,
+        "depGate": null,
+        "arrGate": null,
+        "origin": "OKA",
+        "dest": "NGO",
+        "depTime": "14:45",
+        "arrTime": "16:50",
+        "actDepTime": "14:49",
+        "actArrTime": "16:36",
+        "status": "Departed",
+        "initialModel": "738",
+        "initialIs76P": false
+      },
       "NH308": {
         "flightNo": "NH308",
         "rawFlightNo": "ANA 308",
@@ -353192,6 +353212,46 @@
         "actArrTime": "18:53",
         "status": "Departed",
         "initialModel": "321",
+        "initialIs76P": false
+      },
+      "NH379": {
+        "flightNo": "NH379",
+        "rawFlightNo": "ANA 379",
+        "model": "738",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "isCancelled": false,
+        "depGate": null,
+        "arrGate": null,
+        "origin": "OKJ",
+        "dest": "CTS",
+        "depTime": "12:00",
+        "arrTime": "13:50",
+        "actDepTime": "11:59",
+        "actArrTime": "13:42",
+        "status": "Departed",
+        "initialModel": "73H",
+        "initialIs76P": false
+      },
+      "NH652": {
+        "flightNo": "NH652",
+        "rawFlightNo": "ANA 652",
+        "model": "738",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "isCancelled": false,
+        "depGate": null,
+        "arrGate": "4,5,6",
+        "origin": "OKJ",
+        "dest": "HND",
+        "depTime": "07:05",
+        "arrTime": "08:20",
+        "actDepTime": "07:11",
+        "actArrTime": "08:21",
+        "status": "Departed",
+        "initialModel": "73H/321",
         "initialIs76P": false
       },
       "NH654": {
@@ -353269,8 +353329,8 @@
         "depTime": "20:00",
         "arrTime": "21:15",
         "actDepTime": "20:24",
-        "actArrTime": "21:30",
-        "status": "InAir",
+        "actArrTime": "21:39",
+        "status": "Departed",
         "initialModel": "73H/32P",
         "initialIs76P": false
       },
@@ -353449,8 +353509,8 @@
         "depTime": "19:35",
         "arrTime": "20:50",
         "actDepTime": "20:08",
-        "actArrTime": "21:20",
-        "status": "InAir",
+        "actArrTime": "21:28",
+        "status": "Departed",
         "initialModel": "73H/321",
         "initialIs76P": false
       },
@@ -353490,6 +353550,46 @@
         "arrTime": "17:10",
         "actDepTime": "15:53",
         "actArrTime": "16:59",
+        "status": "Departed",
+        "initialModel": "73H",
+        "initialIs76P": false
+      },
+      "NH732": {
+        "flightNo": "NH732",
+        "rawFlightNo": "ANA 732",
+        "model": "321",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "isCancelled": false,
+        "depGate": null,
+        "arrGate": null,
+        "origin": "SDJ",
+        "dest": "ITM",
+        "depTime": "07:50",
+        "arrTime": "09:15",
+        "actDepTime": "07:56",
+        "actArrTime": "09:20",
+        "status": "Departed",
+        "initialModel": "321",
+        "initialIs76P": false
+      },
+      "NH734": {
+        "flightNo": "NH734",
+        "rawFlightNo": "ANA 734",
+        "model": "738",
+        "is767": false,
+        "is76P": false,
+        "is767Strict": false,
+        "isCancelled": false,
+        "depGate": null,
+        "arrGate": null,
+        "origin": "SDJ",
+        "dest": "ITM",
+        "depTime": "09:45",
+        "arrTime": "11:10",
+        "actDepTime": "09:46",
+        "actArrTime": "11:09",
         "status": "Departed",
         "initialModel": "73H",
         "initialIs76P": false
@@ -353589,7 +353689,7 @@
         "depTime": "20:25",
         "arrTime": "21:50",
         "actDepTime": "20:35",
-        "actArrTime": "22:34",
+        "actArrTime": "22:26",
         "status": "InAir",
         "initialModel": "Q4A",
         "initialIs76P": false
@@ -353874,106 +353974,6 @@
         "initialModel": "73H/32P/321",
         "initialIs76P": false
       },
-      "NH296": {
-        "flightNo": "NH296",
-        "rawFlightNo": "ANA 296",
-        "model": "321",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "isCancelled": false,
-        "depGate": null,
-        "arrGate": "4,5,6",
-        "origin": "TTJ",
-        "dest": "HND",
-        "depTime": "11:10",
-        "arrTime": "12:25",
-        "actDepTime": "11:12",
-        "actArrTime": "12:28",
-        "status": "Departed",
-        "initialModel": "321",
-        "initialIs76P": false
-      },
-      "NH298": {
-        "flightNo": "NH298",
-        "rawFlightNo": "ANA 298",
-        "model": "321",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "isCancelled": false,
-        "depGate": null,
-        "arrGate": "4,5,6",
-        "origin": "TTJ",
-        "dest": "HND",
-        "depTime": "15:00",
-        "arrTime": "16:15",
-        "actDepTime": "15:46",
-        "actArrTime": "17:09",
-        "status": "Departed",
-        "initialModel": "32P/321",
-        "initialIs76P": false
-      },
-      "NH300": {
-        "flightNo": "NH300",
-        "rawFlightNo": "ANA 300",
-        "model": "321",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "isCancelled": false,
-        "depGate": null,
-        "arrGate": "1,2,3",
-        "origin": "TTJ",
-        "dest": "HND",
-        "depTime": "18:30",
-        "arrTime": "19:45",
-        "actDepTime": "18:31",
-        "actArrTime": "19:54",
-        "status": "Departed",
-        "initialModel": "73H/32P",
-        "initialIs76P": false
-      },
-      "NH692": {
-        "flightNo": "NH692",
-        "rawFlightNo": "ANA 692",
-        "model": "321",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "isCancelled": false,
-        "depGate": null,
-        "arrGate": "4,5,6",
-        "origin": "UBJ",
-        "dest": "HND",
-        "depTime": "07:40",
-        "arrTime": "09:15",
-        "actDepTime": "07:39",
-        "actArrTime": "09:07",
-        "status": "Departed",
-        "initialModel": "321",
-        "initialIs76P": false
-      },
-      "NH696": {
-        "flightNo": "NH696",
-        "rawFlightNo": "ANA 696",
-        "model": "321",
-        "is767": false,
-        "is76P": false,
-        "is767Strict": false,
-        "isCancelled": false,
-        "depGate": null,
-        "arrGate": "1,2,3",
-        "origin": "UBJ",
-        "dest": "HND",
-        "depTime": "12:40",
-        "arrTime": "14:10",
-        "actDepTime": "12:50",
-        "actArrTime": "14:29",
-        "status": "Departed",
-        "initialModel": "321",
-        "initialIs76P": false
-      },
       "NH700": {
         "flightNo": "NH700",
         "rawFlightNo": "ANA 700",
@@ -354043,14 +354043,14 @@
         "is767Strict": false,
         "isCancelled": false,
         "depGate": null,
-        "arrGate": "1,2,3",
+        "arrGate": "4,5,6",
         "origin": "UKB",
         "dest": "HND",
         "depTime": "21:20",
         "arrTime": "22:30",
-        "actDepTime": "21:35",
-        "actArrTime": "22:45",
-        "status": "EstimatedDeparture",
+        "actDepTime": "21:47",
+        "actArrTime": "22:48",
+        "status": "InAir",
         "initialModel": "321",
         "initialIs76P": false
       },
@@ -354190,7 +354190,7 @@
         "arrTime": "21:10",
         "actDepTime": "21:10",
         "actArrTime": "22:30",
-        "status": "EstimatedDeparture",
+        "status": "InAir",
         "initialModel": "321",
         "initialIs76P": false
       }
@@ -354211,7 +354211,7 @@
         "isCancelled": false,
         "depGate": "508",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.761Z"
+        "modelObservedAt": "2026-11-28T12:45:13.690Z"
       },
       "NH981": {
         "flightNo": "NH981",
@@ -354228,7 +354228,7 @@
         "isCancelled": false,
         "depGate": "49",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.761Z"
+        "modelObservedAt": "2026-11-28T12:45:13.690Z"
       },
       "NH453": {
         "flightNo": "NH453",
@@ -354245,7 +354245,7 @@
         "isCancelled": false,
         "depGate": "511",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.761Z"
+        "modelObservedAt": "2026-11-28T12:45:13.690Z"
       },
       "NH455": {
         "flightNo": "NH455",
@@ -354262,7 +354262,7 @@
         "isCancelled": false,
         "depGate": "505",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.761Z"
+        "modelObservedAt": "2026-11-28T12:45:13.690Z"
       },
       "NH457": {
         "flightNo": "NH457",
@@ -354279,7 +354279,7 @@
         "isCancelled": false,
         "depGate": "504",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.761Z"
+        "modelObservedAt": "2026-11-28T12:45:13.690Z"
       },
       "NH1897": {
         "flightNo": "NH1897",
@@ -354461,7 +354461,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.763Z"
+        "modelObservedAt": "2026-11-28T12:45:13.692Z"
       },
       "NH1280": {
         "flightNo": "NH1280",
@@ -354478,7 +354478,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.763Z"
+        "modelObservedAt": "2026-11-28T12:45:13.692Z"
       },
       "NH1898": {
         "flightNo": "NH1898",
@@ -354561,7 +354561,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH52": {
         "flightNo": "NH52",
@@ -354578,7 +354578,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH54": {
         "flightNo": "NH54",
@@ -354595,7 +354595,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH56": {
         "flightNo": "NH56",
@@ -354612,7 +354612,7 @@
         "isCancelled": false,
         "depGate": "10",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH58": {
         "flightNo": "NH58",
@@ -354629,7 +354629,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH60": {
         "flightNo": "NH60",
@@ -354646,7 +354646,7 @@
         "isCancelled": false,
         "depGate": "10",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH62": {
         "flightNo": "NH62",
@@ -354663,7 +354663,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH64": {
         "flightNo": "NH64",
@@ -354680,7 +354680,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH66": {
         "flightNo": "NH66",
@@ -354697,7 +354697,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH68": {
         "flightNo": "NH68",
@@ -354714,7 +354714,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH1104": {
         "flightNo": "NH1104",
@@ -354731,7 +354731,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH70": {
         "flightNo": "NH70",
@@ -354748,7 +354748,7 @@
         "isCancelled": false,
         "depGate": "10",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH1106": {
         "flightNo": "NH1106",
@@ -354763,9 +354763,9 @@
         "scheduledModel": "321",
         "is76P": false,
         "isCancelled": false,
-        "depGate": "11",
+        "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH74": {
         "flightNo": "NH74",
@@ -354782,7 +354782,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH76": {
         "flightNo": "NH76",
@@ -354797,9 +354797,9 @@
         "scheduledModel": "789/788/781/772/763",
         "is76P": false,
         "isCancelled": false,
-        "depGate": "11",
+        "depGate": "10",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH78": {
         "flightNo": "NH78",
@@ -354816,7 +354816,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH82": {
         "flightNo": "NH82",
@@ -354833,7 +354833,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH84": {
         "flightNo": "NH84",
@@ -354850,7 +354850,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH988": {
         "flightNo": "NH988",
@@ -354867,7 +354867,7 @@
         "isCancelled": false,
         "depGate": "10",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.764Z"
+        "modelObservedAt": "2026-11-28T12:45:13.693Z"
       },
       "NH772": {
         "flightNo": "NH772",
@@ -354884,7 +354884,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.765Z"
+        "modelObservedAt": "2026-11-28T12:45:13.694Z"
       },
       "NH774": {
         "flightNo": "NH774",
@@ -354901,7 +354901,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.765Z"
+        "modelObservedAt": "2026-11-28T12:45:13.694Z"
       },
       "NH1090": {
         "flightNo": "NH1090",
@@ -354918,7 +354918,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.765Z"
+        "modelObservedAt": "2026-11-28T12:45:13.694Z"
       },
       "NH984": {
         "flightNo": "NH984",
@@ -354935,7 +354935,7 @@
         "isCancelled": false,
         "depGate": "10",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.765Z"
+        "modelObservedAt": "2026-11-28T12:45:13.694Z"
       },
       "NH1092": {
         "flightNo": "NH1092",
@@ -354952,7 +354952,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.765Z"
+        "modelObservedAt": "2026-11-28T12:45:13.694Z"
       },
       "NH778": {
         "flightNo": "NH778",
@@ -354969,7 +354969,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.765Z"
+        "modelObservedAt": "2026-11-28T12:45:13.694Z"
       },
       "NH780": {
         "flightNo": "NH780",
@@ -354984,9 +354984,9 @@
         "scheduledModel": "789/788",
         "is76P": false,
         "isCancelled": false,
-        "depGate": null,
+        "depGate": "11",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.765Z"
+        "modelObservedAt": "2026-11-28T12:45:13.694Z"
       },
       "NH1174": {
         "flightNo": "NH1174",
@@ -355025,7 +355025,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.898Z"
+        "modelObservedAt": "2026-11-28T12:45:13.790Z"
       },
       "NH710": {
         "flightNo": "NH710",
@@ -355042,7 +355042,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.898Z"
+        "modelObservedAt": "2026-11-28T12:45:13.790Z"
       },
       "NH712": {
         "flightNo": "NH712",
@@ -355059,7 +355059,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.898Z"
+        "modelObservedAt": "2026-11-28T12:45:13.790Z"
       },
       "NH714": {
         "flightNo": "NH714",
@@ -355076,7 +355076,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.898Z"
+        "modelObservedAt": "2026-11-28T12:45:13.790Z"
       },
       "NH380": {
         "flightNo": "NH380",
@@ -355181,7 +355181,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.899Z"
+        "modelObservedAt": "2026-11-28T12:45:13.801Z"
       },
       "NH1279": {
         "flightNo": "NH1279",
@@ -355198,7 +355198,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.899Z"
+        "modelObservedAt": "2026-11-28T12:45:13.801Z"
       },
       "NH240": {
         "flightNo": "NH240",
@@ -355215,7 +355215,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH242": {
         "flightNo": "NH242",
@@ -355232,7 +355232,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH244": {
         "flightNo": "NH244",
@@ -355249,7 +355249,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH1076": {
         "flightNo": "NH1076",
@@ -355266,7 +355266,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH246": {
         "flightNo": "NH246",
@@ -355283,7 +355283,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH248": {
         "flightNo": "NH248",
@@ -355300,7 +355300,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH250": {
         "flightNo": "NH250",
@@ -355317,7 +355317,7 @@
         "isCancelled": false,
         "depGate": "10",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH252": {
         "flightNo": "NH252",
@@ -355334,7 +355334,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH254": {
         "flightNo": "NH254",
@@ -355351,7 +355351,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH256": {
         "flightNo": "NH256",
@@ -355368,7 +355368,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH258": {
         "flightNo": "NH258",
@@ -355385,7 +355385,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH260": {
         "flightNo": "NH260",
@@ -355402,7 +355402,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH262": {
         "flightNo": "NH262",
@@ -355419,7 +355419,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH264": {
         "flightNo": "NH264",
@@ -355436,7 +355436,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH1078": {
         "flightNo": "NH1078",
@@ -355453,7 +355453,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH266": {
         "flightNo": "NH266",
@@ -355470,7 +355470,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH268": {
         "flightNo": "NH268",
@@ -355487,7 +355487,7 @@
         "isCancelled": false,
         "depGate": "10",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH270": {
         "flightNo": "NH270",
@@ -355504,7 +355504,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH272": {
         "flightNo": "NH272",
@@ -355521,7 +355521,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH274": {
         "flightNo": "NH274",
@@ -355538,7 +355538,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.907Z"
+        "modelObservedAt": "2026-11-28T12:45:13.845Z"
       },
       "NH420": {
         "flightNo": "NH420",
@@ -355786,7 +355786,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.908Z"
+        "modelObservedAt": "2026-11-28T12:45:13.847Z"
       },
       "NH674": {
         "flightNo": "NH674",
@@ -355803,7 +355803,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.908Z"
+        "modelObservedAt": "2026-11-28T12:45:13.847Z"
       },
       "NH676": {
         "flightNo": "NH676",
@@ -355820,7 +355820,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.908Z"
+        "modelObservedAt": "2026-11-28T12:45:13.847Z"
       },
       "NH678": {
         "flightNo": "NH678",
@@ -355837,7 +355837,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.908Z"
+        "modelObservedAt": "2026-11-28T12:45:13.847Z"
       },
       "NH680": {
         "flightNo": "NH680",
@@ -355854,7 +355854,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.908Z"
+        "modelObservedAt": "2026-11-28T12:45:13.847Z"
       },
       "NH682": {
         "flightNo": "NH682",
@@ -355871,7 +355871,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.908Z"
+        "modelObservedAt": "2026-11-28T12:45:13.847Z"
       },
       "NH684": {
         "flightNo": "NH684",
@@ -355888,7 +355888,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.908Z"
+        "modelObservedAt": "2026-11-28T12:45:13.847Z"
       },
       "NH686": {
         "flightNo": "NH686",
@@ -355905,7 +355905,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.908Z"
+        "modelObservedAt": "2026-11-28T12:45:13.847Z"
       },
       "NH552": {
         "flightNo": "NH552",
@@ -355922,7 +355922,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.956Z"
+        "modelObservedAt": "2026-11-28T12:45:13.853Z"
       },
       "NH554": {
         "flightNo": "NH554",
@@ -355939,7 +355939,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.956Z"
+        "modelObservedAt": "2026-11-28T12:45:13.853Z"
       },
       "NH556": {
         "flightNo": "NH556",
@@ -355956,7 +355956,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.956Z"
+        "modelObservedAt": "2026-11-28T12:45:13.853Z"
       },
       "NH558": {
         "flightNo": "NH558",
@@ -355973,7 +355973,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.956Z"
+        "modelObservedAt": "2026-11-28T12:45:13.853Z"
       },
       "NH746": {
         "flightNo": "NH746",
@@ -356012,7 +356012,7 @@
         "isCancelled": false,
         "depGate": "47",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.962Z"
+        "modelObservedAt": "2026-11-28T12:45:13.878Z"
       },
       "NH403": {
         "flightNo": "NH403",
@@ -356029,7 +356029,7 @@
         "isCancelled": false,
         "depGate": "503",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.962Z"
+        "modelObservedAt": "2026-11-28T12:45:13.878Z"
       },
       "NH405": {
         "flightNo": "NH405",
@@ -356046,7 +356046,7 @@
         "isCancelled": false,
         "depGate": "508",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.962Z"
+        "modelObservedAt": "2026-11-28T12:45:13.878Z"
       },
       "NH407": {
         "flightNo": "NH407",
@@ -356063,7 +356063,7 @@
         "isCancelled": false,
         "depGate": "47",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.962Z"
+        "modelObservedAt": "2026-11-28T12:45:13.878Z"
       },
       "NH409": {
         "flightNo": "NH409",
@@ -356080,7 +356080,7 @@
         "isCancelled": false,
         "depGate": "508",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.962Z"
+        "modelObservedAt": "2026-11-28T12:45:13.878Z"
       },
       "NH987": {
         "flightNo": "NH987",
@@ -356097,7 +356097,7 @@
         "isCancelled": false,
         "depGate": "60",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH51": {
         "flightNo": "NH51",
@@ -356114,7 +356114,7 @@
         "isCancelled": false,
         "depGate": "63",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH53": {
         "flightNo": "NH53",
@@ -356131,7 +356131,7 @@
         "isCancelled": false,
         "depGate": "60",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH55": {
         "flightNo": "NH55",
@@ -356148,7 +356148,7 @@
         "isCancelled": false,
         "depGate": "64",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH57": {
         "flightNo": "NH57",
@@ -356165,7 +356165,7 @@
         "isCancelled": false,
         "depGate": "63",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH59": {
         "flightNo": "NH59",
@@ -356182,7 +356182,7 @@
         "isCancelled": false,
         "depGate": "60",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH61": {
         "flightNo": "NH61",
@@ -356199,7 +356199,7 @@
         "isCancelled": false,
         "depGate": "61",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH63": {
         "flightNo": "NH63",
@@ -356216,7 +356216,7 @@
         "isCancelled": false,
         "depGate": "62",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH65": {
         "flightNo": "NH65",
@@ -356233,7 +356233,7 @@
         "isCancelled": false,
         "depGate": "63",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH1103": {
         "flightNo": "NH1103",
@@ -356250,7 +356250,7 @@
         "isCancelled": false,
         "depGate": "49",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH67": {
         "flightNo": "NH67",
@@ -356267,7 +356267,7 @@
         "isCancelled": false,
         "depGate": "61",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH69": {
         "flightNo": "NH69",
@@ -356284,7 +356284,7 @@
         "isCancelled": false,
         "depGate": "59",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH1105": {
         "flightNo": "NH1105",
@@ -356301,7 +356301,7 @@
         "isCancelled": false,
         "depGate": "50B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH71": {
         "flightNo": "NH71",
@@ -356318,7 +356318,7 @@
         "isCancelled": false,
         "depGate": "60",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH73": {
         "flightNo": "NH73",
@@ -356335,7 +356335,7 @@
         "isCancelled": false,
         "depGate": "62",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH75": {
         "flightNo": "NH75",
@@ -356352,7 +356352,7 @@
         "isCancelled": false,
         "depGate": "61",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH77": {
         "flightNo": "NH77",
@@ -356369,7 +356369,7 @@
         "isCancelled": false,
         "depGate": "58",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH79": {
         "flightNo": "NH79",
@@ -356386,7 +356386,7 @@
         "isCancelled": false,
         "depGate": "59",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH81": {
         "flightNo": "NH81",
@@ -356403,7 +356403,7 @@
         "isCancelled": false,
         "depGate": "62",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.964Z"
+        "modelObservedAt": "2026-11-28T12:45:13.886Z"
       },
       "NH239": {
         "flightNo": "NH239",
@@ -356420,7 +356420,7 @@
         "isCancelled": false,
         "depGate": "51A",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH1075": {
         "flightNo": "NH1075",
@@ -356437,7 +356437,7 @@
         "isCancelled": false,
         "depGate": "53",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH241": {
         "flightNo": "NH241",
@@ -356454,7 +356454,7 @@
         "isCancelled": false,
         "depGate": "62",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH1077": {
         "flightNo": "NH1077",
@@ -356471,7 +356471,7 @@
         "isCancelled": false,
         "depGate": "58",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH243": {
         "flightNo": "NH243",
@@ -356488,7 +356488,7 @@
         "isCancelled": false,
         "depGate": "59",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH245": {
         "flightNo": "NH245",
@@ -356505,7 +356505,7 @@
         "isCancelled": false,
         "depGate": "57",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH247": {
         "flightNo": "NH247",
@@ -356522,7 +356522,7 @@
         "isCancelled": false,
         "depGate": "61",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH249": {
         "flightNo": "NH249",
@@ -356539,7 +356539,7 @@
         "isCancelled": false,
         "depGate": "62",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH251": {
         "flightNo": "NH251",
@@ -356556,7 +356556,7 @@
         "isCancelled": false,
         "depGate": "58",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH253": {
         "flightNo": "NH253",
@@ -356573,7 +356573,7 @@
         "isCancelled": false,
         "depGate": "58",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH255": {
         "flightNo": "NH255",
@@ -356590,7 +356590,7 @@
         "isCancelled": false,
         "depGate": "59",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH257": {
         "flightNo": "NH257",
@@ -356607,7 +356607,7 @@
         "isCancelled": false,
         "depGate": "57",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH259": {
         "flightNo": "NH259",
@@ -356624,7 +356624,7 @@
         "isCancelled": false,
         "depGate": "62",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH261": {
         "flightNo": "NH261",
@@ -356641,7 +356641,7 @@
         "isCancelled": false,
         "depGate": "58",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH263": {
         "flightNo": "NH263",
@@ -356658,7 +356658,7 @@
         "isCancelled": false,
         "depGate": "63",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH265": {
         "flightNo": "NH265",
@@ -356675,7 +356675,7 @@
         "isCancelled": false,
         "depGate": "53",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH267": {
         "flightNo": "NH267",
@@ -356692,7 +356692,7 @@
         "isCancelled": false,
         "depGate": "57",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH269": {
         "flightNo": "NH269",
@@ -356709,7 +356709,7 @@
         "isCancelled": false,
         "depGate": "53",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH271": {
         "flightNo": "NH271",
@@ -356726,7 +356726,7 @@
         "isCancelled": false,
         "depGate": "61",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH273": {
         "flightNo": "NH273",
@@ -356743,7 +356743,7 @@
         "isCancelled": false,
         "depGate": "63",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:25.983Z"
+        "modelObservedAt": "2026-11-28T12:45:13.920Z"
       },
       "NH1891": {
         "flightNo": "NH1891",
@@ -356760,7 +356760,7 @@
         "isCancelled": false,
         "depGate": "51A",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.013Z"
+        "modelObservedAt": "2026-11-28T12:45:13.922Z"
       },
       "NH1893": {
         "flightNo": "NH1893",
@@ -356777,7 +356777,7 @@
         "isCancelled": false,
         "depGate": "47",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.013Z"
+        "modelObservedAt": "2026-11-28T12:45:13.922Z"
       },
       "NH1895": {
         "flightNo": "NH1895",
@@ -356794,7 +356794,7 @@
         "isCancelled": false,
         "depGate": "502",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.013Z"
+        "modelObservedAt": "2026-11-28T12:45:13.922Z"
       },
       "NH671": {
         "flightNo": "NH671",
@@ -356811,7 +356811,7 @@
         "isCancelled": false,
         "depGate": "59",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.037Z"
+        "modelObservedAt": "2026-11-28T12:45:13.927Z"
       },
       "NH673": {
         "flightNo": "NH673",
@@ -356828,7 +356828,7 @@
         "isCancelled": false,
         "depGate": "51B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.037Z"
+        "modelObservedAt": "2026-11-28T12:45:13.927Z"
       },
       "NH675": {
         "flightNo": "NH675",
@@ -356845,7 +356845,7 @@
         "isCancelled": false,
         "depGate": "50B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.037Z"
+        "modelObservedAt": "2026-11-28T12:45:13.927Z"
       },
       "NH677": {
         "flightNo": "NH677",
@@ -356862,7 +356862,7 @@
         "isCancelled": false,
         "depGate": "507",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.037Z"
+        "modelObservedAt": "2026-11-28T12:45:13.927Z"
       },
       "NH679": {
         "flightNo": "NH679",
@@ -356879,7 +356879,7 @@
         "isCancelled": false,
         "depGate": "53",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.037Z"
+        "modelObservedAt": "2026-11-28T12:45:13.927Z"
       },
       "NH681": {
         "flightNo": "NH681",
@@ -356896,7 +356896,7 @@
         "isCancelled": false,
         "depGate": "48",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.037Z"
+        "modelObservedAt": "2026-11-28T12:45:13.927Z"
       },
       "NH683": {
         "flightNo": "NH683",
@@ -356913,7 +356913,7 @@
         "isCancelled": false,
         "depGate": "49",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.037Z"
+        "modelObservedAt": "2026-11-28T12:45:13.927Z"
       },
       "NH685": {
         "flightNo": "NH685",
@@ -356930,7 +356930,7 @@
         "isCancelled": false,
         "depGate": "506",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.037Z"
+        "modelObservedAt": "2026-11-28T12:45:13.927Z"
       },
       "NH553": {
         "flightNo": "NH553",
@@ -356947,7 +356947,7 @@
         "isCancelled": false,
         "depGate": "59",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.042Z"
+        "modelObservedAt": "2026-11-28T12:45:13.951Z"
       },
       "NH555": {
         "flightNo": "NH555",
@@ -356964,7 +356964,7 @@
         "isCancelled": false,
         "depGate": "51B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.042Z"
+        "modelObservedAt": "2026-11-28T12:45:13.951Z"
       },
       "NH557": {
         "flightNo": "NH557",
@@ -356981,7 +356981,7 @@
         "isCancelled": false,
         "depGate": "507",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.042Z"
+        "modelObservedAt": "2026-11-28T12:45:13.951Z"
       },
       "NH559": {
         "flightNo": "NH559",
@@ -356998,7 +356998,7 @@
         "isCancelled": false,
         "depGate": "59",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.042Z"
+        "modelObservedAt": "2026-11-28T12:45:13.951Z"
       },
       "NH89": {
         "flightNo": "NH89",
@@ -357015,7 +357015,7 @@
         "isCancelled": false,
         "depGate": "53",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.072Z"
+        "modelObservedAt": "2026-11-28T12:45:13.959Z"
       },
       "NH91": {
         "flightNo": "NH91",
@@ -357032,7 +357032,7 @@
         "isCancelled": false,
         "depGate": "57",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.072Z"
+        "modelObservedAt": "2026-11-28T12:45:13.959Z"
       },
       "NH985": {
         "flightNo": "NH985",
@@ -357049,7 +357049,7 @@
         "isCancelled": false,
         "depGate": "62",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.082Z"
+        "modelObservedAt": "2026-11-28T12:45:13.977Z"
       },
       "NH13": {
         "flightNo": "NH13",
@@ -357066,7 +357066,7 @@
         "isCancelled": false,
         "depGate": "61",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.082Z"
+        "modelObservedAt": "2026-11-28T12:45:13.977Z"
       },
       "NH15": {
         "flightNo": "NH15",
@@ -357083,7 +357083,7 @@
         "isCancelled": false,
         "depGate": "61",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.082Z"
+        "modelObservedAt": "2026-11-28T12:45:13.977Z"
       },
       "NH17": {
         "flightNo": "NH17",
@@ -357100,7 +357100,7 @@
         "isCancelled": false,
         "depGate": "62",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.082Z"
+        "modelObservedAt": "2026-11-28T12:45:13.977Z"
       },
       "NH19": {
         "flightNo": "NH19",
@@ -357117,7 +357117,7 @@
         "isCancelled": false,
         "depGate": "57",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.082Z"
+        "modelObservedAt": "2026-11-28T12:45:13.977Z"
       },
       "NH21": {
         "flightNo": "NH21",
@@ -357134,7 +357134,7 @@
         "isCancelled": false,
         "depGate": "63",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.082Z"
+        "modelObservedAt": "2026-11-28T12:45:13.977Z"
       },
       "NH23": {
         "flightNo": "NH23",
@@ -357151,7 +357151,7 @@
         "isCancelled": false,
         "depGate": "64",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.082Z"
+        "modelObservedAt": "2026-11-28T12:45:13.977Z"
       },
       "NH27": {
         "flightNo": "NH27",
@@ -357168,7 +357168,7 @@
         "isCancelled": false,
         "depGate": "64",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.082Z"
+        "modelObservedAt": "2026-11-28T12:45:13.977Z"
       },
       "NH31": {
         "flightNo": "NH31",
@@ -357185,7 +357185,7 @@
         "isCancelled": false,
         "depGate": "50A",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.082Z"
+        "modelObservedAt": "2026-11-28T12:45:13.977Z"
       },
       "NH33": {
         "flightNo": "NH33",
@@ -357202,7 +357202,7 @@
         "isCancelled": false,
         "depGate": "51B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.082Z"
+        "modelObservedAt": "2026-11-28T12:45:13.977Z"
       },
       "NH35": {
         "flightNo": "NH35",
@@ -357219,7 +357219,7 @@
         "isCancelled": false,
         "depGate": "58",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.082Z"
+        "modelObservedAt": "2026-11-28T12:45:13.977Z"
       },
       "NH37": {
         "flightNo": "NH37",
@@ -357236,7 +357236,7 @@
         "isCancelled": false,
         "depGate": "63",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.082Z"
+        "modelObservedAt": "2026-11-28T12:45:13.977Z"
       },
       "NH39": {
         "flightNo": "NH39",
@@ -357253,7 +357253,7 @@
         "isCancelled": false,
         "depGate": "62",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.082Z"
+        "modelObservedAt": "2026-11-28T12:45:13.977Z"
       },
       "NH41": {
         "flightNo": "NH41",
@@ -357270,7 +357270,7 @@
         "isCancelled": false,
         "depGate": "64",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.082Z"
+        "modelObservedAt": "2026-11-28T12:45:13.977Z"
       },
       "NH725": {
         "flightNo": "NH725",
@@ -357287,7 +357287,7 @@
         "isCancelled": false,
         "depGate": "47",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.091Z"
+        "modelObservedAt": "2026-11-28T12:45:13.996Z"
       },
       "NH727": {
         "flightNo": "NH727",
@@ -357304,7 +357304,7 @@
         "isCancelled": false,
         "depGate": "504",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.091Z"
+        "modelObservedAt": "2026-11-28T12:45:13.996Z"
       },
       "NH375": {
         "flightNo": "NH375",
@@ -357320,7 +357320,7 @@
       "NH561": {
         "flightNo": "NH561",
         "rawFlightNo": "ANA 561",
-        "model": "32P",
+        "model": "321",
         "is767": false,
         "is767Strict": false,
         "origin": "HND",
@@ -357332,7 +357332,7 @@
         "isCancelled": false,
         "depGate": "503",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.119Z"
+        "modelObservedAt": "2026-11-28T12:45:14.000Z"
       },
       "NH563": {
         "flightNo": "NH563",
@@ -357349,7 +357349,7 @@
         "isCancelled": false,
         "depGate": "48",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.119Z"
+        "modelObservedAt": "2026-11-28T12:45:14.000Z"
       },
       "NH565": {
         "flightNo": "NH565",
@@ -357366,7 +357366,7 @@
         "isCancelled": false,
         "depGate": "51B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.119Z"
+        "modelObservedAt": "2026-11-28T12:45:14.000Z"
       },
       "NH567": {
         "flightNo": "NH567",
@@ -357383,7 +357383,7 @@
         "isCancelled": false,
         "depGate": "48",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.119Z"
+        "modelObservedAt": "2026-11-28T12:45:14.000Z"
       },
       "NH569": {
         "flightNo": "NH569",
@@ -357400,7 +357400,7 @@
         "isCancelled": false,
         "depGate": "60",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.119Z"
+        "modelObservedAt": "2026-11-28T12:45:14.000Z"
       },
       "NH93": {
         "flightNo": "NH93",
@@ -357417,7 +357417,7 @@
         "isCancelled": false,
         "depGate": "49",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.135Z"
+        "modelObservedAt": "2026-11-28T12:45:14.026Z"
       },
       "NH991": {
         "flightNo": "NH991",
@@ -357434,7 +357434,7 @@
         "isCancelled": false,
         "depGate": "504",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.135Z"
+        "modelObservedAt": "2026-11-28T12:45:14.026Z"
       },
       "NH95": {
         "flightNo": "NH95",
@@ -357451,7 +357451,7 @@
         "isCancelled": false,
         "depGate": "50A",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.135Z"
+        "modelObservedAt": "2026-11-28T12:45:14.026Z"
       },
       "NH97": {
         "flightNo": "NH97",
@@ -357468,7 +357468,7 @@
         "isCancelled": false,
         "depGate": "60",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.135Z"
+        "modelObservedAt": "2026-11-28T12:45:14.026Z"
       },
       "NH99": {
         "flightNo": "NH99",
@@ -357485,7 +357485,7 @@
         "isCancelled": false,
         "depGate": "64",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.135Z"
+        "modelObservedAt": "2026-11-28T12:45:14.026Z"
       },
       "NH603": {
         "flightNo": "NH603",
@@ -357502,7 +357502,7 @@
         "isCancelled": false,
         "depGate": "50B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.170Z"
+        "modelObservedAt": "2026-11-28T12:45:14.031Z"
       },
       "NH605": {
         "flightNo": "NH605",
@@ -357519,7 +357519,7 @@
         "isCancelled": false,
         "depGate": "49",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.170Z"
+        "modelObservedAt": "2026-11-28T12:45:14.031Z"
       },
       "NH609": {
         "flightNo": "NH609",
@@ -357536,7 +357536,7 @@
         "isCancelled": false,
         "depGate": "48",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.170Z"
+        "modelObservedAt": "2026-11-28T12:45:14.031Z"
       },
       "NH613": {
         "flightNo": "NH613",
@@ -357553,7 +357553,7 @@
         "isCancelled": false,
         "depGate": "504",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.170Z"
+        "modelObservedAt": "2026-11-28T12:45:14.031Z"
       },
       "NH617": {
         "flightNo": "NH617",
@@ -357570,7 +357570,7 @@
         "isCancelled": false,
         "depGate": "505",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.170Z"
+        "modelObservedAt": "2026-11-28T12:45:14.031Z"
       },
       "NH641": {
         "flightNo": "NH641",
@@ -357587,7 +357587,7 @@
         "isCancelled": false,
         "depGate": "507",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.172Z"
+        "modelObservedAt": "2026-11-28T12:45:14.040Z"
       },
       "NH643": {
         "flightNo": "NH643",
@@ -357604,7 +357604,7 @@
         "isCancelled": false,
         "depGate": "51B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.172Z"
+        "modelObservedAt": "2026-11-28T12:45:14.040Z"
       },
       "NH645": {
         "flightNo": "NH645",
@@ -357621,7 +357621,7 @@
         "isCancelled": false,
         "depGate": "53",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.172Z"
+        "modelObservedAt": "2026-11-28T12:45:14.040Z"
       },
       "NH647": {
         "flightNo": "NH647",
@@ -357638,7 +357638,7 @@
         "isCancelled": false,
         "depGate": "506",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.172Z"
+        "modelObservedAt": "2026-11-28T12:45:14.040Z"
       },
       "NH649": {
         "flightNo": "NH649",
@@ -357655,7 +357655,7 @@
         "isCancelled": false,
         "depGate": "47",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.172Z"
+        "modelObservedAt": "2026-11-28T12:45:14.040Z"
       },
       "NH753": {
         "flightNo": "NH753",
@@ -357672,7 +357672,7 @@
         "isCancelled": false,
         "depGate": "509",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.173Z"
+        "modelObservedAt": "2026-11-28T12:45:14.066Z"
       },
       "NH759": {
         "flightNo": "NH759",
@@ -357689,7 +357689,7 @@
         "isCancelled": false,
         "depGate": "50B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.173Z"
+        "modelObservedAt": "2026-11-28T12:45:14.066Z"
       },
       "NH619": {
         "flightNo": "NH619",
@@ -357706,7 +357706,7 @@
         "isCancelled": false,
         "depGate": "50B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.203Z"
+        "modelObservedAt": "2026-11-28T12:45:14.073Z"
       },
       "NH621": {
         "flightNo": "NH621",
@@ -357723,7 +357723,7 @@
         "isCancelled": false,
         "depGate": "502",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.203Z"
+        "modelObservedAt": "2026-11-28T12:45:14.073Z"
       },
       "NH623": {
         "flightNo": "NH623",
@@ -357740,7 +357740,7 @@
         "isCancelled": false,
         "depGate": "51B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.203Z"
+        "modelObservedAt": "2026-11-28T12:45:14.073Z"
       },
       "NH625": {
         "flightNo": "NH625",
@@ -357757,7 +357757,7 @@
         "isCancelled": false,
         "depGate": "58",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.203Z"
+        "modelObservedAt": "2026-11-28T12:45:14.073Z"
       },
       "NH627": {
         "flightNo": "NH627",
@@ -357774,7 +357774,7 @@
         "isCancelled": false,
         "depGate": "50A",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.203Z"
+        "modelObservedAt": "2026-11-28T12:45:14.073Z"
       },
       "NH629": {
         "flightNo": "NH629",
@@ -357791,7 +357791,7 @@
         "isCancelled": false,
         "depGate": "507",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.203Z"
+        "modelObservedAt": "2026-11-28T12:45:14.073Z"
       },
       "NH741": {
         "flightNo": "NH741",
@@ -357819,7 +357819,7 @@
         "isCancelled": false,
         "depGate": "64",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.232Z"
+        "modelObservedAt": "2026-11-28T12:45:14.081Z"
       },
       "NH87": {
         "flightNo": "NH87",
@@ -357836,7 +357836,7 @@
         "isCancelled": false,
         "depGate": "53",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.232Z"
+        "modelObservedAt": "2026-11-28T12:45:14.081Z"
       },
       "NH583": {
         "flightNo": "NH583",
@@ -357853,7 +357853,7 @@
         "isCancelled": false,
         "depGate": "48",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.252Z"
+        "modelObservedAt": "2026-11-28T12:45:14.116Z"
       },
       "NH585": {
         "flightNo": "NH585",
@@ -357870,7 +357870,7 @@
         "isCancelled": false,
         "depGate": "53",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.252Z"
+        "modelObservedAt": "2026-11-28T12:45:14.116Z"
       },
       "NH589": {
         "flightNo": "NH589",
@@ -357887,7 +357887,7 @@
         "isCancelled": false,
         "depGate": "59",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.252Z"
+        "modelObservedAt": "2026-11-28T12:45:14.116Z"
       },
       "NH593": {
         "flightNo": "NH593",
@@ -357904,7 +357904,7 @@
         "isCancelled": false,
         "depGate": "63",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.252Z"
+        "modelObservedAt": "2026-11-28T12:45:14.116Z"
       },
       "NH595": {
         "flightNo": "NH595",
@@ -357921,7 +357921,7 @@
         "isCancelled": false,
         "depGate": "48",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.252Z"
+        "modelObservedAt": "2026-11-28T12:45:14.116Z"
       },
       "NH599": {
         "flightNo": "NH599",
@@ -357938,7 +357938,7 @@
         "isCancelled": false,
         "depGate": "57",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.252Z"
+        "modelObservedAt": "2026-11-28T12:45:14.116Z"
       },
       "NH85": {
         "flightNo": "NH85",
@@ -357966,7 +357966,7 @@
         "isCancelled": false,
         "depGate": "48",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.256Z"
+        "modelObservedAt": "2026-11-28T12:45:14.121Z"
       },
       "NH663": {
         "flightNo": "NH663",
@@ -357983,7 +357983,7 @@
         "isCancelled": false,
         "depGate": "59",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.256Z"
+        "modelObservedAt": "2026-11-28T12:45:14.121Z"
       },
       "NH1083": {
         "flightNo": "NH1083",
@@ -358000,7 +358000,7 @@
         "isCancelled": false,
         "depGate": "47",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.256Z"
+        "modelObservedAt": "2026-11-28T12:45:14.121Z"
       },
       "NH667": {
         "flightNo": "NH667",
@@ -358017,7 +358017,7 @@
         "isCancelled": false,
         "depGate": "61",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.256Z"
+        "modelObservedAt": "2026-11-28T12:45:14.121Z"
       },
       "NH669": {
         "flightNo": "NH669",
@@ -358034,7 +358034,7 @@
         "isCancelled": false,
         "depGate": "48",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.256Z"
+        "modelObservedAt": "2026-11-28T12:45:14.121Z"
       },
       "NH747": {
         "flightNo": "NH747",
@@ -358051,7 +358051,7 @@
         "isCancelled": false,
         "depGate": "511",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.259Z"
+        "modelObservedAt": "2026-11-28T12:45:14.122Z"
       },
       "NH749": {
         "flightNo": "NH749",
@@ -358068,7 +358068,7 @@
         "isCancelled": false,
         "depGate": "61",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.259Z"
+        "modelObservedAt": "2026-11-28T12:45:14.122Z"
       },
       "NH791": {
         "flightNo": "NH791",
@@ -358085,7 +358085,7 @@
         "isCancelled": false,
         "depGate": "509",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.330Z"
+        "modelObservedAt": "2026-11-28T12:45:14.148Z"
       },
       "NH793": {
         "flightNo": "NH793",
@@ -358102,7 +358102,7 @@
         "isCancelled": false,
         "depGate": "50B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.330Z"
+        "modelObservedAt": "2026-11-28T12:45:14.148Z"
       },
       "NH797": {
         "flightNo": "NH797",
@@ -358119,7 +358119,7 @@
         "isCancelled": false,
         "depGate": "506",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.330Z"
+        "modelObservedAt": "2026-11-28T12:45:14.148Z"
       },
       "NH799": {
         "flightNo": "NH799",
@@ -358136,7 +358136,7 @@
         "isCancelled": false,
         "depGate": "509",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.330Z"
+        "modelObservedAt": "2026-11-28T12:45:14.148Z"
       },
       "NH461": {
         "flightNo": "NH461",
@@ -358153,7 +358153,7 @@
         "isCancelled": false,
         "depGate": "57",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.360Z"
+        "modelObservedAt": "2026-11-28T12:45:14.166Z"
       },
       "NH993": {
         "flightNo": "NH993",
@@ -358170,7 +358170,7 @@
         "isCancelled": false,
         "depGate": "64",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.360Z"
+        "modelObservedAt": "2026-11-28T12:45:14.166Z"
       },
       "NH463": {
         "flightNo": "NH463",
@@ -358187,7 +358187,7 @@
         "isCancelled": false,
         "depGate": "57",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.360Z"
+        "modelObservedAt": "2026-11-28T12:45:14.166Z"
       },
       "NH467": {
         "flightNo": "NH467",
@@ -358204,7 +358204,7 @@
         "isCancelled": false,
         "depGate": "63",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.360Z"
+        "modelObservedAt": "2026-11-28T12:45:14.166Z"
       },
       "NH995": {
         "flightNo": "NH995",
@@ -358221,7 +358221,7 @@
         "isCancelled": false,
         "depGate": "58",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.360Z"
+        "modelObservedAt": "2026-11-28T12:45:14.166Z"
       },
       "NH469": {
         "flightNo": "NH469",
@@ -358238,7 +358238,7 @@
         "isCancelled": false,
         "depGate": "53",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.360Z"
+        "modelObservedAt": "2026-11-28T12:45:14.166Z"
       },
       "NH471": {
         "flightNo": "NH471",
@@ -358255,7 +358255,7 @@
         "isCancelled": false,
         "depGate": "60",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.360Z"
+        "modelObservedAt": "2026-11-28T12:45:14.166Z"
       },
       "NH473": {
         "flightNo": "NH473",
@@ -358272,7 +358272,7 @@
         "isCancelled": false,
         "depGate": "60",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.360Z"
+        "modelObservedAt": "2026-11-28T12:45:14.166Z"
       },
       "NH475": {
         "flightNo": "NH475",
@@ -358289,7 +358289,7 @@
         "isCancelled": false,
         "depGate": "60",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.360Z"
+        "modelObservedAt": "2026-11-28T12:45:14.166Z"
       },
       "NH477": {
         "flightNo": "NH477",
@@ -358306,7 +358306,7 @@
         "isCancelled": false,
         "depGate": "64",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.360Z"
+        "modelObservedAt": "2026-11-28T12:45:14.166Z"
       },
       "NH1095": {
         "flightNo": "NH1095",
@@ -358323,7 +358323,7 @@
         "isCancelled": false,
         "depGate": "57",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.360Z"
+        "modelObservedAt": "2026-11-28T12:45:14.166Z"
       },
       "NH1097": {
         "flightNo": "NH1097",
@@ -358340,7 +358340,7 @@
         "isCancelled": false,
         "depGate": "64",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.360Z"
+        "modelObservedAt": "2026-11-28T12:45:14.166Z"
       },
       "NH479": {
         "flightNo": "NH479",
@@ -358357,7 +358357,7 @@
         "isCancelled": false,
         "depGate": "58",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.360Z"
+        "modelObservedAt": "2026-11-28T12:45:14.166Z"
       },
       "NH651": {
         "flightNo": "NH651",
@@ -358374,7 +358374,7 @@
         "isCancelled": false,
         "depGate": "506",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.382Z"
+        "modelObservedAt": "2026-11-28T12:45:14.176Z"
       },
       "NH653": {
         "flightNo": "NH653",
@@ -358391,7 +358391,7 @@
         "isCancelled": false,
         "depGate": "48",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.382Z"
+        "modelObservedAt": "2026-11-28T12:45:14.176Z"
       },
       "NH655": {
         "flightNo": "NH655",
@@ -358408,7 +358408,7 @@
         "isCancelled": false,
         "depGate": "49",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.382Z"
+        "modelObservedAt": "2026-11-28T12:45:14.176Z"
       },
       "NH657": {
         "flightNo": "NH657",
@@ -358425,7 +358425,7 @@
         "isCancelled": false,
         "depGate": "508",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.382Z"
+        "modelObservedAt": "2026-11-28T12:45:14.176Z"
       },
       "NH659": {
         "flightNo": "NH659",
@@ -358442,7 +358442,7 @@
         "isCancelled": false,
         "depGate": "49",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.382Z"
+        "modelObservedAt": "2026-11-28T12:45:14.176Z"
       },
       "NH719": {
         "flightNo": "NH719",
@@ -358459,7 +358459,7 @@
         "isCancelled": false,
         "depGate": "504",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.395Z"
+        "modelObservedAt": "2026-11-28T12:45:14.198Z"
       },
       "NH721": {
         "flightNo": "NH721",
@@ -358476,7 +358476,7 @@
         "isCancelled": false,
         "depGate": "50B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.395Z"
+        "modelObservedAt": "2026-11-28T12:45:14.198Z"
       },
       "NH723": {
         "flightNo": "NH723",
@@ -358493,7 +358493,7 @@
         "isCancelled": false,
         "depGate": "509",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.395Z"
+        "modelObservedAt": "2026-11-28T12:45:14.198Z"
       },
       "NH377": {
         "flightNo": "NH377",
@@ -358521,7 +358521,7 @@
         "isCancelled": false,
         "depGate": "50A",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.401Z"
+        "modelObservedAt": "2026-11-28T12:45:14.210Z"
       },
       "NH395": {
         "flightNo": "NH395",
@@ -358538,12 +358538,12 @@
         "isCancelled": false,
         "depGate": "511",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.401Z"
+        "modelObservedAt": "2026-11-28T12:45:14.210Z"
       },
       "NH1071": {
         "flightNo": "NH1071",
         "rawFlightNo": "ANA 1071",
-        "model": "32P",
+        "model": "321",
         "is767": false,
         "is767Strict": false,
         "origin": "HND",
@@ -358555,7 +358555,7 @@
         "isCancelled": false,
         "depGate": "61",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.401Z"
+        "modelObservedAt": "2026-11-28T12:45:14.210Z"
       },
       "NH397": {
         "flightNo": "NH397",
@@ -358572,7 +358572,7 @@
         "isCancelled": false,
         "depGate": "508",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.401Z"
+        "modelObservedAt": "2026-11-28T12:45:14.210Z"
       },
       "NH399": {
         "flightNo": "NH399",
@@ -358589,7 +358589,7 @@
         "isCancelled": false,
         "depGate": "500",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.401Z"
+        "modelObservedAt": "2026-11-28T12:45:14.210Z"
       },
       "NH521": {
         "flightNo": "NH521",
@@ -358672,7 +358672,7 @@
         "isCancelled": false,
         "depGate": "51B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.408Z"
+        "modelObservedAt": "2026-11-28T12:45:14.216Z"
       },
       "NH533": {
         "flightNo": "NH533",
@@ -358689,7 +358689,7 @@
         "isCancelled": false,
         "depGate": "506",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.408Z"
+        "modelObservedAt": "2026-11-28T12:45:14.216Z"
       },
       "NH535": {
         "flightNo": "NH535",
@@ -358706,7 +358706,7 @@
         "isCancelled": false,
         "depGate": "47",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.408Z"
+        "modelObservedAt": "2026-11-28T12:45:14.216Z"
       },
       "NH997": {
         "flightNo": "NH997",
@@ -358723,7 +358723,7 @@
         "isCancelled": false,
         "depGate": "506",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.408Z"
+        "modelObservedAt": "2026-11-28T12:45:14.216Z"
       },
       "NH537": {
         "flightNo": "NH537",
@@ -358740,7 +358740,7 @@
         "isCancelled": false,
         "depGate": "50B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.408Z"
+        "modelObservedAt": "2026-11-28T12:45:14.216Z"
       },
       "NH539": {
         "flightNo": "NH539",
@@ -358757,7 +358757,7 @@
         "isCancelled": false,
         "depGate": "53",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.408Z"
+        "modelObservedAt": "2026-11-28T12:45:14.216Z"
       },
       "NH315": {
         "flightNo": "NH315",
@@ -358774,7 +358774,7 @@
         "isCancelled": false,
         "depGate": "505",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.449Z"
+        "modelObservedAt": "2026-11-28T12:45:14.219Z"
       },
       "NH319": {
         "flightNo": "NH319",
@@ -358791,7 +358791,7 @@
         "isCancelled": false,
         "depGate": "59",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.449Z"
+        "modelObservedAt": "2026-11-28T12:45:14.219Z"
       },
       "NH321": {
         "flightNo": "NH321",
@@ -358808,7 +358808,7 @@
         "isCancelled": false,
         "depGate": "50A",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.449Z"
+        "modelObservedAt": "2026-11-28T12:45:14.219Z"
       },
       "NH291": {
         "flightNo": "NH291",
@@ -358825,7 +358825,7 @@
         "isCancelled": false,
         "depGate": "511",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.449Z"
+        "modelObservedAt": "2026-11-28T12:45:14.256Z"
       },
       "NH293": {
         "flightNo": "NH293",
@@ -358842,7 +358842,7 @@
         "isCancelled": false,
         "depGate": "500",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.449Z"
+        "modelObservedAt": "2026-11-28T12:45:14.256Z"
       },
       "NH295": {
         "flightNo": "NH295",
@@ -358859,7 +358859,7 @@
         "isCancelled": false,
         "depGate": "57",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.449Z"
+        "modelObservedAt": "2026-11-28T12:45:14.256Z"
       },
       "NH297": {
         "flightNo": "NH297",
@@ -358876,7 +358876,7 @@
         "isCancelled": false,
         "depGate": "503",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.449Z"
+        "modelObservedAt": "2026-11-28T12:45:14.256Z"
       },
       "NH299": {
         "flightNo": "NH299",
@@ -358893,7 +358893,7 @@
         "isCancelled": false,
         "depGate": "50B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.449Z"
+        "modelObservedAt": "2026-11-28T12:45:14.256Z"
       },
       "NH693": {
         "flightNo": "NH693",
@@ -358910,7 +358910,7 @@
         "isCancelled": false,
         "depGate": "47",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.451Z"
+        "modelObservedAt": "2026-11-28T12:45:14.260Z"
       },
       "NH697": {
         "flightNo": "NH697",
@@ -358927,7 +358927,7 @@
         "isCancelled": false,
         "depGate": "49",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.451Z"
+        "modelObservedAt": "2026-11-28T12:45:14.260Z"
       },
       "NH699": {
         "flightNo": "NH699",
@@ -358944,7 +358944,7 @@
         "isCancelled": false,
         "depGate": "51B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.451Z"
+        "modelObservedAt": "2026-11-28T12:45:14.260Z"
       },
       "NH411": {
         "flightNo": "NH411",
@@ -358961,7 +358961,7 @@
         "isCancelled": false,
         "depGate": "507",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.468Z"
+        "modelObservedAt": "2026-11-28T12:45:14.272Z"
       },
       "NH415": {
         "flightNo": "NH415",
@@ -358978,7 +358978,7 @@
         "isCancelled": false,
         "depGate": "47",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.468Z"
+        "modelObservedAt": "2026-11-28T12:45:14.272Z"
       },
       "NH571": {
         "flightNo": "NH571",
@@ -359006,7 +359006,7 @@
         "isCancelled": false,
         "depGate": "58",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.496Z"
+        "modelObservedAt": "2026-11-28T12:45:14.291Z"
       },
       "NH383": {
         "flightNo": "NH383",
@@ -359023,7 +359023,7 @@
         "isCancelled": false,
         "depGate": "508",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.496Z"
+        "modelObservedAt": "2026-11-28T12:45:14.291Z"
       },
       "NH1087": {
         "flightNo": "NH1087",
@@ -359040,7 +359040,7 @@
         "isCancelled": false,
         "depGate": "504",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.496Z"
+        "modelObservedAt": "2026-11-28T12:45:14.291Z"
       },
       "NH385": {
         "flightNo": "NH385",
@@ -359057,7 +359057,7 @@
         "isCancelled": false,
         "depGate": "511",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.496Z"
+        "modelObservedAt": "2026-11-28T12:45:14.291Z"
       },
       "NH387": {
         "flightNo": "NH387",
@@ -359074,7 +359074,7 @@
         "isCancelled": false,
         "depGate": "51B",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.496Z"
+        "modelObservedAt": "2026-11-28T12:45:14.291Z"
       },
       "NH389": {
         "flightNo": "NH389",
@@ -359091,7 +359091,7 @@
         "isCancelled": false,
         "depGate": "503",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.496Z"
+        "modelObservedAt": "2026-11-28T12:45:14.291Z"
       },
       "NH452": {
         "flightNo": "NH452",
@@ -359260,9 +359260,9 @@
         "scheduledModel": "789/788",
         "is76P": false,
         "isCancelled": false,
-        "depGate": "11",
+        "depGate": "13",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.509Z"
+        "modelObservedAt": "2026-11-28T12:45:14.299Z"
       },
       "NH773": {
         "flightNo": "NH773",
@@ -359279,7 +359279,7 @@
         "isCancelled": false,
         "depGate": "10",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.509Z"
+        "modelObservedAt": "2026-11-28T12:45:14.299Z"
       },
       "NH1089": {
         "flightNo": "NH1089",
@@ -359296,7 +359296,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.509Z"
+        "modelObservedAt": "2026-11-28T12:45:14.299Z"
       },
       "NH983": {
         "flightNo": "NH983",
@@ -359313,7 +359313,7 @@
         "isCancelled": false,
         "depGate": "13",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.509Z"
+        "modelObservedAt": "2026-11-28T12:45:14.299Z"
       },
       "NH1091": {
         "flightNo": "NH1091",
@@ -359330,7 +359330,7 @@
         "isCancelled": false,
         "depGate": "11",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.509Z"
+        "modelObservedAt": "2026-11-28T12:45:14.299Z"
       },
       "NH777": {
         "flightNo": "NH777",
@@ -359347,7 +359347,7 @@
         "isCancelled": false,
         "depGate": "10",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.509Z"
+        "modelObservedAt": "2026-11-28T12:45:14.299Z"
       },
       "NH779": {
         "flightNo": "NH779",
@@ -359364,7 +359364,7 @@
         "isCancelled": false,
         "depGate": "11",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.509Z"
+        "modelObservedAt": "2026-11-28T12:45:14.299Z"
       },
       "NH1851": {
         "flightNo": "NH1851",
@@ -359535,7 +359535,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.526Z"
+        "modelObservedAt": "2026-11-28T12:45:14.320Z"
       },
       "NH14": {
         "flightNo": "NH14",
@@ -359550,9 +359550,9 @@
         "scheduledModel": "789/781/772",
         "is76P": false,
         "isCancelled": false,
-        "depGate": "10",
+        "depGate": "11",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.526Z"
+        "modelObservedAt": "2026-11-28T12:45:14.320Z"
       },
       "NH16": {
         "flightNo": "NH16",
@@ -359569,7 +359569,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.526Z"
+        "modelObservedAt": "2026-11-28T12:45:14.320Z"
       },
       "NH18": {
         "flightNo": "NH18",
@@ -359584,9 +359584,9 @@
         "scheduledModel": "789/788",
         "is76P": false,
         "isCancelled": false,
-        "depGate": "10",
+        "depGate": "11",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.526Z"
+        "modelObservedAt": "2026-11-28T12:45:14.320Z"
       },
       "NH20": {
         "flightNo": "NH20",
@@ -359603,7 +359603,7 @@
         "isCancelled": false,
         "depGate": "13",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.526Z"
+        "modelObservedAt": "2026-11-28T12:45:14.320Z"
       },
       "NH22": {
         "flightNo": "NH22",
@@ -359620,7 +359620,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.526Z"
+        "modelObservedAt": "2026-11-28T12:45:14.320Z"
       },
       "NH24": {
         "flightNo": "NH24",
@@ -359637,7 +359637,7 @@
         "isCancelled": false,
         "depGate": "13",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.526Z"
+        "modelObservedAt": "2026-11-28T12:45:14.320Z"
       },
       "NH26": {
         "flightNo": "NH26",
@@ -359654,7 +359654,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.526Z"
+        "modelObservedAt": "2026-11-28T12:45:14.320Z"
       },
       "NH28": {
         "flightNo": "NH28",
@@ -359671,7 +359671,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.526Z"
+        "modelObservedAt": "2026-11-28T12:45:14.320Z"
       },
       "NH32": {
         "flightNo": "NH32",
@@ -359688,7 +359688,7 @@
         "isCancelled": false,
         "depGate": "13",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.526Z"
+        "modelObservedAt": "2026-11-28T12:45:14.320Z"
       },
       "NH34": {
         "flightNo": "NH34",
@@ -359705,7 +359705,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.526Z"
+        "modelObservedAt": "2026-11-28T12:45:14.320Z"
       },
       "NH36": {
         "flightNo": "NH36",
@@ -359722,7 +359722,7 @@
         "isCancelled": false,
         "depGate": "10",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.526Z"
+        "modelObservedAt": "2026-11-28T12:45:14.320Z"
       },
       "NH38": {
         "flightNo": "NH38",
@@ -359739,7 +359739,7 @@
         "isCancelled": false,
         "depGate": "13",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.526Z"
+        "modelObservedAt": "2026-11-28T12:45:14.320Z"
       },
       "NH40": {
         "flightNo": "NH40",
@@ -359756,7 +359756,7 @@
         "isCancelled": false,
         "depGate": "10",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.526Z"
+        "modelObservedAt": "2026-11-28T12:45:14.320Z"
       },
       "NH1601": {
         "flightNo": "NH1601",
@@ -360257,12 +360257,12 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.543Z"
+        "modelObservedAt": "2026-11-28T12:45:14.345Z"
       },
       "NH564": {
         "flightNo": "NH564",
         "rawFlightNo": "ANA 564",
-        "model": "32P",
+        "model": "321",
         "is767": false,
         "is767Strict": false,
         "origin": "KCZ",
@@ -360274,7 +360274,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.543Z"
+        "modelObservedAt": "2026-11-28T12:45:14.345Z"
       },
       "NH566": {
         "flightNo": "NH566",
@@ -360291,7 +360291,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.543Z"
+        "modelObservedAt": "2026-11-28T12:45:14.345Z"
       },
       "NH568": {
         "flightNo": "NH568",
@@ -360308,7 +360308,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.543Z"
+        "modelObservedAt": "2026-11-28T12:45:14.345Z"
       },
       "NH570": {
         "flightNo": "NH570",
@@ -360325,7 +360325,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.543Z"
+        "modelObservedAt": "2026-11-28T12:45:14.345Z"
       },
       "NH1600": {
         "flightNo": "NH1600",
@@ -360408,7 +360408,7 @@
         "isCancelled": false,
         "depGate": "25",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.573Z"
+        "modelObservedAt": "2026-11-28T12:45:14.364Z"
       },
       "NH94": {
         "flightNo": "NH94",
@@ -360425,7 +360425,7 @@
         "isCancelled": false,
         "depGate": "26",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.573Z"
+        "modelObservedAt": "2026-11-28T12:45:14.364Z"
       },
       "NH96": {
         "flightNo": "NH96",
@@ -360442,7 +360442,7 @@
         "isCancelled": false,
         "depGate": "26",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.573Z"
+        "modelObservedAt": "2026-11-28T12:45:14.364Z"
       },
       "NH992": {
         "flightNo": "NH992",
@@ -360459,7 +360459,7 @@
         "isCancelled": false,
         "depGate": "26",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.573Z"
+        "modelObservedAt": "2026-11-28T12:45:14.364Z"
       },
       "NH98": {
         "flightNo": "NH98",
@@ -360476,7 +360476,7 @@
         "isCancelled": false,
         "depGate": "26",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.573Z"
+        "modelObservedAt": "2026-11-28T12:45:14.364Z"
       },
       "NH1221": {
         "flightNo": "NH1221",
@@ -360570,7 +360570,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.574Z"
+        "modelObservedAt": "2026-11-28T12:45:14.378Z"
       },
       "NH608": {
         "flightNo": "NH608",
@@ -360587,7 +360587,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.574Z"
+        "modelObservedAt": "2026-11-28T12:45:14.378Z"
       },
       "NH612": {
         "flightNo": "NH612",
@@ -360604,7 +360604,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.574Z"
+        "modelObservedAt": "2026-11-28T12:45:14.378Z"
       },
       "NH614": {
         "flightNo": "NH614",
@@ -360621,7 +360621,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.574Z"
+        "modelObservedAt": "2026-11-28T12:45:14.378Z"
       },
       "NH618": {
         "flightNo": "NH618",
@@ -360638,7 +360638,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.574Z"
+        "modelObservedAt": "2026-11-28T12:45:14.378Z"
       },
       "NH502": {
         "flightNo": "NH502",
@@ -361018,7 +361018,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.577Z"
+        "modelObservedAt": "2026-11-28T12:45:14.386Z"
       },
       "NH88": {
         "flightNo": "NH88",
@@ -361035,7 +361035,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.577Z"
+        "modelObservedAt": "2026-11-28T12:45:14.386Z"
       },
       "NH1791": {
         "flightNo": "NH1791",
@@ -361140,7 +361140,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.618Z"
+        "modelObservedAt": "2026-11-28T12:45:14.405Z"
       },
       "NH584": {
         "flightNo": "NH584",
@@ -361157,7 +361157,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.618Z"
+        "modelObservedAt": "2026-11-28T12:45:14.405Z"
       },
       "NH590": {
         "flightNo": "NH590",
@@ -361174,7 +361174,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.618Z"
+        "modelObservedAt": "2026-11-28T12:45:14.405Z"
       },
       "NH592": {
         "flightNo": "NH592",
@@ -361191,7 +361191,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.618Z"
+        "modelObservedAt": "2026-11-28T12:45:14.405Z"
       },
       "NH596": {
         "flightNo": "NH596",
@@ -361208,7 +361208,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.618Z"
+        "modelObservedAt": "2026-11-28T12:45:14.405Z"
       },
       "NH598": {
         "flightNo": "NH598",
@@ -361225,7 +361225,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.618Z"
+        "modelObservedAt": "2026-11-28T12:45:14.405Z"
       },
       "NH1632": {
         "flightNo": "NH1632",
@@ -361330,7 +361330,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.646Z"
+        "modelObservedAt": "2026-11-28T12:45:14.454Z"
       },
       "NH703": {
         "flightNo": "NH703",
@@ -361347,7 +361347,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.646Z"
+        "modelObservedAt": "2026-11-28T12:45:14.454Z"
       },
       "NH707": {
         "flightNo": "NH707",
@@ -361364,7 +361364,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.646Z"
+        "modelObservedAt": "2026-11-28T12:45:14.454Z"
       },
       "NH715": {
         "flightNo": "NH715",
@@ -361381,7 +361381,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.646Z"
+        "modelObservedAt": "2026-11-28T12:45:14.454Z"
       },
       "NH447": {
         "flightNo": "NH447",
@@ -361508,7 +361508,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.649Z"
+        "modelObservedAt": "2026-11-28T12:45:14.455Z"
       },
       "NH309": {
         "flightNo": "NH309",
@@ -361525,7 +361525,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.649Z"
+        "modelObservedAt": "2026-11-28T12:45:14.455Z"
       },
       "NH311": {
         "flightNo": "NH311",
@@ -361542,7 +361542,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.649Z"
+        "modelObservedAt": "2026-11-28T12:45:14.455Z"
       },
       "NH662": {
         "flightNo": "NH662",
@@ -361559,7 +361559,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.671Z"
+        "modelObservedAt": "2026-11-28T12:45:14.456Z"
       },
       "NH664": {
         "flightNo": "NH664",
@@ -361576,7 +361576,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.671Z"
+        "modelObservedAt": "2026-11-28T12:45:14.456Z"
       },
       "NH666": {
         "flightNo": "NH666",
@@ -361593,7 +361593,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.671Z"
+        "modelObservedAt": "2026-11-28T12:45:14.456Z"
       },
       "NH1084": {
         "flightNo": "NH1084",
@@ -361610,7 +361610,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.671Z"
+        "modelObservedAt": "2026-11-28T12:45:14.456Z"
       },
       "NH670": {
         "flightNo": "NH670",
@@ -361627,7 +361627,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.671Z"
+        "modelObservedAt": "2026-11-28T12:45:14.456Z"
       },
       "NH782": {
         "flightNo": "NH782",
@@ -361743,7 +361743,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.695Z"
+        "modelObservedAt": "2026-11-28T12:45:14.467Z"
       },
       "NH794": {
         "flightNo": "NH794",
@@ -361760,7 +361760,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.695Z"
+        "modelObservedAt": "2026-11-28T12:45:14.467Z"
       },
       "NH796": {
         "flightNo": "NH796",
@@ -361777,7 +361777,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.695Z"
+        "modelObservedAt": "2026-11-28T12:45:14.467Z"
       },
       "NH800": {
         "flightNo": "NH800",
@@ -361794,7 +361794,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.695Z"
+        "modelObservedAt": "2026-11-28T12:45:14.467Z"
       },
       "NH1765": {
         "flightNo": "NH1765",
@@ -362284,7 +362284,7 @@
         "isCancelled": false,
         "depGate": "36A",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.702Z"
+        "modelObservedAt": "2026-11-28T12:45:14.503Z"
       },
       "NH306": {
         "flightNo": "NH306",
@@ -362301,7 +362301,7 @@
         "isCancelled": false,
         "depGate": "31",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.702Z"
+        "modelObservedAt": "2026-11-28T12:45:14.503Z"
       },
       "NH308": {
         "flightNo": "NH308",
@@ -362318,7 +362318,7 @@
         "isCancelled": false,
         "depGate": "33",
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.702Z"
+        "modelObservedAt": "2026-11-28T12:45:14.503Z"
       },
       "NH1864": {
         "flightNo": "NH1864",
@@ -362885,7 +362885,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.705Z"
+        "modelObservedAt": "2026-11-28T12:45:14.519Z"
       },
       "NH384": {
         "flightNo": "NH384",
@@ -362902,7 +362902,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.705Z"
+        "modelObservedAt": "2026-11-28T12:45:14.519Z"
       },
       "NH386": {
         "flightNo": "NH386",
@@ -362919,7 +362919,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.705Z"
+        "modelObservedAt": "2026-11-28T12:45:14.519Z"
       },
       "NH1088": {
         "flightNo": "NH1088",
@@ -362936,7 +362936,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.705Z"
+        "modelObservedAt": "2026-11-28T12:45:14.519Z"
       },
       "NH388": {
         "flightNo": "NH388",
@@ -362953,7 +362953,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.705Z"
+        "modelObservedAt": "2026-11-28T12:45:14.519Z"
       },
       "NH390": {
         "flightNo": "NH390",
@@ -362970,7 +362970,7 @@
         "isCancelled": false,
         "depGate": null,
         "modelSource": "ANA運航状況",
-        "modelObservedAt": "2026-11-28T10:30:26.705Z"
+        "modelObservedAt": "2026-11-28T12:45:14.519Z"
       }
     },
     "20261130": {
@@ -397315,12 +397315,12 @@
       }
     }
   },
-  "updatedAt": "2026-11-28T10:30:27.591Z",
+  "updatedAt": "2026-11-28T12:45:15.782Z",
   "source": "ODPT (Public Transportation Open Data Center) API v4",
-  "todayUpdatedAt": "2026-11-28T12:00:08.756Z",
+  "todayUpdatedAt": "2026-11-28T13:00:09.827Z",
   "todayShipChanges": {
     "dateKey": "20261128",
-    "updatedAt": "2026-11-28T12:00:08.756Z",
+    "updatedAt": "2026-11-28T13:00:09.827Z",
     "dropped": [],
     "promoted": []
   }
