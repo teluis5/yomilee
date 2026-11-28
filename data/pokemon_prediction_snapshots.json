@@ -2001,14 +2001,14 @@
     ]
   },
   "2026-11-29": {
-    "updatedAtIso": "2026-11-28T08:00:27.192Z",
+    "updatedAtIso": "2026-11-28T09:00:15.888Z",
     "plans": [
       {
         "planId": "tomorrow-plan-1",
         "planName": "プランA",
         "stayCode": "KMJ",
         "rank": "本命",
-        "probability": 38,
+        "probability": 40,
         "routeSummary": "羽田 ➔ 宮古 ➔ 羽田 ➔ 熊本",
         "flights": [
           {
@@ -2045,7 +2045,7 @@
         "planName": "プランB",
         "stayCode": "HND",
         "rank": "候補",
-        "probability": 38,
+        "probability": 40,
         "routeSummary": "羽田 ➔ 宮古 ➔ 羽田 ➔ 熊本 ➔ 羽田",
         "flights": [
           {
@@ -2091,34 +2091,43 @@
         "planName": "プランC",
         "stayCode": "HND",
         "rank": "候補",
-        "probability": 24,
-        "routeSummary": "高松 ➔ 羽田 ➔ 石垣 ➔ 羽田",
+        "probability": 20,
+        "routeSummary": "羽田 ➔ 福岡 ➔ 羽田 ➔ 広島 ➔ 羽田",
         "flights": [
           {
             "step": "第1便",
-            "flightNo": "NH532",
-            "orig": "TAK",
-            "dest": "HND",
-            "route": "高松 ➔ 東京(羽田)",
-            "time": "07:10発 - 08:25着",
+            "flightNo": "NH243",
+            "orig": "HND",
+            "dest": "FUK",
+            "route": "東京(羽田) ➔ 福岡",
+            "time": "08:30発 - 10:30着",
             "tag": "予想"
           },
           {
             "step": "第2便",
-            "flightNo": "NH91",
-            "orig": "HND",
-            "dest": "ISG",
-            "route": "東京(羽田) ➔ 石垣",
-            "time": "11:40発 - 15:00着",
+            "flightNo": "NH248",
+            "orig": "FUK",
+            "dest": "HND",
+            "route": "福岡 ➔ 東京(羽田)",
+            "time": "11:20発 - 13:00着",
             "tag": "予想"
           },
           {
             "step": "第3便",
-            "flightNo": "NH92",
-            "orig": "ISG",
+            "flightNo": "NH679",
+            "orig": "HND",
+            "dest": "HIJ",
+            "route": "東京(羽田) ➔ 広島",
+            "time": "14:00発 - 15:30着",
+            "tag": "予想"
+          },
+          {
+            "step": "第4便",
+            "flightNo": "NH680",
+            "orig": "HIJ",
             "dest": "HND",
-            "route": "石垣 ➔ 東京(羽田)",
-            "time": "15:50発 - 18:30着",
+            "route": "広島 ➔ 東京(羽田)",
+            "time": "16:15発 - 17:40着",
             "tag": "予想"
           }
         ]
