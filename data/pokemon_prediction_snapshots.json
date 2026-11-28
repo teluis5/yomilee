@@ -1999,5 +1999,121 @@
         ]
       }
     ]
+  },
+  "2026-11-29": {
+    "updatedAtIso": "2026-11-28T00:00:23.466Z",
+    "plans": [
+      {
+        "planId": "tomorrow-plan-1",
+        "planName": "プランA",
+        "stayCode": "HND",
+        "rank": "本命",
+        "probability": 35,
+        "routeSummary": "高松 ➔ 羽田 ➔ 石垣 ➔ 羽田",
+        "flights": [
+          {
+            "step": "第1便",
+            "flightNo": "NH532",
+            "orig": "TAK",
+            "dest": "HND",
+            "route": "高松 ➔ 東京(羽田)",
+            "time": "07:10発 - 08:25着",
+            "tag": "予想"
+          },
+          {
+            "step": "第2便",
+            "flightNo": "NH91",
+            "orig": "HND",
+            "dest": "ISG",
+            "route": "東京(羽田) ➔ 石垣",
+            "time": "11:40発 - 15:00着",
+            "tag": "予想"
+          },
+          {
+            "step": "第3便",
+            "flightNo": "NH92",
+            "orig": "ISG",
+            "dest": "HND",
+            "route": "石垣 ➔ 東京(羽田)",
+            "time": "15:50発 - 18:30着",
+            "tag": "予想"
+          }
+        ]
+      },
+      {
+        "planId": "tomorrow-plan-2",
+        "planName": "プランB",
+        "stayCode": "HND",
+        "rank": "候補",
+        "probability": 35,
+        "routeSummary": "高松 ➔ 羽田 ➔ 宮古 ➔ 羽田",
+        "flights": [
+          {
+            "step": "第1便",
+            "flightNo": "NH532",
+            "orig": "TAK",
+            "dest": "HND",
+            "route": "高松 ➔ 東京(羽田)",
+            "time": "07:10発 - 08:25着",
+            "tag": "予想"
+          },
+          {
+            "step": "第2便",
+            "flightNo": "NH87",
+            "orig": "HND",
+            "dest": "MMY",
+            "route": "東京(羽田) ➔ 宮古",
+            "time": "12:00発 - 15:15着",
+            "tag": "予想"
+          },
+          {
+            "step": "第3便",
+            "flightNo": "NH88",
+            "orig": "MMY",
+            "dest": "HND",
+            "route": "宮古 ➔ 東京(羽田)",
+            "time": "16:15発 - 18:45着",
+            "tag": "予想"
+          }
+        ]
+      },
+      {
+        "planId": "tomorrow-plan-3",
+        "planName": "プランC",
+        "stayCode": "KMJ",
+        "rank": "候補",
+        "probability": 30,
+        "routeSummary": "羽田 ➔ 宮古 ➔ 羽田 ➔ 熊本",
+        "flights": [
+          {
+            "step": "第1便",
+            "flightNo": "NH1079",
+            "orig": "HND",
+            "dest": "MMY",
+            "route": "東京(羽田) ➔ 宮古",
+            "time": "07:50発 - 11:05着",
+            "tag": "予想"
+          },
+          {
+            "step": "第2便",
+            "flightNo": "NH1080",
+            "orig": "MMY",
+            "dest": "HND",
+            "route": "宮古 ➔ 東京(羽田)",
+            "time": "11:55発 - 14:25着",
+            "tag": "予想"
+          },
+          {
+            "step": "第3便",
+            "flightNo": "NH645",
+            "orig": "HND",
+            "dest": "KMJ",
+            "route": "東京(羽田) ➔ 熊本",
+            "time": "15:30発 - 17:25着",
+            "tag": "予想"
+          }
+        ]
+      }
+    ]
   }
 }
