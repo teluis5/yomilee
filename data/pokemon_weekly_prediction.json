@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026年11月28日 22:00",
-  "updatedAtIso": "2026-11-28T13:00:24.527Z",
+  "updatedAt": "2026年11月28日 23:00",
+  "updatedAtIso": "2026-11-28T14:00:17.055Z",
   "totalJets": 5,
   "jets": [
     {
@@ -219,9 +219,26 @@
       "routesSummary": "羽田/成田 ➔ シンガポール / バンクーバー / ホノルル / シドニー / マニラ / ジャカルタ",
       "color": "#eab308",
       "serviceStart": "2023-06-04",
-      "flightState": "着陸済・駐機中 🟡",
-      "currentLocation": "東京(羽田) (HND)",
-      "currentFlight": null,
+      "flightState": "飛行中 🟢",
+      "currentLocation": "東京(羽田) (HND) ➔ バンクーバー (YVR)",
+      "currentFlight": {
+        "flightNo": "NH116",
+        "origin": "HND",
+        "dest": "YVR",
+        "originName": "東京(羽田) (HND)",
+        "destinationName": "バンクーバー (YVR)",
+        "origCode": "HND",
+        "destCode": "YVR",
+        "route": "東京(羽田) ➔ バンクーバー",
+        "depTime": "22:06",
+        "arrTime": "06:40",
+        "timeRange": "22:06 - 06:40",
+        "dateJst": "2026-11-28",
+        "status": "Estimated 14:00",
+        "isLive": true,
+        "isLanded": false,
+        "isToday": true
+      },
       "todayFlights": [
         {
           "flightNo": "NH117",
@@ -250,12 +267,12 @@
           "origCode": "HND",
           "destCode": "YVR",
           "route": "東京(羽田) ➔ バンクーバー",
-          "depTime": "21:50",
+          "depTime": "22:06",
           "arrTime": "06:40",
-          "timeRange": "21:50 - 06:40",
+          "timeRange": "22:06 - 06:40",
           "dateJst": "2026-11-28",
-          "status": "Estimated dep 21:49",
-          "isLive": false,
+          "status": "Estimated 14:00",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         }
@@ -270,12 +287,12 @@
           "origCode": "HND",
           "destCode": "YVR",
           "route": "東京(羽田) ➔ バンクーバー",
-          "depTime": "21:50",
+          "depTime": "22:06",
           "arrTime": "06:40",
-          "timeRange": "21:50 - 06:40",
+          "timeRange": "22:06 - 06:40",
           "dateJst": "2026-11-28",
-          "status": "Estimated dep 21:49",
-          "isLive": false,
+          "status": "Estimated 14:00",
+          "isLive": true,
           "isLanded": false,
           "isToday": true
         },
